@@ -1,0 +1,10 @@
+framework module SwiftRates {
+  umbrella header "SwiftRates.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftRates.Swift {
+    header "SwiftRates-Swift.h"
+}
