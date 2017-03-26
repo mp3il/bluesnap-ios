@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="kEU-ax-AwI">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="y5E-Je-eim">
+            <objects>
+                <navigationController id="kEU-ax-AwI" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QJ0-p5-tRN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="a9r-0H-fLW"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fAv-9h-w1Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-486" y="193"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BluesnapSDKExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gtG-Zk-3aB">
+                                <rect key="frame" x="163" y="236" width="274" height="128"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1E4-kM-4oY">
+                                        <rect key="frame" x="62" y="34" width="97" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="97" id="Z4M-wU-9Ug"/>
+                                            <constraint firstAttribute="height" constant="30" id="ixq-rc-q5P"/>
+                                            <constraint firstAttribute="width" constant="97" id="oHQ-3i-Ik1"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Z4M-wU-9Ug"/>
+                                            </mask>
+                                        </variation>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dMR-1J-U5n">
+                                        <rect key="frame" x="191" y="34" width="31" height="30"/>
+                                        <state key="normal" title="USD">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="currencyButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cMq-tg-ss6"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TAo-mM-qRo">
+                                        <rect key="frame" x="110" y="90" width="55" height="30"/>
+                                        <state key="normal" title="BuyNow"/>
+                                        <connections>
+                                            <action selector="convertButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eYp-Vm-qQz"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="274" id="0Gf-4S-eNN"/>
+                                    <constraint firstAttribute="bottom" secondItem="TAo-mM-qRo" secondAttribute="bottom" constant="8" id="4cT-ER-slz"/>
+                                    <constraint firstAttribute="width" constant="274" id="53A-mw-qzd"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="Bm9-sZ-OeY"/>
+                                    <constraint firstItem="1E4-kM-4oY" firstAttribute="top" secondItem="gtG-Zk-3aB" secondAttribute="top" constant="34" id="Jws-Ct-HTU"/>
+                                    <constraint firstItem="TAo-mM-qRo" firstAttribute="centerX" secondItem="gtG-Zk-3aB" secondAttribute="centerX" id="Zey-1O-WzV"/>
+                                    <constraint firstItem="1E4-kM-4oY" firstAttribute="leading" secondItem="gtG-Zk-3aB" secondAttribute="leading" constant="62" id="ZlJ-Ie-frB"/>
+                                    <constraint firstAttribute="height" constant="128" id="aPs-xo-Qc0"/>
+                                    <constraint firstAttribute="trailing" secondItem="dMR-1J-U5n" secondAttribute="trailing" constant="52" id="nMY-rn-DYP"/>
+                                    <constraint firstItem="dMR-1J-U5n" firstAttribute="top" secondItem="gtG-Zk-3aB" secondAttribute="top" constant="34" id="pvi-yy-W7f"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="gtG-Zk-3aB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2V0-uP-AMa"/>
+                            <constraint firstItem="gtG-Zk-3aB" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ejm-c2-Aka"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Wrn-am-caX"/>
+                    <connections>
+                        <outlet property="convertButton" destination="TAo-mM-qRo" id="fgb-9J-9ff"/>
+                        <outlet property="currencyButton" destination="dMR-1J-U5n" id="565-Jx-enD"/>
+                        <outlet property="valueTextField" destination="1E4-kM-4oY" id="Irq-uA-p7l"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
