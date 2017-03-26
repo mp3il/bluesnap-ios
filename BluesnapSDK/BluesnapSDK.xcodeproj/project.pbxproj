@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D374F2A1E880E7300AE2A81 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
 		2D374F2F1E880E7300AE2A81 /* BluesnapSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F2E1E880E7300AE2A81 /* BluesnapSDKTests.swift */; };
 		2D374F311E880E7300AE2A81 /* BluesnapSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D374F231E880E7200AE2A81 /* BluesnapSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */; };
@@ -20,6 +19,7 @@
 		2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F411E880EF100AE2A81 /* BSToken.swift */; };
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
 		2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */; };
+		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D374F2A1E880E7300AE2A81 /* BluesnapSDK.framework in Frameworks */,
+				2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +448,7 @@
 				2D374F361E880E7300AE2A81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2D374F371E880E7300AE2A81 /* Build configuration list for PBXNativeTarget "BluesnapSDKTests" */ = {
 			isa = XCConfigurationList;
@@ -456,6 +457,7 @@
 				2D374F391E880E7300AE2A81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
