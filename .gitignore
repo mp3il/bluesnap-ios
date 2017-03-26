@@ -17,6 +17,17 @@ DerivedData
 *.ipa
 *.xcuserstate
 
+*.pbxuser
+*.swp
+*.xcscmblueprint
+.idea
+
+.DS_Store
+profile
+DerivedData
+
+xcuserdata/
+
 .idea/
 .DS_Store
 
