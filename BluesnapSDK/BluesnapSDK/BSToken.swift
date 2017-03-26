@@ -1,9 +1,6 @@
 //
 //  BSToken.swift
-//  SwiftRates
-//
 
-//
 
 import Foundation
 

@@ -14,7 +14,8 @@
 		2D4E278D1E8808A700C56C46 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D4E278B1E8808A700C56C46 /* LaunchScreen.storyboard */; };
 		2D4E27981E8808A800C56C46 /* BluesnapSDKExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4E27971E8808A800C56C46 /* BluesnapSDKExampleTests.swift */; };
 		2D4E27A31E8808A800C56C46 /* BluesnapSDKExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4E27A21E8808A800C56C46 /* BluesnapSDKExampleUITests.swift */; };
-		FD5B44441E881FB100507A98 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD5B44431E881FB100507A98 /* BluesnapSDK.framework */; };
+		2DD7F10A1E8822D5002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD7F1051E8822A4002C5571 /* BluesnapSDK.framework */; };
+		2DD7F10B1E8822D5002C5571 /* BluesnapSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD7F1051E8822A4002C5571 /* BluesnapSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2DD7F10C1E8822D5002C5571 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2DD7F10B1E8822D5002C5571 /* BluesnapSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2D374F511E88122500AE2A81 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-ddzqhllkkdnpsmfrcakyiypzbmtw/Build/Products/Debug-iphoneos/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		2D4E277F1E8808A700C56C46 /* BluesnapSDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BluesnapSDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +64,7 @@
 		2D4E279E1E8808A800C56C46 /* BluesnapSDKExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluesnapSDKExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D4E27A21E8808A800C56C46 /* BluesnapSDKExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluesnapSDKExampleUITests.swift; sourceTree = "<group>"; };
 		2D4E27A41E8808A800C56C46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DD7F1051E8822A4002C5571 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-ggrfbohhkirdhjgzoerfetyhgbyb/Build/Products/Debug-iphoneos/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD5B44441E881FB100507A98 /* BluesnapSDK.framework in Frameworks */,
+				2DD7F10A1E8822D5002C5571 /* BluesnapSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +97,7 @@
 		2D374F501E88122500AE2A81 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2DD7F1051E8822A4002C5571 /* BluesnapSDK.framework */,
 				FD5B44431E881FB100507A98 /* BluesnapSDK.framework */,
 				2D374F511E88122500AE2A81 /* BluesnapSDK.framework */,
 			);
@@ -149,6 +166,7 @@
 				2D4E277B1E8808A700C56C46 /* Sources */,
 				2D4E277C1E8808A700C56C46 /* Frameworks */,
 				2D4E277D1E8808A700C56C46 /* Resources */,
+				2DD7F10C1E8822D5002C5571 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
