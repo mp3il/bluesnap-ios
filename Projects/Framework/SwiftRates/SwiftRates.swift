@@ -10,7 +10,7 @@ import Foundation
 	
 	// MARK: - Constants
 	
-	fileprivate static let bundleIdentifier = "com.bs.SwiftRates"
+	fileprivate static let bundleIdentifier = "com.bs.swiftrates"
 	fileprivate static let storyboardName = "SwiftRates"
 	fileprivate static let currencyListStoryboardId = "CurrencyListStoryboardId"
 	fileprivate static let summaryScreenStoryboardId = "SummaryScreenStoryboardId"

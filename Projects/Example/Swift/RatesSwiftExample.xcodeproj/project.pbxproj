@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		94DDE1351C5E6D16007F2AC0 /* SwiftRates.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94DDE1341C5E6D16007F2AC0 /* SwiftRates.framework */; };
-		94DDE1371C5E6D1B007F2AC0 /* SwiftRates.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94DDE1341C5E6D16007F2AC0 /* SwiftRates.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2D196EC41E87EE6D009E5206 /* SwiftRates.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D196EC31E87EE6D009E5206 /* SwiftRates.framework */; };
+		2D196EC51E87EE76009E5206 /* SwiftRates.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D196EC31E87EE6D009E5206 /* SwiftRates.framework */; };
+		2D196EC61E87EE76009E5206 /* SwiftRates.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2D196EC31E87EE6D009E5206 /* SwiftRates.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		94DDE16E1C5E95EE007F2AC0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94DDE1631C5E95EE007F2AC0 /* Assets.xcassets */; };
 		94DDE16F1C5E95EE007F2AC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DDE1651C5E95EE007F2AC0 /* AppDelegate.swift */; };
 		94DDE1701C5E95EE007F2AC0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DDE1661C5E95EE007F2AC0 /* ViewController.swift */; };
@@ -17,13 +18,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		94DDE1381C5E6D1B007F2AC0 /* Embed Frameworks */ = {
+		2D196EC71E87EE77009E5206 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				94DDE1371C5E6D1B007F2AC0 /* SwiftRates.framework in Embed Frameworks */,
+				2D196EC61E87EE76009E5206 /* SwiftRates.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -31,6 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2D196EC31E87EE6D009E5206 /* SwiftRates.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftRates.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/RatesSwiftExample-hcscnirnhgrdcobhkffpfpovfsey/Build/Products/Debug-iphoneos/SwiftRates.framework"; sourceTree = "<group>"; };
 		94DDE1341C5E6D16007F2AC0 /* SwiftRates.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftRates.framework; path = ../../../Framework/SwiftRates.framework; sourceTree = "<group>"; };
 		94DDE1631C5E95EE007F2AC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94DDE1651C5E95EE007F2AC0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -46,7 +48,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94DDE1351C5E6D16007F2AC0 /* SwiftRates.framework in Frameworks */,
+				2D196EC51E87EE76009E5206 /* SwiftRates.framework in Frameworks */,
+				2D196EC41E87EE6D009E5206 /* SwiftRates.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +59,7 @@
 		94DDE1611C5E95A4007F2AC0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2D196EC31E87EE6D009E5206 /* SwiftRates.framework */,
 				94DDE1341C5E6D16007F2AC0 /* SwiftRates.framework */,
 			);
 			name = Frameworks;
@@ -133,7 +137,7 @@
 				94E701A11C5DEDAE0073F84F /* Sources */,
 				94E701A21C5DEDAE0073F84F /* Frameworks */,
 				94E701A31C5DEDAE0073F84F /* Resources */,
-				94DDE1381C5E6D1B007F2AC0 /* Embed Frameworks */,
+				2D196EC71E87EE77009E5206 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -152,7 +156,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = "BLUESNAP";
+				ORGANIZATIONNAME = BLUESNAP;
 				TargetAttributes = {
 					94E701A41C5DEDAE0073F84F = {
 						CreatedOnToolsVersion = 7.2;

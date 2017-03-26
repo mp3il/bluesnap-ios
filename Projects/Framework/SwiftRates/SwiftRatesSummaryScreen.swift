@@ -6,7 +6,7 @@
 
 import UIKit
 
-class SwiftRatesSummaryScreen: UIViewController, UITextFieldDelegate, ValidationDelegate {
+class SwiftRatesSummaryScreen: UIViewController, UITextFieldDelegate {
 
 	// MARK: - Public properties
 	
@@ -27,16 +27,16 @@ class SwiftRatesSummaryScreen: UIViewController, UITextFieldDelegate, Validation
     
 	// MARK: - UIViewController's methods
 	
-    let validator = Validator()
+   // let validator = Validator()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         cardUIText.delegate = self
         
-        validator.registerField(cardUIText, errorLabel: valueLabel,
-            rules: [RequiredRule(), CreditCardNumberRule()]
-        )
+//        validator.registerField(cardUIText, errorLabel: valueLabel,
+//            rules: [RequiredRule(), CreditCardNumberRule()]
+//        )
         paySubmit.setTitle(
             String(format:"Pay %8.2f %@", rawValue, toCurrency) ,
             for: UIControlState())
@@ -44,7 +44,7 @@ class SwiftRatesSummaryScreen: UIViewController, UITextFieldDelegate, Validation
     
 
     @IBAction func click(_ sender: UIButton) {
-        validator.validate(self)
+      //  validator.validate(self)
     }
     
     
@@ -54,25 +54,25 @@ class SwiftRatesSummaryScreen: UIViewController, UITextFieldDelegate, Validation
         // submit the form
     }
     
-    func validationFailed(_ errors:[(Validatable ,ValidationError)]) {
-        // turn the fields to red
-        for (field, error) in errors {
-            if let field = field as? UITextField {
-                field.layer.borderColor = UIColor.red.cgColor
-                field.layer.borderWidth = 1.0
-                error.errorLabel?.text = error.errorMessage // works if you added labels
-                error.errorLabel?.isHidden = false
-            } else {
-                if let field = field as? UITextField {
-                    field.layer.borderColor = UIColor.black.cgColor
-                    error.errorLabel?.isHidden = true
-                }
-            }
-        }
-    
-        
-        
-    }
+//    func validationFailed(_ errors:[(Validatable ,ValidationError)]) {
+//        // turn the fields to red
+//        for (field, error) in errors {
+//            if let field = field as? UITextField {
+//                field.layer.borderColor = UIColor.red.cgColor
+//                field.layer.borderWidth = 1.0
+//                error.errorLabel?.text = error.errorMessage // works if you added labels
+//                error.errorLabel?.isHidden = false
+//            } else {
+//                if let field = field as? UITextField {
+//                    field.layer.borderColor = UIColor.black.cgColor
+//                    error.errorLabel?.isHidden = true
+//                }
+//            }
+//        }
+//    
+//        
+//        
+//    }
     
     
     
