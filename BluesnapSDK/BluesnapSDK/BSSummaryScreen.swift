@@ -84,7 +84,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
 		
 		// Get data
 		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
-			if error == nil {
+			if error == nil && data != nil {
 				for item in data! {
 					let currency = item as! BSCurrencyModel
 					if currency.code == self!.toCurrency {

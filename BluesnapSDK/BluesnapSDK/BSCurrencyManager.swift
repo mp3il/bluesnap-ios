@@ -30,14 +30,19 @@ class BSCurrencyManager : NSObject {
 		
 		if let date = userDefaults.object(forKey: lastTimeRequestKey) as? Date {
 			lastTimeRequest = date
-		}
+        } else {
+            // supply default = current date
+            lastTimeRequest = Date()
+        }
 	}
 	
 	// MARK: - Data Fetching
 	
 	func fetchData(_ offlineCompletion: @escaping ([AnyObject]?, NSError?) -> Void) {
-		DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async {
+        
+        DispatchQueue.global(qos: .default).async {
 			var data: [AnyObject]?
+            
 			if self.storage.hasData() {
 				data = self.storage.fetchData()
 			}
@@ -51,7 +56,7 @@ class BSCurrencyManager : NSObject {
 		
 		fetchData(offlineCompletion)
 		
-		DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async {
+		DispatchQueue.global(qos: .default).async {
 			
 			var data: [AnyObject]?
 			

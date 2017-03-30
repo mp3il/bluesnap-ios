@@ -20,7 +20,7 @@ class BSCurrencyRequest {
 		//let userAgent = ""
 		//request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
 		//request.setValue(token, forKey: )
-        var request = URLRequest(url:myUrl!)
+        let request = URLRequest(url:myUrl!)
         
        // let task1 = URLSession.shared.dataTask(with: request as URLRequest) { }
 

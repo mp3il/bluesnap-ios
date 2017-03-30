@@ -35,7 +35,7 @@ class RatesCurrencyList: UITableViewController {
 		
 		// Get data
 		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
-			if error! == nil {
+			if error == nil && data != nil {
 				self!.data.removeAll()
 				for item in data! {
 					self!.data.append(item as! BSCurrencyModel)
