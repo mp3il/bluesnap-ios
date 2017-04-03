@@ -1,7 +1,7 @@
 
 import UIKit
 
-class BSSummaryScreen: UIViewController, UITextFieldDelegate {
+class BSSummaryScreen: UIViewController {
 
 	// MARK: - Public properties
 	
@@ -10,79 +10,45 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
 	
 	// MARK: - Data
 	
-    @IBOutlet weak var nameUIText: UITextField!
-	fileprivate var currencyManager = BSCurrencyManager()
+ 	fileprivate var currencyManager = BSCurrencyManager()
 	
 	// MARK: - Outlets
-    
-    @IBOutlet weak var cardUIText: UITextField!
-    @IBOutlet weak var valueLabel: UILabel!
-	@IBOutlet weak var currencyLabel: UILabel!
-    @IBOutlet weak var paySubmit: UIButton!
+    @IBOutlet weak var payButton: UIButton!
+    @IBOutlet weak var nameUiTextyField: UITextField!
+    @IBOutlet weak var cardUiTextField: UITextField!
+    @IBOutlet weak var expUiTextField: UITextField!
+    @IBOutlet weak var cvvUiTextField: UITextField!
+    @IBOutlet weak var ccnErrorUiLabel: UILabel!
+    @IBOutlet weak var nameErrorUiLabel: UILabel!
+    @IBOutlet weak var expErrorUiLabel: UILabel!
+    @IBOutlet weak var cvvErrorUiLabel: UILabel!
     
 	// MARK: - UIViewController's methods
-	
-   // let validator = Validator()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardUIText.delegate = self
-        
-//        validator.registerField(cardUIText, errorLabel: valueLabel,
-//            rules: [RequiredRule(), CreditCardNumberRule()]
-//        )
-        
-        paySubmit.setTitle(
-            String(format:"Pay %8.2f %@", rawValue, toCurrency) ,
-            for: UIControlState())
     }
     
 
     @IBAction func click(_ sender: UIButton) {
-      //  validator.validate(self)
+      
+        if (validateForm()) {
+            print("ready to submit!")
+        }
+        
     }
-    
-    
-    
-    // ValidationDelegate methods
-    func validationSuccessful() {
-        // submit the form
-    }
-    
-//    func validationFailed(_ errors:[(Validatable ,ValidationError)]) {
-//        // turn the fields to red
-//        for (field, error) in errors {
-//            if let field = field as? UITextField {
-//                field.layer.borderColor = UIColor.red.cgColor
-//                field.layer.borderWidth = 1.0
-//                error.errorLabel?.text = error.errorMessage // works if you added labels
-//                error.errorLabel?.isHidden = false
-//            } else {
-//                if let field = field as? UITextField {
-//                    field.layer.borderColor = UIColor.black.cgColor
-//                    error.errorLabel?.isHidden = true
-//                }
-//            }
-//        }
-//    
-//        
-//        
-//    }
-    
-    
     
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		self.navigationController!.isNavigationBarHidden = false
 		
-        paySubmit.setTitle(
-            String(format:"Pay %8.2f %@", rawValue, toCurrency) ,
+        let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
+        payButton.setTitle(
+            String(format:"Pay %@ %.2f", currencyCode, rawValue) ,
             for: UIControlState())
         
-        //currencyLabel.text = toCurrency
-		
 		// Get data
 		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
 			if error == nil && data != nil {
@@ -97,35 +63,141 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
 		}
 	}
     
+    // MARK: Validation methods
     
-    @IBAction func NameEditingChanged(_ sender: UITextField) {
+    func validateForm() -> Bool {
         
-        let input : String = sender.text ?? ""
-        let ok = input.isAlphaNumeric;
-        
-        print(input)
-        print(ok)
+        let ok1 = validateName()
+        let ok2 = validateCCN()
+        let ok3 = validateExp()
+        let ok4 = validateCvv()
+        return ok1 && ok2 && ok3 && ok4
     }
     
-    @IBAction func ccNumEditingChanged(_ sender: UITextField) {
+    func validateCvv() -> Bool {
+        
+        if (cvvUiTextField.text!.characters.count < 3) {
+            cvvErrorUiLabel.text = "Please fill a valid CVV number"
+            cvvErrorUiLabel.isHidden = false
+            return false
+        } else {
+            cvvErrorUiLabel.isHidden = true
+            return true
+        }
+    }
+    
+    func validateName() -> Bool {
+        
+        nameErrorUiLabel.isHidden = true
+        if (nameUiTextyField.text!.characters.count < 4) {
+            nameErrorUiLabel.text = "Please fill Card holder name"
+            nameErrorUiLabel.isHidden = false
+            return false
+        }
+        return true
+    }
+    
+    func validateCCN() -> Bool {
+        
+        ccnErrorUiLabel.isHidden = true
+        // TODO: need to add lohn check as well
+        if (cardUiTextField.text!.characters.count < 7) {
+            ccnErrorUiLabel.text = "Please fill a valid Credirt Card number"
+            ccnErrorUiLabel.isHidden = false
+            return false
+        }
+        return true
+    }
+    
+    func validateExp() -> Bool {
+        var ok = true
+        let input = expUiTextField.text!
+        if (input.characters.count < 5) {
+            ok = false
+        } else {
+            let idx = input.index(input.startIndex, offsetBy: 2)
+            let monthStr = input.substring(with: input.startIndex..<idx)
+            if !monthStr.isValidMonth {
+                ok = false
+            }
+        }
+        if (ok) {
+            expErrorUiLabel.isHidden = true
+        } else {
+            expErrorUiLabel.text = "Please fill a valid exiration date"
+            expErrorUiLabel.isHidden = false
+        }
+        return ok
+    }
+
+    
+    // MARK: real-time formatting and Validations on text fields
+    
+    @IBAction func nameEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        //print(input)
-        input = input.removeNoneDigits.formatCCN
-        //print(input)
+        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 100)
         sender.text = input
     }
+    
+    @IBAction func ccnEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 21).formatCCN
+        sender.text = input
+    }
+    
+    @IBAction func expEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4).formatExp
+        sender.text = input
+    }
+    
+    @IBAction func cvvEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4)
+        sender.text = input
+    }
+    
+    @IBAction func nameEditingDidEnd(_ sender: UITextField) {
+        _ = validateName()
+    }
+    
+    @IBAction func cvvEditingDidEnd(_ sender: UITextField) {
+        _ = validateCvv()
+    }
+    
+    @IBAction func expEditingDidEnd(_ sender: UITextField) {
+        _ = validateExp()
+    }
+    
+    @IBAction func cardEditingDidEnd(_ sender: UITextField) {
+        _ = validateCCN()
+    }
+   
 
 
 }
 
 extension String {
     
-    var isAlphaNumeric : Bool {
- 
-        let allowedAlphaCharacters = "abcdefghijklmnopqrstuvwxyz "
-        let alphaCharset = CharacterSet(charactersIn: allowedAlphaCharacters)
-        return lowercased().rangeOfCharacter(from: alphaCharset.inverted) == nil
+    var isValidMonth : Bool {
+        
+        let validMonths = ["01","02","03","04","05","06","07","08","09","10","11","12"]
+        return validMonths.contains(self)
+    }
+    
+    var removeNoneAlphaCharacters : String {
+        
+        var result : String = "";
+        for character in characters {
+            if (character == " ") || (character >= "a" && character <= "z") || (character >= "A" && character <= "Z") {
+                result.append(character)
+            }
+        }
+        return result
     }
     
     var removeNoneDigits : String {
@@ -138,6 +210,29 @@ extension String {
         }
         return result
     }
+
+    func cutToMaxLength(maxLength: Int) -> String {
+        if (characters.count < maxLength) {
+            return self
+        } else {
+            let idx = index(startIndex, offsetBy: maxLength)
+            return substring(with: startIndex..<idx)
+        }
+    }
+    
+    var formatExp : String {
+        
+        var result : String
+        if characters.count < 2 {
+            result = self
+        } else {
+            let idx = index(startIndex, offsetBy: 2)
+            result = substring(with: startIndex..<idx) + "/"
+            result += substring(with: idx..<endIndex)
+        }
+        return result
+    }
+    
     var formatCCN : String {
 
         var result: String
@@ -150,8 +245,7 @@ extension String {
                 result += substring(with: idx1..<idx2) + " "
                 if (myLength > 12) {
                     let idx3 = index(idx2, offsetBy: 4)
-                    result += substring(with: idx2..<idx3) + " "
-                    result += substring(from: idx3)
+                    result += substring(with: idx2..<idx3) + " " + substring(from: idx3)
                 } else {
                     result += substring(from:idx2)
                 }
