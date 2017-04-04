@@ -5,15 +5,20 @@ class BSSummaryScreen: UIViewController {
 
 	// MARK: - Public properties
 	
-	internal var rawValue: CGFloat = 0
-	internal var toCurrency: String = "USD"
+    internal var purchaseData : PurchaseData?
+    
+    // MARK: private properties
+    var withShipping = false
+    var shippingScreen: BSShippingViewController!
 	
 	// MARK: - Data
 	
  	fileprivate var currencyManager = BSCurrencyManager()
+    fileprivate var payButtonText : String?
 	
 	// MARK: - Outlets
     @IBOutlet weak var payButton: UIButton!
+    @IBOutlet weak var shippingButton: UIButton!
     @IBOutlet weak var nameUiTextyField: UITextField!
     @IBOutlet weak var cardUiTextField: UITextField!
     @IBOutlet weak var expUiTextField: UITextField!
@@ -22,6 +27,9 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var nameErrorUiLabel: UILabel!
     @IBOutlet weak var expErrorUiLabel: UILabel!
     @IBOutlet weak var cvvErrorUiLabel: UILabel!
+    @IBOutlet weak var subtotalUILabel: UILabel!
+    @IBOutlet weak var taxAmountUILabel: UILabel!
+
     
 	// MARK: - UIViewController's methods
 
@@ -30,31 +38,32 @@ class BSSummaryScreen: UIViewController {
         super.viewDidLoad()
     }
     
-
-    @IBAction func click(_ sender: UIButton) {
-      
-        if (validateForm()) {
-            print("ready to submit!")
-        }
-        
-    }
-    
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		self.navigationController!.isNavigationBarHidden = false
 		
+        payButton.isHidden = self.withShipping
+        shippingButton.isHidden = !self.withShipping
+
+        let toCurrency = purchaseData!.getCurrency()
+        let subtotalAmount = purchaseData!.getAmount()
+        let taxAmount = purchaseData!.getTaxAmount()
+        let amount = subtotalAmount + taxAmount
+        self.withShipping = purchaseData!.getShippingDetails() != nil
+        
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
-        payButton.setTitle(
-            String(format:"Pay %@ %.2f", currencyCode, rawValue) ,
-            for: UIControlState())
+        payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
+        payButton.setTitle(payButtonText, for: UIControlState())
+        subtotalUILabel.text = String(format:"%@ %.2f", currencyCode, CGFloat(subtotalAmount))
+        taxAmountUILabel.text = String(format:"%@ %.2f", currencyCode, CGFloat(taxAmount))
         
 		// Get data
 		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
 			if error == nil && data != nil {
 				for item in data! {
 					let currency = item as! BSCurrencyModel
-					if currency.code == self!.toCurrency {
+					if currency.code == toCurrency {
 						//self!.valueLabel.text = String(self!.rawValue * currency.rate)
 						break
 					}
@@ -62,7 +71,38 @@ class BSSummaryScreen: UIViewController {
 			}
 		}
 	}
+
+    // MARK: button actions
     
+    
+    
+    @IBAction func clickPay(_ sender: UIButton) {
+        
+        if (validateForm()) {
+            print("ready to submit!")
+        } else {
+            //return false
+        }
+        
+    }
+    
+    @IBAction func clickShipping(_ sender: UIButton) {
+        
+        if (validateForm()) {
+            print("ready to go to shipping!")
+            if (self.shippingScreen == nil) {
+                self.shippingScreen = storyboard!.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
+                purchaseData!.getShippingDetails()!.name = self.nameUiTextyField.text!
+                self.shippingScreen.purchaseData = self.purchaseData
+            }
+            self.shippingScreen.payText = self.payButtonText
+            self.navigationController?.pushViewController(self.shippingScreen, animated: true)
+        } else {
+            //return false
+        }
+        
+    }
+
     // MARK: Validation methods
     
     func validateForm() -> Bool {
@@ -179,83 +219,5 @@ class BSSummaryScreen: UIViewController {
    
 
 
-}
-
-extension String {
-    
-    var isValidMonth : Bool {
-        
-        let validMonths = ["01","02","03","04","05","06","07","08","09","10","11","12"]
-        return validMonths.contains(self)
-    }
-    
-    var removeNoneAlphaCharacters : String {
-        
-        var result : String = "";
-        for character in characters {
-            if (character == " ") || (character >= "a" && character <= "z") || (character >= "A" && character <= "Z") {
-                result.append(character)
-            }
-        }
-        return result
-    }
-    
-    var removeNoneDigits : String {
-        
-        var result : String = "";
-        for character in characters {
-            if (character >= "0" && character <= "9") {
-                result.append(character)
-            }
-        }
-        return result
-    }
-
-    func cutToMaxLength(maxLength: Int) -> String {
-        if (characters.count < maxLength) {
-            return self
-        } else {
-            let idx = index(startIndex, offsetBy: maxLength)
-            return substring(with: startIndex..<idx)
-        }
-    }
-    
-    var formatExp : String {
-        
-        var result : String
-        if characters.count < 2 {
-            result = self
-        } else {
-            let idx = index(startIndex, offsetBy: 2)
-            result = substring(with: startIndex..<idx) + "/"
-            result += substring(with: idx..<endIndex)
-        }
-        return result
-    }
-    
-    var formatCCN : String {
-
-        var result: String
-        let myLength = characters.count
-        if (myLength > 4) {
-            let idx1 = index(startIndex, offsetBy: 4)
-            result = substring(to: idx1) + " "
-            if (myLength > 8) {
-                let idx2 = index(idx1, offsetBy: 4)
-                result += substring(with: idx1..<idx2) + " "
-                if (myLength > 12) {
-                    let idx3 = index(idx2, offsetBy: 4)
-                    result += substring(with: idx2..<idx3) + " " + substring(from: idx3)
-                } else {
-                    result += substring(from:idx2)
-                }
-            } else {
-                result += substring(from: idx1)
-            }
-        } else {
-            result = self
-        }
-        return result;
-    }
 }
 

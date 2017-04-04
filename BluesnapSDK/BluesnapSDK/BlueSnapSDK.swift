@@ -19,6 +19,10 @@ import Foundation
 	
 	fileprivate static var currencyList: RatesCurrencyList!
 	fileprivate static var summaryScreen: BSSummaryScreen!
+    
+    // MARK: data
+    
+    static var purchaseData : PurchaseData?
 
 	// MARK: - Show drop-down list with currencies
 	
@@ -39,15 +43,22 @@ import Foundation
 	
 	// MARK: - Show summary screen
 	
-	open class func showSummaryScreen(_ rawValue: CGFloat, toCurrency: String, inNavigationController: UINavigationController!, animated: Bool) {
+    open class func showSummaryScreen(_ amount: Double, taxAmount : Double, currency: String, withShipping: Bool, inNavigationController: UINavigationController!, animated: Bool) {
 		
 		if summaryScreen == nil {
 			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
 			summaryScreen = storyboard.instantiateViewController(withIdentifier: summaryScreenStoryboardId) as! BSSummaryScreen
-		}
+        }
 		
-		summaryScreen.rawValue = rawValue
-		summaryScreen.toCurrency = toCurrency
+        purchaseData = PurchaseData()
+        purchaseData!.setAmount(amount: amount)
+        purchaseData!.setTaxAmount(taxAmount: taxAmount)
+        purchaseData!.setCurrency(currency: currency)
+        if (withShipping) {
+            purchaseData?.setShippingDetails(shippingDetails: BSShippingDetails())
+        }
+        summaryScreen.purchaseData = purchaseData
+        summaryScreen.withShipping = withShipping
 		
 		inNavigationController.pushViewController(summaryScreen, animated: true)
 	}

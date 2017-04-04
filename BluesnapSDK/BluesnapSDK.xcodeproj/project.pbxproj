@@ -20,6 +20,10 @@
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
 		2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
+		FD71DB4E1E9385530059D6A7 /* BSShippingDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71DB4D1E9385530059D6A7 /* BSShippingDetails.swift */; };
+		FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */; };
+		FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE301E938B63006C3359 /* BSValidator.swift */; };
+		FDA6BE331E93D815006C3359 /* PurchaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE321E93D815006C3359 /* PurchaseData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
 		2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BlueSnap.storyboard; sourceTree = "<group>"; };
+		FD71DB4D1E9385530059D6A7 /* BSShippingDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingDetails.swift; sourceTree = "<group>"; };
+		FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
+		FDA6BE301E938B63006C3359 /* BSValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidator.swift; sourceTree = "<group>"; };
+		FDA6BE321E93D815006C3359 /* PurchaseData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,14 +99,9 @@
 		2D374F221E880E7200AE2A81 /* BluesnapSDK */ = {
 			isa = PBXGroup;
 			children = (
-				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
-				2D374F3B1E880EF100AE2A81 /* BSCurrencyStorage.swift */,
-				2D374F3C1E880EF100AE2A81 /* BSCurrencyRequest.swift */,
-				2D374F3D1E880EF100AE2A81 /* BSCurrencyParser.swift */,
-				2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */,
-				2D374F3F1E880EF100AE2A81 /* BSCurrencyManager.swift */,
-				2D374F401E880EF100AE2A81 /* RatesCurrencyList.swift */,
-				2D374F411E880EF100AE2A81 /* BSToken.swift */,
+				FD17062F1E93727D00552A35 /* Screens */,
+				FD17062E1E93724000552A35 /* Handlers */,
+				FD17062D1E9371FD00552A35 /* Model */,
 				2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */,
 				2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */,
 				2D374F231E880E7200AE2A81 /* BluesnapSDK.h */,
@@ -114,6 +117,39 @@
 				2D374F301E880E7300AE2A81 /* Info.plist */,
 			);
 			path = BluesnapSDKTests;
+			sourceTree = "<group>";
+		};
+		FD17062D1E9371FD00552A35 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */,
+				2D374F411E880EF100AE2A81 /* BSToken.swift */,
+				FD71DB4D1E9385530059D6A7 /* BSShippingDetails.swift */,
+				FDA6BE321E93D815006C3359 /* PurchaseData.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		FD17062E1E93724000552A35 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				2D374F3B1E880EF100AE2A81 /* BSCurrencyStorage.swift */,
+				2D374F3C1E880EF100AE2A81 /* BSCurrencyRequest.swift */,
+				2D374F3D1E880EF100AE2A81 /* BSCurrencyParser.swift */,
+				2D374F3F1E880EF100AE2A81 /* BSCurrencyManager.swift */,
+				FDA6BE301E938B63006C3359 /* BSValidator.swift */,
+			);
+			name = Handlers;
+			sourceTree = "<group>";
+		};
+		FD17062F1E93727D00552A35 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
+				2D374F401E880EF100AE2A81 /* RatesCurrencyList.swift */,
+				FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */,
+			);
+			name = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,8 +266,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */,
 				2D374F471E880EF100AE2A81 /* BSCurrencyRequest.swift in Sources */,
 				2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */,
+				FDA6BE331E93D815006C3359 /* PurchaseData.swift in Sources */,
+				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
+				FD71DB4E1E9385530059D6A7 /* BSShippingDetails.swift in Sources */,
 				2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */,
 				2D374F4B1E880EF100AE2A81 /* RatesCurrencyList.swift in Sources */,
 				2D374F4A1E880EF100AE2A81 /* BSCurrencyManager.swift in Sources */,

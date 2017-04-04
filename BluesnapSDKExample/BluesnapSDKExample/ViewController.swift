@@ -14,6 +14,8 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
 	@IBOutlet weak var currencyButton: UIButton!
 	@IBOutlet weak var valueTextField: UITextField!
 	@IBOutlet weak var convertButton: UIButton!
+    @IBOutlet weak var withShippingSwitch: UISwitch!
+    @IBOutlet weak var taxTextField: UITextField!
 	
 	// MARK: - UIViewController's methods
 	
@@ -39,8 +41,12 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
 	// MARK: - Actions
 	
 	@IBAction func convertButtonAction(_ sender: UIButton) {
-		let rawValue = (valueTextField.text! as NSString).floatValue
-		BlueSnapSDK.showSummaryScreen(CGFloat(rawValue), toCurrency: (currencyButton.titleLabel?.text)!, inNavigationController: self.navigationController, animated: true)
+		let amount = (valueTextField.text! as NSString).doubleValue
+        let tax = (taxTextField.text! as NSString).doubleValue
+        BlueSnapSDK.showSummaryScreen(amount,
+                taxAmount : tax, currency: (currencyButton.titleLabel?.text)!,
+                withShipping: withShippingSwitch.isOn,
+                inNavigationController: self.navigationController, animated: true)
 	}
 	
 	@IBAction func currencyButtonAction(_ sender: UIButton) {
