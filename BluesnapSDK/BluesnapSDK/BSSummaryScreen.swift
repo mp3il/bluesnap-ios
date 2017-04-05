@@ -8,8 +8,15 @@ class BSSummaryScreen: UIViewController {
     internal var purchaseData : PurchaseData?
     
     // MARK: private properties
+    
     var withShipping = false
     var shippingScreen: BSShippingViewController!
+    
+    // MARK: Constants
+    
+    let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
+    let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
+    let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
 	
 	// MARK: - Data
 	
@@ -17,6 +24,7 @@ class BSSummaryScreen: UIViewController {
     fileprivate var payButtonText : String?
 	
 	// MARK: - Outlets
+    
     @IBOutlet weak var payButton: UIButton!
     @IBOutlet weak var shippingButton: UIButton!
     @IBOutlet weak var nameUiTextyField: UITextField!
@@ -29,6 +37,8 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var cvvErrorUiLabel: UILabel!
     @IBOutlet weak var subtotalUILabel: UILabel!
     @IBOutlet weak var taxAmountUILabel: UILabel!
+    @IBOutlet weak var menuWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var menuCurrencyButton: UIButton!
 
     
 	// MARK: - UIViewController's methods
@@ -58,7 +68,11 @@ class BSSummaryScreen: UIViewController {
         subtotalUILabel.text = String(format:"%@ %.2f", currencyCode, CGFloat(subtotalAmount))
         taxAmountUILabel.text = String(format:"%@ %.2f", currencyCode, CGFloat(taxAmount))
         
-		// Get data
+        
+        // hide menu
+        menuWidthConstraint.constant = 0
+
+        // Get data
 		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
 			if error == nil && data != nil {
 				for item in data! {
@@ -72,9 +86,46 @@ class BSSummaryScreen: UIViewController {
 		}
 	}
 
+    // MARK: menu actions
+        
+    @IBAction func menuCurrecyAction(_ sender: Any) {
+        
+        print("in currency menu option")
+    }
+    
+    @IBAction func MenuClick(_ sender: UIBarButtonItem) {
+        
+        // hide/show the menu
+        if (menuWidthConstraint.constant <= 0) {
+            let title = "Currency - " + purchaseData!.currency
+            menuCurrencyButton.setTitle(title, for: UIControlState())
+            menuWidthConstraint.constant = 150
+        } else {
+            menuWidthConstraint.constant = 0
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // if navigating to the web view - set the right URL
+        if segue.identifier != nil {
+            let id = segue.identifier!
+            var url : String?
+            if id == "webViewPrivacyPolicy" {
+                url = privacyPolicyURL
+            } else if id == "webViewRefundPolicy" {
+                url = refundPolicyURL
+            } else if id == "webViewTerms" {
+                url = termsURL
+            }
+            if url != nil {
+                let controller = segue.destination as! BSWebViewController
+                controller.url = url!
+            }
+        }
+    }
+
     // MARK: button actions
-    
-    
     
     @IBAction func clickPay(_ sender: UIButton) {
         
