@@ -43,7 +43,9 @@ import Foundation
 	
 	// MARK: - Show summary screen
 	
-    open class func showSummaryScreen(_ amount: Double, taxAmount : Double, currency: String, withShipping: Bool, inNavigationController: UINavigationController!, animated: Bool) {
+    open class func showSummaryScreen(_ bsToken : String,
+            amount: Double, taxAmount : Double, currency: String, withShipping: Bool,
+            inNavigationController: UINavigationController!, animated: Bool) {
 		
 		if summaryScreen == nil {
 			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
@@ -59,7 +61,12 @@ import Foundation
         }
         summaryScreen.purchaseData = purchaseData
         summaryScreen.withShipping = withShipping
+        summaryScreen.bsToken = bsToken
 		
 		inNavigationController.pushViewController(summaryScreen, animated: true)
 	}
+    
+    open class func getSandboxTestToken() -> String? {
+        return BSApiManager.getSandboxBSToken()
+    }
 }

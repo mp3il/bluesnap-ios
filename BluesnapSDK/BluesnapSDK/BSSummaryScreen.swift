@@ -6,6 +6,7 @@ class BSSummaryScreen: UIViewController {
 	// MARK: - Public properties
 	
     internal var purchaseData : PurchaseData?
+    internal var bsToken: String?
     
     // MARK: private properties
     

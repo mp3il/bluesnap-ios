@@ -41,9 +41,15 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
 	// MARK: - Actions
 	
 	@IBAction func convertButtonAction(_ sender: UIButton) {
+        
+        // get BS token!
+        let token = BlueSnapSDK.getSandboxTestToken()
+        print("token= \(token)")
+        
+        // open the purchase screen
 		let amount = (valueTextField.text! as NSString).doubleValue
         let tax = (taxTextField.text! as NSString).doubleValue
-        BlueSnapSDK.showSummaryScreen(amount,
+        BlueSnapSDK.showSummaryScreen(token!, amount: amount,
                 taxAmount : tax, currency: (currencyButton.titleLabel?.text)!,
                 withShipping: withShippingSwitch.isOn,
                 inNavigationController: self.navigationController, animated: true)
