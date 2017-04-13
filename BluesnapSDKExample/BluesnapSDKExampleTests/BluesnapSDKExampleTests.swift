@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import BluesnapSDK
 @testable import BluesnapSDKExample
 
 class BluesnapSDKExampleTests: XCTestCase {
@@ -24,6 +25,19 @@ class BluesnapSDKExampleTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        let token = BlueSnapSDK.getSandboxTestToken()
+        XCTAssertNotNil(token, "Failed to get token")
+        print("Token: \(token?.getTokenStr())")
+        
+        let bsCurrencies = BlueSnapSDK.getCurrencyRates(bsToken: token!)
+        XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+            
+        let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+        print("GBP currency name is: \(gbpCurrency.getName()), and its rate is \(gbpCurrency.getRate())")
+                
+        let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+        print("EUR currency rate is: \(eurCurrencyRate)")
     }
     
     func testPerformanceExample() {

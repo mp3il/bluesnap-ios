@@ -9,7 +9,7 @@ import Foundation
 class BSCurrencyManager : NSObject {
 	
 	// MARK: - Properties
-	
+	/*
 	fileprivate let request = BSCurrencyRequest()
 	fileprivate let parser = BSCurrencyParser()
 	fileprivate let storage = BSCurrencyStorage()
@@ -109,6 +109,6 @@ class BSCurrencyManager : NSObject {
             }
         }
         return sum % 10 == 0
-    }
+    }*/
 	
 }

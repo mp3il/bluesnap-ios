@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PurchaseData : NSObject {
+public class PurchaseData : NSObject {
     
     var amount : Double = 0.0
     var taxAmount : Double = 0.0
@@ -19,67 +19,89 @@ class PurchaseData : NSObject {
     var cvv : String = ""
     var shippingDetails : BSShippingDetails?
     
-    func getAmount() -> Double {
+    public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?, bsCurrencies: BSCurrencies?) {
+     
+        if (newCurrency == nil || bsCurrencies == nil) {
+            return
+        }
+        
+        currency = newCurrency!.code
+        
+        // calculate conversion rate
+        
+        var oldRate : Double = 1.0
+        if (oldCurrency != nil) {
+            // keep rate to convert amount and tax back to USD
+            oldRate = oldCurrency!.getRate()
+        }
+        let newRate = newCurrency!.getRate() / oldRate
+        
+        // update amounts
+        amount = amount * newRate
+        taxAmount = taxAmount * newRate
+    }
+    
+    public func getAmount() -> Double {
         return amount
     }
     
-    func setAmount(amount : Double) {
+    public func setAmount(amount : Double) {
         self.amount = amount
     }
     
-    func getTaxAmount() -> Double {
+    public func getTaxAmount() -> Double {
         return taxAmount
     }
     
-    func setTaxAmount(taxAmount : Double) {
+    public func setTaxAmount(taxAmount : Double) {
         self.taxAmount = taxAmount
     }
     
-    func getCurrency() -> String {
+    public func getCurrency() -> String {
         return currency
     }
     
-    func setCurrency(currency : String) {
+    public func setCurrency(currency : String) {
         self.currency = currency
     }
 
-    func getName() -> String {
+    public func getName() -> String {
         return name
     }
 
-    func setName(name : String) {
+    public func setName(name : String) {
         self.name = name
     }
     
-    func getCCN() -> String {
+    public func getCCN() -> String {
         return ccn
     }
     
-    func setCCN(ccn : String) {
+    public func setCCN(ccn : String) {
         self.ccn = ccn
     }
     
-    func getExp() -> String {
+    public func getExp() -> String {
         return exp
     }
     
-    func setExp(exp : String) {
+    public func setExp(exp : String) {
         self.exp = exp
     }
     
-    func getCVV() -> String {
+    public func getCVV() -> String {
         return cvv
     }
     
-    func setCVV(cvv : String) {
+    public func setCVV(cvv : String) {
         self.cvv = cvv
     }
     
-    func getShippingDetails() -> BSShippingDetails? {
+    public func getShippingDetails() -> BSShippingDetails? {
         return shippingDetails
     }
     
-    func setShippingDetails(shippingDetails : BSShippingDetails?) {
+    public func setShippingDetails(shippingDetails : BSShippingDetails?) {
         self.shippingDetails = shippingDetails
     }
     

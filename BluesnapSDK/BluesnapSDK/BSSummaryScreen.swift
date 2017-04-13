@@ -6,22 +6,21 @@ class BSSummaryScreen: UIViewController {
 	// MARK: - Public properties
 	
     internal var purchaseData : PurchaseData?
-    internal var bsToken: String?
+    internal var bsToken: BSToken?
     
     // MARK: private properties
     
-    var withShipping = false
-    var shippingScreen: BSShippingViewController!
+    fileprivate var withShipping = false
+    fileprivate var shippingScreen: BSShippingViewController!
     
     // MARK: Constants
     
-    let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
-    let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
-    let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
+    fileprivate let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
+    fileprivate let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
+    fileprivate let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
 	
 	// MARK: - Data
 	
- 	fileprivate var currencyManager = BSCurrencyManager()
     fileprivate var payButtonText : String?
 	
 	// MARK: - Outlets
@@ -53,9 +52,6 @@ class BSSummaryScreen: UIViewController {
 		super.viewWillAppear(animated)
 		
 		self.navigationController!.isNavigationBarHidden = false
-		
-        payButton.isHidden = self.withShipping
-        shippingButton.isHidden = !self.withShipping
 
         let toCurrency = purchaseData!.getCurrency()
         let subtotalAmount = purchaseData!.getAmount()
@@ -63,28 +59,18 @@ class BSSummaryScreen: UIViewController {
         let amount = subtotalAmount + taxAmount
         self.withShipping = purchaseData!.getShippingDetails() != nil
         
+        payButton.isHidden = self.withShipping
+        shippingButton.isHidden = !self.withShipping
+        
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
         payButton.setTitle(payButtonText, for: UIControlState())
-        subtotalUILabel.text = String(format:"%@ %.2f", currencyCode, CGFloat(subtotalAmount))
-        taxAmountUILabel.text = String(format:"%@ %.2f", currencyCode, CGFloat(taxAmount))
+        subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
+        taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
         
         
         // hide menu
         menuWidthConstraint.constant = 0
-
-        // Get data
-		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
-			if error == nil && data != nil {
-				for item in data! {
-					let currency = item as! BSCurrencyModel
-					if currency.code == toCurrency {
-						//self!.valueLabel.text = String(self!.rawValue * currency.rate)
-						break
-					}
-				}
-			}
-		}
 	}
 
     // MARK: menu actions
@@ -268,8 +254,6 @@ class BSSummaryScreen: UIViewController {
     @IBAction func cardEditingDidEnd(_ sender: UITextField) {
         _ = validateCCN()
     }
-   
-
 
 }
 

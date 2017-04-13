@@ -30,12 +30,13 @@ class BSApiManager  {
     }
     
     // Use this method only in tests to get a token for sandbox
-    static func getSandboxBSToken() -> String? {
+    static func getSandboxBSToken() -> BSToken? {
                 
         return getBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS)
     }
     
-    static func getBSToken(domain: String, user: String, password: String) -> String? {
+    
+    static func getBSToken(domain: String, user: String, password: String) -> BSToken? {
         
         // create request
         let authorization = getBasicAuth(user: user, password: password)
@@ -50,7 +51,7 @@ class BSApiManager  {
         
         // fire request
 
-        var resultData : String?
+        var result : BSToken?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             defer {
@@ -65,7 +66,8 @@ class BSApiManager  {
             if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                 let location:String = httpResponse?.allHeaderFields["Location"] as! String
                 let lastIndexOfSlash = location.range(of:"/", options:String.CompareOptions.backwards, range:nil, locale:nil)!
-                resultData = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
+                let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
+                result = BSToken(tokenStr: tokenStr, serverUrl: domain)
             } else {
                 print("Http error; status = \(httpStatusCode)")
             }
@@ -73,7 +75,7 @@ class BSApiManager  {
         task.resume()
         semaphore.wait()
         
-        return resultData
+        return result
     }
     
     static func getBasicAuth(user: String!, password: String!) -> String {
@@ -81,6 +83,65 @@ class BSApiManager  {
         let loginData = loginStr.data(using: String.Encoding.utf8)!
         let base64LoginStr = loginData.base64EncodedString()
         return "Basic \(base64LoginStr)"
+    }
+    
+    
+    
+    static func getCurrencyRates(bsToken : BSToken!) -> BSCurrencies? {
+        
+        let domain : String! = bsToken.serverUrl
+        let urlStr = domain + "services/2/tokenized-services/rates"
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        //request.timeoutInterval = 60
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(bsToken.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        
+        // fire request
+        
+        var resultData : BSCurrencies?
+        let semaphore = DispatchSemaphore(value: 0)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            if error != nil {
+                print("error")
+                return
+            }
+            let httpResponse = response as? HTTPURLResponse
+            let httpStatusCode:Int = (httpResponse?.statusCode)!
+            if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                do {
+                    
+                    // Parse the result JSOn object
+                    
+                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : AnyObject]
+                    var currencies : [BSCurrency] = []
+                    var bsCurrency : BSCurrency! = BSCurrency(name: json["baseCurrencyName"] as! String!,
+                                                              code: json["baseCurrency"] as! String!,
+                                                              rate: 1.0)
+                    currencies.append(bsCurrency)
+                    let exchangeRatesArr = json["exchangeRate"] as! [[String : Any]]
+                    for exchangeRateItem in exchangeRatesArr {
+                        bsCurrency = BSCurrency(name: exchangeRateItem["quoteCurrencyName"] as! String!,
+                            code: exchangeRateItem["quoteCurrency"] as! String!,
+                            rate: exchangeRateItem["conversionRate"] as! Double!)
+                        currencies.append(bsCurrency)
+                    }
+                    resultData = BSCurrencies(currencies: currencies)
+                    
+                } catch let error as NSError {
+                    print(error)
+                }
+                
+            } else {
+                print("Http error; status = \(httpStatusCode)")
+            }
+            defer {
+                semaphore.signal()
+            }
+        }
+        task.resume()
+        semaphore.wait()
+        return resultData
     }
     
 }

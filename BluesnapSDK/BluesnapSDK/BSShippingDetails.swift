@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BSShippingDetails {
+public class BSShippingDetails {
     
     var name : String = ""
     var email : String = ""

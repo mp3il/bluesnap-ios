@@ -15,11 +15,11 @@ class RatesCurrencyList: UITableViewController {
 	// MARK: - Public properties
 	
 	internal var sender: UIButton?
+    internal var bsToken: BSToken?
 	
 	// MARK: - Data
 	
-	fileprivate var currencyManager = BSCurrencyManager()
-	fileprivate var data = Array<BSCurrencyModel!>()
+	fileprivate var data = Array<BSCurrency!>()
 	
 	// MARK: - UIViewController's methods
 	
@@ -33,16 +33,15 @@ class RatesCurrencyList: UITableViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
+        
 		// Get data
-		currencyManager.fetchData {[weak self] (data: [AnyObject]?, error: NSError?) -> Void in
-			if error == nil && data != nil {
-				self!.data.removeAll()
-				for item in data! {
-					self!.data.append(item as! BSCurrencyModel)
-				}
-				self!.tableView.reloadData()
-			}
-		}
+        if (bsToken != nil) {
+           let bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken!)
+            if (bsCurrencies != nil) {
+                self.data = bsCurrencies!.currencies
+                self.tableView.reloadData()
+            }
+        }
 	}
 	
 	// MARK: - UITableViewDataSource

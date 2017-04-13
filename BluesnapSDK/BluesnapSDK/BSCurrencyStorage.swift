@@ -3,7 +3,7 @@ import Foundation
 class BSCurrencyStorage {
 	
 	// MARK: - Constants
-	
+	/*
 	fileprivate let entityName = ""
 	
 	// MARK: - Data
@@ -60,6 +60,6 @@ class BSCurrencyStorage {
 	}
 	
 	fileprivate func store(_ data: AnyObject!) {
-	}
+	}*/
 	
 }

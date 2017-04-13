@@ -12,61 +12,100 @@ import Foundation
 	
 	fileprivate static let bundleIdentifier = "com.bluesnap.BluesnapSDK"
 	fileprivate static let storyboardName = "BlueSnap"
-	fileprivate static let currencyListStoryboardId = "CurrencyListStoryboardId"
-	fileprivate static let summaryScreenStoryboardId = "SummaryScreenStoryboardId"
+	fileprivate static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
+	fileprivate static let purchaseScreenStoryboardId = "SummaryScreenStoryboardId"
 	
 	// MARK: - UI Controllers
 	
-	fileprivate static var currencyList: RatesCurrencyList!
-	fileprivate static var summaryScreen: BSSummaryScreen!
+	fileprivate static var currencyScreen: BSCurrenciesViewController!
+	fileprivate static var purchaseScreen: BSSummaryScreen!
     
     // MARK: data
     
     static var purchaseData : PurchaseData?
 
-	// MARK: - Show drop-down list with currencies
+	// MARK: - Show currencies' selection screen
 	
-	open class func showCurrencyList(_ sender: UIButton, inViewController: UIViewController, animated: Bool) {
+    /**
+    Navigate to the currency list, allow changing current selection.
+     
+     - parameters:
+        - inNavigationController: your viewController's navigationController (to be able to navigate back)
+        - animated: how to navigate to the new screen
+        - bsToken: BlueSnap token, should be fresh and valid
+        - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
+        - updateFunc: callback; will be called each time a new value is selected
+     */
+    open class func showCurrencyList(
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        bsToken: BSToken!,
+        selectedCurrencyCode : String!,
+        updateFunc: @escaping (BSCurrency?, BSCurrency?, BSCurrencies?)->Void) {
 
-		if currencyList == nil {
+		if currencyScreen == nil {
 			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
-			currencyList = storyboard.instantiateViewController(withIdentifier: currencyListStoryboardId) as! RatesCurrencyList
+			currencyScreen = storyboard.instantiateViewController(withIdentifier: currencyScreenStoryboardId) as! BSCurrenciesViewController
 		}
 		
-		currencyList.sender = sender
-		currencyList.modalPresentationStyle = .popover
-		currencyList.presentationController?.delegate = inViewController as! UIPopoverPresentationControllerDelegate
-		currencyList.popoverPresentationController?.sourceRect = sender.convert(sender.bounds, to: inViewController.view)
-		currencyList.popoverPresentationController?.sourceView = inViewController.view
-		inViewController.present(currencyList, animated: true, completion: nil)
+        currencyScreen.bsToken = bsToken
+        currencyScreen.selectedCurrencyCode = selectedCurrencyCode
+        currencyScreen.updateFunc = updateFunc
+
+        inNavigationController.pushViewController(currencyScreen, animated: animated)
 	}
 	
-	// MARK: - Show summary screen
+	// MARK: - Show purchase screen
 	
-    open class func showSummaryScreen(_ bsToken : String,
-            amount: Double, taxAmount : Double, currency: String, withShipping: Bool,
-            inNavigationController: UINavigationController!, animated: Bool) {
+    /**
+     Open the check-out screen, where the shopper payment details are entered.
+     
+     - parameters:
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+     - bsToken: BlueSnap token, should be fresh and valid
+     - purchaseData: object that will hold the shopper and payment details; shopper name and shipping details may be pre-filled
+     - withShipping: if true, the shopper will be asked to supply shipping details
+     - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data isd prepared
+     
+    */
+    open class func showPurchaseScreen(
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        bsToken : BSToken!,
+        purchaseData : PurchaseData!,
+        withShipping: Bool,
+        purchaseFunc: (PurchaseData!)->Void) {
 		
-		if summaryScreen == nil {
+		if purchaseScreen == nil {
 			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
-			summaryScreen = storyboard.instantiateViewController(withIdentifier: summaryScreenStoryboardId) as! BSSummaryScreen
+			purchaseScreen = storyboard.instantiateViewController(withIdentifier: purchaseScreenStoryboardId) as! BSSummaryScreen
         }
 		
-        purchaseData = PurchaseData()
-        purchaseData!.setAmount(amount: amount)
-        purchaseData!.setTaxAmount(taxAmount: taxAmount)
-        purchaseData!.setCurrency(currency: currency)
-        if (withShipping) {
-            purchaseData?.setShippingDetails(shippingDetails: BSShippingDetails())
+        if (withShipping && purchaseData.shippingDetails == nil) {
+            purchaseData.setShippingDetails(shippingDetails: BSShippingDetails())
+        } else if (!withShipping && purchaseData.shippingDetails != nil) {
+            purchaseData.setShippingDetails(shippingDetails: nil)
         }
-        summaryScreen.purchaseData = purchaseData
-        summaryScreen.withShipping = withShipping
-        summaryScreen.bsToken = bsToken
+        purchaseScreen.purchaseData = purchaseData
+        purchaseScreen.bsToken = bsToken
 		
-		inNavigationController.pushViewController(summaryScreen, animated: true)
+		inNavigationController.pushViewController(purchaseScreen, animated: animated)
 	}
     
-    open class func getSandboxTestToken() -> String? {
+    // MARK: Utility functions
+    
+    /**
+    Returns token for BlueSnap Sandbox environment; useful for tests.
+    */
+    open class func getSandboxTestToken() -> BSToken? {
         return BSApiManager.getSandboxBSToken()
+    }
+    
+    /**
+     Returns Currency Rates data.
+     */
+    open class func getCurrencyRates(bsToken : BSToken) -> BSCurrencies? {
+        return BSApiManager.getCurrencyRates(bsToken: bsToken)
     }
 }
