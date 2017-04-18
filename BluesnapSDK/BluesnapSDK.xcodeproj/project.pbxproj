@@ -10,12 +10,7 @@
 		2D374F2F1E880E7300AE2A81 /* BluesnapSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F2E1E880E7300AE2A81 /* BluesnapSDKTests.swift */; };
 		2D374F311E880E7300AE2A81 /* BluesnapSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D374F231E880E7200AE2A81 /* BluesnapSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */; };
-		2D374F461E880EF100AE2A81 /* BSCurrencyStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3B1E880EF100AE2A81 /* BSCurrencyStorage.swift */; };
-		2D374F471E880EF100AE2A81 /* BSCurrencyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3C1E880EF100AE2A81 /* BSCurrencyRequest.swift */; };
-		2D374F481E880EF100AE2A81 /* BSCurrencyParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3D1E880EF100AE2A81 /* BSCurrencyParser.swift */; };
 		2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */; };
-		2D374F4A1E880EF100AE2A81 /* BSCurrencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3F1E880EF100AE2A81 /* BSCurrencyManager.swift */; };
-		2D374F4B1E880EF100AE2A81 /* RatesCurrencyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F401E880EF100AE2A81 /* RatesCurrencyList.swift */; };
 		2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F411E880EF100AE2A81 /* BSToken.swift */; };
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
 		2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */; };
@@ -48,12 +43,7 @@
 		2D374F2E1E880E7300AE2A81 /* BluesnapSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluesnapSDKTests.swift; sourceTree = "<group>"; };
 		2D374F301E880E7300AE2A81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSSummaryScreen.swift; sourceTree = "<group>"; };
-		2D374F3B1E880EF100AE2A81 /* BSCurrencyStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyStorage.swift; sourceTree = "<group>"; };
-		2D374F3C1E880EF100AE2A81 /* BSCurrencyRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyRequest.swift; sourceTree = "<group>"; };
-		2D374F3D1E880EF100AE2A81 /* BSCurrencyParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyParser.swift; sourceTree = "<group>"; };
 		2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyModel.swift; sourceTree = "<group>"; };
-		2D374F3F1E880EF100AE2A81 /* BSCurrencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyManager.swift; sourceTree = "<group>"; };
-		2D374F401E880EF100AE2A81 /* RatesCurrencyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatesCurrencyList.swift; sourceTree = "<group>"; };
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
 		2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BlueSnap.storyboard; sourceTree = "<group>"; };
@@ -141,10 +131,6 @@
 		FD17062E1E93724000552A35 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
-				2D374F3B1E880EF100AE2A81 /* BSCurrencyStorage.swift */,
-				2D374F3C1E880EF100AE2A81 /* BSCurrencyRequest.swift */,
-				2D374F3D1E880EF100AE2A81 /* BSCurrencyParser.swift */,
-				2D374F3F1E880EF100AE2A81 /* BSCurrencyManager.swift */,
 				FDA6BE301E938B63006C3359 /* BSValidator.swift */,
 				FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */,
 			);
@@ -155,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
-				2D374F401E880EF100AE2A81 /* RatesCurrencyList.swift */,
 				FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
 				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
@@ -279,7 +264,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */,
-				2D374F471E880EF100AE2A81 /* BSCurrencyRequest.swift in Sources */,
 				2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */,
 				FDA6BE331E93D815006C3359 /* PurchaseData.swift in Sources */,
 				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
@@ -287,12 +271,8 @@
 				2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */,
 				FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */,
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
-				2D374F4B1E880EF100AE2A81 /* RatesCurrencyList.swift in Sources */,
-				2D374F4A1E880EF100AE2A81 /* BSCurrencyManager.swift in Sources */,
 				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
 				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */,
-				2D374F481E880EF100AE2A81 /* BSCurrencyParser.swift in Sources */,
-				2D374F461E880EF100AE2A81 /* BSCurrencyStorage.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
 				2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */,
 			);
