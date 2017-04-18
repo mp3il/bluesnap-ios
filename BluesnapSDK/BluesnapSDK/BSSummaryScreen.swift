@@ -18,6 +18,11 @@ class BSSummaryScreen: UIViewController {
     fileprivate let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
     fileprivate let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
     fileprivate let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
+    fileprivate let nameInvalidMessage = "Please fill Card holder name"
+    fileprivate let ccnInvalidMessage = "Please fill a valid Credirt Card number"
+    fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
+    fileprivate let expInvalidMessage = "Please fill a valid exiration date"
+    
 	
 	// MARK: - Data
 	
@@ -29,7 +34,8 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var shippingButton: UIButton!
     @IBOutlet weak var nameUiTextyField: UITextField!
     @IBOutlet weak var cardUiTextField: UITextField!
-    @IBOutlet weak var expUiTextField: UITextField!
+    @IBOutlet weak var ExpYYUiTextField: UITextField!
+    @IBOutlet weak var ExpMMUiTextField: UITextField!
     @IBOutlet weak var cvvUiTextField: UITextField!
     @IBOutlet weak var ccnErrorUiLabel: UILabel!
     @IBOutlet weak var nameErrorUiLabel: UILabel!
@@ -84,7 +90,30 @@ class BSSummaryScreen: UIViewController {
         updateTexts()
     }
     
+    private func getCurrentYear() -> Int! {
+        let date = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        return year
+    }
+    
+    private func getExpYearAsYYYY() -> String! {
+        
+        let yearStr = String(getCurrentYear())
+        let p = yearStr.index(yearStr.startIndex, offsetBy: 2)
+        let first2Digits = yearStr.substring(with: yearStr.startIndex..<p)
+        let last2Digits = self.ExpYYUiTextField.text!
+        return "\(first2Digits)\(last2Digits)"
+    }
+    
+    private func getExpDateAsMMYYYY() -> String! {
+        
+        let mm = self.ExpMMUiTextField.text!
+        let yyyy = getExpYearAsYYYY()
+        return "\(mm)/\(yyyy)"
+    }
 
+    
     // MARK: menu actions
         
     @IBAction func menuCurrecyAction(_ sender: Any) {
@@ -137,10 +166,32 @@ class BSSummaryScreen: UIViewController {
         
         if (validateForm()) {
             print("ready to submit!")
+            
+            let ccn = self.cardUiTextField.text!
+            let cvv = self.cvvUiTextField.text!
+            let exp = self.getExpDateAsMMYYYY()!
+            do {
+                let result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
+                self.purchaseData?.setCcDetails(ccDetails: result)
+                
+            } catch let error as BSCcDetailErrors {
+                if (error == BSCcDetailErrors.invalidCcNumber) {
+                    ccnErrorUiLabel.text = ccnInvalidMessage
+                    ccnErrorUiLabel.isHidden = false
+                } else if (error == BSCcDetailErrors.invalidExpDate) {
+                    expErrorUiLabel.text = expInvalidMessage
+                    expErrorUiLabel.isHidden = false
+                } else if (error == BSCcDetailErrors.invalidCvv) {
+                    cvvErrorUiLabel.text = cvvInvalidMessage
+                    cvvErrorUiLabel.isHidden = false
+                }
+            } catch {
+                print("Unexpected error")
+            }
+
         } else {
             //return false
         }
-        
     }
     
     
@@ -168,15 +219,16 @@ class BSSummaryScreen: UIViewController {
         
         let ok1 = validateName()
         let ok2 = validateCCN()
-        let ok3 = validateExp()
-        let ok4 = validateCvv()
-        return ok1 && ok2 && ok3 && ok4
+        let ok3 = validateExpMM()
+        let ok4 = validateExpYY()
+        let ok5 = validateCvv()
+        return ok1 && ok2 && ok3 && ok4 && ok5
     }
     
     func validateCvv() -> Bool {
         
         if (cvvUiTextField.text!.characters.count < 3) {
-            cvvErrorUiLabel.text = "Please fill a valid CVV number"
+            cvvErrorUiLabel.text = cvvInvalidMessage
             cvvErrorUiLabel.isHidden = false
             return false
         } else {
@@ -189,7 +241,7 @@ class BSSummaryScreen: UIViewController {
         
         nameErrorUiLabel.isHidden = true
         if (nameUiTextyField.text!.characters.count < 4) {
-            nameErrorUiLabel.text = "Please fill Card holder name"
+            nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false
             return false
         }
@@ -201,34 +253,48 @@ class BSSummaryScreen: UIViewController {
         ccnErrorUiLabel.isHidden = true
         // TODO: need to add lohn check as well
         if (cardUiTextField.text!.characters.count < 7) {
-            ccnErrorUiLabel.text = "Please fill a valid Credirt Card number"
+            ccnErrorUiLabel.text = ccnInvalidMessage
             ccnErrorUiLabel.isHidden = false
             return false
         }
         return true
     }
     
-    func validateExp() -> Bool {
+    func validateExpMM() -> Bool {
         var ok = true
-        let input = expUiTextField.text!
-        if (input.characters.count < 5) {
+        let inputMM = ExpMMUiTextField.text!
+        if (inputMM.characters.count < 2) {
             ok = false
-        } else {
-            let idx = input.index(input.startIndex, offsetBy: 2)
-            let monthStr = input.substring(with: input.startIndex..<idx)
-            if !monthStr.isValidMonth {
-                ok = false
-            }
+        } else if !inputMM.isValidMonth {
+            ok = false
         }
         if (ok) {
             expErrorUiLabel.isHidden = true
         } else {
-            expErrorUiLabel.text = "Please fill a valid exiration date"
+            expErrorUiLabel.text = expInvalidMessage
             expErrorUiLabel.isHidden = false
         }
         return ok
     }
-
+    
+    func validateExpYY() -> Bool {
+        var ok = true
+        let inputYY = ExpYYUiTextField.text!
+        if (inputYY.characters.count < 2) {
+            ok = false
+        } else {
+            let currentYearYY = self.getCurrentYear() % 100
+            ok = currentYearYY <= Int(inputYY)!
+        }
+        if (ok) {
+            expErrorUiLabel.isHidden = true
+        } else {
+            expErrorUiLabel.text = expInvalidMessage
+            expErrorUiLabel.isHidden = false
+        }
+        return ok
+    }
+    
     
     // MARK: real-time formatting and Validations on text fields
     
@@ -249,7 +315,7 @@ class BSSummaryScreen: UIViewController {
     @IBAction func expEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4).formatExp
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 2)
         sender.text = input
     }
     
@@ -268,10 +334,14 @@ class BSSummaryScreen: UIViewController {
         _ = validateCvv()
     }
     
-    @IBAction func expEditingDidEnd(_ sender: UITextField) {
-        _ = validateExp()
+    @IBAction func expYYEditingDidEnd(_ sender: UITextField) {
+        _ = validateExpYY()
     }
     
+    @IBAction func expMMEditingDidEnd(_ sender: UITextField) {
+        _ = validateExpMM()
+    }
+
     @IBAction func cardEditingDidEnd(_ sender: UITextField) {
         _ = validateCCN()
     }

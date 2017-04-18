@@ -36,6 +36,9 @@ class BSApiManager  {
     }
     
     
+    /**
+        Get BlueSnap Token from BlueSnap server
+    */
     static func getBSToken(domain: String, user: String, password: String) -> BSToken? {
         
         // create request
@@ -78,6 +81,9 @@ class BSApiManager  {
         return result
     }
     
+    /**
+        Build the basic authentication header from username/password
+    */
     static func getBasicAuth(user: String!, password: String!) -> String {
         let loginStr = String(format: "%@:%@", user, password)
         let loginData = loginStr.data(using: String.Encoding.utf8)!
@@ -86,7 +92,9 @@ class BSApiManager  {
     }
     
     
-    
+    /**
+        Return a list of currencies and their rates from BlueSnap server
+    */
     static func getCurrencyRates(bsToken : BSToken!) -> BSCurrencies? {
         
         let domain : String! = bsToken.serverUrl
@@ -144,4 +152,90 @@ class BSApiManager  {
         return resultData
     }
     
+    /**
+    Submit CC details to BlueSnap server
+    */
+    static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
+        
+        let requestBody = ["ccNumber": ccNumber, "cvv":cvv, "expDate": expDate]
+        
+        let domain : String! = bsToken.serverUrl
+        let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken.getTokenStr();
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "PUT"
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        //request.timeoutInterval = 60
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // fire request
+        
+        var result : BSResultCcDetails?
+        var resultError : BSCcDetailErrors?
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            if error != nil {
+                print("error")
+                return
+            }
+            let httpResponse = response as? HTTPURLResponse
+            let httpStatusCode:Int = (httpResponse?.statusCode)!
+            if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                do {
+                    
+                    // Parse the result JSOn object
+                    
+                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : AnyObject]
+
+                    result = BSResultCcDetails()
+                    result!.ccType = json["ccType"] as? String
+                    result!.last4Digits = json["last4Digits"] as? String
+                    result!.ccIssuingCountry = json["issuingCountry"] as? String
+                    
+                } catch let error as NSError {
+                    print(error)
+                }
+                
+            } else if (httpStatusCode == 400) {
+                resultError = .unknown
+                if (data != nil) {
+                    let errStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+                    if (errStr == "\"INVALID_CC_NUMBER\"") {
+                        resultError = .invalidCcNumber
+                    } else if (errStr == "\"INVALID_CVV\"") {
+                        resultError = .invalidCvv
+                    } else if (errStr == "\"INVALID_EXP_DATE\"") {
+                        resultError = .invalidExpDate
+                    }
+                }
+            } else {
+                print("Http error; status = \(httpStatusCode)")
+                resultError = .unknown
+            }
+            defer {
+                semaphore.signal()
+            }
+        }
+        task.resume()
+        semaphore.wait()
+        if (resultError != nil) {
+            throw resultError!
+        }
+        return result
+    }
+    
+    
 }
+
+enum BSCcDetailErrors : Error {
+    case invalidCcNumber
+    case invalidCvv
+    case invalidExpDate
+    case unknown
+}
+

@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="28" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4yp-lT-3rH" id="cc5-Fv-bYZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="160" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="160" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -224,27 +224,49 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="50" verticalHuggingPriority="50" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="MM/YY" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sgm-Vg-xti">
-                                        <rect key="frame" x="62" y="0.0" width="68" height="30"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="50" verticalHuggingPriority="50" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="MM" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6qK-6f-cHE">
+                                        <rect key="frame" x="62" y="0.0" width="40" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="68" id="LqF-fl-g6Q"/>
+                                            <constraint firstAttribute="width" constant="40" id="VO2-NJ-Z9e"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                        <connections>
+                                            <action selector="expEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="h2N-Z6-Xa2"/>
+                                            <action selector="expMMEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="Bsd-b4-fnU"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mNM-Q4-TGk">
+                                        <rect key="frame" x="102" y="0.0" width="5" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="5" id="u4i-B9-3kU"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="50" verticalHuggingPriority="50" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="YY" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sgm-Vg-xti">
+                                        <rect key="frame" x="107" y="0.0" width="40" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="LqF-fl-g6Q"/>
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                         <connections>
                                             <action selector="expEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="96V-Ow-wqI"/>
-                                            <action selector="expEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="kws-Cc-nmY"/>
+                                            <action selector="expYYEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="zME-s0-lqu"/>
                                         </connections>
                                     </textField>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" image="ico_field_name.png" translatesAutoresizingMaskIntoConstraints="NO" id="0FV-92-cR2">
-                                        <rect key="frame" x="130" y="0.0" width="33" height="30"/>
+                                        <rect key="frame" x="147" y="0.0" width="33" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="xCz-ee-voN"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CVV" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q7c-mg-GMk">
-                                        <rect key="frame" x="163" y="0.0" width="34" height="30"/>
+                                        <rect key="frame" x="180" y="0.0" width="34" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="34" id="54d-Uw-HLJ"/>
                                         </constraints>
@@ -253,7 +275,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QdQ-H8-ref">
-                                        <rect key="frame" x="197" y="0.0" width="44" height="30"/>
+                                        <rect key="frame" x="214" y="0.0" width="27" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -427,12 +449,13 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="300" height="600"/>
                     <connections>
+                        <outlet property="ExpMMUiTextField" destination="6qK-6f-cHE" id="Zfv-bL-HQw"/>
+                        <outlet property="ExpYYUiTextField" destination="sgm-Vg-xti" id="sxh-qG-bCj"/>
                         <outlet property="cardUiTextField" destination="O75-Cx-Nfz" id="mum-XO-GFI"/>
                         <outlet property="ccnErrorUiLabel" destination="Qxa-dL-l7E" id="aPh-EF-kdy"/>
                         <outlet property="cvvErrorUiLabel" destination="flE-kk-lUd" id="2gV-kf-Lx6"/>
                         <outlet property="cvvUiTextField" destination="QdQ-H8-ref" id="aEc-gb-gom"/>
                         <outlet property="expErrorUiLabel" destination="8NT-xL-Sen" id="l8k-5H-w3f"/>
-                        <outlet property="expUiTextField" destination="sgm-Vg-xti" id="MjL-DZ-qwf"/>
                         <outlet property="menuCurrencyButton" destination="OWd-2D-Y5F" id="xsn-uk-qSL"/>
                         <outlet property="menuWidthConstraint" destination="aBo-89-XOZ" id="9Gb-b2-RIC"/>
                         <outlet property="nameErrorUiLabel" destination="ylX-6i-g8z" id="iAV-e9-6Sy"/>

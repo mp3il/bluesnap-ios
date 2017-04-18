@@ -10,15 +10,24 @@ import Foundation
 
 public class PurchaseData : NSObject {
     
+    // These 3 fields are input + output (they may change if shopper changes currency)
     var amount : Double = 0.0
     var taxAmount : Double = 0.0
     var currency : String = "USD"
-    var name : String = ""
-    var ccn : String = ""
-    var exp : String = ""
-    var cvv : String = ""
-    var shippingDetails : BSShippingDetails?
     
+    // These fields are output, but may be supplied as input as well
+    var name : String = ""
+    var shippingDetails : BSShippingDetails?
+
+    // Output only - result of submitting the CC details to BlueSnap server
+    var ccDetails : BSResultCcDetails?
+    
+    
+    // MARK: Change currency method
+    
+    /*
+    Change currencvy will also change the amounts according to the change rates
+    */
     public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?, bsCurrencies: BSCurrencies?) {
         
         if (newCurrency == nil || bsCurrencies == nil) {
@@ -40,6 +49,9 @@ public class PurchaseData : NSObject {
         amount = amount * newRate
         taxAmount = taxAmount * newRate
     }
+    
+    
+    // MARK: getters and setters
     
     public func getAmount() -> Double {
         return amount
@@ -73,28 +85,12 @@ public class PurchaseData : NSObject {
         self.name = name
     }
     
-    public func getCCN() -> String {
-        return ccn
+    public func getCcDetails() -> BSResultCcDetails? {
+        return ccDetails
     }
     
-    public func setCCN(ccn : String) {
-        self.ccn = ccn
-    }
-    
-    public func getExp() -> String {
-        return exp
-    }
-    
-    public func setExp(exp : String) {
-        self.exp = exp
-    }
-    
-    public func getCVV() -> String {
-        return cvv
-    }
-    
-    public func setCVV(cvv : String) {
-        self.cvv = cvv
+    public func setCcDetails(ccDetails : BSResultCcDetails?) {
+        self.ccDetails = ccDetails
     }
     
     public func getShippingDetails() -> BSShippingDetails? {
@@ -106,6 +102,9 @@ public class PurchaseData : NSObject {
     }
 }
 
+/**
+    Shopper shipping details for purchase
+ */
 public class BSShippingDetails {
     
     var name : String = ""
@@ -115,5 +114,16 @@ public class BSShippingDetails {
     var zip : String = ""
     var country : String = ""
     var state : String = ""
-    
 }
+
+/**
+ Output non-secured CC details for the purchase
+*/
+public class BSResultCcDetails {
+    
+    // these fields are output - result of submitting the CC details to BlueSnap server
+    var ccType : String?
+    var last4Digits : String?
+    var ccIssuingCountry : String?
+}
+
