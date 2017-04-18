@@ -53,31 +53,50 @@ class BSSummaryScreen: UIViewController {
 		
 		self.navigationController!.isNavigationBarHidden = false
 
+        self.withShipping = purchaseData!.getShippingDetails() != nil
+        payButton.isHidden = self.withShipping
+        shippingButton.isHidden = !self.withShipping
+        updateTexts()
+        
+        // hide menu
+        menuWidthConstraint.constant = 0
+	}
+    
+    
+    // MARK: private methods
+    
+    private func updateTexts() {
+        
         let toCurrency = purchaseData!.getCurrency()
         let subtotalAmount = purchaseData!.getAmount()
         let taxAmount = purchaseData!.getTaxAmount()
         let amount = subtotalAmount + taxAmount
-        self.withShipping = purchaseData!.getShippingDetails() != nil
-        
-        payButton.isHidden = self.withShipping
-        shippingButton.isHidden = !self.withShipping
-        
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
         payButton.setTitle(payButtonText, for: UIControlState())
         subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
         taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
+    }
+    
+    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?, bsCurrencies : BSCurrencies?) {
         
-        
-        // hide menu
-        menuWidthConstraint.constant = 0
-	}
+        purchaseData!.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!, bsCurrencies: bsCurrencies!)
+        updateTexts()
+    }
+    
 
     // MARK: menu actions
         
     @IBAction func menuCurrecyAction(_ sender: Any) {
         
-        print("in currency menu option")
+        //print("in currency menu option")
+        BlueSnapSDK.showCurrencyList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            bsToken: bsToken,
+            selectedCurrencyCode: purchaseData!.getCurrency(),
+            updateFunc: updateViewWithNewCurrency)
+
     }
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
@@ -123,6 +142,8 @@ class BSSummaryScreen: UIViewController {
         }
         
     }
+    
+    
     
     @IBAction func clickShipping(_ sender: UIButton) {
         

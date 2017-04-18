@@ -71,7 +71,7 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
             animated: true,
             bsToken: bsToken,
             selectedCurrencyCode: purchaseData.getCurrency(),
-            updateFunc: updateViewWithPurchaseData)
+            updateFunc: updateViewWithNewCurrency)
 	}
 	
 	// MARK: - UIPopoverPresentationControllerDelegate
@@ -88,7 +88,7 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         purchaseData.setCurrency(currency: (currencyButton.titleLabel?.text)!)
     }
     
-    private func updateViewWithPurchaseData(oldCurrency : BSCurrency?, newCurrency : BSCurrency?, bsCurrencies : BSCurrencies?) {
+    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?, bsCurrencies : BSCurrencies?) {
         
         purchaseData.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!, bsCurrencies: bsCurrencies!)
         valueTextField.text = String(purchaseData.getAmount())
