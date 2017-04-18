@@ -1,8 +1,8 @@
 //
-//  PurchaseData.swift
+//  BSPurchaseDataModel.swift
 //  BluesnapSDK
 //
-//  Created by Shevie Chen on 04/04/2017.
+//  Created by Shevie Chen on 18/04/2017.
 //  Copyright © 2017 Bluesnap. All rights reserved.
 //
 
@@ -20,7 +20,7 @@ public class PurchaseData : NSObject {
     var shippingDetails : BSShippingDetails?
     
     public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?, bsCurrencies: BSCurrencies?) {
-     
+        
         if (newCurrency == nil || bsCurrencies == nil) {
             return
         }
@@ -64,11 +64,11 @@ public class PurchaseData : NSObject {
     public func setCurrency(currency : String) {
         self.currency = currency
     }
-
+    
     public func getName() -> String {
         return name
     }
-
+    
     public func setName(name : String) {
         self.name = name
     }
@@ -104,5 +104,16 @@ public class PurchaseData : NSObject {
     public func setShippingDetails(shippingDetails : BSShippingDetails?) {
         self.shippingDetails = shippingDetails
     }
+}
+
+public class BSShippingDetails {
+    
+    var name : String = ""
+    var email : String = ""
+    var address : String = ""
+    var city : String = ""
+    var zip : String = ""
+    var country : String = ""
+    var state : String = ""
     
 }
