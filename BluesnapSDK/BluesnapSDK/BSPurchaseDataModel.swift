@@ -10,13 +10,14 @@ import Foundation
 
 public class PurchaseData : NSObject {
     
-    // These 3 fields are input + output (they may change if shopper changes currency)
-    var amount : Double = 0.0
-    var taxAmount : Double = 0.0
-    var currency : String = "USD"
+    // These 4 fields are input + output (they may change if shopper changes currency)
+    var amount : Double! = 0.0
+    var taxAmount : Double! = 0.0
+    var taxPercent : Double! = 0.0
+    var currency : String! = "USD"
     
     // These fields are output, but may be supplied as input as well
-    var name : String = ""
+    var name : String! = ""
     var shippingDetails : BSShippingDetails?
 
     // Output only - result of submitting the CC details to BlueSnap server
@@ -53,35 +54,43 @@ public class PurchaseData : NSObject {
     
     // MARK: getters and setters
     
-    public func getAmount() -> Double {
+    public func getAmount() -> Double! {
         return amount
     }
     
-    public func setAmount(amount : Double) {
+    public func setAmount(amount : Double!) {
         self.amount = amount
     }
     
-    public func getTaxAmount() -> Double {
+    public func getTaxAmount() -> Double! {
         return taxAmount
     }
     
-    public func setTaxAmount(taxAmount : Double) {
+    public func setTaxAmount(taxAmount : Double!) {
         self.taxAmount = taxAmount
     }
     
-    public func getCurrency() -> String {
+    public func getTaxPercent() -> Double! {
+        return taxPercent
+    }
+    
+    public func setTaxPercent(taxPercent : Double!) {
+        self.taxPercent = taxPercent
+    }
+    
+    public func getCurrency() -> String! {
         return currency
     }
     
-    public func setCurrency(currency : String) {
+    public func setCurrency(currency : String!) {
         self.currency = currency
     }
     
-    public func getName() -> String {
+    public func getName() -> String! {
         return name
     }
     
-    public func setName(name : String) {
+    public func setName(name : String!) {
         self.name = name
     }
     

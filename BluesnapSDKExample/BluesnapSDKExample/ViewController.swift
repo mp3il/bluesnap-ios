@@ -16,6 +16,7 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
 	@IBOutlet weak var convertButton: UIButton!
     @IBOutlet weak var withShippingSwitch: UISwitch!
     @IBOutlet weak var taxTextField: UITextField!
+    @IBOutlet weak var taxPercentTextField: UITextField!
     
     // MARK: private properties
     
@@ -85,6 +86,7 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         
         purchaseData.setAmount(amount: (valueTextField.text! as NSString).doubleValue)
         purchaseData.setTaxAmount(taxAmount: (taxTextField.text! as NSString).doubleValue)
+        purchaseData.setTaxPercent(taxPercent: (taxPercentTextField.text! as NSString).doubleValue)
         purchaseData.setCurrency(currency: (currencyButton.titleLabel?.text)!)
     }
     

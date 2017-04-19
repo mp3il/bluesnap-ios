@@ -73,9 +73,9 @@ class BSSummaryScreen: UIViewController {
     
     private func updateTexts() {
         
-        let toCurrency = purchaseData!.getCurrency()
-        let subtotalAmount = purchaseData!.getAmount()
-        let taxAmount = purchaseData!.getTaxAmount()
+        let toCurrency = purchaseData!.getCurrency()!
+        let subtotalAmount = purchaseData!.getAmount()!
+        let taxAmount = purchaseData!.getTaxAmount()! + purchaseData!.getTaxPercent()!*subtotalAmount/100.0
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
