@@ -7,7 +7,7 @@
 import UIKit
 import BluesnapSDK
 
-class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController {
 	
 	// MARK: - Outlets
 	

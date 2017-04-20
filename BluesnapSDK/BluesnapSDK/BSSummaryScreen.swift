@@ -22,7 +22,7 @@ class BSSummaryScreen: UIViewController {
     fileprivate let ccnInvalidMessage = "Please fill a valid Credirt Card number"
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
-    
+    fileprivate let doValidations = false;
 	
 	// MARK: - Data
 	
@@ -31,7 +31,6 @@ class BSSummaryScreen: UIViewController {
 	// MARK: - Outlets
     
     @IBOutlet weak var payButton: UIButton!
-    @IBOutlet weak var shippingButton: UIButton!
     @IBOutlet weak var nameUiTextyField: UITextField!
     @IBOutlet weak var cardUiTextField: UITextField!
     @IBOutlet weak var ExpYYUiTextField: UITextField!
@@ -60,8 +59,6 @@ class BSSummaryScreen: UIViewController {
 		self.navigationController!.isNavigationBarHidden = false
 
         self.withShipping = purchaseData!.getShippingDetails() != nil
-        payButton.isHidden = self.withShipping
-        shippingButton.isHidden = !self.withShipping
         updateTexts()
         
         // hide menu
@@ -79,7 +76,11 @@ class BSSummaryScreen: UIViewController {
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
-        payButton.setTitle(payButtonText, for: UIControlState())
+        if (self.withShipping) {
+            payButton.setTitle("Shipping ->", for: UIControlState())
+        } else {
+            payButton.setTitle(payButtonText, for: UIControlState())
+        }
         subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
         taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
     }
@@ -113,9 +114,47 @@ class BSSummaryScreen: UIViewController {
         return "\(mm)/\(yyyy)"
     }
 
+    private func submitPaymentFields() -> BSResultCcDetails? {
+        
+        var result : BSResultCcDetails?
+        
+        let ccn = self.cardUiTextField.text!
+        let cvv = self.cvvUiTextField.text!
+        let exp = self.getExpDateAsMMYYYY()!
+        do {
+            result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
+            self.purchaseData?.setCcDetails(ccDetails: result)
+            
+        } catch let error as BSCcDetailErrors {
+            if (error == BSCcDetailErrors.invalidCcNumber) {
+                ccnErrorUiLabel.text = ccnInvalidMessage
+                ccnErrorUiLabel.isHidden = false
+            } else if (error == BSCcDetailErrors.invalidExpDate) {
+                expErrorUiLabel.text = expInvalidMessage
+                expErrorUiLabel.isHidden = false
+            } else if (error == BSCcDetailErrors.invalidCvv) {
+                cvvErrorUiLabel.text = cvvInvalidMessage
+                cvvErrorUiLabel.isHidden = false
+            }
+        } catch {
+            print("Unexpected error")
+        }
+        return result
+    }
+    
+    private func gotoShippingScreen() {
+        
+        if (self.shippingScreen == nil) {
+            self.shippingScreen = storyboard!.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
+            purchaseData!.getShippingDetails()!.name = self.nameUiTextyField.text!
+            self.shippingScreen.purchaseData = self.purchaseData
+        }
+        self.shippingScreen.payText = self.payButtonText
+        self.navigationController?.pushViewController(self.shippingScreen, animated: true)
+    }
     
     // MARK: menu actions
-        
+    
     @IBAction func menuCurrecyAction(_ sender: Any) {
         
         //print("in currency menu option")
@@ -165,53 +204,21 @@ class BSSummaryScreen: UIViewController {
     @IBAction func clickPay(_ sender: UIButton) {
         
         if (validateForm()) {
-            print("ready to submit!")
             
-            let ccn = self.cardUiTextField.text!
-            let cvv = self.cvvUiTextField.text!
-            let exp = self.getExpDateAsMMYYYY()!
-            do {
-                let result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
-                self.purchaseData?.setCcDetails(ccDetails: result)
-                
-            } catch let error as BSCcDetailErrors {
-                if (error == BSCcDetailErrors.invalidCcNumber) {
-                    ccnErrorUiLabel.text = ccnInvalidMessage
-                    ccnErrorUiLabel.isHidden = false
-                } else if (error == BSCcDetailErrors.invalidExpDate) {
-                    expErrorUiLabel.text = expInvalidMessage
-                    expErrorUiLabel.isHidden = false
-                } else if (error == BSCcDetailErrors.invalidCvv) {
-                    cvvErrorUiLabel.text = cvvInvalidMessage
-                    cvvErrorUiLabel.isHidden = false
+            if (withShipping) {
+                gotoShippingScreen()
+            } else {
+                let result = submitPaymentFields()
+                if (result != nil) {
+                    // call callback
+                    print("Should close window here and call the callback")
                 }
-            } catch {
-                print("Unexpected error")
             }
-
         } else {
             //return false
         }
     }
     
-    
-    
-    @IBAction func clickShipping(_ sender: UIButton) {
-        
-        if (validateForm()) {
-            print("ready to go to shipping!")
-            if (self.shippingScreen == nil) {
-                self.shippingScreen = storyboard!.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
-                purchaseData!.getShippingDetails()!.name = self.nameUiTextyField.text!
-                self.shippingScreen.purchaseData = self.purchaseData
-            }
-            self.shippingScreen.payText = self.payButtonText
-            self.navigationController?.pushViewController(self.shippingScreen, animated: true)
-        } else {
-            //return false
-        }
-        
-    }
 
     // MARK: Validation methods
     
@@ -227,7 +234,7 @@ class BSSummaryScreen: UIViewController {
     
     func validateCvv() -> Bool {
         
-        if (cvvUiTextField.text!.characters.count < 3) {
+        if (doValidations && cvvUiTextField.text!.characters.count < 3) {
             cvvErrorUiLabel.text = cvvInvalidMessage
             cvvErrorUiLabel.isHidden = false
             return false
@@ -240,7 +247,7 @@ class BSSummaryScreen: UIViewController {
     func validateName() -> Bool {
         
         nameErrorUiLabel.isHidden = true
-        if (nameUiTextyField.text!.characters.count < 4) {
+        if (doValidations && nameUiTextyField.text!.characters.count < 4) {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false
             return false
@@ -252,7 +259,7 @@ class BSSummaryScreen: UIViewController {
         
         ccnErrorUiLabel.isHidden = true
         // TODO: need to add lohn check as well
-        if (cardUiTextField.text!.characters.count < 7) {
+        if (doValidations && cardUiTextField.text!.characters.count < 7) {
             ccnErrorUiLabel.text = ccnInvalidMessage
             ccnErrorUiLabel.isHidden = false
             return false
@@ -263,7 +270,9 @@ class BSSummaryScreen: UIViewController {
     func validateExpMM() -> Bool {
         var ok = true
         let inputMM = ExpMMUiTextField.text!
-        if (inputMM.characters.count < 2) {
+        if (!doValidations) {
+            ok = true
+        } else if (inputMM.characters.count < 2) {
             ok = false
         } else if !inputMM.isValidMonth {
             ok = false
@@ -280,7 +289,9 @@ class BSSummaryScreen: UIViewController {
     func validateExpYY() -> Bool {
         var ok = true
         let inputYY = ExpYYUiTextField.text!
-        if (inputYY.characters.count < 2) {
+        if (!doValidations) {
+            ok = true
+        } else if (inputYY.characters.count < 2) {
             ok = false
         } else {
             let currentYearYY = self.getCurrentYear() % 100
