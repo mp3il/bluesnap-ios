@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KountDataCollector.h"
 
 //! Project version number for BluesnapSDK.
 FOUNDATION_EXPORT double BluesnapSDKVersionNumber;

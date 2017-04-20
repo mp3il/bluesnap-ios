@@ -24,8 +24,8 @@ import Foundation
     
     static var purchaseData : PurchaseData?
 
-	// MARK: - Show currencies' selection screen
-	
+    // MARK: - Show currencies' selection screen
+    
     /**
     Navigate to the currency list, allow changing current selection.
      
@@ -75,8 +75,12 @@ import Foundation
         bsToken : BSToken!,
         purchaseData : PurchaseData!,
         withShipping: Bool,
+        
         purchaseFunc: (PurchaseData!)->Void) {
-		
+	
+        
+        
+        
 		if purchaseScreen == nil {
 			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
 			purchaseScreen = storyboard.instantiateViewController(withIdentifier: purchaseScreenStoryboardId) as! BSSummaryScreen
@@ -107,5 +111,17 @@ import Foundation
      */
     open class func getCurrencyRates(bsToken : BSToken) -> BSCurrencies? {
         return BSApiManager.getCurrencyRates(bsToken: bsToken)
+    }
+    
+    open class func KountInit() {
+        //// Configure the Data Collector
+        //
+        KDataCollector.shared().debug = true
+        // TODO Set your Merchant ID
+        KDataCollector.shared().merchantID = 0 // Insert your valid merchant ID
+        // TODO Set the location collection configuration
+        KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
+        // For a released app, you'll want to set this to KEnvironment.Production
+        KDataCollector.shared().environment = KEnvironment.test
     }
 }

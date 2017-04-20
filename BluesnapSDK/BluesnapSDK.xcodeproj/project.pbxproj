@@ -14,6 +14,8 @@
 		2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F411E880EF100AE2A81 /* BSToken.swift */; };
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
 		2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */; };
+		2D89D53F1EA8ECD30076E219 /* KountDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
 		FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */; };
 		FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */; };
@@ -46,6 +48,9 @@
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
 		2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BlueSnap.storyboard; sourceTree = "<group>"; };
+		2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KountDataCollector.h; sourceTree = "<group>"; };
+		2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKountDataCollector.a; sourceTree = "<group>"; };
+		2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CheckoutExampleSwift-Bridging-Header.h.h"; sourceTree = "<group>"; };
 		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController.swift; sourceTree = "<group>"; };
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
@@ -60,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +83,7 @@
 		2D374F161E880E7200AE2A81 = {
 			isa = PBXGroup;
 			children = (
+				2D89D53C1EA8ECD30076E219 /* Kount */,
 				2D374F221E880E7200AE2A81 /* BluesnapSDK */,
 				2D374F2D1E880E7300AE2A81 /* BluesnapSDKTests */,
 				2D374F211E880E7200AE2A81 /* Products */,
@@ -101,6 +108,7 @@
 				2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */,
 				2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */,
 				2D374F231E880E7200AE2A81 /* BluesnapSDK.h */,
+				2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */,
 				2D374F241E880E7200AE2A81 /* Info.plist */,
 			);
 			path = BluesnapSDK;
@@ -113,6 +121,15 @@
 				2D374F301E880E7300AE2A81 /* Info.plist */,
 			);
 			path = BluesnapSDKTests;
+			sourceTree = "<group>";
+		};
+		2D89D53C1EA8ECD30076E219 /* Kount */ = {
+			isa = PBXGroup;
+			children = (
+				2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */,
+				2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */,
+			);
+			path = Kount;
 			sourceTree = "<group>";
 		};
 		FD17062D1E9371FD00552A35 /* Model */ = {
@@ -153,6 +170,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D89D53F1EA8ECD30076E219 /* KountDataCollector.h in Headers */,
 				2D374F311E880E7300AE2A81 /* BluesnapSDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +424,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Kount",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluesnap.BluesnapSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -428,6 +450,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Kount",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluesnap.BluesnapSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

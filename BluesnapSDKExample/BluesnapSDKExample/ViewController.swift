@@ -31,6 +31,10 @@ class ViewController: UIViewController {
 		let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
 		self.view.addGestureRecognizer(tap)
         
+        NSLog("Kount Init");
+        //Init Kount
+        BlueSnapSDK.KountInit();
+        
         // get BS token!
         bsToken = BlueSnapSDK.getSandboxTestToken()
         print("token= \(bsToken!.getTokenStr())")
