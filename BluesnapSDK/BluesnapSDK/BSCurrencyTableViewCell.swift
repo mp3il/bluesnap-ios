@@ -10,6 +10,6 @@ import Foundation
 class BSCurrencyTableViewCell : UITableViewCell {
     
     //MARK: items in cell UI
-    @IBOutlet weak var CurrentUILabel: UILabel!
     @IBOutlet weak var CurrencyUILabel: UILabel!
+    @IBOutlet weak var CurrentUILabel: UILabel!
 }

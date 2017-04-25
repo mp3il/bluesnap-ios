@@ -21,6 +21,10 @@
 		FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */; };
 		FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */; };
 		FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */; };
+		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
+		FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */; };
+		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
+		FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077321EACACD50045E920 /* BSViewsManager.swift */; };
 		FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE301E938B63006C3359 /* BSValidator.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +56,10 @@
 		FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
 		FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiManager.swift; sourceTree = "<group>"; };
 		FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
+		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
+		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
+		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
+		FDA077321EACACD50045E920 /* BSViewsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSViewsManager.swift; sourceTree = "<group>"; };
 		FDA6BE301E938B63006C3359 /* BSValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +138,8 @@
 			children = (
 				FDA6BE301E938B63006C3359 /* BSValidator.swift */,
 				FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */,
+				FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */,
+				FDA077321EACACD50045E920 /* BSViewsManager.swift */,
 			);
 			name = Handlers;
 			sourceTree = "<group>";
@@ -142,6 +152,8 @@
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
 				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
+				FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */,
+				FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -262,6 +274,7 @@
 			files = (
 				FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */,
 				2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */,
+				FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */,
 				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
 				2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */,
 				FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */,
@@ -269,7 +282,10 @@
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
 				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
 				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */,
+				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
+				FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */,
+				FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */,
 				2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

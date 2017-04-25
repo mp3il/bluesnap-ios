@@ -19,7 +19,6 @@ class BSApiManager  {
     static let BS_SANDBOX_TEST_USER = "GCpapi" //"sdkuser"
     static let BS_SANDBOX_TEST_PASS = "Plimus4321" //"SDKuser123"
     
-    
     // MARK: Settings
     var bsDomain = BS_PRODUCTION_DOMAIN
     

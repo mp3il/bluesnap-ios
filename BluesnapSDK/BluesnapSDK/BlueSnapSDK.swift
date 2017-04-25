@@ -8,12 +8,6 @@ import Foundation
 
 @objc open class BlueSnapSDK: NSObject {
 	
-	// MARK: - Constants
-	
-	fileprivate static let bundleIdentifier = "com.bluesnap.BluesnapSDK"
-	fileprivate static let storyboardName = "BlueSnap"
-	fileprivate static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
-	fileprivate static let purchaseScreenStoryboardId = "SummaryScreenStoryboardId"
 	
 	// MARK: - UI Controllers
 	
@@ -44,8 +38,8 @@ import Foundation
         updateFunc: @escaping (BSCurrency?, BSCurrency?, BSCurrencies?)->Void) {
 
 		if currencyScreen == nil {
-			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
-			currencyScreen = storyboard.instantiateViewController(withIdentifier: currencyScreenStoryboardId) as! BSCurrenciesViewController
+			let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+			currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
 		}
 		
         currencyScreen.bsToken = bsToken
@@ -78,8 +72,8 @@ import Foundation
         purchaseFunc: (PurchaseData!)->Void) {
 		
 		if purchaseScreen == nil {
-			let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle(identifier: bundleIdentifier))
-			purchaseScreen = storyboard.instantiateViewController(withIdentifier: purchaseScreenStoryboardId) as! BSSummaryScreen
+			let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+			purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSSummaryScreen
         }
 		
         if (withShipping && purchaseData.shippingDetails == nil) {
@@ -92,6 +86,13 @@ import Foundation
 		
 		inNavigationController.pushViewController(purchaseScreen, animated: animated)
 	}
+    
+    /**
+    Submit Payment token fields
+    */
+    
+    
+    
     
     // MARK: Utility functions
     

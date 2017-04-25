@@ -36,6 +36,8 @@ class BSShippingViewController: UIViewController {
     
     @IBOutlet weak var payUIButton: UIButton!
     
+    // MARK: private properties
+    var countryManager = BSCountryManager()
     
     // MARK: - UIViewController's methods
     
@@ -53,7 +55,7 @@ class BSShippingViewController: UIViewController {
         addressUITextField.text = shippingDetails!.address
         cityUITextField.text = shippingDetails!.city
         zipUITextField.text = shippingDetails!.zip
-        countryUITextField.text = shippingDetails!.country
+        countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails!.country)
         stateUITextField.text = shippingDetails!.state
         payUIButton.setTitle(payText, for: UIControlState())
     }
@@ -139,8 +141,7 @@ class BSShippingViewController: UIViewController {
     
     func validateCountry() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.country = countryUITextField.text!
-        if (countryUITextField.text!.characters.count < 2) {
+        if (self.purchaseData!.getShippingDetails()!.country.characters.count < 2) {
             countryErrorUILabel.text = "Please fill a valid country"
             countryErrorUILabel.isHidden = false
             return false
@@ -246,6 +247,22 @@ class BSShippingViewController: UIViewController {
         _ = validateState()
     }
     
+    // enter country field - open the country screen
+    @IBAction func countryTouchDown(_ sender: Any) {
+        
+        BSViewsManager.showCurrencyList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            countryManager: countryManager,
+            selectedCountryCode: purchaseData?.getShippingDetails()!.country,
+            updateFunc: updateViewWithNewCountry)
+    }
 
+    // MARK: private functions
     
+    private func updateViewWithNewCountry(countryCode : String, countryName : String) {
+        
+        purchaseData!.getShippingDetails()?.country = countryCode
+        self.countryUITextField.text = countryName
+    }
 }

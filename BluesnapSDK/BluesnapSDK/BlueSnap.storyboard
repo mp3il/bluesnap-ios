@@ -5,43 +5,10 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Rates Currency List-->
-        <scene sceneID="cRR-oD-9wm">
-            <objects>
-                <tableViewController storyboardIdentifier="CurrencyListStoryboardId" id="Nnt-qU-wKk" customClass="RatesCurrencyList" customModule="BluesnapSDK" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Nb7-dj-nwU">
-                        <rect key="frame" x="0.0" y="0.0" width="160" height="135"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="currencyCellReuseIdentifier" id="4yp-lT-3rH">
-                                <rect key="frame" x="0.0" y="28" width="160" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4yp-lT-3rH" id="cc5-Fv-bYZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="160" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="Nnt-qU-wKk" id="7z7-ag-R7F"/>
-                            <outlet property="delegate" destination="Nnt-qU-wKk" id="gsn-n8-Rts"/>
-                        </connections>
-                    </tableView>
-                    <value key="contentSizeForViewInPopover" type="size" width="160" height="130"/>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="160" height="135"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5Bt-AG-oNa" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1061" y="733"/>
-        </scene>
         <!--Select Currency-->
         <scene sceneID="69f-Rr-Zgv">
             <objects>
@@ -55,28 +22,36 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yfV-qT-H9M" id="TgZ-F6-lHe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEm-Qt-uFp">
-                                            <rect key="frame" x="8" y="-5" width="313" height="44"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEm-Qt-uFp">
+                                            <rect key="frame" x="8" y="8" width="300" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="CurrencySelectedUILabel" text="V" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ti5-j2-JDX">
-                                            <rect key="frame" x="329" y="-6" width="38" height="44"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="18"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencySelectedUILabel" text="V" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ti5-j2-JDX">
+                                            <rect key="frame" x="321" y="8" width="38" height="24"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="38" id="NEy-gW-a2m"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="baseline" secondItem="Ti5-j2-JDX" secondAttribute="baseline" id="0OA-a4-5eY"/>
+                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="top" secondItem="TgZ-F6-lHe" secondAttribute="topMargin" id="Mhf-1o-kHL"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Ti5-j2-JDX" secondAttribute="trailing" constant="8" id="Otb-Kt-nbh"/>
+                                        <constraint firstItem="Ti5-j2-JDX" firstAttribute="leading" secondItem="pEm-Qt-uFp" secondAttribute="trailing" constant="13" id="Qa3-4z-lvu"/>
+                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="leading" secondItem="TgZ-F6-lHe" secondAttribute="leadingMargin" id="cee-BG-Aq4"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="CurrencyUILabel" destination="pEm-Qt-uFp" id="Hzw-vn-y5H"/>
-                                    <outlet property="CurrentUILabel" destination="Ti5-j2-JDX" id="lM8-nl-FEx"/>
+                                    <outlet property="CurrencyUILabel" destination="pEm-Qt-uFp" id="3Kd-fI-CRG"/>
+                                    <outlet property="CurrentUILabel" destination="Ti5-j2-JDX" id="rCE-iD-lxt"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -90,6 +65,63 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LFy-of-8hp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2728.8000000000002" y="940.47976011994012"/>
+        </scene>
+        <!--Select Country-->
+        <scene sceneID="DYu-86-uuE">
+            <objects>
+                <tableViewController storyboardIdentifier="BSCountriesStoryboardId" id="5P4-2v-wU7" customClass="BSCountryViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Uh8-4y-2C5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="cg0-Le-P5J" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
+                                <rect key="frame" x="0.0" y="28" width="375" height="40"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cg0-Le-P5J" id="2Ol-nY-fcu">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZR-ul-J7u">
+                                            <rect key="frame" x="8" y="8" width="311" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencySelectedUILabel" text="V" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mH8-4R-uIS">
+                                            <rect key="frame" x="321" y="8" width="38" height="24"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="38" id="Dfd-of-YmY"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="baseline" secondItem="mH8-4R-uIS" secondAttribute="baseline" id="1S7-zc-0qo"/>
+                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="top" secondItem="2Ol-nY-fcu" secondAttribute="topMargin" id="B4w-0u-iX1"/>
+                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="leading" secondItem="2Ol-nY-fcu" secondAttribute="leadingMargin" id="JtW-SI-rZW"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="mH8-4R-uIS" secondAttribute="trailing" constant="8" id="PRq-vD-gF6"/>
+                                        <constraint firstItem="mH8-4R-uIS" firstAttribute="leading" secondItem="8ZR-ul-J7u" secondAttribute="trailing" constant="2" id="l1q-mG-d4E"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="isCurrentUILabel" destination="mH8-4R-uIS" id="yrc-45-4OJ"/>
+                                    <outlet property="itemNameUILabel" destination="8ZR-ul-J7u" id="KJ9-sB-Z2m"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="5P4-2v-wU7" id="g7J-53-z2Y"/>
+                            <outlet property="delegate" destination="5P4-2v-wU7" id="di7-IB-Hgl"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Select Country" id="Bk5-It-mjD"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q2O-jA-r8M" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2728.8000000000002" y="1610.6446776611695"/>
         </scene>
         <!--Checkout-->
         <scene sceneID="ww0-E5-C5s">
@@ -654,6 +686,7 @@
                                         <connections>
                                             <action selector="countryEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="1NA-lg-Jd8"/>
                                             <action selector="countryEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="iDp-PL-peh"/>
+                                            <action selector="countryTouchDown:" destination="JMI-6r-Lwf" eventType="touchDown" id="9V1-Ap-B4u"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Country error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6GB-o5-pgA">
@@ -881,6 +914,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z5j-Jb-8SZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1789.5999999999999" y="940.47976011994012"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="sCF-2L-hsI">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="b2b-Da-7pe" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wC0-OI-YuG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="5P4-2v-wU7" kind="relationship" relationship="rootViewController" id="eMz-vx-gde"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lID-ls-AC6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1790" y="1611"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
