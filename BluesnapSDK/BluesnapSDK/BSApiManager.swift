@@ -138,7 +138,7 @@ class BSApiManager  {
     */
     static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
         
-        let requestBody = ["ccNumber": ccNumber, "cvv":cvv, "expDate": expDate]
+        let requestBody = ["ccNumber": ccNumber.removeWhitespaces(), "cvv":cvv, "expDate": expDate]
         
         let domain : String! = bsToken.serverUrl
         let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken.getTokenStr();

@@ -22,7 +22,7 @@ class BSSummaryScreen: UIViewController {
     fileprivate let ccnInvalidMessage = "Please fill a valid Credirt Card number"
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
-    fileprivate let doValidations = false;
+    fileprivate let doValidations = true;
 	
 	// MARK: - Data
 	
@@ -248,7 +248,7 @@ class BSSummaryScreen: UIViewController {
     func validateName() -> Bool {
         
         let newValue = nameUiTextyField.text ?? ""
-        if (doValidations && newValue.characters.count < 4) {
+        if (doValidations && newValue.isValidName) {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false
             return false
@@ -261,13 +261,16 @@ class BSSummaryScreen: UIViewController {
     func validateCCN() -> Bool {
         
         let newValue = cardUiTextField.text ?? ""
-        // TODO: need to add lohn check as well
-        if (doValidations && newValue.characters.count < 7) {
+        if (doValidations && !newValue.isValidCCN) {
             ccnErrorUiLabel.text = ccnInvalidMessage
             ccnErrorUiLabel.isHidden = false
             return false
         } else {
             ccnErrorUiLabel.isHidden = true
+            
+            let cardType = newValue.getCCType()
+            NSLog("cardType= \(cardType)")
+            
             return true
         }
     }
