@@ -21,7 +21,7 @@ class BSCountryViewController : UITableViewController {
         NSLog("Country \(countryCode):\(countryName) was selected")
     }
 
-    internal var countryManager : BSCountryManager?
+    internal var countryManager : BSCountryManager!
     
     // MARK: private properties
     
@@ -41,16 +41,16 @@ class BSCountryViewController : UITableViewController {
         super.viewDidLoad()
         
         // Get country data
-        let manager = countryManager!
-        countryCodes = manager.getCountryCodes()
-        for countryCode in countryCodes {
-            if let countryName = manager.getCountryName(countryCode: countryCode) {
-                countryNames.append(countryName)
-            } else {
-                countryNames.append("Unbknown")
+        if let manager = countryManager {
+            countryCodes = manager.getCountryCodes()
+            for countryCode in countryCodes {
+                if let countryName = manager.getCountryName(countryCode: countryCode) {
+                    countryNames.append(countryName)
+                } else {
+                    countryNames.append("Unbknown")
+                }
             }
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,13 +100,15 @@ class BSCountryViewController : UITableViewController {
         selectedCountryName = countryNames[indexPath.row]
         
         // deselect previous option
-        if (selectedCountryIndexPath != nil) {
-            self.tableView.reloadRows(at: [selectedCountryIndexPath!], with: .none)
+        if let selectedCountryIndexPath = selectedCountryIndexPath {
+            self.tableView.reloadRows(at: [selectedCountryIndexPath], with: .none)
         }
         
         // select current option
         selectedCountryIndexPath = indexPath
-        self.tableView.reloadRows(at: [selectedCountryIndexPath!], with: .none)
+        if let selectedCountryIndexPath = selectedCountryIndexPath {
+            self.tableView.reloadRows(at: [selectedCountryIndexPath], with: .none)
+        }
         
         // call updateFunc
         updateFunc(selectedCountryCode, selectedCountryName)

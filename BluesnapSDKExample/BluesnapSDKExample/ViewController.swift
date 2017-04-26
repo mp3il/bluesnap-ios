@@ -90,9 +90,9 @@ class ViewController: UIViewController {
         purchaseData.setCurrency(currency: (currencyButton.titleLabel?.text)!)
     }
     
-    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?, bsCurrencies : BSCurrencies?) {
+    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        purchaseData.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!, bsCurrencies: bsCurrencies!)
+        purchaseData.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
         valueTextField.text = String(purchaseData.getAmount())
         taxTextField.text = String(purchaseData.getTaxAmount())
         currencyButton.titleLabel?.text = purchaseData.getCurrency()

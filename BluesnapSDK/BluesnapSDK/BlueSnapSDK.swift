@@ -35,7 +35,7 @@ import Foundation
         animated: Bool,
         bsToken: BSToken!,
         selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?, BSCurrencies?)->Void) {
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
 
 		if currencyScreen == nil {
 			let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))

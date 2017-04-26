@@ -59,19 +59,19 @@ class BSApiManager  {
             defer {
                 semaphore.signal()
             }
-            if error != nil {
-                NSLog("error getting BSToken: \(error!.localizedDescription)")
+            if let error = error {
+                NSLog("error getting BSToken: \(error.localizedDescription)")
                 return
             }
             let httpResponse = response as? HTTPURLResponse
-            let httpStatusCode:Int = (httpResponse?.statusCode)!
-            if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                let location:String = httpResponse?.allHeaderFields["Location"] as! String
-                let lastIndexOfSlash = location.range(of:"/", options:String.CompareOptions.backwards, range:nil, locale:nil)!
-                let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
-                result = BSToken(tokenStr: tokenStr, serverUrl: domain)
+            if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                    result = extractTokenFromResponse(httpResponse : httpResponse, domain : domain)
+                } else {
+                    NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                }
             } else {
-                NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                NSLog("Http error getting response for BSToken")
             }
         }
         task.resume()
@@ -108,39 +108,20 @@ class BSApiManager  {
         
         var resultData : BSCurrencies?
         let semaphore = DispatchSemaphore(value: 0)
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            if error != nil {
-                NSLog("Error getting BS currencies: \(error!.localizedDescription)")
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data : Data?, response, error) in
+            if let error = error {
+                NSLog("Error getting BS currencies: \(error.localizedDescription)")
                 return
             }
             let httpResponse = response as? HTTPURLResponse
-            let httpStatusCode:Int = (httpResponse?.statusCode)!
-            if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                do {
-                    
-                    // Parse the result JSOn object
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : AnyObject]
-                    var currencies : [BSCurrency] = []
-                    var bsCurrency : BSCurrency! = BSCurrency(name: json["baseCurrencyName"] as! String!,
-                                                              code: json["baseCurrency"] as! String!,
-                                                              rate: 1.0)
-                    currencies.append(bsCurrency)
-                    let exchangeRatesArr = json["exchangeRate"] as! [[String : Any]]
-                    for exchangeRateItem in exchangeRatesArr {
-                        bsCurrency = BSCurrency(name: exchangeRateItem["quoteCurrencyName"] as! String!,
-                            code: exchangeRateItem["quoteCurrency"] as! String!,
-                            rate: exchangeRateItem["conversionRate"] as! Double!)
-                        currencies.append(bsCurrency)
-                    }
-                    resultData = BSCurrencies(currencies: currencies)
-                    
-                } catch let error as NSError {
-                    NSLog("Error parsing BS currency rates: \(error.localizedDescription)")
+            if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                    resultData = parseCurrenciesJSON(data: data)
+                } else {
+                    NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
                 }
-                
             } else {
-                NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
+                NSLog("Http error getting BS currencies response")
             }
             defer {
                 semaphore.signal()
@@ -150,6 +131,7 @@ class BSApiManager  {
         semaphore.wait()
         return resultData
     }
+
     
     /**
     Submit CC details to BlueSnap server
@@ -178,43 +160,33 @@ class BSApiManager  {
         
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            if error != nil {
+            if let error = error {
                 print("error")
                 return
             }
             let httpResponse = response as? HTTPURLResponse
-            let httpStatusCode:Int = (httpResponse?.statusCode)!
-            if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                do {
+            if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                    result = parseResultCCDetailsFromResponse(data: data)
                     
-                    // Parse the result JSOn object
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : AnyObject]
-
-                    result = BSResultCcDetails()
-                    result!.ccType = json["ccType"] as? String
-                    result!.last4Digits = json["last4Digits"] as? String
-                    result!.ccIssuingCountry = json["issuingCountry"] as? String
-                    
-                } catch let error as NSError {
-                    NSLog("Error parsing BS result on CC detauils submit: \(error.localizedDescription)")
-                }
-                
-            } else if (httpStatusCode == 400) {
-                resultError = .unknown
-                if (data != nil) {
-                    let errStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-                    if (errStr == "\"INVALID_CC_NUMBER\"") {
-                        resultError = .invalidCcNumber
-                    } else if (errStr == "\"INVALID_CVV\"") {
-                        resultError = .invalidCvv
-                    } else if (errStr == "\"INVALID_EXP_DATE\"") {
-                        resultError = .invalidExpDate
+                } else if (httpStatusCode == 400) {
+                    resultError = .unknown
+                    if let data = data {
+                        let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+                        if (errStr == "\"INVALID_CC_NUMBER\"") {
+                            resultError = .invalidCcNumber
+                        } else if (errStr == "\"INVALID_CVV\"") {
+                            resultError = .invalidCvv
+                        } else if (errStr == "\"INVALID_EXP_DATE\"") {
+                            resultError = .invalidExpDate
+                        }
                     }
+                } else {
+                    print("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
+                    resultError = .unknown
                 }
             } else {
-                print("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
-                resultError = .unknown
+                NSLog("Error getting response from BS on submitting Payment details")
             }
             defer {
                 semaphore.signal()
@@ -222,12 +194,84 @@ class BSApiManager  {
         }
         task.resume()
         semaphore.wait()
-        if (resultError != nil) {
-            throw resultError!
+        if let resultError = resultError {
+            throw resultError
         }
         return result
     }
     
+    // MARK: Private functions
+    
+    private static func parseResultCCDetailsFromResponse(data: Data?) -> BSResultCcDetails? {
+        
+        var result : BSResultCcDetails?
+        if let data = data {
+            do {
+                // Parse the result JSOn object
+                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String : AnyObject] {
+                    result = BSResultCcDetails()
+                    result!.ccType = json["ccType"] as? String
+                    result!.last4Digits = json["last4Digits"] as? String
+                    result!.ccIssuingCountry = json["issuingCountry"] as? String
+                } else {
+                    NSLog("Error parsing BS result on CC detauils submit")
+                }
+            } catch let error as NSError {
+                NSLog("Error parsing BS result on CC detauils submit: \(error.localizedDescription)")
+            }
+        } else {
+            NSLog("No data in BS result on CC detauils submit")
+        }
+        return result
+    }
+    
+    private static func extractTokenFromResponse(httpResponse: HTTPURLResponse?, domain: String!) -> BSToken? {
+        
+        var result : BSToken?
+        if let location:String = httpResponse?.allHeaderFields["Location"] as? String {
+            if let lastIndexOfSlash = location.range(of:"/", options:String.CompareOptions.backwards, range:nil, locale:nil) {
+                let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
+                result = BSToken(tokenStr: tokenStr, serverUrl: domain)
+            }
+        }
+        return result
+    }
+    
+    private static func parseCurrenciesJSON(data: Data?) -> BSCurrencies? {
+        
+        var resultData : BSCurrencies?
+        if let data = data {
+            do {
+                // Parse the result JSOn object
+                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String : AnyObject] {
+                    var currencies : [BSCurrency] = []
+                    if let currencyName = json["baseCurrencyName"] as? String
+                    , let currencyCode = json["baseCurrency"] as? String {
+                        let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: 1.0)
+                        currencies.append(bsCurrency)
+                    }
+                    if let exchangeRatesArr = json["exchangeRate"] as? [[String : Any]] {
+                        for exchangeRateItem in exchangeRatesArr {
+                            if let currencyName = exchangeRateItem["quoteCurrencyName"] as? String
+                                , let currencyCode = exchangeRateItem["quoteCurrency"] as? String
+                                , let currencyRate = exchangeRateItem["conversionRate"] as? Double {
+                                let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: currencyRate)
+                                currencies.append(bsCurrency)
+                            }
+                        }
+                    }
+                    resultData = BSCurrencies(currencies: currencies)
+                } else {
+                    NSLog("Error parsing BS currency rates")
+                }
+            } catch let error as NSError {
+                NSLog("Error parsing BS currency rates: \(error.localizedDescription)")
+            }
+        } else {
+            NSLog("No BS currency data exists")
+        }
+        return resultData
+    }
     
 }
 

@@ -13,8 +13,8 @@ class BSShippingViewController: UIViewController {
     // MARK: shipping data as input and output
     //internal var storyboard : UIStoryboard?
 
-    internal var purchaseData : PurchaseData?
-    internal var payText : String?
+    internal var purchaseData : PurchaseData!
+    internal var payText : String!
     
     // MARK: outlets
     
@@ -48,16 +48,16 @@ class BSShippingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let shippingDetails = self.purchaseData?.getShippingDetails()!
-        
-        nameUITextField.text = shippingDetails!.name
-        emailUITextField.text = shippingDetails!.email
-        addressUITextField.text = shippingDetails!.address
-        cityUITextField.text = shippingDetails!.city
-        zipUITextField.text = shippingDetails!.zip
-        countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails!.country)
-        stateUITextField.text = shippingDetails!.state
-        payUIButton.setTitle(payText, for: UIControlState())
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            nameUITextField.text = shippingDetails.name
+            emailUITextField.text = shippingDetails.email
+            addressUITextField.text = shippingDetails.address
+            cityUITextField.text = shippingDetails.city
+            zipUITextField.text = shippingDetails.zip
+            countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails.country)
+            stateUITextField.text = shippingDetails.state
+            payUIButton.setTitle(payText, for: UIControlState())
+        }
     }
     
     // MARK: Validation methods
@@ -76,11 +76,14 @@ class BSShippingViewController: UIViewController {
     
     func validateName() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.name = nameUITextField.text!
-        if (nameUITextField.text!.characters.count < 4) {
-            nameErrorUILabel.text = "Please fill Card holder name"
-            nameErrorUILabel.isHidden = false
-            return false
+        let newValue = nameUITextField.text ?? ""
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            shippingDetails.name = newValue
+        }
+        if (newValue.characters.count < 4) {
+                nameErrorUILabel.text = "Please fill Card holder name"
+                nameErrorUILabel.isHidden = false
+                return false
         } else {
             nameErrorUILabel.isHidden = true
             return true
@@ -89,8 +92,11 @@ class BSShippingViewController: UIViewController {
 
     func validateEmail() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.email = emailUITextField.text!
-        if (!emailUITextField.text!.isValidEmail) {
+        let newValue = emailUITextField.text ?? ""
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            shippingDetails.email = newValue
+        }
+        if (!newValue.isValidEmail) {
             emailErrorUILabel.text = "Please fill a valid email address"
             emailErrorUILabel.isHidden = false
             return false
@@ -102,8 +108,11 @@ class BSShippingViewController: UIViewController {
     
     func validateAddress() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.address = addressUITextField.text!
-        if (addressUITextField.text!.characters.count < 3) {
+        let newValue = addressUITextField.text ?? ""
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            shippingDetails.address = newValue
+        }
+        if (newValue.characters.count < 3) {
             addressErrorUILabel.text = "Please fill a valid address"
             addressErrorUILabel.isHidden = false
             return false
@@ -115,8 +124,11 @@ class BSShippingViewController: UIViewController {
     
     func validateCity() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.city = cityUITextField.text!
-        if (cityUITextField.text!.characters.count < 3) {
+        let newValue = cityUITextField.text ?? ""
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            shippingDetails.city = newValue
+        }
+        if (newValue.characters.count < 3) {
             cityErrorUILabel.text = "Please fill a valid city"
             cityErrorUILabel.isHidden = false
             return false
@@ -128,8 +140,11 @@ class BSShippingViewController: UIViewController {
     
     func validateZip() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.zip = zipUITextField.text!
-        if (zipUITextField.text!.characters.count < 3) {
+        let newValue = zipUITextField.text ?? ""
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            shippingDetails.zip = newValue
+        }
+        if (newValue.characters.count < 3) {
             zipErrorUILabel.text = "Please fill a valid zip code"
             zipErrorUILabel.isHidden = false
             return false
@@ -141,7 +156,8 @@ class BSShippingViewController: UIViewController {
     
     func validateCountry() -> Bool {
         
-        if (self.purchaseData!.getShippingDetails()!.country.characters.count < 2) {
+        let newValue = self.purchaseData.getShippingDetails()?.country ?? ""
+        if (newValue.characters.count < 2) {
             countryErrorUILabel.text = "Please fill a valid country"
             countryErrorUILabel.isHidden = false
             return false
@@ -153,8 +169,11 @@ class BSShippingViewController: UIViewController {
     
     func validateState() -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.state = stateUITextField.text!
-        if (stateUITextField.isEnabled && stateUITextField.text!.characters.count < 2) {
+        let newValue = stateUITextField.text ?? ""
+        if let shippingDetails = self.purchaseData.getShippingDetails() {
+            shippingDetails.state = newValue
+        }
+        if (newValue.characters.count < 2) {
             stateErrorUILabel.text = "Please fill a valid state"
             stateErrorUILabel.isHidden = false
             return false
@@ -250,11 +269,12 @@ class BSShippingViewController: UIViewController {
     // enter country field - open the country screen
     @IBAction func countryTouchDown(_ sender: Any) {
         
+        let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
         BSViewsManager.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
             countryManager: countryManager,
-            selectedCountryCode: purchaseData?.getShippingDetails()!.country,
+            selectedCountryCode: selectedCountryCode,
             updateFunc: updateViewWithNewCountry)
     }
 
@@ -262,7 +282,9 @@ class BSShippingViewController: UIViewController {
     
     private func updateViewWithNewCountry(countryCode : String, countryName : String) {
         
-        purchaseData!.getShippingDetails()?.country = countryCode
+        if let shippingDetails = purchaseData.getShippingDetails() {
+            shippingDetails.country = countryCode
+        }
         self.countryUITextField.text = countryName
     }
 }
