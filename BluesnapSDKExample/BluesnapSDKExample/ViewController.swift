@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         
         // get BS token!
         bsToken = BlueSnapSDK.getSandboxTestToken()
-        print("token= \(bsToken!.getTokenStr())")
+        NSLog("Got BS token= \(bsToken!.getTokenStr())")
  	}
 	
 	override func viewWillAppear(_ animated: Bool) {

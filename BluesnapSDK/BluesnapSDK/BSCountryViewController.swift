@@ -18,7 +18,7 @@ class BSCountryViewController : UITableViewController {
     // this is just a default
     internal var updateFunc : (String, String)->Void = {
         countryCode, countryName in
-        print("Country \(countryCode):\(countryName) was selected")
+        NSLog("Country \(countryCode):\(countryName) was selected")
     }
 
     internal var countryManager : BSCountryManager?
@@ -83,7 +83,6 @@ class BSCountryViewController : UITableViewController {
         }
         let countryName : String = countryNames[indexPath.row]
         let countryCode : String = countryCodes[indexPath.row]
-        //print("Drawing cell #\(indexPath.row), countryName=\(countryName)")
         cell.itemNameUILabel.text = countryName
         if (countryCode == selectedCountryCode) {
             cell.isCurrentUILabel.text = "V"

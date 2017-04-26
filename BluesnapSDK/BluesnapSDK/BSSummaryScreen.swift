@@ -137,7 +137,7 @@ class BSSummaryScreen: UIViewController {
                 cvvErrorUiLabel.isHidden = false
             }
         } catch {
-            print("Unexpected error")
+            NSLog("Unexpected error submitting Payment Fields to BS")
         }
         return result
     }
@@ -157,7 +157,6 @@ class BSSummaryScreen: UIViewController {
     
     @IBAction func menuCurrecyAction(_ sender: Any) {
         
-        //print("in currency menu option")
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,

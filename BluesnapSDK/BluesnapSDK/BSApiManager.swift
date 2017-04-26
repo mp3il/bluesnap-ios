@@ -60,7 +60,7 @@ class BSApiManager  {
                 semaphore.signal()
             }
             if error != nil {
-                print("error")
+                NSLog("error getting BSToken: \(error!.localizedDescription)")
                 return
             }
             let httpResponse = response as? HTTPURLResponse
@@ -71,7 +71,7 @@ class BSApiManager  {
                 let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
                 result = BSToken(tokenStr: tokenStr, serverUrl: domain)
             } else {
-                print("Http error; status = \(httpStatusCode)")
+                NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
             }
         }
         task.resume()
@@ -110,7 +110,7 @@ class BSApiManager  {
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             if error != nil {
-                print("error")
+                NSLog("Error getting BS currencies: \(error!.localizedDescription)")
                 return
             }
             let httpResponse = response as? HTTPURLResponse
@@ -136,11 +136,11 @@ class BSApiManager  {
                     resultData = BSCurrencies(currencies: currencies)
                     
                 } catch let error as NSError {
-                    print(error)
+                    NSLog("Error parsing BS currency rates: \(error.localizedDescription)")
                 }
                 
             } else {
-                print("Http error; status = \(httpStatusCode)")
+                NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
             }
             defer {
                 semaphore.signal()
@@ -166,7 +166,7 @@ class BSApiManager  {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
         } catch let error {
-            print(error.localizedDescription)
+            NSLog("Error serializing CC details: \(error.localizedDescription)")
         }
         //request.timeoutInterval = 60
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -197,7 +197,7 @@ class BSApiManager  {
                     result!.ccIssuingCountry = json["issuingCountry"] as? String
                     
                 } catch let error as NSError {
-                    print(error)
+                    NSLog("Error parsing BS result on CC detauils submit: \(error.localizedDescription)")
                 }
                 
             } else if (httpStatusCode == 400) {
@@ -213,7 +213,7 @@ class BSApiManager  {
                     }
                 }
             } else {
-                print("Http error; status = \(httpStatusCode)")
+                print("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
                 resultError = .unknown
             }
             defer {
