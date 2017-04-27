@@ -66,129 +66,165 @@ class BSShippingViewController: UIViewController {
         }
     }
     
+    
+    @IBAction func CheckoutClick(_ sender: Any) {
+        
+        
+        
+    }
+    
+    
     // MARK: Validation methods
     
     func validateForm() -> Bool {
         
-        let ok1 = validateName()
-        let ok2 = validateEmail()
-        let ok3 = validateAddress()
-        let ok4 = validateCity()
-        let ok5 = validateZip()
-        let ok6 = validateCountry()
-        let ok7 = validateState()
+        let ok1 = validateName(ignoreIfEmpty: false)
+        let ok2 = validateEmail(ignoreIfEmpty: false)
+        let ok3 = validateAddress(ignoreIfEmpty: false)
+        let ok4 = validateCity(ignoreIfEmpty: false)
+        let ok5 = validateZip(ignoreIfEmpty: false)
+        let ok6 = validateCountry(ignoreIfEmpty: false)
+        let ok7 = validateState(ignoreIfEmpty: false)
         return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7
     }
     
-    func validateName() -> Bool {
+    func validateName(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = nameUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.name = newValue
         }
-        if (newValue.characters.count < 4) {
-                nameErrorUILabel.text = "Please fill Card holder name"
-                nameErrorUILabel.isHidden = false
-                return false
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 4) {
+            nameErrorUILabel.text = "Please fill Card holder name"
+            nameErrorUILabel.isHidden = false
+            result = false
         } else {
             nameErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
 
-    func validateEmail() -> Bool {
+    func validateEmail(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = emailUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.email = newValue
         }
-        if (!newValue.isValidEmail) {
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (!newValue.isValidEmail) {
             emailErrorUILabel.text = "Please fill a valid email address"
             emailErrorUILabel.isHidden = false
-            return false
+            result = false
         } else {
             emailErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
     
-    func validateAddress() -> Bool {
+    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = addressUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.address = newValue
         }
-        if (newValue.characters.count < 3) {
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
             addressErrorUILabel.text = "Please fill a valid address"
             addressErrorUILabel.isHidden = false
-            return false
+            result = false
         } else {
             addressErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
     
-    func validateCity() -> Bool {
+    func validateCity(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = cityUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.city = newValue
         }
-        if (newValue.characters.count < 3) {
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
             cityErrorUILabel.text = "Please fill a valid city"
             cityErrorUILabel.isHidden = false
-            return false
+            result = false
         } else {
             cityErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
     
-    func validateZip() -> Bool {
+    func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = zipUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.zip = newValue
         }
-        if (newValue.characters.count < 3) {
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
             zipErrorUILabel.text = "Please fill a valid zip code"
             zipErrorUILabel.isHidden = false
-            return false
+            result = false
         } else {
             zipErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
     
-    func validateCountry() -> Bool {
+    func validateCountry(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = self.purchaseData.getShippingDetails()?.country ?? ""
-        if (newValue.characters.count < 2) {
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 2) {
             countryErrorUILabel.text = "Please fill a valid country"
             countryErrorUILabel.isHidden = false
-            return false
+            result = false
         } else {
             countryErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
     
-    func validateState() -> Bool {
+    func validateState(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = stateUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.state = newValue
         }
-        if (newValue.characters.count < 2) {
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 2) {
             stateErrorUILabel.text = "Please fill a valid state"
             stateErrorUILabel.isHidden = false
-            return false
+            result = false
         } else {
             stateErrorUILabel.isHidden = true
-            return true
+            result = true
         }
+        return result
     }
-    
+
     
     // MARK: real-time formatting and Validations on text fields
     
@@ -242,36 +278,34 @@ class BSShippingViewController: UIViewController {
     }
     
     @IBAction func nameEditingDidEnd(_ sender: UITextField) {
-        _ = validateName()
+        _ = validateName(ignoreIfEmpty: true)
     }
     
     @IBAction func emailEditingDidEnd(_ sender: UITextField) {
-        _ = validateEmail()
+        _ = validateEmail(ignoreIfEmpty: true)
     }
     
     @IBAction func addressEditingDidEnd(_ sender: UITextField) {
-        _ = validateAddress()
+        _ = validateAddress(ignoreIfEmpty: true)
     }
     
     @IBAction func cityEditingDidEnd(_ sender: UITextField) {
-        _ = validateCity()
+        _ = validateCity(ignoreIfEmpty: true)
     }
-    
     
     @IBAction func zipEditingDidEnd(_ sender: UITextField) {
-        _ = validateZip()
+        _ = validateZip(ignoreIfEmpty: true)
     }
     
-    
     @IBAction func countryEditingDidEnd(_ sender: UITextField) {
-        _ = validateCountry()
+        _ = validateCountry(ignoreIfEmpty: true)
         updateState()
     }
     
-    
     @IBAction func stateEditingDidEnd(_ sender: UITextField) {
-        _ = validateState()
+        _ = validateState(ignoreIfEmpty: true)
     }
+    
     
     // enter country field - open the country screen
     @IBAction func countryTouchDown(_ sender: Any) {
@@ -285,7 +319,7 @@ class BSShippingViewController: UIViewController {
             updateFunc: updateWithNewCountry)
     }
     
-    
+    // enter state field - open the state screen
     @IBAction func statetouchDown(_ sender: Any) {
         let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
         let selectedStateCode = purchaseData.getShippingDetails()?.state ?? ""
