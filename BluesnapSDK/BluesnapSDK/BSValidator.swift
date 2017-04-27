@@ -27,6 +27,10 @@ extension String {
 
     var isValidCCN : Bool {
         
+        if characters.count < 6 {
+            return false
+        }
+        
         var isOdd : Bool! = true
         var sum : Int! = 0;
         

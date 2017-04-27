@@ -17,6 +17,7 @@ class BSViewsManager {
     static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
     static let purchaseScreenStoryboardId = "SummaryScreenStoryboardId"
     static let countryScreenStoryboardId = "BSCountriesStoryboardId"
+    static let stateScreenStoryboardId = "BSStatesStoryboardId"
 
     
     /**
@@ -25,10 +26,11 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - selectedCountryCode: 3 characters of the curtrent language code (uppercase)
+     - countryManager: instance of BSCountryManager
+     - selectedCountryCode: ISO country code
      - updateFunc: callback; will be called each time a new value is selected
      */
-    open class func showCurrencyList(
+    open class func showCountryList(
         inNavigationController: UINavigationController!,
         animated: Bool,
         countryManager : BSCountryManager,
@@ -36,12 +38,47 @@ class BSViewsManager {
         updateFunc: @escaping (String, String)->Void) {
         
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
-        let countryScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BSCountryViewController
+        let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BSCountryViewController
 
-        countryScreen.selectedCountryCode = selectedCountryCode
-        countryScreen.updateFunc = updateFunc
-        countryScreen.countryManager = countryManager
+        screen.selectedCountryCode = selectedCountryCode
+        screen.updateFunc = updateFunc
+        screen.countryManager = countryManager
         
-        inNavigationController.pushViewController(countryScreen, animated: animated)
+        inNavigationController.pushViewController(screen, animated: animated)
     }
+    
+    
+    /**
+     Navigate to the state list, allow changing current selection.
+     
+     - parameters:
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+     - countryManager: instance of BSCountryManager
+     - selectedCountryCode: ISO country code
+     - selectedStateCode: state code
+     - updateFunc: callback; will be called each time a new value is selected
+     */
+    open class func showStateList(
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        countryManager : BSCountryManager,
+        selectedCountryCode : String!,
+        selectedStateCode : String!,
+        updateFunc: @escaping (String, String)->Void) {
+        
+        if let states = countryManager.countryStates(countryCode: selectedCountryCode) {
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+            let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.stateScreenStoryboardId) as! BSStatesViewController
+            
+            screen.selectedCode = selectedStateCode
+            screen.updateFunc = updateFunc
+            screen.states = states
+            
+            inNavigationController.pushViewController(screen, animated: animated)
+        } else {
+            NSLog("No state data available for \(selectedCountryCode)")
+        }
+    }
+
 }

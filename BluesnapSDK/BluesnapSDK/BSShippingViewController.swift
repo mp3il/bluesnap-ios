@@ -26,6 +26,9 @@ class BSShippingViewController: UIViewController {
     @IBOutlet weak var countryUITextField: UITextField!
     @IBOutlet weak var stateUITextField: UITextField!
     
+    @IBOutlet weak var stateUILabel: UILabel!
+    
+    
     @IBOutlet weak var nameErrorUILabel: UILabel!
     @IBOutlet weak var emailErrorUILabel: UILabel!
     @IBOutlet weak var addressErrorUILabel: UILabel!
@@ -54,8 +57,11 @@ class BSShippingViewController: UIViewController {
             addressUITextField.text = shippingDetails.address
             cityUITextField.text = shippingDetails.city
             zipUITextField.text = shippingDetails.zip
+            if (shippingDetails.country == "") {
+                shippingDetails.country = Locale.current.regionCode ?? ""
+            }
             countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails.country)
-            stateUITextField.text = shippingDetails.state
+            updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }
     }
@@ -259,6 +265,7 @@ class BSShippingViewController: UIViewController {
     
     @IBAction func countryEditingDidEnd(_ sender: UITextField) {
         _ = validateCountry()
+        updateState()
     }
     
     
@@ -270,21 +277,57 @@ class BSShippingViewController: UIViewController {
     @IBAction func countryTouchDown(_ sender: Any) {
         
         let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
-        BSViewsManager.showCurrencyList(
+        BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
             countryManager: countryManager,
             selectedCountryCode: selectedCountryCode,
-            updateFunc: updateViewWithNewCountry)
+            updateFunc: updateWithNewCountry)
     }
+    
+    
+    @IBAction func statetouchDown(_ sender: Any) {
+        let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
+        let selectedStateCode = purchaseData.getShippingDetails()?.state ?? ""
+        BSViewsManager.showStateList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            countryManager: countryManager,
+            selectedCountryCode: selectedCountryCode,
+            selectedStateCode: selectedStateCode,
+            updateFunc: updateWithNewState)
+    }
+    
 
     // MARK: private functions
     
-    private func updateViewWithNewCountry(countryCode : String, countryName : String) {
+    private func updateWithNewCountry(countryCode : String, countryName : String) {
         
         if let shippingDetails = purchaseData.getShippingDetails() {
             shippingDetails.country = countryCode
         }
         self.countryUITextField.text = countryName
     }
+    
+    private func updateState() {
+        let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
+        let selectedStateCode = purchaseData.getShippingDetails()?.state ?? ""
+        var hideState : Bool = true
+        if let states = countryManager.countryStates(countryCode: selectedCountryCode){
+            stateUITextField.text = states[selectedStateCode]
+            hideState = false
+        }
+        stateUITextField.isHidden = hideState
+        stateUILabel.isHidden = hideState
+        stateErrorUILabel.isHidden = true
+    }
+    
+    private func updateWithNewState(stateCode : String, stateName : String) {
+        
+        if let shippingDetails = purchaseData.getShippingDetails() {
+            shippingDetails.state = stateCode
+        }
+        self.stateUITextField.text = stateName
+    }
+
 }

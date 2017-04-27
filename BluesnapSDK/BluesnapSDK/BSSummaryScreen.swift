@@ -224,66 +224,89 @@ class BSSummaryScreen: UIViewController {
     
     func validateForm() -> Bool {
         
-        let ok1 = validateName()
-        let ok2 = validateCCN()
-        let ok3 = validateExpMM()
-        let ok4 = validateExpYY()
-        let ok5 = validateCvv()
+        let ok1 = validateName(ignoreIfEmpty: false)
+        let ok2 = validateCCN(ignoreIfEmpty: false)
+        let ok3 = validateExpMM(ignoreIfEmpty: false)
+        let ok4 = validateExpYY(ignoreIfEmpty: false)
+        let ok5 = validateCvv(ignoreIfEmpty: false)
         return ok1 && ok2 && ok3 && ok4 && ok5
     }
     
-    func validateCvv() -> Bool {
+    func validateCvv(ignoreIfEmpty : Bool) -> Bool {
         
-        let newValue = cvvUiTextField.text ?? ""
-        if (doValidations && newValue.characters.count < 3) {
+        var ok : Bool = true;
+        if (doValidations) {
+            let newValue = cvvUiTextField.text ?? ""
+            if newValue.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if newValue.characters.count < 3 {
+                ok = false
+            }
+        }
+        if ok {
+            cvvErrorUiLabel.isHidden = true
+        } else {
             cvvErrorUiLabel.text = cvvInvalidMessage
             cvvErrorUiLabel.isHidden = false
-            return false
-        } else {
-            cvvErrorUiLabel.isHidden = true
-            return true
         }
+        return ok
     }
     
-    func validateName() -> Bool {
+    func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        let newValue = nameUiTextyField.text ?? ""
-        if (doValidations && newValue.isValidName) {
+        var ok : Bool = true;
+        if (doValidations) {
+            let newValue = nameUiTextyField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+            nameUiTextyField.text = newValue
+            if newValue.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if !newValue.isValidName {
+                ok = false
+            }
+        }
+        if ok {
+            nameErrorUiLabel.isHidden = true
+        } else {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false
-            return false
-        } else {
-            nameErrorUiLabel.isHidden = true
-            return true
         }
+        return ok
     }
     
-    func validateCCN() -> Bool {
+    func validateCCN(ignoreIfEmpty : Bool) -> Bool {
         
+        var ok : Bool = true;
         let newValue = cardUiTextField.text ?? ""
-        if (doValidations && !newValue.isValidCCN) {
-            ccnErrorUiLabel.text = ccnInvalidMessage
-            ccnErrorUiLabel.isHidden = false
-            return false
-        } else {
+        if (doValidations) {
+            if newValue.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if !newValue.isValidCCN {
+                ok = false
+            }
+        }
+        if ok {
             ccnErrorUiLabel.isHidden = true
-            
             let cardType = newValue.getCCType()
             NSLog("cardType= \(cardType)")
-            
-            return true
+        } else {
+            ccnErrorUiLabel.text = ccnInvalidMessage
+            ccnErrorUiLabel.isHidden = false
         }
+        return ok
     }
     
-    func validateExpMM() -> Bool {
-        var ok = true
-        let inputMM = ExpMMUiTextField.text ?? ""
-        if (!doValidations) {
-            ok = true
-        } else if (inputMM.characters.count < 2) {
-            ok = false
-        } else if !inputMM.isValidMonth {
-            ok = false
+    func validateExpMM(ignoreIfEmpty : Bool) -> Bool {
+        
+        var ok : Bool = true
+        if (doValidations) {
+            let inputMM = ExpMMUiTextField.text ?? ""
+            if inputMM.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if (inputMM.characters.count < 2) {
+                ok = false
+            } else if !inputMM.isValidMonth {
+                ok = false
+            }
         }
         if (ok) {
             expErrorUiLabel.isHidden = true
@@ -294,16 +317,19 @@ class BSSummaryScreen: UIViewController {
         return ok
     }
     
-    func validateExpYY() -> Bool {
-        var ok = true
-        let inputYY = ExpYYUiTextField.text ?? ""
-        if (!doValidations) {
-            ok = true
-        } else if (inputYY.characters.count < 2) {
-            ok = false
-        } else {
-            let currentYearYY = self.getCurrentYear() % 100
-            ok = currentYearYY <= Int(inputYY)!
+    func validateExpYY(ignoreIfEmpty : Bool) -> Bool {
+
+        var ok : Bool = true
+        if (doValidations) {
+            let inputYY = ExpYYUiTextField.text ?? ""
+            if inputYY.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if (inputYY.characters.count < 2) {
+                ok = false
+            } else {
+                let currentYearYY = self.getCurrentYear() % 100
+                ok = currentYearYY <= Int(inputYY)!
+            }
         }
         if (ok) {
             expErrorUiLabel.isHidden = true
@@ -346,23 +372,23 @@ class BSSummaryScreen: UIViewController {
     }
     
     @IBAction func nameEditingDidEnd(_ sender: UITextField) {
-        _ = validateName()
+        _ = validateName(ignoreIfEmpty: true)
     }
     
     @IBAction func cvvEditingDidEnd(_ sender: UITextField) {
-        _ = validateCvv()
+        _ = validateCvv(ignoreIfEmpty: true)
     }
     
     @IBAction func expYYEditingDidEnd(_ sender: UITextField) {
-        _ = validateExpYY()
+        _ = validateExpYY(ignoreIfEmpty: true)
     }
     
     @IBAction func expMMEditingDidEnd(_ sender: UITextField) {
-        _ = validateExpMM()
+        _ = validateExpMM(ignoreIfEmpty: true)
     }
 
     @IBAction func cardEditingDidEnd(_ sender: UITextField) {
-        _ = validateCCN()
+        _ = validateCCN(ignoreIfEmpty: true)
     }
 
 }
