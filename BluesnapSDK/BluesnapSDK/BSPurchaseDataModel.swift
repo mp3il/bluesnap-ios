@@ -29,26 +29,25 @@ public class PurchaseData : NSObject {
     /*
     Change currencvy will also change the amounts according to the change rates
     */
-    public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?, bsCurrencies: BSCurrencies?) {
+    public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?) {
         
-        if (newCurrency == nil || bsCurrencies == nil) {
-            return
+        if let newCurrency = newCurrency {
+        
+            currency = newCurrency.code
+        
+            // calculate conversion rate
+        
+            var oldRate : Double = 1.0
+            if let oldCurrency = oldCurrency {
+                // keep rate to convert amount and tax back to USD
+                oldRate = oldCurrency.getRate()
+            }
+            let newRate = newCurrency.getRate() / oldRate
+        
+            // update amounts
+            amount = amount * newRate
+            taxAmount = taxAmount * newRate
         }
-        
-        currency = newCurrency!.code
-        
-        // calculate conversion rate
-        
-        var oldRate : Double = 1.0
-        if (oldCurrency != nil) {
-            // keep rate to convert amount and tax back to USD
-            oldRate = oldCurrency!.getRate()
-        }
-        let newRate = newCurrency!.getRate() / oldRate
-        
-        // update amounts
-        amount = amount * newRate
-        taxAmount = taxAmount * newRate
     }
     
     

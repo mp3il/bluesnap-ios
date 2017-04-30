@@ -28,16 +28,16 @@ class BluesnapSDKExampleTests: XCTestCase {
         
         let token = BlueSnapSDK.getSandboxTestToken()
         XCTAssertNotNil(token, "Failed to get token")
-        print("Token: \(token?.getTokenStr())")
+        NSLog("Token: \(token?.getTokenStr())")
         
         let bsCurrencies = BlueSnapSDK.getCurrencyRates(bsToken: token!)
         XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
             
         let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-        print("GBP currency name is: \(gbpCurrency.getName()), and its rate is \(gbpCurrency.getRate())")
+        NSLog("GBP currency name is: \(gbpCurrency.getName()), and its rate is \(gbpCurrency.getRate())")
                 
         let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-        print("EUR currency rate is: \(eurCurrencyRate)")
+        NSLog("EUR currency rate is: \(eurCurrencyRate)")
     }
     
     func testPerformanceExample() {

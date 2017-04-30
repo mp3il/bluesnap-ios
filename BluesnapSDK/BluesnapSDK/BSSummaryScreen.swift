@@ -5,8 +5,8 @@ class BSSummaryScreen: UIViewController {
 
 	// MARK: - Public properties
 	
-    internal var purchaseData : PurchaseData?
-    internal var bsToken: BSToken?
+    internal var purchaseData : PurchaseData!
+    internal var bsToken: BSToken!
     
     // MARK: private properties
     
@@ -22,7 +22,7 @@ class BSSummaryScreen: UIViewController {
     fileprivate let ccnInvalidMessage = "Please fill a valid Credirt Card number"
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
-    fileprivate let doValidations = false;
+    fileprivate let doValidations = true;
 	
 	// MARK: - Data
 	
@@ -58,7 +58,7 @@ class BSSummaryScreen: UIViewController {
 		
 		self.navigationController!.isNavigationBarHidden = false
 
-        self.withShipping = purchaseData!.getShippingDetails() != nil
+        self.withShipping = purchaseData.getShippingDetails() != nil
         updateTexts()
         
         // hide menu
@@ -70,9 +70,9 @@ class BSSummaryScreen: UIViewController {
     
     private func updateTexts() {
         
-        let toCurrency = purchaseData!.getCurrency()!
-        let subtotalAmount = purchaseData!.getAmount()!
-        let taxAmount = purchaseData!.getTaxAmount()! + purchaseData!.getTaxPercent()!*subtotalAmount/100.0
+        let toCurrency = purchaseData.getCurrency() ?? ""
+        let subtotalAmount = purchaseData.getAmount() ?? 0.0
+        let taxAmount = (purchaseData.getTaxAmount() ?? 0.0) + (purchaseData.getTaxPercent() ?? 0.0) * subtotalAmount / 100.0
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
@@ -85,10 +85,9 @@ class BSSummaryScreen: UIViewController {
         taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
     }
     
-    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?, bsCurrencies : BSCurrencies?) {
+    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        purchaseData!.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!, bsCurrencies: bsCurrencies!)
-        updateTexts()
+            purchaseData.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
     }
     
     private func getCurrentYear() -> Int! {
@@ -103,13 +102,13 @@ class BSSummaryScreen: UIViewController {
         let yearStr = String(getCurrentYear())
         let p = yearStr.index(yearStr.startIndex, offsetBy: 2)
         let first2Digits = yearStr.substring(with: yearStr.startIndex..<p)
-        let last2Digits = self.ExpYYUiTextField.text!
+        let last2Digits = self.ExpYYUiTextField.text ?? ""
         return "\(first2Digits)\(last2Digits)"
     }
     
     private func getExpDateAsMMYYYY() -> String! {
         
-        let mm = self.ExpMMUiTextField.text!
+        let mm = self.ExpMMUiTextField.text ?? ""
         let yyyy = getExpYearAsYYYY()
         return "\(mm)/\(yyyy)"
     }
@@ -118,12 +117,12 @@ class BSSummaryScreen: UIViewController {
         
         var result : BSResultCcDetails?
         
-        let ccn = self.cardUiTextField.text!
-        let cvv = self.cvvUiTextField.text!
-        let exp = self.getExpDateAsMMYYYY()!
+        let ccn = self.cardUiTextField.text ?? ""
+        let cvv = self.cvvUiTextField.text ?? ""
+        let exp = self.getExpDateAsMMYYYY() ?? ""
         do {
             result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
-            self.purchaseData?.setCcDetails(ccDetails: result)
+            self.purchaseData.setCcDetails(ccDetails: result)
             
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
@@ -137,7 +136,7 @@ class BSSummaryScreen: UIViewController {
                 cvvErrorUiLabel.isHidden = false
             }
         } catch {
-            print("Unexpected error")
+            NSLog("Unexpected error submitting Payment Fields to BS")
         }
         return result
     }
@@ -145,9 +144,13 @@ class BSSummaryScreen: UIViewController {
     private func gotoShippingScreen() {
         
         if (self.shippingScreen == nil) {
-            self.shippingScreen = storyboard!.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
-            purchaseData!.getShippingDetails()!.name = self.nameUiTextyField.text!
-            self.shippingScreen.purchaseData = self.purchaseData
+            if let storyboard = storyboard {
+                self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
+                if let shippingDetails = purchaseData.getShippingDetails() {
+                    shippingDetails.name = self.nameUiTextyField.text ?? ""
+                }
+                self.shippingScreen.purchaseData = self.purchaseData
+            }
         }
         self.shippingScreen.payText = self.payButtonText
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
@@ -157,12 +160,11 @@ class BSSummaryScreen: UIViewController {
     
     @IBAction func menuCurrecyAction(_ sender: Any) {
         
-        //print("in currency menu option")
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
             bsToken: bsToken,
-            selectedCurrencyCode: purchaseData!.getCurrency(),
+            selectedCurrencyCode: purchaseData.getCurrency(),
             updateFunc: updateViewWithNewCurrency)
 
     }
@@ -171,7 +173,7 @@ class BSSummaryScreen: UIViewController {
         
         // hide/show the menu
         if (menuWidthConstraint.constant <= 0) {
-            let title = "Currency - " + purchaseData!.currency
+            let title = "Currency - " + purchaseData.currency
             menuCurrencyButton.setTitle(title, for: UIControlState())
             menuWidthConstraint.constant = 150
         } else {
@@ -182,8 +184,7 @@ class BSSummaryScreen: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         // if navigating to the web view - set the right URL
-        if segue.identifier != nil {
-            let id = segue.identifier!
+        if let id = segue.identifier {
             var url : String?
             if id == "webViewPrivacyPolicy" {
                 url = privacyPolicyURL
@@ -192,9 +193,9 @@ class BSSummaryScreen: UIViewController {
             } else if id == "webViewTerms" {
                 url = termsURL
             }
-            if url != nil {
+            if let url = url {
                 let controller = segue.destination as! BSWebViewController
-                controller.url = url!
+                controller.url = url
             }
         }
     }
@@ -208,10 +209,9 @@ class BSSummaryScreen: UIViewController {
             if (withShipping) {
                 gotoShippingScreen()
             } else {
-                let result = submitPaymentFields()
-                if (result != nil) {
+                if let result = submitPaymentFields() {
                     // call callback
-                    print("Should close window here and call the callback")
+                    print("Should close window here and call the callback; result: \(result)")
                 }
             }
         } else {
@@ -224,58 +224,89 @@ class BSSummaryScreen: UIViewController {
     
     func validateForm() -> Bool {
         
-        let ok1 = validateName()
-        let ok2 = validateCCN()
-        let ok3 = validateExpMM()
-        let ok4 = validateExpYY()
-        let ok5 = validateCvv()
+        let ok1 = validateName(ignoreIfEmpty: false)
+        let ok2 = validateCCN(ignoreIfEmpty: false)
+        let ok3 = validateExpMM(ignoreIfEmpty: false)
+        let ok4 = validateExpYY(ignoreIfEmpty: false)
+        let ok5 = validateCvv(ignoreIfEmpty: false)
         return ok1 && ok2 && ok3 && ok4 && ok5
     }
     
-    func validateCvv() -> Bool {
+    func validateCvv(ignoreIfEmpty : Bool) -> Bool {
         
-        if (doValidations && cvvUiTextField.text!.characters.count < 3) {
+        var ok : Bool = true;
+        if (doValidations) {
+            let newValue = cvvUiTextField.text ?? ""
+            if newValue.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if newValue.characters.count < 3 {
+                ok = false
+            }
+        }
+        if ok {
+            cvvErrorUiLabel.isHidden = true
+        } else {
             cvvErrorUiLabel.text = cvvInvalidMessage
             cvvErrorUiLabel.isHidden = false
-            return false
-        } else {
-            cvvErrorUiLabel.isHidden = true
-            return true
         }
+        return ok
     }
     
-    func validateName() -> Bool {
+    func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        nameErrorUiLabel.isHidden = true
-        if (doValidations && nameUiTextyField.text!.characters.count < 4) {
+        var ok : Bool = true;
+        if (doValidations) {
+            let newValue = nameUiTextyField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+            nameUiTextyField.text = newValue
+            if newValue.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if !newValue.isValidName {
+                ok = false
+            }
+        }
+        if ok {
+            nameErrorUiLabel.isHidden = true
+        } else {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false
-            return false
         }
-        return true
+        return ok
     }
     
-    func validateCCN() -> Bool {
+    func validateCCN(ignoreIfEmpty : Bool) -> Bool {
         
-        ccnErrorUiLabel.isHidden = true
-        // TODO: need to add lohn check as well
-        if (doValidations && cardUiTextField.text!.characters.count < 7) {
+        var ok : Bool = true;
+        let newValue = cardUiTextField.text ?? ""
+        if (doValidations) {
+            if newValue.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if !newValue.isValidCCN {
+                ok = false
+            }
+        }
+        if ok {
+            ccnErrorUiLabel.isHidden = true
+            let cardType = newValue.getCCType()
+            NSLog("cardType= \(cardType)")
+        } else {
             ccnErrorUiLabel.text = ccnInvalidMessage
             ccnErrorUiLabel.isHidden = false
-            return false
         }
-        return true
+        return ok
     }
     
-    func validateExpMM() -> Bool {
-        var ok = true
-        let inputMM = ExpMMUiTextField.text!
-        if (!doValidations) {
-            ok = true
-        } else if (inputMM.characters.count < 2) {
-            ok = false
-        } else if !inputMM.isValidMonth {
-            ok = false
+    func validateExpMM(ignoreIfEmpty : Bool) -> Bool {
+        
+        var ok : Bool = true
+        if (doValidations) {
+            let inputMM = ExpMMUiTextField.text ?? ""
+            if inputMM.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if (inputMM.characters.count < 2) {
+                ok = false
+            } else if !inputMM.isValidMonth {
+                ok = false
+            }
         }
         if (ok) {
             expErrorUiLabel.isHidden = true
@@ -286,16 +317,19 @@ class BSSummaryScreen: UIViewController {
         return ok
     }
     
-    func validateExpYY() -> Bool {
-        var ok = true
-        let inputYY = ExpYYUiTextField.text!
-        if (!doValidations) {
-            ok = true
-        } else if (inputYY.characters.count < 2) {
-            ok = false
-        } else {
-            let currentYearYY = self.getCurrentYear() % 100
-            ok = currentYearYY <= Int(inputYY)!
+    func validateExpYY(ignoreIfEmpty : Bool) -> Bool {
+
+        var ok : Bool = true
+        if (doValidations) {
+            let inputYY = ExpYYUiTextField.text ?? ""
+            if inputYY.characters.count == 0 && ignoreIfEmpty {
+                // ignore
+            } else if (inputYY.characters.count < 2) {
+                ok = false
+            } else {
+                let currentYearYY = self.getCurrentYear() % 100
+                ok = currentYearYY <= Int(inputYY)!
+            }
         }
         if (ok) {
             expErrorUiLabel.isHidden = true
@@ -338,23 +372,23 @@ class BSSummaryScreen: UIViewController {
     }
     
     @IBAction func nameEditingDidEnd(_ sender: UITextField) {
-        _ = validateName()
+        _ = validateName(ignoreIfEmpty: true)
     }
     
     @IBAction func cvvEditingDidEnd(_ sender: UITextField) {
-        _ = validateCvv()
+        _ = validateCvv(ignoreIfEmpty: true)
     }
     
     @IBAction func expYYEditingDidEnd(_ sender: UITextField) {
-        _ = validateExpYY()
+        _ = validateExpYY(ignoreIfEmpty: true)
     }
     
     @IBAction func expMMEditingDidEnd(_ sender: UITextField) {
-        _ = validateExpMM()
+        _ = validateExpMM(ignoreIfEmpty: true)
     }
 
     @IBAction func cardEditingDidEnd(_ sender: UITextField) {
-        _ = validateCCN()
+        _ = validateCCN(ignoreIfEmpty: true)
     }
 
 }

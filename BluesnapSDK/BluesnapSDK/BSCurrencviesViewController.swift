@@ -18,8 +18,8 @@ class BSCurrenciesViewController: UITableViewController {
     internal var selectedCurrencyCode : String = ""
     // the callback function that gets called when a currency is selected;
     // this ids just a default
-    internal var updateFunc : (BSCurrency?, BSCurrency?, BSCurrencies?)->Void = {
-        oldCurrency, newCurrency, bsCurrencies in
+    internal var updateFunc : (BSCurrency?, BSCurrency?)->Void = {
+        oldCurrency, newCurrency in
         print("Currency \(newCurrency?.getCode()) was selected")
     }
 
@@ -37,8 +37,10 @@ class BSCurrenciesViewController: UITableViewController {
         super.viewDidLoad()
         
         // Get currencies data
-        if (bsToken != nil && bsCurrencies == nil) {
-            bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken!)
+        if let bsToken = bsToken {
+            if (bsCurrencies == nil) {
+                bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
+            }
         }
     }
     
@@ -60,7 +62,11 @@ class BSCurrenciesViewController: UITableViewController {
     // return #rows in table
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return bsCurrencies!.currencies.count
+        if let bsCurrencies = bsCurrencies {
+            return bsCurrencies.currencies.count
+        } else {
+            return 0
+        }
     }
     
     // "draw" a cell
@@ -70,13 +76,14 @@ class BSCurrenciesViewController: UITableViewController {
         guard let cell = reusableCell as? BSCurrencyTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        let bsCurrency : BSCurrency = bsCurrencies!.currencies[indexPath.row]
-        cell.CurrencyUILabel.text = bsCurrency.getName() + " " + bsCurrency.getCode()
-        if (bsCurrency.getCode() == selectedCurrencyCode) {
-            cell.CurrentUILabel.text = "V"
-            selectedCurrencyIndexPath = indexPath
-        } else {
-            cell.CurrentUILabel.text = ""
+        if let bsCurrency = bsCurrencies?.currencies[indexPath.row] {
+            cell.CurrencyUILabel.text = bsCurrency.getName() + " " + bsCurrency.getCode()
+            if (bsCurrency.getCode() == selectedCurrencyCode) {
+                cell.CurrentUILabel.text = "V"
+                selectedCurrencyIndexPath = indexPath
+            } else {
+                cell.CurrentUILabel.text = ""
+            }
         }
         return cell
     }
@@ -84,25 +91,29 @@ class BSCurrenciesViewController: UITableViewController {
     // When a cell is selected
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        var oldBsCurrency : BSCurrency?
-        if (self.selectedCurrencyIndexPath != nil) {
-            oldBsCurrency = bsCurrencies!.currencies[self.selectedCurrencyIndexPath!.row]
+        if let bsCurrencies = bsCurrencies {
+            var oldBsCurrency : BSCurrency?
+            if let selectedCurrencyIndexPath = self.selectedCurrencyIndexPath {
+                oldBsCurrency = bsCurrencies.currencies[selectedCurrencyIndexPath.row]
+            }
+            let newBsCurrency : BSCurrency = bsCurrencies.currencies[indexPath.row]
+        
+            selectedCurrencyCode = newBsCurrency.getCode()
+        
+            // deselect previous option
+            if let selectedCurrencyIndexPath = self.selectedCurrencyIndexPath {
+                self.tableView.reloadRows(at: [selectedCurrencyIndexPath], with: .none)
+            }
+        
+            // select current option
+            selectedCurrencyIndexPath = indexPath
+            if let selectedCurrencyIndexPath = selectedCurrencyIndexPath {
+                self.tableView.reloadRows(at: [selectedCurrencyIndexPath], with: .none)
+            }
+        
+            // call updateFunc
+            updateFunc(oldBsCurrency, newBsCurrency)
         }
-        let newBsCurrency : BSCurrency = bsCurrencies!.currencies[indexPath.row]
-        
-        selectedCurrencyCode = newBsCurrency.getCode()
-        
-        // deselect previous option
-        if (selectedCurrencyIndexPath != nil) {
-            self.tableView.reloadRows(at: [selectedCurrencyIndexPath!], with: .none)
-        }
-        
-        // select current option
-        selectedCurrencyIndexPath = indexPath
-        self.tableView.reloadRows(at: [selectedCurrencyIndexPath!], with: .none)
-        
-        // call updateFunc
-        updateFunc(oldBsCurrency, newBsCurrency, bsCurrencies)
     }
     
 }
