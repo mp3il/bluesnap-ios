@@ -93,6 +93,11 @@ public class PurchaseData : NSObject {
         self.name = name
     }
     
+    public func getSplitName() -> (firstName: String, lastName: String)? {
+        return name.splitName
+    }
+
+    
     public func getCcDetails() -> BSResultCcDetails? {
         return ccDetails
     }

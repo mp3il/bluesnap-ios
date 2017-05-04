@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var withShippingSwitch: UISwitch!
     @IBOutlet weak var taxTextField: UITextField!
     @IBOutlet weak var taxPercentTextField: UITextField!
+    @IBOutlet weak var resultTextView: UITextView!
     
     // MARK: private properties
     
@@ -38,6 +39,7 @@ class ViewController: UIViewController {
         // get BS token!
         bsToken = BlueSnapSDK.getSandboxTestToken()
         NSLog("Got BS token= \(bsToken!.getTokenStr())")
+        resultTextView.text = ""
  	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +58,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func convertButtonAction(_ sender: UIButton) {
         
+        resultTextView.text = ""
         
         // open the purchase screen
         fillPurchaseData()
@@ -104,7 +107,17 @@ class ViewController: UIViewController {
     
     private func completePurchase(purchaseData: PurchaseData!) {
         print("Here we should call the server to complete the transaction with BlueSnap")
+        
+        let demo = DemoTreansactions()
+        let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
+            paymentDetails: purchaseData,
+            bsToken: bsToken!)
+        if (result.success == true) {
+            resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
+        } else {
+            let errorDesc = result.data ?? ""
+            resultTextView.text = "An error occurred trying to create BLS transaction.\n\n\(errorDesc)"
+        }
     }
-
 }
 

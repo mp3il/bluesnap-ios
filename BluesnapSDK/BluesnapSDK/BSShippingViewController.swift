@@ -15,6 +15,7 @@ class BSShippingViewController: UIViewController {
 
     internal var purchaseData : PurchaseData!
     internal var payText : String!
+    internal var submitPaymentFields : () -> BSResultCcDetails? = { return nil }
     
     // MARK: outlets
     
@@ -66,11 +67,16 @@ class BSShippingViewController: UIViewController {
         }
     }
     
-    
-    @IBAction func CheckoutClick(_ sender: Any) {
+    @IBAction func SubmitClick(_ sender: Any) {
         
-        
-        
+        if (validateForm()) {
+            
+            _ = navigationController?.popViewController(animated: true)
+            _ = submitPaymentFields()
+            
+        } else {
+            //return false
+        }
     }
     
     
@@ -207,12 +213,12 @@ class BSShippingViewController: UIViewController {
     
     func validateState(ignoreIfEmpty : Bool) -> Bool {
         
-        let newValue = stateUITextField.text ?? ""
+        let newValue = stateUITextField.isHidden ? "" : stateUITextField.text ?? ""
         if let shippingDetails = self.purchaseData.getShippingDetails() {
             shippingDetails.state = newValue
         }
         var result : Bool = true
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
+        if ((ignoreIfEmpty || stateUITextField.isHidden) && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 2) {
             stateErrorUILabel.text = "Please fill a valid state"

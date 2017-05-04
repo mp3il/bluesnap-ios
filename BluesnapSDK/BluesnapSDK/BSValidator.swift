@@ -68,6 +68,17 @@ extension String {
         return true
     }
     
+    var splitName : (firstName: String, lastName: String)? {
+        
+        if let p = self.characters.index(of: " ") {
+            let firstName = substring(with: startIndex..<p).trimmingCharacters(in: .whitespaces)
+            let lastName = substring(with: p..<endIndex).trimmingCharacters(in: .whitespaces)
+            return (firstName, lastName)
+        } else {
+            return nil
+        }
+    }
+    
     var removeNoneAlphaCharacters : String {
         
         var result : String = "";
@@ -85,6 +96,7 @@ extension String {
         for character in characters {
             if (character == "-") ||
                 (character == "_") ||
+                (character == ".") ||
                 (character == "@") ||
                 (character >= "0" && character <= "9") ||
                 (character >= "a" && character <= "z") ||

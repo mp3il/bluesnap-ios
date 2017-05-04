@@ -7,6 +7,11 @@ class BSSummaryScreen: UIViewController {
 	
     internal var purchaseData : PurchaseData!
     internal var bsToken: BSToken!
+    internal var purchaseFunc: (PurchaseData!)->Void = {
+        paymentDetails in
+        print("Payment Details were submitted")
+    }
+
     
     // MARK: private properties
     
@@ -110,7 +115,7 @@ class BSSummaryScreen: UIViewController {
         
         let mm = self.ExpMMUiTextField.text ?? ""
         let yyyy = getExpYearAsYYYY()
-        return "\(mm)/\(yyyy)"
+        return "\(mm)/\(yyyy!)"
     }
 
     private func submitPaymentFields() -> BSResultCcDetails? {
@@ -123,6 +128,10 @@ class BSSummaryScreen: UIViewController {
         do {
             result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
             self.purchaseData.setCcDetails(ccDetails: result)
+            // return to previous screen
+            _ = navigationController?.popViewController(animated: true)
+            // execute callback
+            purchaseFunc(purchaseData)
             
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
@@ -150,6 +159,7 @@ class BSSummaryScreen: UIViewController {
                     shippingDetails.name = self.nameUiTextyField.text ?? ""
                 }
                 self.shippingScreen.purchaseData = self.purchaseData
+                self.shippingScreen.submitPaymentFields = submitPaymentFields
             }
         }
         self.shippingScreen.payText = self.payButtonText
@@ -255,8 +265,8 @@ class BSSummaryScreen: UIViewController {
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
         var ok : Bool = true;
+        let newValue = nameUiTextyField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         if (doValidations) {
-            let newValue = nameUiTextyField.text?.trimmingCharacters(in: .whitespaces) ?? ""
             nameUiTextyField.text = newValue
             if newValue.characters.count == 0 && ignoreIfEmpty {
                 // ignore
@@ -266,6 +276,7 @@ class BSSummaryScreen: UIViewController {
         }
         if ok {
             nameErrorUiLabel.isHidden = true
+            purchaseData.name = newValue
         } else {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false

@@ -70,10 +70,7 @@ import Foundation
         purchaseData : PurchaseData!,
         withShipping: Bool,
         
-        purchaseFunc: (PurchaseData!)->Void) {
-	
-        
-        
+        purchaseFunc: @escaping (PurchaseData!)->Void) {
         
 		if purchaseScreen == nil {
 			let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
@@ -87,16 +84,24 @@ import Foundation
         }
         purchaseScreen.purchaseData = purchaseData
         purchaseScreen.bsToken = bsToken
+        purchaseScreen.purchaseFunc = purchaseFunc
 		
 		inNavigationController.pushViewController(purchaseScreen, animated: animated)
 	}
     
     /**
-    Submit Payment token fields
-    */
-    
-    
-    
+     Submit Payment token fields
+     */
+    static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
+        
+        do {
+            let result = try BSApiManager.submitCcDetails(bsToken: bsToken, ccNumber: ccNumber, expDate: expDate, cvv: cvv)
+            return result
+        } catch let error {
+            throw error
+        }
+    }
+        
     
     // MARK: Utility functions
     

@@ -55,7 +55,6 @@
 		2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BlueSnap.storyboard; sourceTree = "<group>"; };
 		2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KountDataCollector.h; sourceTree = "<group>"; };
 		2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKountDataCollector.a; sourceTree = "<group>"; };
-		2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CheckoutExampleSwift-Bridging-Header.h.h"; sourceTree = "<group>"; };
 		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController.swift; sourceTree = "<group>"; };
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
@@ -118,7 +117,6 @@
 				2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */,
 				2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */,
 				2D374F231E880E7200AE2A81 /* BluesnapSDK.h */,
-				2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */,
 				2D374F241E880E7200AE2A81 /* Info.plist */,
 			);
 			path = BluesnapSDK;
