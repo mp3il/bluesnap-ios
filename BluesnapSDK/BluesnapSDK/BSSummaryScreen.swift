@@ -159,7 +159,7 @@ class BSSummaryScreen: UIViewController {
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
         if popupMenuViewController != nil {
-            closeMenu()
+            //closeMenu()
             return
         }
         

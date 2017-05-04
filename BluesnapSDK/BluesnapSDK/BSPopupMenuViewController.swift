@@ -11,6 +11,7 @@ import Foundation
 class BSPopupMenuViewController : UIViewController {
     
     // MARK: - Public properties
+    
     internal var bsToken : BSToken?
     internal var purchaseData : PurchaseData?
     internal var closeFunc : ()->Void = {
@@ -19,9 +20,15 @@ class BSPopupMenuViewController : UIViewController {
     }
     
     // MARK: private properties
+    
     @IBOutlet var menuView: UIView!
+    @IBOutlet weak var subView: UIView!
+    @IBOutlet weak var currencyButton: UIButton!
+    @IBOutlet weak var termsButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     // MARK: Constants
+    
     fileprivate let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
     fileprivate let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
     fileprivate let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
@@ -30,7 +37,26 @@ class BSPopupMenuViewController : UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.9)
+        
+        menuView.backgroundColor = UIColor.gray.withAlphaComponent(0.7)
+        //self.view.backgroundColor = UIColor.lightGray.withAlphaComponent(1)
+        subView.backgroundColor = UIColor.lightGray.withAlphaComponent(1)
+        
+        let radius : CGFloat = 9.0
+        
+        let cornerRadii = CGSize(width: radius, height: radius)
+        let topRoundedPath = UIBezierPath(roundedRect: currencyButton.bounds, byRoundingCorners: [UIRectCorner.topLeft, UIRectCorner.topRight], cornerRadii: cornerRadii)
+        let topMaskLayer = CAShapeLayer()
+        topMaskLayer.path = topRoundedPath.cgPath
+        currencyButton.layer.mask = topMaskLayer
+        
+        let bottomRoundedPath = UIBezierPath(roundedRect: currencyButton.bounds, byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight], cornerRadii: cornerRadii)
+        let bottomMaskLayer = CAShapeLayer()
+        bottomMaskLayer.path = bottomRoundedPath.cgPath
+        termsButton.layer.mask = bottomMaskLayer
+        
+        self.cancelButton.layer.cornerRadius = radius
+        
         self.showAnimate()
     }
 
