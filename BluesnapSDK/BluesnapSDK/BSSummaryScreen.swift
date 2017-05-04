@@ -20,9 +20,6 @@ class BSSummaryScreen: UIViewController {
     
     // MARK: Constants
     
-    fileprivate let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
-    fileprivate let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
-    fileprivate let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
     fileprivate let nameInvalidMessage = "Please fill Card holder name"
     fileprivate let ccnInvalidMessage = "Please fill a valid Credirt Card number"
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
@@ -47,8 +44,6 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var cvvErrorUiLabel: UILabel!
     @IBOutlet weak var subtotalUILabel: UILabel!
     @IBOutlet weak var taxAmountUILabel: UILabel!
-    @IBOutlet weak var menuWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var menuCurrencyButton: UIButton!
 
     
 	// MARK: - UIViewController's methods
@@ -65,9 +60,6 @@ class BSSummaryScreen: UIViewController {
 
         self.withShipping = purchaseData.getShippingDetails() != nil
         updateTexts()
-        
-        // hide menu
-        menuWidthConstraint.constant = 0
 	}
     
     
@@ -88,11 +80,6 @@ class BSSummaryScreen: UIViewController {
         }
         subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
         taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
-    }
-    
-    private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
-        
-            purchaseData.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
     }
     
     private func getCurrentYear() -> Int! {
@@ -167,46 +154,34 @@ class BSSummaryScreen: UIViewController {
     }
     
     // MARK: menu actions
-    
-    @IBAction func menuCurrecyAction(_ sender: Any) {
-        
-        BlueSnapSDK.showCurrencyList(
-            inNavigationController: self.navigationController,
-            animated: true,
-            bsToken: bsToken,
-            selectedCurrencyCode: purchaseData.getCurrency(),
-            updateFunc: updateViewWithNewCurrency)
-
-    }
+    fileprivate var popupMenuViewController : BSPopupMenuViewController?
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
-        // hide/show the menu
-        if (menuWidthConstraint.constant <= 0) {
-            let title = "Currency - " + purchaseData.currency
-            menuCurrencyButton.setTitle(title, for: UIControlState())
-            menuWidthConstraint.constant = 150
-        } else {
-            menuWidthConstraint.constant = 0
+        if popupMenuViewController != nil {
+            closeMenu()
+            return
         }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        // if navigating to the web view - set the right URL
-        if let id = segue.identifier {
-            var url : String?
-            if id == "webViewPrivacyPolicy" {
-                url = privacyPolicyURL
-            } else if id == "webViewRefundPolicy" {
-                url = refundPolicyURL
-            } else if id == "webViewTerms" {
-                url = termsURL
+        if let storyboard = storyboard, popupMenuViewController == nil {
+            popupMenuViewController = storyboard.instantiateViewController(withIdentifier: "bsPopupMenu") as? BSPopupMenuViewController
+            if let popupMenuViewController = popupMenuViewController {
+                popupMenuViewController.purchaseData = self.purchaseData
+                popupMenuViewController.bsToken = self.bsToken
+                popupMenuViewController.closeFunc = self.closeMenu
+                popupMenuViewController.view.frame = self.view.frame
+                self.addChildViewController(popupMenuViewController)
+                self.view.addSubview(popupMenuViewController.view)
+                popupMenuViewController.didMove(toParentViewController: self)
             }
-            if let url = url {
-                let controller = segue.destination as! BSWebViewController
-                controller.url = url
-            }
+        }
+   }
+    
+    private func closeMenu() {
+        
+        if let _ = popupMenuViewController {
+            self.popupMenuViewController!.view.removeFromSuperview()
+            self.popupMenuViewController = nil
         }
     }
 
