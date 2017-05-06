@@ -91,10 +91,11 @@ class ViewController: UIViewController {
     // MARK: private methods
     private func fillPaymentDetails() {
         
-        paymentDetails.setAmount(amount: (valueTextField.text! as NSString).doubleValue)
-        paymentDetails.setTaxAmount(taxAmount: (taxTextField.text! as NSString).doubleValue)
-        paymentDetails.setTaxPercent(taxPercent: (taxPercentTextField.text! as NSString).doubleValue)
-        paymentDetails.setCurrency(currency: (currencyButton.titleLabel?.text)!)
+        let amount = (valueTextField.text! as NSString).doubleValue
+        let taxPercent = (taxPercentTextField.text! as NSString).doubleValue
+        let taxAmount = (taxTextField.text! as NSString).doubleValue + (taxPercent * amount / 100.0)
+        
+        paymentDetails.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: (currencyButton.titleLabel?.text)!)
     }
     
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {

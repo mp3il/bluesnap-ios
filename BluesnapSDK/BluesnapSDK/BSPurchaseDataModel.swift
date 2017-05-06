@@ -10,11 +10,15 @@ import Foundation
 
 public class BSPaymentDetails : NSObject {
     
-    // These 4 fields are input + output (they may change if shopper changes currency)
+    // These 3 fields are input + output (they may change if shopper changes currency)
     var amount : Double! = 0.0
     var taxAmount : Double! = 0.0
-    var taxPercent : Double! = 0.0
     var currency : String! = "USD"
+    
+    // These fields hold the original amounts in USD, to keep precision in case of currency change
+    internal var originalAmount : Double! = 0.0
+    internal var originalTaxAmount : Double! = 0.0
+    internal var originalRate : Double?
     
     // These fields are output, but may be supplied as input as well
     var name : String! = ""
@@ -24,29 +28,39 @@ public class BSPaymentDetails : NSObject {
     var ccDetails : BSResultCcDetails?
     
     
-    // MARK: Change currency method
+    // MARK: Change currency methods
+    
+    /*
+    Set amounts will reset the currency and amounts, including the original
+    amounts.
+    */
+    public func setAmountsAndCurrency(amount: Double!, taxAmount: Double?, currency: String) {
+        
+        self.amount = amount
+        self.originalAmount = amount
+        self.taxAmount = taxAmount
+        self.originalTaxAmount = taxAmount ?? 0.0
+        self.currency = currency
+        self.originalRate = nil
+    }
     
     /*
     Change currencvy will also change the amounts according to the change rates
     */
     public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?) {
         
-        if let newCurrency = newCurrency {
-        
-            currency = newCurrency.code
-        
-            // calculate conversion rate
-        
-            var oldRate : Double = 1.0
+        if originalRate == nil {
             if let oldCurrency = oldCurrency {
-                // keep rate to convert amount and tax back to USD
-                oldRate = oldCurrency.getRate()
+                originalRate = oldCurrency.getRate() ?? 1.0
+            } else {
+                originalRate = 1.0
             }
-            let newRate = newCurrency.getRate() / oldRate
-        
-            // update amounts
-            amount = amount * newRate
-            taxAmount = taxAmount * newRate
+        }
+        if let newCurrency = newCurrency {
+            self.currency = newCurrency.code
+            let newRate = newCurrency.getRate() / originalRate!
+            self.amount = originalAmount * newRate
+            self.taxAmount = originalTaxAmount * newRate
         }
     }
     
@@ -57,32 +71,12 @@ public class BSPaymentDetails : NSObject {
         return amount
     }
     
-    public func setAmount(amount : Double!) {
-        self.amount = amount
-    }
-    
     public func getTaxAmount() -> Double! {
         return taxAmount
     }
     
-    public func setTaxAmount(taxAmount : Double!) {
-        self.taxAmount = taxAmount
-    }
-    
-    public func getTaxPercent() -> Double! {
-        return taxPercent
-    }
-    
-    public func setTaxPercent(taxPercent : Double!) {
-        self.taxPercent = taxPercent
-    }
-    
     public func getCurrency() -> String! {
         return currency
-    }
-    
-    public func setCurrency(currency : String!) {
-        self.currency = currency
     }
     
     public func getName() -> String! {

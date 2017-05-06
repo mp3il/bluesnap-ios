@@ -18,16 +18,13 @@ class BSApiManager  {
     static let BS_SANDBOX_DOMAIN = "https://us-qa-fct03.bluesnap.com/" // "https://sandbox.bluesnap.com/"
     static let BS_SANDBOX_TEST_USER = "GCpapi" //"sdkuser"
     static let BS_SANDBOX_TEST_PASS = "Plimus4321" //"SDKuser123"
+    static let TIME_DIFF_TO_RELOAD : Double = -60 * 60 // every hour (interval should be negative, and in seconds)
     
-    // MARK: Settings
-    var bsDomain = BS_PRODUCTION_DOMAIN
+    // MARK: private properties
+    static var bsCurrencies : BSCurrencies?
+    static var lastCurrencyFetchDate : Date?
     
-    
-    
-    func setBSDomain(domain : String!) {
-        bsDomain = domain
-    }
-    
+
     // Use this method only in tests to get a token for sandbox
     static func getSandboxBSToken() -> BSToken? {
                 
@@ -96,6 +93,13 @@ class BSApiManager  {
     */
     static func getCurrencyRates(bsToken : BSToken!) -> BSCurrencies? {
         
+        if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
+            let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
+            if (diff > TIME_DIFF_TO_RELOAD) {
+                return  bsCurrencies
+            }
+        }
+        
         let domain : String! = bsToken.serverUrl
         let urlStr = domain + "services/2/tokenized-services/rates"
         let url = NSURL(string: urlStr)!
@@ -106,7 +110,6 @@ class BSApiManager  {
         
         // fire request
         
-        var resultData : BSCurrencies?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data : Data?, response, error) in
             if let error = error {
@@ -116,7 +119,9 @@ class BSApiManager  {
             let httpResponse = response as? HTTPURLResponse
             if let httpStatusCode:Int = (httpResponse?.statusCode) {
                 if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    resultData = parseCurrenciesJSON(data: data)
+                    bsCurrencies = parseCurrenciesJSON(data: data)
+                    self.lastCurrencyFetchDate = Date()
+
                 } else {
                     NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
                 }
@@ -129,7 +134,7 @@ class BSApiManager  {
         }
         task.resume()
         semaphore.wait()
-        return resultData
+        return bsCurrencies
     }
 
     

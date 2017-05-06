@@ -35,13 +35,6 @@ class BSCurrenciesViewController: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        // Get currencies data
-        if let bsToken = bsToken {
-            if (bsCurrencies == nil) {
-                bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +42,11 @@ class BSCurrenciesViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         self.navigationController!.isNavigationBarHidden = false
+        
+        // Re-load currencies data if necessary
+        if let bsToken = bsToken {
+            bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
+        }
     }
     
     

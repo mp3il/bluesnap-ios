@@ -69,7 +69,7 @@ class BSSummaryScreen: UIViewController {
         
         let toCurrency = paymentDetails.getCurrency() ?? ""
         let subtotalAmount = paymentDetails.getAmount() ?? 0.0
-        let taxAmount = (paymentDetails.getTaxAmount() ?? 0.0) + (paymentDetails.getTaxPercent() ?? 0.0) * subtotalAmount / 100.0
+        let taxAmount = (paymentDetails.getTaxAmount() ?? 0.0)
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
