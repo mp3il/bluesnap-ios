@@ -5,9 +5,9 @@ class BSSummaryScreen: UIViewController {
 
 	// MARK: - Public properties
 	
-    internal var purchaseData : PurchaseData!
+    internal var paymentDetails : BSPaymentDetails!
     internal var bsToken: BSToken!
-    internal var purchaseFunc: (PurchaseData!)->Void = {
+    internal var purchaseFunc: (BSPaymentDetails!)->Void = {
         paymentDetails in
         print("Payment Details were submitted")
     }
@@ -58,7 +58,7 @@ class BSSummaryScreen: UIViewController {
 		
 		self.navigationController!.isNavigationBarHidden = false
 
-        self.withShipping = purchaseData.getShippingDetails() != nil
+        self.withShipping = paymentDetails.getShippingDetails() != nil
         updateTexts()
 	}
     
@@ -67,9 +67,9 @@ class BSSummaryScreen: UIViewController {
     
     private func updateTexts() {
         
-        let toCurrency = purchaseData.getCurrency() ?? ""
-        let subtotalAmount = purchaseData.getAmount() ?? 0.0
-        let taxAmount = (purchaseData.getTaxAmount() ?? 0.0) + (purchaseData.getTaxPercent() ?? 0.0) * subtotalAmount / 100.0
+        let toCurrency = paymentDetails.getCurrency() ?? ""
+        let subtotalAmount = paymentDetails.getAmount() ?? 0.0
+        let taxAmount = (paymentDetails.getTaxAmount() ?? 0.0) + (paymentDetails.getTaxPercent() ?? 0.0) * subtotalAmount / 100.0
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
@@ -114,11 +114,11 @@ class BSSummaryScreen: UIViewController {
         let exp = self.getExpDateAsMMYYYY() ?? ""
         do {
             result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
-            self.purchaseData.setCcDetails(ccDetails: result)
+            self.paymentDetails.setCcDetails(ccDetails: result)
             // return to previous screen
             _ = navigationController?.popViewController(animated: true)
             // execute callback
-            purchaseFunc(purchaseData)
+            purchaseFunc(paymentDetails)
             
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
@@ -142,10 +142,10 @@ class BSSummaryScreen: UIViewController {
         if (self.shippingScreen == nil) {
             if let storyboard = storyboard {
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
-                if let shippingDetails = purchaseData.getShippingDetails() {
+                if let shippingDetails = paymentDetails.getShippingDetails() {
                     shippingDetails.name = self.nameUiTextyField.text ?? ""
                 }
-                self.shippingScreen.purchaseData = self.purchaseData
+                self.shippingScreen.paymentDetails = self.paymentDetails
                 self.shippingScreen.submitPaymentFields = submitPaymentFields
             }
         }
@@ -166,7 +166,7 @@ class BSSummaryScreen: UIViewController {
         if let storyboard = storyboard, popupMenuViewController == nil {
             popupMenuViewController = storyboard.instantiateViewController(withIdentifier: "bsPopupMenu") as? BSPopupMenuViewController
             if let popupMenuViewController = popupMenuViewController {
-                popupMenuViewController.purchaseData = self.purchaseData
+                popupMenuViewController.paymentDetails = self.paymentDetails
                 popupMenuViewController.bsToken = self.bsToken
                 popupMenuViewController.closeFunc = self.closeMenu
                 popupMenuViewController.view.frame = self.view.frame
@@ -251,7 +251,7 @@ class BSSummaryScreen: UIViewController {
         }
         if ok {
             nameErrorUiLabel.isHidden = true
-            purchaseData.name = newValue
+            paymentDetails.name = newValue
         } else {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false

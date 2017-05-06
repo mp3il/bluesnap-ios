@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     // MARK: private properties
     
     fileprivate var bsToken : BSToken?
-    fileprivate var purchaseData = PurchaseData()
+    fileprivate var paymentDetails = BSPaymentDetails()
  
 	// MARK: - UIViewController's methods
 	
@@ -61,24 +61,24 @@ class ViewController: UIViewController {
         resultTextView.text = ""
         
         // open the purchase screen
-        fillPurchaseData()
+        fillPaymentDetails()
         BlueSnapSDK.showPurchaseScreen(
             inNavigationController: self.navigationController,
             animated: true,
             bsToken: bsToken!,
-            purchaseData: purchaseData,
+            paymentDetails: paymentDetails,
             withShipping: withShippingSwitch.isOn,
             purchaseFunc: completePurchase)
 	}
 	
 	@IBAction func currencyButtonAction(_ sender: UIButton) {
         
-        fillPurchaseData()
+        fillPaymentDetails()
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
             bsToken: bsToken,
-            selectedCurrencyCode: purchaseData.getCurrency(),
+            selectedCurrencyCode: paymentDetails.getCurrency(),
             updateFunc: updateViewWithNewCurrency)
 	}
 	
@@ -89,28 +89,28 @@ class ViewController: UIViewController {
 	}
     
     // MARK: private methods
-    private func fillPurchaseData() {
+    private func fillPaymentDetails() {
         
-        purchaseData.setAmount(amount: (valueTextField.text! as NSString).doubleValue)
-        purchaseData.setTaxAmount(taxAmount: (taxTextField.text! as NSString).doubleValue)
-        purchaseData.setTaxPercent(taxPercent: (taxPercentTextField.text! as NSString).doubleValue)
-        purchaseData.setCurrency(currency: (currencyButton.titleLabel?.text)!)
+        paymentDetails.setAmount(amount: (valueTextField.text! as NSString).doubleValue)
+        paymentDetails.setTaxAmount(taxAmount: (taxTextField.text! as NSString).doubleValue)
+        paymentDetails.setTaxPercent(taxPercent: (taxPercentTextField.text! as NSString).doubleValue)
+        paymentDetails.setCurrency(currency: (currencyButton.titleLabel?.text)!)
     }
     
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        purchaseData.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
-        valueTextField.text = String(purchaseData.getAmount())
-        taxTextField.text = String(purchaseData.getTaxAmount())
-        currencyButton.titleLabel?.text = purchaseData.getCurrency()
+        paymentDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
+        valueTextField.text = String(paymentDetails.getAmount())
+        taxTextField.text = String(paymentDetails.getTaxAmount())
+        currencyButton.titleLabel?.text = paymentDetails.getCurrency()
     }
     
-    private func completePurchase(purchaseData: PurchaseData!) {
+    private func completePurchase(paymentDetails: BSPaymentDetails!) {
         print("Here we should call the server to complete the transaction with BlueSnap")
         
         let demo = DemoTreansactions()
         let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
-            paymentDetails: purchaseData,
+            paymentDetails: paymentDetails,
             bsToken: bsToken!)
         if (result.success == true) {
             resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"

@@ -13,7 +13,7 @@ class BSPopupMenuViewController : UIViewController {
     // MARK: - Public properties
     
     internal var bsToken : BSToken?
-    internal var purchaseData : PurchaseData?
+    internal var paymentDetails : BSPaymentDetails?
     internal var closeFunc : ()->Void = {
         // this will be overidden by parent screen
         //self.view.removeFromSuperview()
@@ -63,12 +63,12 @@ class BSPopupMenuViewController : UIViewController {
     
     @IBAction func currencyMenuClick(_ sender: Any) {
         
-        if let purchaseData = purchaseData, let bsToken = bsToken {
+        if let paymentDetails = paymentDetails, let bsToken = bsToken {
             BlueSnapSDK.showCurrencyList(
                 inNavigationController: self.navigationController,
                 animated: true,
                 bsToken: bsToken,
-                selectedCurrencyCode: purchaseData.getCurrency(),
+                selectedCurrencyCode: paymentDetails.getCurrency(),
                 updateFunc: updateViewWithNewCurrency)
             self.closeFunc()
         }
@@ -107,7 +107,7 @@ class BSPopupMenuViewController : UIViewController {
     
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        purchaseData!.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
+        paymentDetails!.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
     }
 
     

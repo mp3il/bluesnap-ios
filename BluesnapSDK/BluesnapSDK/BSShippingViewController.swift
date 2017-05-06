@@ -13,7 +13,7 @@ class BSShippingViewController: UIViewController {
     // MARK: shipping data as input and output
     //internal var storyboard : UIStoryboard?
 
-    internal var purchaseData : PurchaseData!
+    internal var paymentDetails : BSPaymentDetails!
     internal var payText : String!
     internal var submitPaymentFields : () -> BSResultCcDetails? = { return nil }
     
@@ -52,7 +52,7 @@ class BSShippingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             nameUITextField.text = shippingDetails.name
             emailUITextField.text = shippingDetails.email
             addressUITextField.text = shippingDetails.address
@@ -97,7 +97,7 @@ class BSShippingViewController: UIViewController {
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = nameUITextField.text ?? ""
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             shippingDetails.name = newValue
         }
         var result : Bool = true
@@ -117,7 +117,7 @@ class BSShippingViewController: UIViewController {
     func validateEmail(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = emailUITextField.text ?? ""
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             shippingDetails.email = newValue
         }
         var result : Bool = true
@@ -137,7 +137,7 @@ class BSShippingViewController: UIViewController {
     func validateAddress(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = addressUITextField.text ?? ""
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             shippingDetails.address = newValue
         }
         var result : Bool = true
@@ -157,7 +157,7 @@ class BSShippingViewController: UIViewController {
     func validateCity(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = cityUITextField.text ?? ""
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             shippingDetails.city = newValue
         }
         var result : Bool = true
@@ -177,7 +177,7 @@ class BSShippingViewController: UIViewController {
     func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = zipUITextField.text ?? ""
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             shippingDetails.zip = newValue
         }
         var result : Bool = true
@@ -196,7 +196,7 @@ class BSShippingViewController: UIViewController {
     
     func validateCountry(ignoreIfEmpty : Bool) -> Bool {
         
-        let newValue = self.purchaseData.getShippingDetails()?.country ?? ""
+        let newValue = self.paymentDetails.getShippingDetails()?.country ?? ""
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
@@ -214,7 +214,7 @@ class BSShippingViewController: UIViewController {
     func validateState(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = stateUITextField.isHidden ? "" : stateUITextField.text ?? ""
-        if let shippingDetails = self.purchaseData.getShippingDetails() {
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
             shippingDetails.state = newValue
         }
         var result : Bool = true
@@ -316,7 +316,7 @@ class BSShippingViewController: UIViewController {
     // enter country field - open the country screen
     @IBAction func countryTouchDown(_ sender: Any) {
         
-        let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
+        let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
         BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
@@ -327,8 +327,8 @@ class BSShippingViewController: UIViewController {
     
     // enter state field - open the state screen
     @IBAction func statetouchDown(_ sender: Any) {
-        let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
-        let selectedStateCode = purchaseData.getShippingDetails()?.state ?? ""
+        let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
+        let selectedStateCode = paymentDetails.getShippingDetails()?.state ?? ""
         BSViewsManager.showStateList(
             inNavigationController: self.navigationController,
             animated: true,
@@ -343,15 +343,15 @@ class BSShippingViewController: UIViewController {
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
-        if let shippingDetails = purchaseData.getShippingDetails() {
+        if let shippingDetails = paymentDetails.getShippingDetails() {
             shippingDetails.country = countryCode
         }
         self.countryUITextField.text = countryName
     }
     
     private func updateState() {
-        let selectedCountryCode = purchaseData.getShippingDetails()?.country ?? ""
-        let selectedStateCode = purchaseData.getShippingDetails()?.state ?? ""
+        let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
+        let selectedStateCode = paymentDetails.getShippingDetails()?.state ?? ""
         var hideState : Bool = true
         if let states = countryManager.countryStates(countryCode: selectedCountryCode){
             stateUITextField.text = states[selectedStateCode]
@@ -364,7 +364,7 @@ class BSShippingViewController: UIViewController {
     
     private func updateWithNewState(stateCode : String, stateName : String) {
         
-        if let shippingDetails = purchaseData.getShippingDetails() {
+        if let shippingDetails = paymentDetails.getShippingDetails() {
             shippingDetails.state = stateCode
         }
         self.stateUITextField.text = stateName

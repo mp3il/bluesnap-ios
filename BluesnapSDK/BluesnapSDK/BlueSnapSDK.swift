@@ -16,7 +16,7 @@ import Foundation
     
     // MARK: data
     
-    static var purchaseData : PurchaseData?
+    static var paymentDetails : BSPaymentDetails?
 
     // MARK: - Show currencies' selection screen
     
@@ -58,7 +58,7 @@ import Foundation
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - bsToken: BlueSnap token, should be fresh and valid
-     - purchaseData: object that will hold the shopper and payment details; shopper name and shipping details may be pre-filled
+     - paymentDetails: object that will hold the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data isd prepared
      
@@ -67,22 +67,22 @@ import Foundation
         inNavigationController: UINavigationController!,
         animated: Bool,
         bsToken : BSToken!,
-        purchaseData : PurchaseData!,
+        paymentDetails : BSPaymentDetails!,
         withShipping: Bool,
         
-        purchaseFunc: @escaping (PurchaseData!)->Void) {
+        purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
         
 		if purchaseScreen == nil {
 			let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
 			purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSSummaryScreen
         }
 		
-        if (withShipping && purchaseData.shippingDetails == nil) {
-            purchaseData.setShippingDetails(shippingDetails: BSShippingDetails())
-        } else if (!withShipping && purchaseData.shippingDetails != nil) {
-            purchaseData.setShippingDetails(shippingDetails: nil)
+        if (withShipping && paymentDetails.shippingDetails == nil) {
+            paymentDetails.setShippingDetails(shippingDetails: BSShippingDetails())
+        } else if (!withShipping && paymentDetails.shippingDetails != nil) {
+            paymentDetails.setShippingDetails(shippingDetails: nil)
         }
-        purchaseScreen.purchaseData = purchaseData
+        purchaseScreen.paymentDetails = paymentDetails
         purchaseScreen.bsToken = bsToken
         purchaseScreen.purchaseFunc = purchaseFunc
 		

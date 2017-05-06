@@ -22,7 +22,7 @@ class DemoTreansactions {
     static let BS_SANDBOX_DOMAIN : String = "https://us-qa-fct03.bluesnap.com/" // "https://sandbox.bluesnap.com/"
 
     func createCreditCardTransaction(
-        paymentDetails: PurchaseData!,
+        paymentDetails: BSPaymentDetails!,
         bsToken: BSToken!) -> (success:Bool, data: String?) {
         
         let name = paymentDetails.getSplitName()!
