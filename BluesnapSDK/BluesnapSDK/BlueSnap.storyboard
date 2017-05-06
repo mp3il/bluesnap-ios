@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yfV-qT-H9M" id="TgZ-F6-lHe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEm-Qt-uFp">
@@ -79,7 +79,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cg0-Le-P5J" id="2Ol-nY-fcu">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZR-ul-J7u">
@@ -424,7 +424,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7P4-kh-8Jw">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="action" id="RcJ-XI-3qm">
+                        <barButtonItem key="rightBarButtonItem" image="MenuIcon" style="plain" id="RcJ-XI-3qm">
                             <connections>
                                 <action selector="MenuClick:" destination="sH3-ph-K7G" id="U1B-No-OY5"/>
                             </connections>
@@ -777,11 +777,11 @@
                         <viewControllerLayoutGuide type="bottom" id="hIE-9k-5Qv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1CO-ql-uki">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ht8-MI-FiX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </webView>
                         </subviews>
@@ -921,8 +921,6 @@
                         <outlet property="cancelButton" destination="We3-zh-Xij" id="3gJ-y8-Kqx"/>
                         <outlet property="currencyButton" destination="yYu-zd-ykP" id="8oL-hw-woD"/>
                         <outlet property="menuView" destination="R4i-nO-cFk" id="CEH-Lw-Fkv"/>
-                        <outlet property="privacyPolicyButton" destination="fDf-ZW-uon" id="hnu-fe-Zyj"/>
-                        <outlet property="refundButton" destination="ZdJ-In-erq" id="ILv-E7-iWK"/>
                         <outlet property="subView" destination="KwH-qQ-DXe" id="K2C-0I-Kfg"/>
                         <outlet property="termsButton" destination="MA6-fZ-hhT" id="NQm-lG-46J"/>
                     </connections>
@@ -998,7 +996,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hP5-1m-Eye" id="bTs-1V-l1p">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ui-Dw-wU0">
@@ -1043,7 +1041,10 @@
             <point key="canvasLocation" x="2728.8000000000002" y="1610.6446776611695"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="MenuIcon" width="20" height="16"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gq4-JQ-uvu"/>
+        <segue reference="o5N-18-3TP"/>
     </inferredMetricsTieBreakers>
 </document>

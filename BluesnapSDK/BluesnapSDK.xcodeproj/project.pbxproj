@@ -23,6 +23,7 @@
 		FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */; };
 		FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */; };
 		FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */; };
+		FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */; };
 		FD6749491EBB12E700B8076C /* BSPopupMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */; };
 		FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */; };
 		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
@@ -62,6 +63,7 @@
 		FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
 		FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiManager.swift; sourceTree = "<group>"; };
 		FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStatesViewController.swift; sourceTree = "<group>"; };
+		FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPopupMenuViewController.swift; sourceTree = "<group>"; };
 		FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
 		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */,
 				2D374F231E880E7200AE2A81 /* BluesnapSDK.h */,
 				2D374F241E880E7200AE2A81 /* Info.plist */,
+				FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */,
 			);
 			path = BluesnapSDK;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */,
 				2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
