@@ -135,7 +135,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" restorationIdentifier="CardDetailsView" translatesAutoresizingMaskIntoConstraints="NO" id="He3-E7-7cS">
+                            <view contentMode="scaleToFill" restorationIdentifier="CardDetailsView" translatesAutoresizingMaskIntoConstraints="NO" id="He3-E7-7cS" customClass="UIScrollView">
                                 <rect key="frame" x="10" y="74" width="331" height="516"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credit/Debit Card Details" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O4L-Hk-Dl0">
@@ -179,18 +179,25 @@
                                         <color key="textColor" red="1" green="0.40277853060000002" blue="0.32749722240000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cc_default" translatesAutoresizingMaskIntoConstraints="NO" id="WbS-yD-FNH" userLabel="CcIcon">
+                                        <rect key="frame" x="0.0" y="120" width="35" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="fKy-HK-WII"/>
+                                            <constraint firstAttribute="width" constant="35" id="zAy-ZS-qu5"/>
+                                        </constraints>
+                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Card" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWj-nc-e1y">
-                                        <rect key="frame" x="0.0" y="115" width="70" height="30"/>
+                                        <rect key="frame" x="40" y="115" width="40" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="8jc-bL-Lgy"/>
-                                            <constraint firstAttribute="width" constant="70" id="C1O-ji-kin"/>
+                                            <constraint firstAttribute="width" constant="40" id="C1O-ji-kin"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="1234567891234" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="O75-Cx-Nfz" userLabel="CardText">
-                                        <rect key="frame" x="100" y="115" width="231" height="30"/>
+                                        <rect key="frame" x="110" y="115" width="221" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="arn-Ev-vg0"/>
                                         </constraints>
@@ -364,11 +371,12 @@
                                     <constraint firstAttribute="trailing" secondItem="O75-Cx-Nfz" secondAttribute="trailing" id="8ex-2W-Fbk"/>
                                     <constraint firstItem="s0I-aU-qtt" firstAttribute="top" secondItem="flE-kk-lUd" secondAttribute="bottom" constant="30" id="8v4-gb-SmP"/>
                                     <constraint firstItem="gIQ-mj-Z7s" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="AO3-bp-73d"/>
+                                    <constraint firstItem="HWj-nc-e1y" firstAttribute="leading" secondItem="WbS-yD-FNH" secondAttribute="trailing" constant="5" id="AQ5-2M-1mu"/>
                                     <constraint firstAttribute="trailing" secondItem="O4L-Hk-Dl0" secondAttribute="trailing" id="Am1-bu-2uL"/>
                                     <constraint firstAttribute="trailing" secondItem="ylX-6i-g8z" secondAttribute="trailing" id="AyY-kQ-6z4"/>
-                                    <constraint firstItem="HWj-nc-e1y" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="E6E-Pe-0Hk"/>
                                     <constraint firstItem="O4L-Hk-Dl0" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="GIU-k4-U45"/>
                                     <constraint firstItem="6qK-6f-cHE" firstAttribute="top" secondItem="Qxa-dL-l7E" secondAttribute="bottom" constant="5" id="Gja-kz-hBd"/>
+                                    <constraint firstItem="WbS-yD-FNH" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="Hw5-Mn-oRa"/>
                                     <constraint firstItem="8NT-xL-Sen" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="ISV-zY-a6H"/>
                                     <constraint firstItem="3WQ-te-Dk5" firstAttribute="top" secondItem="O4L-Hk-Dl0" secondAttribute="bottom" constant="15" id="IcD-bL-q9t"/>
                                     <constraint firstItem="sgm-Vg-xti" firstAttribute="leading" secondItem="mNM-Q4-TGk" secondAttribute="trailing" constant="7" id="Iyl-fY-DRY"/>
@@ -402,6 +410,7 @@
                                     <constraint firstAttribute="trailing" secondItem="Qxa-dL-l7E" secondAttribute="trailing" id="kUF-A5-E1S"/>
                                     <constraint firstItem="flE-kk-lUd" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="lB7-1h-G9d"/>
                                     <constraint firstItem="g85-Po-lL5" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="lxZ-Wv-CQ9"/>
+                                    <constraint firstItem="WbS-yD-FNH" firstAttribute="top" secondItem="ylX-6i-g8z" secondAttribute="bottom" constant="10" id="m8K-el-2DO"/>
                                     <constraint firstItem="1Ja-wj-sCf" firstAttribute="leading" secondItem="He3-E7-7cS" secondAttribute="leading" id="mmW-pw-zH1"/>
                                     <constraint firstItem="O75-Cx-Nfz" firstAttribute="top" secondItem="ylX-6i-g8z" secondAttribute="bottom" constant="5" id="mpg-yj-eGu"/>
                                     <constraint firstItem="g85-Po-lL5" firstAttribute="top" secondItem="flE-kk-lUd" secondAttribute="bottom" constant="30" id="nLE-ZW-N4b"/>
@@ -437,6 +446,7 @@
                         <outlet property="ExpMMUiTextField" destination="6qK-6f-cHE" id="Zfv-bL-HQw"/>
                         <outlet property="ExpYYUiTextField" destination="sgm-Vg-xti" id="sxh-qG-bCj"/>
                         <outlet property="cardUiTextField" destination="O75-Cx-Nfz" id="mum-XO-GFI"/>
+                        <outlet property="ccIconImage" destination="WbS-yD-FNH" id="FBP-pO-bOT"/>
                         <outlet property="ccnErrorUiLabel" destination="Qxa-dL-l7E" id="aPh-EF-kdy"/>
                         <outlet property="cvvErrorUiLabel" destination="flE-kk-lUd" id="2gV-kf-Lx6"/>
                         <outlet property="cvvUiTextField" destination="QdQ-H8-ref" id="aEc-gb-gom"/>
@@ -1043,6 +1053,7 @@
     </scenes>
     <resources>
         <image name="MenuIcon" width="20" height="16"/>
+        <image name="cc_default" width="25" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="o5N-18-3TP"/>

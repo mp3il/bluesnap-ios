@@ -25,7 +25,18 @@ class BSSummaryScreen: UIViewController {
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
     fileprivate let doValidations = true;
-	
+    fileprivate let ccImages = [
+        "americanexpress": "amex",
+        //"cartebleue": "visa",
+        "cirrus": "cirrus",
+        "dinersclub": "dinersclub",
+        "discover": "discover",
+        "jcb": "jcb",
+        "maestro": "maestro",
+        "mastercard": "mastercard",
+        "unionpay": "unionpay",
+        "visa": "visa"]
+
 	// MARK: - Data
 	
     fileprivate var payButtonText : String?
@@ -44,6 +55,7 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var cvvErrorUiLabel: UILabel!
     @IBOutlet weak var subtotalUILabel: UILabel!
     @IBOutlet weak var taxAmountUILabel: UILabel!
+    @IBOutlet weak var ccIconImage: UIImageView!
 
     
 	// MARK: - UIViewController's methods
@@ -153,7 +165,27 @@ class BSSummaryScreen: UIViewController {
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
     
+    
+    private func updateCcIcon(ccType : String?) {
+
+        // change the image in ccIconImage
+        var imageName : String?
+        if let ccType = ccType?.lowercased() {
+            imageName = ccImages[ccType]
+        }
+        if imageName == nil {
+            imageName = "default"
+            NSLog("ccTypew \(ccType) does not have an icon")
+        }
+        if let myBundle = Bundle(identifier: BSViewsManager.bundleIdentifier) {
+            if let image = UIImage(named: "cc_\(imageName!)", in: myBundle, compatibleWith: nil) {
+                self.ccIconImage.image = image
+            }
+        }
+    }
+    
     // MARK: menu actions
+    
     fileprivate var popupMenuViewController : BSPopupMenuViewController?
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
@@ -274,6 +306,7 @@ class BSSummaryScreen: UIViewController {
             ccnErrorUiLabel.isHidden = true
             let cardType = newValue.getCCType()
             NSLog("cardType= \(cardType)")
+            updateCcIcon(ccType: cardType)
         } else {
             ccnErrorUiLabel.text = ccnInvalidMessage
             ccnErrorUiLabel.isHidden = false
