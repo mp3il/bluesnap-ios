@@ -80,5 +80,17 @@ class BSViewsManager {
             NSLog("No state data available for \(selectedCountryCode)")
         }
     }
+    
+    open class func getImage(imageName: String!) -> UIImage? {
+        
+        var result : UIImage?
+        if let myBundle = Bundle(identifier: bundleIdentifier) {
+            if let image = UIImage(named: imageName, in: myBundle, compatibleWith: nil) {
+                result = image
+            }
+        }
+        return result
+    }
+
 
 }

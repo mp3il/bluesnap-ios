@@ -71,7 +71,15 @@ class BSSummaryScreen: UIViewController {
 		self.navigationController!.isNavigationBarHidden = false
 
         self.withShipping = paymentDetails.getShippingDetails() != nil
+        
         updateTexts()
+        
+        // for debug:
+        self.cardUiTextField.text = "4111 1111 1111 1111"
+        self.ExpMMUiTextField.text = "11"
+        self.ExpYYUiTextField.text = "20"
+        self.cvvUiTextField.text = "444"
+        self.nameUiTextyField.text = "John Doe"
 	}
     
     
@@ -177,12 +185,16 @@ class BSSummaryScreen: UIViewController {
             imageName = "default"
             NSLog("ccTypew \(ccType) does not have an icon")
         }
-        if let myBundle = Bundle(identifier: BSViewsManager.bundleIdentifier) {
-            if let image = UIImage(named: "cc_\(imageName!)", in: myBundle, compatibleWith: nil) {
-                self.ccIconImage.image = image
-            }
+        //if let myBundle = Bundle(identifier: BSViewsManager.bundleIdentifier) {
+        //    if let image = UIImage(named: "cc_\(imageName!)", in: myBundle, compatibleWith: nil) {
+       //         self.ccIconImage.image = image
+       //     }
+        //}
+        if let image = BSViewsManager.getImage(imageName: "cc_\(imageName!)") {
+            self.ccIconImage.image = image
         }
     }
+    
     
     // MARK: menu actions
     

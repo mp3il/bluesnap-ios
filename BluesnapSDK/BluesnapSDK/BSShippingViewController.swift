@@ -24,10 +24,9 @@ class BSShippingViewController: UIViewController {
     @IBOutlet weak var addressUITextField: UITextField!
     @IBOutlet weak var cityUITextField: UITextField!
     @IBOutlet weak var zipUITextField: UITextField!
-    @IBOutlet weak var countryUITextField: UITextField!
     @IBOutlet weak var stateUITextField: UITextField!
-    
     @IBOutlet weak var stateUILabel: UILabel!
+    @IBOutlet weak var countryFlagButton: UIButton!
     
     
     @IBOutlet weak var nameErrorUILabel: UILabel!
@@ -35,7 +34,6 @@ class BSShippingViewController: UIViewController {
     @IBOutlet weak var addressErrorUILabel: UILabel!
     @IBOutlet weak var cityErrorUILabel: UILabel!
     @IBOutlet weak var zipErrorUILabel: UILabel!
-    @IBOutlet weak var countryErrorUILabel: UILabel!
     @IBOutlet weak var stateErrorUILabel: UILabel!
     
     @IBOutlet weak var payUIButton: UIButton!
@@ -61,7 +59,7 @@ class BSShippingViewController: UIViewController {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
-            countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails.country!) ?? ""
+            //let countryName = countryManager.getCountryName(countryCode: shippingDetails.country!) ?? ""
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }
@@ -88,10 +86,9 @@ class BSShippingViewController: UIViewController {
         let ok2 = validateEmail(ignoreIfEmpty: false)
         let ok3 = validateAddress(ignoreIfEmpty: false)
         let ok4 = validateCity(ignoreIfEmpty: false)
-        let ok5 = validateZip(ignoreIfEmpty: false)
-        let ok6 = validateCountry(ignoreIfEmpty: false)
-        let ok7 = validateState(ignoreIfEmpty: false)
-        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7
+        let ok5 = validateCountryAndZip(ignoreIfEmpty: false)
+        let ok6 = validateState(ignoreIfEmpty: false)
+        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6
     }
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
@@ -174,38 +171,43 @@ class BSShippingViewController: UIViewController {
         return result
     }
     
-    func validateZip(ignoreIfEmpty : Bool) -> Bool {
+    func validateCountryAndZip(ignoreIfEmpty : Bool) -> Bool {
         
-        let newValue = zipUITextField.text ?? ""
-        if let shippingDetails = self.paymentDetails.getShippingDetails() {
-            shippingDetails.zip = newValue
-        }
         var result : Bool = true
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
-            // ignore
-        } else if (newValue.characters.count < 3) {
-            zipErrorUILabel.text = "Please fill a valid zip code"
-            zipErrorUILabel.isHidden = false
-            result = false
+        if validateCountryByZip(ignoreIfEmpty: ignoreIfEmpty) {
+        
+            let newValue : String = zipUITextField.text ?? ""
+            if let shippingDetails = self.paymentDetails.getShippingDetails() {
+                shippingDetails.zip = newValue
+            }
+            if (ignoreIfEmpty && newValue.characters.count == 0) {
+                // ignore
+            } else if (newValue.characters.count < 3) {
+                zipErrorUILabel.text = "Please fill a valid zip code"
+                zipErrorUILabel.isHidden = false
+                result = false
+            } else {
+                zipErrorUILabel.isHidden = true
+                result = true
+            }
         } else {
-            zipErrorUILabel.isHidden = true
-            result = true
+            result = false
         }
         return result
     }
     
-    func validateCountry(ignoreIfEmpty : Bool) -> Bool {
+    func validateCountryByZip(ignoreIfEmpty : Bool) -> Bool {
         
         let newValue = self.paymentDetails.getShippingDetails()?.country ?? ""
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 2) {
-            countryErrorUILabel.text = "Please fill a valid country"
-            countryErrorUILabel.isHidden = false
+            zipErrorUILabel.text = "Please choosen a country"
+            zipErrorUILabel.isHidden = false
             result = false
         } else {
-            countryErrorUILabel.isHidden = true
+            zipErrorUILabel.isHidden = true
             result = true
         }
         return result
@@ -278,9 +280,8 @@ class BSShippingViewController: UIViewController {
     
     @IBAction func stateEditingChanged(_ sender: UITextField) {
         
-        var input : String = sender.text ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 2)
-        sender.text = input
+        sender.text = "" // prevent typing - open pop-up insdtead
+        self.statetouchDown(sender)
     }
     
     @IBAction func nameEditingDidEnd(_ sender: UITextField) {
@@ -300,21 +301,12 @@ class BSShippingViewController: UIViewController {
     }
     
     @IBAction func zipEditingDidEnd(_ sender: UITextField) {
-        _ = validateZip(ignoreIfEmpty: true)
-    }
-    
-    @IBAction func countryEditingDidEnd(_ sender: UITextField) {
-        _ = validateCountry(ignoreIfEmpty: true)
-        updateState()
-    }
-    
-    @IBAction func stateEditingDidEnd(_ sender: UITextField) {
-        _ = validateState(ignoreIfEmpty: true)
+        _ = validateCountryAndZip(ignoreIfEmpty: true)
     }
     
     
     // enter country field - open the country screen
-    @IBAction func countryTouchDown(_ sender: Any) {
+    @IBAction func changeCountry(_ sender: Any) {
         
         let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
         BSViewsManager.showCountryList(
@@ -346,7 +338,10 @@ class BSShippingViewController: UIViewController {
         if let shippingDetails = paymentDetails.getShippingDetails() {
             shippingDetails.country = countryCode
         }
-        self.countryUITextField.text = countryName
+        // load the flag image
+        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
+            self.countryFlagButton.imageView?.image = image
+        }
     }
     
     private func updateState() {
