@@ -61,7 +61,7 @@ class BSShippingViewController: UIViewController {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
-            countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails.country)
+            countryUITextField.text = countryManager.getCountryName(countryCode: shippingDetails.country!) ?? ""
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }

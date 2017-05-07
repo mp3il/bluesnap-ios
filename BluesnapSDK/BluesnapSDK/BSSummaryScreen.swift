@@ -283,7 +283,7 @@ class BSSummaryScreen: UIViewController {
         }
         if ok {
             nameErrorUiLabel.isHidden = true
-            paymentDetails.name = newValue
+            paymentDetails.getBillingDetails().name = newValue
         } else {
             nameErrorUiLabel.text = nameInvalidMessage
             nameErrorUiLabel.isHidden = false

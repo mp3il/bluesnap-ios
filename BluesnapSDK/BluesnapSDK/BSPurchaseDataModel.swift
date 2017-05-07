@@ -15,18 +15,18 @@ public class BSPaymentDetails : NSObject {
     var taxAmount : Double! = 0.0
     var currency : String! = "USD"
     
-    // These fields hold the original amounts in USD, to keep precision in case of currency change
-    internal var originalAmount : Double! = 0.0
-    internal var originalTaxAmount : Double! = 0.0
-    internal var originalRate : Double?
-    
     // These fields are output, but may be supplied as input as well
-    var name : String! = ""
-    var shippingDetails : BSShippingDetails?
+    var billingDetails : BSAddressDetails! = BSAddressDetails()
+    var shippingDetails : BSAddressDetails?
 
     // Output only - result of submitting the CC details to BlueSnap server
     var ccDetails : BSResultCcDetails?
     
+    
+    // These fields hold the original amounts in USD, to keep precision in case of currency change
+    internal var originalAmount : Double! = 0.0
+    internal var originalTaxAmount : Double! = 0.0
+    internal var originalRate : Double?
     
     // MARK: Change currency methods
     
@@ -79,18 +79,9 @@ public class BSPaymentDetails : NSObject {
         return currency
     }
     
-    public func getName() -> String! {
-        return name
+    public func getBillingDetails() -> BSAddressDetails! {
+        return billingDetails
     }
-    
-    public func setName(name : String!) {
-        self.name = name
-    }
-    
-    public func getSplitName() -> (firstName: String, lastName: String)? {
-        return name.splitName
-    }
-
     
     public func getCcDetails() -> BSResultCcDetails? {
         return ccDetails
@@ -100,11 +91,11 @@ public class BSPaymentDetails : NSObject {
         self.ccDetails = ccDetails
     }
     
-    public func getShippingDetails() -> BSShippingDetails? {
+    public func getShippingDetails() -> BSAddressDetails? {
         return shippingDetails
     }
     
-    public func setShippingDetails(shippingDetails : BSShippingDetails?) {
+    public func setShippingDetails(shippingDetails : BSAddressDetails?) {
         self.shippingDetails = shippingDetails
     }
 }
@@ -112,15 +103,19 @@ public class BSPaymentDetails : NSObject {
 /**
     Shopper shipping details for purchase
  */
-public class BSShippingDetails {
+public class BSAddressDetails {
     
-    var name : String = ""
-    var email : String = ""
-    var address : String = ""
-    var city : String = ""
-    var zip : String = ""
-    var country : String = ""
-    var state : String = ""
+    var name : String! = ""
+    var email : String?
+    var address : String?
+    var city : String?
+    var zip : String?
+    var country : String?
+    var state : String?
+    
+    public func getSplitName() -> (firstName: String, lastName: String)? {
+        return name.splitName
+    }
 }
 
 /**

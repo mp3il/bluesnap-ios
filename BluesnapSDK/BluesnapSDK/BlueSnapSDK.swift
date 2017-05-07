@@ -78,7 +78,7 @@ import Foundation
         }
 		
         if (withShipping && paymentDetails.shippingDetails == nil) {
-            paymentDetails.setShippingDetails(shippingDetails: BSShippingDetails())
+            paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
         } else if (!withShipping && paymentDetails.shippingDetails != nil) {
             paymentDetails.setShippingDetails(shippingDetails: nil)
         }

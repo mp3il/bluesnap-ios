@@ -25,7 +25,7 @@ class DemoTreansactions {
         paymentDetails: BSPaymentDetails!,
         bsToken: BSToken!) -> (success:Bool, data: String?) {
         
-        let name = paymentDetails.getSplitName()!
+        let name = paymentDetails.getBillingDetails().getSplitName()!
         let bodyStart: String = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
             "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
             "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
