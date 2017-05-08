@@ -14,5 +14,5 @@ class BSStateTableViewCell : UITableViewCell {
     
     //MARK: items in cell UI
     @IBOutlet weak var itemNameUILabel: UILabel!
-    @IBOutlet weak var isCurrentUILabel: UILabel!
+    @IBOutlet weak var checkMarkImage: UIImageView!
 }

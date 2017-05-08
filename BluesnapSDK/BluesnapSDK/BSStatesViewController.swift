@@ -51,6 +51,12 @@ class BSStatesViewController : UITableViewController {
         super.viewWillAppear(animated)
         
         self.navigationController!.isNavigationBarHidden = false
+        
+        if let index = codes.index(of: self.selectedCode) {
+            let indexPath = IndexPath(row: index, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+        }
+
     }
     
     
@@ -77,11 +83,12 @@ class BSStatesViewController : UITableViewController {
         let name : String = names[indexPath.row]
         let code : String = codes[indexPath.row]
         cell.itemNameUILabel.text = name
+        cell.checkMarkImage.image = nil
         if (code == selectedCode) {
-            cell.isCurrentUILabel.text = "V"
+            if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
+                cell.checkMarkImage.image = image
+            }
             selectedIndexPath = indexPath
-        } else {
-            cell.isCurrentUILabel.text = ""
         }
         return cell
     }
