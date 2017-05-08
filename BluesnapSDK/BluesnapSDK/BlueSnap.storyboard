@@ -932,7 +932,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="hP5-1m-Eye" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="hP5-1m-Eye" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
                                 <rect key="frame" x="0.0" y="28" width="320" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hP5-1m-Eye" id="bTs-1V-l1p">
@@ -964,8 +964,8 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="isCurrentUILabel" destination="dhQ-kd-ojt" id="7P0-iE-IQC"/>
-                                    <outlet property="itemNameUILabel" destination="7Ui-Dw-wU0" id="PsI-FK-jYA"/>
+                                    <outlet property="isCurrentUILabel" destination="dhQ-kd-ojt" id="9Or-kS-qbL"/>
+                                    <outlet property="itemNameUILabel" destination="7Ui-Dw-wU0" id="0tI-tP-h6f"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

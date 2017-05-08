@@ -80,6 +80,14 @@ class BSSummaryScreen: UIViewController {
         self.ExpYYUiTextField.text = "20"
         self.cvvUiTextField.text = "444"
         self.nameUiTextyField.text = "John Doe"
+        
+        if let shippingDetails = self.paymentDetails.getShippingDetails() {
+            shippingDetails.name = "Mary Doe"
+            shippingDetails.address = "333 elm st"
+            shippingDetails.city = "NY"
+            shippingDetails.country = "US"
+            shippingDetails.email = "mary@gmail.com"
+        }
 	}
     
     

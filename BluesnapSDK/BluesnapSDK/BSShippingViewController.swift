@@ -319,6 +319,9 @@ class BSShippingViewController: UIViewController {
     
     // enter state field - open the state screen
     @IBAction func statetouchDown(_ sender: Any) {
+        
+        self.stateUITextField.resignFirstResponder()
+
         let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
         let selectedStateCode = paymentDetails.getShippingDetails()?.state ?? ""
         BSViewsManager.showStateList(

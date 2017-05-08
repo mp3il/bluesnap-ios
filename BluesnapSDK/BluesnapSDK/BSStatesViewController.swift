@@ -70,8 +70,8 @@ class BSStatesViewController : UITableViewController {
     // "draw" a cell
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let reusableCell = tableView.dequeueReusableCell(withIdentifier: "CountryTableViewCell", for: indexPath)
-        guard let cell = reusableCell as? BSCountryTableViewCell else {
+        let reusableCell = tableView.dequeueReusableCell(withIdentifier: "StateTableViewCell", for: indexPath)
+        guard let cell = reusableCell as? BSStateTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
         let name : String = names[indexPath.row]
