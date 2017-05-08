@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var taxTextField: UITextField!
     @IBOutlet weak var taxPercentTextField: UITextField!
     @IBOutlet weak var resultTextView: UITextView!
+    @IBOutlet weak var fullBillingSwitch: UISwitch!
     
     // MARK: private properties
     
@@ -68,6 +69,7 @@ class ViewController: UIViewController {
             bsToken: bsToken!,
             paymentDetails: paymentDetails,
             withShipping: withShippingSwitch.isOn,
+            fullBilling: fullBillingSwitch.isOn,
             purchaseFunc: completePurchase)
 	}
 	

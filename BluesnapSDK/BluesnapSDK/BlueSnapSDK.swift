@@ -69,7 +69,7 @@ import Foundation
         bsToken : BSToken!,
         paymentDetails : BSPaymentDetails!,
         withShipping: Bool,
-        
+        fullBilling : Bool,
         purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
         
 		if purchaseScreen == nil {
@@ -85,6 +85,7 @@ import Foundation
         purchaseScreen.paymentDetails = paymentDetails
         purchaseScreen.bsToken = bsToken
         purchaseScreen.purchaseFunc = purchaseFunc
+        purchaseScreen.fullBilling = fullBilling
 		
 		inNavigationController.pushViewController(purchaseScreen, animated: animated)
 	}

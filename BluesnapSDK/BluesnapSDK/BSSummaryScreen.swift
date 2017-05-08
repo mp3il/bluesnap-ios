@@ -6,6 +6,7 @@ class BSSummaryScreen: UIViewController {
 	// MARK: - Public properties
 	
     internal var paymentDetails : BSPaymentDetails!
+    internal var fullBilling = false
     internal var bsToken: BSToken!
     internal var purchaseFunc: (BSPaymentDetails!)->Void = {
         paymentDetails in
