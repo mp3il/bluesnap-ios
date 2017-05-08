@@ -593,14 +593,30 @@
                         <outlet property="cardUiTextField" destination="O75-Cx-Nfz" id="mum-XO-GFI"/>
                         <outlet property="ccIconImage" destination="WbS-yD-FNH" id="FBP-pO-bOT"/>
                         <outlet property="ccnErrorUiLabel" destination="Qxa-dL-l7E" id="aPh-EF-kdy"/>
+                        <outlet property="cityError" destination="2Mm-8c-raO" id="oPI-nj-je1"/>
+                        <outlet property="cityField" destination="D68-BQ-RFL" id="eqm-16-zr4"/>
+                        <outlet property="cityLabel" destination="8o6-0W-WvQ" id="tCK-TM-qJR"/>
+                        <outlet property="countryFlagButton" destination="iMV-mS-Y33" id="A5t-rZ-txF"/>
                         <outlet property="cvvErrorUiLabel" destination="flE-kk-lUd" id="2gV-kf-Lx6"/>
                         <outlet property="cvvUiTextField" destination="QdQ-H8-ref" id="aEc-gb-gom"/>
+                        <outlet property="emailError" destination="9oC-8W-g8m" id="7kU-C3-PXe"/>
+                        <outlet property="emailField" destination="8Pv-hi-occ" id="4wT-tk-vgQ"/>
+                        <outlet property="emailLabel" destination="qDW-Qa-YC0" id="4se-KT-ZUN"/>
                         <outlet property="expErrorUiLabel" destination="8NT-xL-Sen" id="l8k-5H-w3f"/>
                         <outlet property="nameErrorUiLabel" destination="ylX-6i-g8z" id="iAV-e9-6Sy"/>
                         <outlet property="nameUiTextyField" destination="3WQ-te-Dk5" id="6aZ-sO-nT6"/>
                         <outlet property="payButton" destination="1Ja-wj-sCf" id="VEi-wf-BfD"/>
+                        <outlet property="stateError" destination="xnR-6V-k9A" id="8QR-wK-LQB"/>
+                        <outlet property="stateField" destination="gRz-oW-p3f" id="kOb-06-gZ7"/>
+                        <outlet property="stateLabel" destination="Fwb-mL-cwK" id="2ZX-Yj-5pf"/>
+                        <outlet property="streetError" destination="oTz-wv-wk7" id="fI1-wP-eC7"/>
+                        <outlet property="streetField" destination="YD7-HW-CXb" id="YhD-nV-B4c"/>
+                        <outlet property="streetLabel" destination="sTv-BP-hry" id="aXP-Sp-tCN"/>
                         <outlet property="subtotalUILabel" destination="HrD-ST-P3N" id="LNk-ev-Beq"/>
                         <outlet property="taxAmountUILabel" destination="s0I-aU-qtt" id="O8p-qT-Sc8"/>
+                        <outlet property="zipError" destination="w6l-7R-rTa" id="sbP-zt-k2a"/>
+                        <outlet property="zipField" destination="oZb-G1-07Q" id="WCM-xl-3F0"/>
+                        <outlet property="zipLabel" destination="e04-uK-dbQ" id="sqX-wT-57V"/>
                         <segue destination="jsJ-VA-rD0" kind="show" identifier="NotInUdeLinkToWebView" id="o5N-18-3TP"/>
                     </connections>
                 </viewController>

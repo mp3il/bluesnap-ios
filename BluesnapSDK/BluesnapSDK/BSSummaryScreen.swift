@@ -58,6 +58,25 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var taxAmountUILabel: UILabel!
     @IBOutlet weak var ccIconImage: UIImageView!
 
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var emailError: UILabel!
+    @IBOutlet weak var streetLabel: UILabel!
+    @IBOutlet weak var streetField: UITextField!
+    @IBOutlet weak var streetError: UILabel!
+    @IBOutlet weak var zipLabel: UILabel!
+    @IBOutlet weak var zipField: UITextField!
+    @IBOutlet weak var zipError: UILabel!
+    @IBOutlet weak var countryFlagButton: UIButton!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var cityField: UITextField!
+    @IBOutlet weak var cityError: UILabel!
+    @IBOutlet weak var stateLabel: UILabel!
+    @IBOutlet weak var stateField: UITextField!
+    @IBOutlet weak var stateError: UILabel!
+    
+    
+    
     
 	// MARK: - UIViewController's methods
 
@@ -89,10 +108,28 @@ class BSSummaryScreen: UIViewController {
             shippingDetails.country = "US"
             shippingDetails.email = "mary@gmail.com"
         }
+        hideShowFullBillingFields()
+        
 	}
     
     
     // MARK: private methods
+    
+    private func hideShowFullBillingFields() {
+        
+        let hideFields = !self.fullBilling
+        emailLabel.isHidden = hideFields
+        emailField.isHidden = hideFields
+        streetLabel.isHidden = hideFields
+        streetField.isHidden = hideFields
+        zipLabel.isHidden = hideFields
+        zipField.isHidden = hideFields
+        countryFlagButton.isHidden = hideFields
+        cityLabel.isHidden = hideFields
+        cityField.isHidden = hideFields
+        stateLabel.isHidden = hideFields
+        stateField.isHidden = hideFields
+    }
     
     private func updateTexts() {
         
