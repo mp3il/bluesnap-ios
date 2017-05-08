@@ -47,6 +47,15 @@ class BSCurrenciesViewController: UITableViewController {
         if let bsToken = bsToken {
             bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
         }
+        
+        if let index = bsCurrencies?.getCurrencyIndex(code: selectedCurrencyCode) {
+            let indexPath = IndexPath(row: index, section: 0)
+            var position = UITableViewScrollPosition.middle
+            if (index > bsCurrencies!.currencies.count-10) {
+                position = UITableViewScrollPosition.bottom
+            }
+            self.tableView.scrollToRow(at: indexPath, at: position, animated: false)
+        }
     }
     
     
@@ -76,11 +85,12 @@ class BSCurrenciesViewController: UITableViewController {
         }
         if let bsCurrency = bsCurrencies?.currencies[indexPath.row] {
             cell.CurrencyUILabel.text = bsCurrency.getName() + " " + bsCurrency.getCode()
+            cell.checkMarkImage.image = nil
             if (bsCurrency.getCode() == selectedCurrencyCode) {
-                cell.CurrentUILabel.text = "V"
+                if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
+                    cell.checkMarkImage.image = image
+                }
                 selectedCurrencyIndexPath = indexPath
-            } else {
-                cell.CurrentUILabel.text = ""
             }
         }
         return cell

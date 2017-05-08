@@ -27,32 +27,32 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEm-Qt-uFp">
-                                            <rect key="frame" x="8" y="8" width="245" height="24"/>
+                                            <rect key="frame" x="8" y="8" width="82" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencySelectedUILabel" text="V" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ti5-j2-JDX">
-                                            <rect key="frame" x="266" y="8" width="38" height="24"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="DqE-Ga-cQ1" userLabel="checkMark">
+                                            <rect key="frame" x="280" y="7" width="32" height="26"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                            </accessibility>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="38" id="NEy-gW-a2m"/>
+                                                <constraint firstAttribute="width" constant="32" id="2eB-49-BVS"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                            <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="baseline" secondItem="Ti5-j2-JDX" secondAttribute="baseline" id="0OA-a4-5eY"/>
-                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="top" secondItem="TgZ-F6-lHe" secondAttribute="topMargin" id="Mhf-1o-kHL"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Ti5-j2-JDX" secondAttribute="trailing" constant="8" id="Otb-Kt-nbh"/>
-                                        <constraint firstItem="Ti5-j2-JDX" firstAttribute="leading" secondItem="pEm-Qt-uFp" secondAttribute="trailing" constant="13" id="Qa3-4z-lvu"/>
-                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="leading" secondItem="TgZ-F6-lHe" secondAttribute="leadingMargin" id="cee-BG-Aq4"/>
+                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="top" secondItem="TgZ-F6-lHe" secondAttribute="topMargin" id="6G6-ZP-bvM"/>
+                                        <constraint firstItem="DqE-Ga-cQ1" firstAttribute="trailing" secondItem="TgZ-F6-lHe" secondAttribute="trailingMargin" id="gb2-mL-jnC"/>
+                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="leading" secondItem="TgZ-F6-lHe" secondAttribute="leadingMargin" id="hyt-U9-Ds3"/>
+                                        <constraint firstItem="DqE-Ga-cQ1" firstAttribute="top" secondItem="TgZ-F6-lHe" secondAttribute="topMargin" constant="-1" id="orR-5h-Ig7"/>
+                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="centerY" secondItem="DqE-Ga-cQ1" secondAttribute="centerY" id="upH-c5-Eeg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="CurrencyUILabel" destination="pEm-Qt-uFp" id="3Kd-fI-CRG"/>
-                                    <outlet property="CurrentUILabel" destination="Ti5-j2-JDX" id="rCE-iD-lxt"/>
+                                    <outlet property="checkMarkImage" destination="DqE-Ga-cQ1" id="VlB-eA-GW2"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

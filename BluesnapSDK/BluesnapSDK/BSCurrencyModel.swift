@@ -28,10 +28,10 @@ public class BSCurrency {
 
 public class BSCurrencies {
     
-    internal var currencies = Array<BSCurrency!>()
+    internal var currencies : [BSCurrency] = []
 
     
-    internal init(currencies : Array<BSCurrency>) {
+    internal init(currencies : [BSCurrency]) {
         
         self.currencies = currencies
     }
@@ -39,8 +39,18 @@ public class BSCurrencies {
     public func getCurrencyByCode(code : String!) -> BSCurrency? {
         
         for currency in currencies {
-            if currency!.code == code {
+            if currency.code == code {
                 return currency
+            }
+        }
+        return nil
+    }
+    
+    public func getCurrencyIndex(code : String) -> Int? {
+        
+        for (index, currency) in currencies.enumerated() {
+            if currency.code == code {
+                return index
             }
         }
         return nil

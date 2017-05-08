@@ -100,7 +100,9 @@ class ViewController: UIViewController {
     
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
+        print("before change currency: currency=\(paymentDetails.getCurrency()), amount = \(paymentDetails.getAmount())")
         paymentDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
+        print("after change currency: currency=\(paymentDetails.getCurrency()), amount = \(paymentDetails.getAmount())")
         valueTextField.text = String(paymentDetails.getAmount())
         taxTextField.text = String(paymentDetails.getTaxAmount())
         currencyButton.titleLabel?.text = paymentDetails.getCurrency()
