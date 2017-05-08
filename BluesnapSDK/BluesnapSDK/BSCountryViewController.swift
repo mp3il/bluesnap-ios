@@ -58,6 +58,11 @@ class BSCountryViewController : UITableViewController {
         super.viewWillAppear(animated)
         
         self.navigationController!.isNavigationBarHidden = false
+        
+        if let index = countryCodes.index(of: self.selectedCountryCode) {
+            let indexPath = IndexPath(row: index, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+        }
     }
     
     
@@ -84,11 +89,16 @@ class BSCountryViewController : UITableViewController {
         let countryName : String = countryNames[indexPath.row]
         let countryCode : String = countryCodes[indexPath.row]
         cell.itemNameUILabel.text = countryName
+        cell.checkMarkImageView.image = nil
         if (countryCode == selectedCountryCode) {
-            cell.isCurrentUILabel.text = "V"
+            if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
+                cell.checkMarkImageView.image = image
+            }
             selectedCountryIndexPath = indexPath
-        } else {
-            cell.isCurrentUILabel.text = ""
+        }
+        // load the flag image
+        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
+            cell.flagUIButton.imageView?.image = image
         }
         return cell
     }

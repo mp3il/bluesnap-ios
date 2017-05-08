@@ -83,32 +83,45 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hov-Ho-8hZ">
+                                            <rect key="frame" x="8" y="8" width="28" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="28" id="Fnr-W5-yfd"/>
+                                            </constraints>
+                                            <state key="normal" title="Flag" image="US"/>
+                                            <connections>
+                                                <action selector="changeCountry:" destination="JMI-6r-Lwf" eventType="touchUpInside" id="ppf-bd-qv5"/>
+                                            </connections>
+                                        </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ZR-ul-J7u">
-                                            <rect key="frame" x="8" y="8" width="256" height="24"/>
+                                            <rect key="frame" x="46" y="8" width="98" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencySelectedUILabel" text="V" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mH8-4R-uIS">
-                                            <rect key="frame" x="266" y="8" width="38" height="24"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="kEu-cB-faa" userLabel="checkMark">
+                                            <rect key="frame" x="280" y="7" width="32" height="26"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                            </accessibility>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="38" id="Dfd-of-YmY"/>
+                                                <constraint firstAttribute="width" constant="32" id="2ww-N6-mF0"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                            <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="baseline" secondItem="mH8-4R-uIS" secondAttribute="baseline" id="1S7-zc-0qo"/>
-                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="top" secondItem="2Ol-nY-fcu" secondAttribute="topMargin" id="B4w-0u-iX1"/>
-                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="leading" secondItem="2Ol-nY-fcu" secondAttribute="leadingMargin" id="JtW-SI-rZW"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="mH8-4R-uIS" secondAttribute="trailing" constant="8" id="PRq-vD-gF6"/>
-                                        <constraint firstItem="mH8-4R-uIS" firstAttribute="leading" secondItem="8ZR-ul-J7u" secondAttribute="trailing" constant="2" id="l1q-mG-d4E"/>
+                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="centerY" secondItem="kEu-cB-faa" secondAttribute="centerY" id="Bjp-l4-c3Y"/>
+                                        <constraint firstItem="hov-Ho-8hZ" firstAttribute="leading" secondItem="2Ol-nY-fcu" secondAttribute="leadingMargin" id="MEy-f5-xik"/>
+                                        <constraint firstItem="hov-Ho-8hZ" firstAttribute="top" secondItem="2Ol-nY-fcu" secondAttribute="topMargin" id="TcV-fb-dR0"/>
+                                        <constraint firstItem="kEu-cB-faa" firstAttribute="top" secondItem="2Ol-nY-fcu" secondAttribute="topMargin" constant="-1" id="XuB-87-IxD"/>
+                                        <constraint firstItem="kEu-cB-faa" firstAttribute="trailing" secondItem="2Ol-nY-fcu" secondAttribute="trailingMargin" id="bZp-9d-Lk4"/>
+                                        <constraint firstItem="8ZR-ul-J7u" firstAttribute="leading" secondItem="hov-Ho-8hZ" secondAttribute="trailing" constant="10" id="bvu-Gb-7HP"/>
+                                        <constraint firstItem="hov-Ho-8hZ" firstAttribute="top" secondItem="8ZR-ul-J7u" secondAttribute="top" id="ee1-CP-zT2"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="isCurrentUILabel" destination="mH8-4R-uIS" id="yrc-45-4OJ"/>
+                                    <outlet property="checkMarkImageView" destination="kEu-cB-faa" id="Oti-CB-ddq"/>
+                                    <outlet property="flagUIButton" destination="hov-Ho-8hZ" id="PU2-Qs-exY"/>
                                     <outlet property="itemNameUILabel" destination="8ZR-ul-J7u" id="KJ9-sB-Z2m"/>
                                 </connections>
                             </tableViewCell>
@@ -122,7 +135,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q2O-jA-r8M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2728.8000000000002" y="1610.6446776611695"/>
+            <point key="canvasLocation" x="2728.125" y="1609.8591549295775"/>
         </scene>
         <!--Payment-->
         <scene sceneID="ww0-E5-C5s">
@@ -983,6 +996,7 @@
     </scenes>
     <resources>
         <image name="US" width="28" height="20"/>
+        <image name="blue_check_mark" width="16" height="13"/>
         <image name="cc_default" width="25" height="17"/>
         <image name="menu_button" width="20" height="16"/>
     </resources>
