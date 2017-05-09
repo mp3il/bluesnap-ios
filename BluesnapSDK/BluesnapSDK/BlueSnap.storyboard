@@ -653,6 +653,7 @@
                                         <connections>
                                             <action selector="nameEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="qNX-9f-Itt"/>
                                             <action selector="nameEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="zP0-Nx-waM"/>
+                                            <outlet property="delegate" destination="JMI-6r-Lwf" id="3LX-45-DHT"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0xo-d0-rrQ">
@@ -675,6 +676,7 @@
                                         <connections>
                                             <action selector="emailEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="51I-wJ-lez"/>
                                             <action selector="emailEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="OQJ-Wy-JnK"/>
+                                            <outlet property="delegate" destination="JMI-6r-Lwf" id="kwA-5m-osQ"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GeY-Hi-1Va">
@@ -697,6 +699,7 @@
                                         <connections>
                                             <action selector="addressEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="dSY-fg-awu"/>
                                             <action selector="addressEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="qbs-hH-Vc5"/>
+                                            <outlet property="delegate" destination="JMI-6r-Lwf" id="mjt-pJ-dz4"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LQx-RH-KpF" userLabel="Street ErrorUI Label">
@@ -719,6 +722,7 @@
                                         <connections>
                                             <action selector="zipEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="NX9-v7-ZUE"/>
                                             <action selector="zipEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="Xht-nt-ITi"/>
+                                            <outlet property="delegate" destination="JMI-6r-Lwf" id="NDp-73-jWI"/>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uJ7-bo-EXo">
@@ -751,6 +755,7 @@
                                         <connections>
                                             <action selector="cityEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="pQg-ae-g99"/>
                                             <action selector="cityEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="sPZ-l4-udB"/>
+                                            <outlet property="delegate" destination="JMI-6r-Lwf" id="JuH-Il-0dq"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-Yz-bYM">
@@ -773,6 +778,7 @@
                                         <connections>
                                             <action selector="stateEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="9XC-a9-6no"/>
                                             <action selector="statetouchDown:" destination="JMI-6r-Lwf" eventType="touchDown" id="5Qu-Y1-fmG"/>
+                                            <outlet property="delegate" destination="JMI-6r-Lwf" id="VgA-qB-KYd"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v9M-ez-mAp">
@@ -898,6 +904,7 @@
                         <outlet property="nameErrorUILabel" destination="0xo-d0-rrQ" id="EUz-KQ-Wld"/>
                         <outlet property="nameUITextField" destination="bwC-vA-Bd6" id="Emf-R1-mbD"/>
                         <outlet property="payUIButton" destination="6y7-Zn-vhp" id="CrX-SL-y5g"/>
+                        <outlet property="scrollView" destination="rmx-Ql-GJo" id="4JO-Mp-Xpl"/>
                         <outlet property="stateErrorUILabel" destination="v9M-ez-mAp" id="4gk-QV-wcg"/>
                         <outlet property="stateUILabel" destination="ULM-Xc-IRq" id="Ry1-W5-brV"/>
                         <outlet property="stateUITextField" destination="KGr-fc-Xo2" id="e04-3P-4zU"/>

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSShippingViewController: UIViewController {
+class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: shipping data as input and output
     //internal var storyboard : UIStoryboard?
@@ -39,16 +39,75 @@ class BSShippingViewController: UIViewController {
     
     @IBOutlet weak var payUIButton: UIButton!
     
+    // MARK: for scrolling to prevent keyboard hiding
+
+    let scrollOffset : Int = -64 // ask Michal why this is???
+    var movedUp = false
+    var fieldBottom : Int?
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        fieldBottom = Int(textField.frame.origin.y + textField.frame.height)
+    }
+    
+    // Do we need this?
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        self.view.endEditing(true)
+        return false
+    }
+    
+    private func scrollForKeyboard(direction: Int) {
+        
+        self.movedUp = (direction > 0)
+        let y = scrollOffset + 100*direction
+        let point : CGPoint = CGPoint(x: 0, y: y)
+        self.scrollView.setContentOffset(point, animated: true)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+        var moveUp = false
+        if let fieldBottom = fieldBottom {
+            let userInfo = notification.userInfo as! [String: NSObject] as NSDictionary
+            let keyboardFrame = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! CGRect
+            let keyboardHeight = Int(keyboardFrame.height)
+            let viewHeight : Int = Int(self.view.frame.height)
+            let offset = fieldBottom + keyboardHeight - scrollOffset
+            if (offset > viewHeight) {
+                moveUp = true
+            }
+        }
+
+        if !self.movedUp && moveUp {
+            scrollForKeyboard(direction: 1)
+        } else if self.movedUp && !moveUp {
+            scrollForKeyboard(direction: 0)
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        
+        if self.movedUp {
+            scrollForKeyboard(direction: 0)
+        }
+    }
+
     
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollForKeyboard(direction: 0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+  
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
         if let shippingDetails = self.paymentDetails.getShippingDetails() {
             nameUITextField.text = shippingDetails.name
             emailUITextField.text = shippingDetails.email
@@ -61,6 +120,13 @@ class BSShippingViewController: UIViewController {
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
     @IBAction func SubmitClick(_ sender: Any) {
