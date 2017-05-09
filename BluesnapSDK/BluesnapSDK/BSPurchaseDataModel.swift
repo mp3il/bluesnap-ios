@@ -105,13 +105,15 @@ public class BSPaymentDetails : NSObject {
  */
 public class BSAddressDetails {
     
-    var name : String! = ""
-    var email : String?
-    var address : String?
-    var city : String?
-    var zip : String?
-    var country : String?
-    var state : String?
+    public init() {}
+    
+    public var name : String! = ""
+    public var email : String?
+    public var address : String?
+    public var city : String?
+    public var zip : String?
+    public var country : String?
+    public var state : String?
     
     public func getSplitName() -> (firstName: String, lastName: String)? {
         return name.splitName

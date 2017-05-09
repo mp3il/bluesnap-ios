@@ -200,3 +200,297 @@ extension String {
 
 }
 
+class BSValidator {
+    
+    class func validateName(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String, addressDetails: BSAddressDetails?) -> Bool {
+        
+        var result : Bool = true
+        let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        textField.text = newValue
+        if newValue.characters.count == 0 && ignoreIfEmpty {
+            // ignore
+        } else if !newValue.isValidName {
+            result = false
+        }
+        if result {
+            errorLabel.isHidden = true
+            if let addressDetails = addressDetails {
+                addressDetails.name = newValue
+            }
+        } else {
+            errorLabel.text = errorMessage
+            errorLabel.isHidden = false
+        }
+        return result
+    }
+
+    class func validateEmail(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.email = newValue
+        }
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (!newValue.isValidEmail) {
+            errorLabel.text = "Please fill a valid email address"
+            errorLabel.isHidden = false
+            result = false
+        } else {
+            errorLabel.isHidden = true
+            result = true
+        }
+        return result
+    }
+
+    class func validateAddress(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.address = newValue
+        }
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
+            errorLabel.text = "Please fill a valid address"
+            errorLabel.isHidden = false
+            result = false
+        } else {
+            errorLabel.isHidden = true
+            result = true
+        }
+        return result
+    }
+
+    class func validateCity(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.city = newValue
+        }
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
+            errorLabel.text = "Please fill a valid city"
+            errorLabel.isHidden = false
+            result = false
+        } else {
+            errorLabel.isHidden = true
+            result = true
+        }
+        return result
+    }
+    
+    class func validateCountry(ignoreIfEmpty : Bool, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = addressDetails?.country ?? ""
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 2) {
+            errorLabel.text = "Please choosen a country"
+            errorLabel.isHidden = false
+            result = false
+        } else {
+            errorLabel.isHidden = true
+            result = true
+        }
+        return result
+    }
+
+    class func validateZip(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
+        
+        var result : Bool = true
+        let newValue : String = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.zip = newValue
+        }
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
+            errorLabel.text = "Please fill a valid zip code"
+            errorLabel.isHidden = false
+            result = false
+        } else {
+            errorLabel.isHidden = true
+            result = true
+        }
+        return result
+    }
+
+    class func validateState(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = addressDetails?.state ?? ""
+        var result : Bool = true
+        if ((ignoreIfEmpty || textField.isHidden) && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 2) {
+            errorLabel.text = "Please fill a valid state"
+            errorLabel.isHidden = false
+            result = false
+        } else {
+            errorLabel.isHidden = true
+            result = true
+        }
+        return result
+    }
+    
+    
+    class func validateExpMM(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String!) -> Bool {
+        
+        var ok : Bool = true
+        let inputMM = textField.text ?? ""
+        if inputMM.characters.count == 0 && ignoreIfEmpty {
+            // ignore
+        } else if (inputMM.characters.count < 2) {
+            ok = false
+        } else if !inputMM.isValidMonth {
+            ok = false
+        }
+        if (ok) {
+            errorLabel.isHidden = true
+        } else {
+            errorLabel.text = errorMessage
+            errorLabel.isHidden = false
+        }
+        return ok
+    }
+    
+    class func validateExpYY(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String!) -> Bool {
+        
+        var ok : Bool = true
+        let inputYY = textField.text ?? ""
+        if inputYY.characters.count == 0 && ignoreIfEmpty {
+            // ignore
+        } else if (inputYY.characters.count < 2) {
+            ok = false
+        } else {
+            let currentYearYY = self.getCurrentYear() % 100
+            ok = currentYearYY <= Int(inputYY)!
+        }
+        if (ok) {
+            errorLabel.isHidden = true
+        } else {
+            errorLabel.text = errorMessage
+            errorLabel.isHidden = false
+        }
+        return ok
+    }
+    
+    class func getCurrentYear() -> Int! {
+        let date = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        return year
+    }
+    
+    class func validateCvv(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel) -> Bool {
+        
+        var result : Bool = true;
+        let newValue = textField.text ?? ""
+        if newValue.characters.count == 0 && ignoreIfEmpty {
+            // ignore
+        } else if newValue.characters.count < 3 {
+            result = false
+        }
+        if result {
+            errorLabel.isHidden = true
+        } else {
+            errorLabel.text = "Please fill a valid CVV number"
+            errorLabel.isHidden = false
+        }
+        return result
+    }
+
+    class func validateCCN(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String!) -> Bool {
+        
+        var result : Bool = true;
+        let newValue = textField.text ?? ""
+        if newValue.characters.count == 0 && ignoreIfEmpty {
+            // ignore
+        } else if !newValue.isValidCCN {
+            result = false
+        }
+        if result {
+            errorLabel.isHidden = true
+        } else {
+            errorLabel.text = errorMessage
+            errorLabel.isHidden = false
+        }
+        return result
+    }
+
+    class func nameEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 100)
+        sender.text = input
+    }
+    
+    class func emailEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneEmailCharacters.cutToMaxLength(maxLength: 1200)
+        sender.text = input
+    }
+    
+    class func addressEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.cutToMaxLength(maxLength: 100)
+        sender.text = input
+    }
+    
+    class func cityEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 50)
+        sender.text = input
+    }
+    
+    class func zipEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.cutToMaxLength(maxLength: 20)
+        sender.text = input
+    }
+    
+    class func ccnEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 21).formatCCN
+        sender.text = input
+    }
+    
+    class func expEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 2)
+        sender.text = input
+    }
+    
+    class func cvvEditingChanged(_ sender: UITextField) {
+        
+        var input : String = sender.text ?? ""
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4)
+        sender.text = input
+    }
+
+    class func updateState(addressDetails: BSAddressDetails!, countryManager: BSCountryManager, stateUILabel: UILabel, stateUITextField: UITextField, stateErrorUILabel: UILabel) {
+        let selectedCountryCode = addressDetails.country ?? ""
+        let selectedStateCode = addressDetails.state ?? ""
+        var hideState : Bool = true
+        if let states = countryManager.countryStates(countryCode: selectedCountryCode){
+            stateUITextField.text = states[selectedStateCode]
+            hideState = false
+        }
+        stateUITextField.isHidden = hideState
+        stateUILabel.isHidden = hideState
+        stateErrorUILabel.isHidden = true
+    }
+
+}
+

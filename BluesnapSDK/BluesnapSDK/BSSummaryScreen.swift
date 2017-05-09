@@ -12,7 +12,7 @@ class BSSummaryScreen: UIViewController {
         paymentDetails in
         print("Payment Details were submitted")
     }
-
+    internal var countryManager = BSCountryManager()
     
     // MARK: private properties
     
@@ -22,7 +22,7 @@ class BSSummaryScreen: UIViewController {
     // MARK: Constants
     
     fileprivate let nameInvalidMessage = "Please fill Card holder name"
-    fileprivate let ccnInvalidMessage = "Please fill a valid Credirt Card number"
+    fileprivate let ccnInvalidMessage = "Please fill a valid Credit Card number"
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
     fileprivate let doValidations = true;
@@ -50,33 +50,33 @@ class BSSummaryScreen: UIViewController {
     @IBOutlet weak var ExpYYUiTextField: UITextField!
     @IBOutlet weak var ExpMMUiTextField: UITextField!
     @IBOutlet weak var cvvUiTextField: UITextField!
-    @IBOutlet weak var ccnErrorUiLabel: UILabel!
-    @IBOutlet weak var nameErrorUiLabel: UILabel!
-    @IBOutlet weak var expErrorUiLabel: UILabel!
-    @IBOutlet weak var cvvErrorUiLabel: UILabel!
     @IBOutlet weak var subtotalUILabel: UILabel!
     @IBOutlet weak var taxAmountUILabel: UILabel!
     @IBOutlet weak var ccIconImage: UIImageView!
 
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
-    @IBOutlet weak var emailError: UILabel!
     @IBOutlet weak var streetLabel: UILabel!
     @IBOutlet weak var streetField: UITextField!
-    @IBOutlet weak var streetError: UILabel!
     @IBOutlet weak var zipLabel: UILabel!
     @IBOutlet weak var zipField: UITextField!
-    @IBOutlet weak var zipError: UILabel!
     @IBOutlet weak var countryFlagButton: UIButton!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var cityField: UITextField!
-    @IBOutlet weak var cityError: UILabel!
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var stateField: UITextField!
+    
+    @IBOutlet weak var nameErrorUiLabel: UILabel!
+    @IBOutlet weak var ccnErrorUiLabel: UILabel!
+    @IBOutlet weak var expErrorUiLabel: UILabel!
+    @IBOutlet weak var cvvErrorUiLabel: UILabel!
+    @IBOutlet weak var emailError: UILabel!
+    @IBOutlet weak var streetError: UILabel!
+    @IBOutlet weak var zipError: UILabel!
+    @IBOutlet weak var cityError: UILabel!
     @IBOutlet weak var stateError: UILabel!
     
-    
-    
+    fileprivate var firstTime : Bool! = true
     
 	// MARK: - UIViewController's methods
 
@@ -94,28 +94,31 @@ class BSSummaryScreen: UIViewController {
         
         updateTexts()
         
-        // for debug:
-        self.cardUiTextField.text = "4111 1111 1111 1111"
-        self.ExpMMUiTextField.text = "11"
-        self.ExpYYUiTextField.text = "20"
-        self.cvvUiTextField.text = "444"
-        self.nameUiTextyField.text = "John Doe"
-        
-        if let shippingDetails = self.paymentDetails.getShippingDetails() {
-            shippingDetails.name = "Mary Doe"
-            shippingDetails.address = "333 elm st"
-            shippingDetails.city = "NY"
-            shippingDetails.country = "US"
-            shippingDetails.email = "mary@gmail.com"
+        if self.firstTime == true {
+            self.firstTime = false
+            if let billingDetails = paymentDetails.getBillingDetails() {
+                self.nameUiTextyField.text = billingDetails.name
+                if fullBilling {
+                    self.emailField.text = billingDetails.email
+                    self.zipField.text = billingDetails.zip
+                    self.streetField.text = billingDetails.address
+                    self.cityField.text = billingDetails.city
+                }
+            }
+            // this is for debug, should bve removed
+            self.cardUiTextField.text = "4111 1111 1111 1111"
+            self.ExpMMUiTextField.text = "11"
+            self.ExpYYUiTextField.text = "20"
+            self.cvvUiTextField.text = "444"
         }
-        hideShowFullBillingFields()
-        
+
+        hideShowFields()
 	}
     
     
     // MARK: private methods
     
-    private func hideShowFullBillingFields() {
+    private func hideShowFields() {
         
         let hideFields = !self.fullBilling
         emailLabel.isHidden = hideFields
@@ -127,9 +130,33 @@ class BSSummaryScreen: UIViewController {
         countryFlagButton.isHidden = hideFields
         cityLabel.isHidden = hideFields
         cityField.isHidden = hideFields
-        stateLabel.isHidden = hideFields
-        stateField.isHidden = hideFields
+        if (fullBilling) {
+            updateState()
+        } else {
+            stateLabel.isHidden = hideFields
+            stateField.isHidden = hideFields
+        }
+        
+        // hide all errors
+        nameErrorUiLabel.isHidden = true
+        ccnErrorUiLabel.isHidden = true
+        expErrorUiLabel.isHidden = true
+        cvvErrorUiLabel.isHidden = true
+        emailError.isHidden = true
+        streetError.isHidden = true
+        zipError.isHidden = true
+        cityError.isHidden = true
+        stateError.isHidden = true
+        
+        let cardType = cardUiTextField.text?.getCCType() ?? ""
+        updateCcIcon(ccType: cardType)
     }
+    
+    private func updateState() {
+        
+        BSValidator.updateState(addressDetails: paymentDetails.getBillingDetails(), countryManager: countryManager, stateUILabel: stateLabel, stateUITextField: stateField, stateErrorUILabel: stateError)
+    }
+    
     
     private func updateTexts() {
         
@@ -148,16 +175,9 @@ class BSSummaryScreen: UIViewController {
         taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
     }
     
-    private func getCurrentYear() -> Int! {
-        let date = Date()
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: date)
-        return year
-    }
-    
     private func getExpYearAsYYYY() -> String! {
         
-        let yearStr = String(getCurrentYear())
+        let yearStr = String(BSValidator.getCurrentYear())
         let p = yearStr.index(yearStr.startIndex, offsetBy: 2)
         let first2Digits = yearStr.substring(with: yearStr.startIndex..<p)
         let last2Digits = self.ExpYYUiTextField.text ?? ""
@@ -213,6 +233,7 @@ class BSSummaryScreen: UIViewController {
                 }
                 self.shippingScreen.paymentDetails = self.paymentDetails
                 self.shippingScreen.submitPaymentFields = submitPaymentFields
+                self.shippingScreen.countryManager = self.countryManager
             }
         }
         self.shippingScreen.payText = self.payButtonText
@@ -231,16 +252,32 @@ class BSSummaryScreen: UIViewController {
             imageName = "default"
             NSLog("ccTypew \(ccType) does not have an icon")
         }
-        //if let myBundle = Bundle(identifier: BSViewsManager.bundleIdentifier) {
-        //    if let image = UIImage(named: "cc_\(imageName!)", in: myBundle, compatibleWith: nil) {
-       //         self.ccIconImage.image = image
-       //     }
-        //}
         if let image = BSViewsManager.getImage(imageName: "cc_\(imageName!)") {
             self.ccIconImage.image = image
         }
+        if !fullBilling {
+            let hideZip = (ccType != "Visa")
+            zipLabel.isHidden = hideZip
+            zipField.isHidden = hideZip
+        }
     }
     
+    private func updateWithNewCountry(countryCode : String, countryName : String) {
+        
+        paymentDetails.getBillingDetails().country = countryCode
+
+        // load the flag image
+        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
+            self.countryFlagButton.imageView?.image = image
+        }
+    }
+    
+    private func updateWithNewState(stateCode : String, stateName : String) {
+        
+        paymentDetails.getBillingDetails().state = stateCode
+        self.stateField.text = stateName
+    }
+
     
     // MARK: menu actions
     
@@ -304,149 +341,163 @@ class BSSummaryScreen: UIViewController {
         let ok3 = validateExpMM(ignoreIfEmpty: false)
         let ok4 = validateExpYY(ignoreIfEmpty: false)
         let ok5 = validateCvv(ignoreIfEmpty: false)
-        return ok1 && ok2 && ok3 && ok4 && ok5
+        var result = ok1 && ok2 && ok3 && ok4 && ok5
+        
+        if fullBilling {
+            let ok1 = validateEmail(ignoreIfEmpty: false)
+            let ok2 = validateCity(ignoreIfEmpty: false)
+            let ok3 = validateAddress(ignoreIfEmpty: false)
+            let ok4 = validateCity(ignoreIfEmpty: false)
+            let ok5 = validateCountryAndZip(ignoreIfEmpty: false)
+            result = result && ok1 && ok2 && ok3 && ok4 && ok5
+        } else if !zipField.isHidden {
+            // if not full billing, zip is optional (if visible at all)
+            let ok = validateCountryAndZip(ignoreIfEmpty: true)
+            result = result && ok
+        }
+
+        return result
     }
     
     func validateCvv(ignoreIfEmpty : Bool) -> Bool {
         
-        var ok : Bool = true;
-        if (doValidations) {
-            let newValue = cvvUiTextField.text ?? ""
-            if newValue.characters.count == 0 && ignoreIfEmpty {
-                // ignore
-            } else if newValue.characters.count < 3 {
-                ok = false
-            }
-        }
-        if ok {
-            cvvErrorUiLabel.isHidden = true
-        } else {
-            cvvErrorUiLabel.text = cvvInvalidMessage
-            cvvErrorUiLabel.isHidden = false
-        }
-        return ok
+        let result = BSValidator.validateCvv(ignoreIfEmpty: ignoreIfEmpty, textField: cvvUiTextField, errorLabel: cvvErrorUiLabel)
+        return result
     }
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        var ok : Bool = true;
-        let newValue = nameUiTextyField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        if (doValidations) {
-            nameUiTextyField.text = newValue
-            if newValue.characters.count == 0 && ignoreIfEmpty {
-                // ignore
-            } else if !newValue.isValidName {
-                ok = false
-            }
-        }
-        if ok {
-            nameErrorUiLabel.isHidden = true
-            paymentDetails.getBillingDetails().name = newValue
-        } else {
-            nameErrorUiLabel.text = nameInvalidMessage
-            nameErrorUiLabel.isHidden = false
-        }
-        return ok
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, textField: nameUiTextyField, errorLabel: nameErrorUiLabel, errorMessage: nameInvalidMessage, addressDetails: paymentDetails.getBillingDetails())
+        return result
     }
     
     func validateCCN(ignoreIfEmpty : Bool) -> Bool {
         
-        var ok : Bool = true;
-        let newValue = cardUiTextField.text ?? ""
-        if (doValidations) {
-            if newValue.characters.count == 0 && ignoreIfEmpty {
-                // ignore
-            } else if !newValue.isValidCCN {
-                ok = false
-            }
-        }
-        if ok {
-            ccnErrorUiLabel.isHidden = true
-            let cardType = newValue.getCCType()
-            NSLog("cardType= \(cardType)")
+        let result : Bool = BSValidator.validateCCN(ignoreIfEmpty: ignoreIfEmpty, textField: cardUiTextField, errorLabel: ccnErrorUiLabel, errorMessage: ccnInvalidMessage)
+        if result == true {
+            let cardType = cardUiTextField.text?.getCCType() ?? ""
             updateCcIcon(ccType: cardType)
-        } else {
-            ccnErrorUiLabel.text = ccnInvalidMessage
-            ccnErrorUiLabel.isHidden = false
         }
-        return ok
+        return result
     }
     
     func validateExpMM(ignoreIfEmpty : Bool) -> Bool {
         
-        var ok : Bool = true
-        if (doValidations) {
-            let inputMM = ExpMMUiTextField.text ?? ""
-            if inputMM.characters.count == 0 && ignoreIfEmpty {
-                // ignore
-            } else if (inputMM.characters.count < 2) {
-                ok = false
-            } else if !inputMM.isValidMonth {
-                ok = false
-            }
-        }
-        if (ok) {
-            expErrorUiLabel.isHidden = true
-        } else {
-            expErrorUiLabel.text = expInvalidMessage
-            expErrorUiLabel.isHidden = false
-        }
-        return ok
+        let result = BSValidator.validateExpMM(ignoreIfEmpty: ignoreIfEmpty, textField: ExpMMUiTextField, errorLabel: expErrorUiLabel, errorMessage: expInvalidMessage)
+        return result
     }
     
     func validateExpYY(ignoreIfEmpty : Bool) -> Bool {
 
-        var ok : Bool = true
-        if (doValidations) {
-            let inputYY = ExpYYUiTextField.text ?? ""
-            if inputYY.characters.count == 0 && ignoreIfEmpty {
-                // ignore
-            } else if (inputYY.characters.count < 2) {
-                ok = false
-            } else {
-                let currentYearYY = self.getCurrentYear() % 100
-                ok = currentYearYY <= Int(inputYY)!
-            }
-        }
-        if (ok) {
-            expErrorUiLabel.isHidden = true
-        } else {
-            expErrorUiLabel.text = expInvalidMessage
-            expErrorUiLabel.isHidden = false
-        }
-        return ok
+        let result = BSValidator.validateExpYY(ignoreIfEmpty: ignoreIfEmpty, textField: ExpYYUiTextField, errorLabel: expErrorUiLabel, errorMessage: expInvalidMessage)
+        return result
     }
     
+    func validateEmail(ignoreIfEmpty : Bool) -> Bool {
+        
+        let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, textField: emailField, errorLabel: emailError, addressDetails: paymentDetails.getBillingDetails())
+        return result
+    }
+    
+    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
+        
+        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, textField: streetField, errorLabel: streetError, addressDetails: paymentDetails.getBillingDetails())
+        return result
+    }
+    
+    func validateCity(ignoreIfEmpty : Bool) -> Bool {
+        
+        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, textField: cityField, errorLabel: cityError, addressDetails: paymentDetails.getBillingDetails())
+        return result
+    }
+    
+    func validateCountryAndZip(ignoreIfEmpty : Bool) -> Bool {
+        
+        var result : Bool = true
+        if fullBilling {
+            result = BSValidator.validateCountry(ignoreIfEmpty: ignoreIfEmpty, errorLabel: zipError, addressDetails: paymentDetails.getBillingDetails())
+        }
+        if result == true {
+            result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, textField: zipField, errorLabel: zipError, addressDetails: paymentDetails.getBillingDetails())
+        }
+        return result
+    }
+    
+    func validateState(ignoreIfEmpty : Bool) -> Bool {
+
+        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, textField: stateField, errorLabel: stateError, addressDetails: paymentDetails.getBillingDetails())
+        return result
+    }
     
     // MARK: real-time formatting and Validations on text fields
     
     @IBAction func nameEditingChanged(_ sender: UITextField) {
         
-        var input : String = sender.text ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 100)
-        sender.text = input
+        BSValidator.nameEditingChanged(sender)
     }
     
     @IBAction func ccnEditingChanged(_ sender: UITextField) {
         
-        var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 21).formatCCN
-        sender.text = input
+        BSValidator.ccnEditingChanged(sender)
     }
     
     @IBAction func expEditingChanged(_ sender: UITextField) {
         
-        var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 2)
-        sender.text = input
+        BSValidator.expEditingChanged(sender)
     }
     
     @IBAction func cvvEditingChanged(_ sender: UITextField) {
         
-        var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4)
-        sender.text = input
+        BSValidator.cvvEditingChanged(sender)
     }
+    
+    @IBAction func emailEditingChanged(_ sender: UITextField) {
+        BSValidator.emailEditingChanged(sender)
+    }
+    
+    @IBAction func addressEditingChanged(_ sender: UITextField) {
+        BSValidator.addressEditingChanged(sender)
+    }
+    
+    @IBAction func cityEditingChanged(_ sender: UITextField) {
+        BSValidator.cityEditingChanged(sender)
+    }
+    
+    @IBAction func zipEditingChanged(_ sender: UITextField) {
+        BSValidator.zipEditingChanged(sender)
+    }
+    
+    @IBAction func stateEditingChanged(_ sender: UITextField) {
+        sender.text = "" // prevent typing - open pop-up insdtead
+        self.statetouchDown(sender)
+    }
+    
+    
+    // open the country screen
+    @IBAction func changeCountry(_ sender: Any) {
+        
+        let selectedCountryCode = paymentDetails.getBillingDetails().country ?? ""
+        BSViewsManager.showCountryList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            countryManager: countryManager,
+            selectedCountryCode: selectedCountryCode,
+            updateFunc: updateWithNewCountry)
+    }
+    
+    // enter state field - open the state screen
+    @IBAction func statetouchDown(_ sender: Any) {
+        
+        self.stateField.resignFirstResponder()
+        
+        BSViewsManager.showStateList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            countryManager: countryManager,
+            addressDetails: paymentDetails.getBillingDetails(),
+            updateFunc: updateWithNewState)
+    }
+    
     
     @IBAction func nameEditingDidEnd(_ sender: UITextField) {
         _ = validateName(ignoreIfEmpty: true)
@@ -466,6 +517,22 @@ class BSSummaryScreen: UIViewController {
 
     @IBAction func cardEditingDidEnd(_ sender: UITextField) {
         _ = validateCCN(ignoreIfEmpty: true)
+    }
+
+    @IBAction func emailEditingDidEnd(_ sender: UITextField) {
+        _ = validateEmail(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func addressEditingDidEnd(_ sender: UITextField) {
+        _ = validateAddress(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func cityEditingDidEnd(_ sender: UITextField) {
+        _ = validateCity(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func zipEditingDidEnd(_ sender: UITextField) {
+        _ = validateCountryAndZip(ignoreIfEmpty: true)
     }
 
 }

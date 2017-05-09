@@ -79,14 +79,18 @@ import Foundation
 		
         if (withShipping && paymentDetails.shippingDetails == nil) {
             paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
+            paymentDetails.getShippingDetails()!.country = "US"
         } else if (!withShipping && paymentDetails.shippingDetails != nil) {
             paymentDetails.setShippingDetails(shippingDetails: nil)
+        }
+        if (fullBilling == true) && (paymentDetails.getBillingDetails().country ?? "" == "") {
+            paymentDetails.getBillingDetails().country = "US"
         }
         purchaseScreen.paymentDetails = paymentDetails
         purchaseScreen.bsToken = bsToken
         purchaseScreen.purchaseFunc = purchaseFunc
         purchaseScreen.fullBilling = fullBilling
-		
+        
 		inNavigationController.pushViewController(purchaseScreen, animated: animated)
 	}
     

@@ -61,6 +61,32 @@ class ViewController: UIViewController {
         
         resultTextView.text = ""
         
+        // for debug - supply initial values:
+        if fullBillingSwitch.isOn == true {
+            if let billingDetails = paymentDetails.getBillingDetails() {
+                billingDetails.name = "John Doe"
+                billingDetails.address = "333 elm st"
+                billingDetails.city = "New York"
+                billingDetails.zip = "532464"
+                billingDetails.country = "US"
+                billingDetails.state = "MA"
+                billingDetails.email = "john@gmail.com"
+            }
+        }
+        if withShippingSwitch.isOn {
+            if paymentDetails.getShippingDetails() == nil {
+                paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
+            }
+            if let shippingDetails = paymentDetails.getShippingDetails() {
+                shippingDetails.name = "Mary Doe"
+                shippingDetails.address = "333 elm st"
+                shippingDetails.city = "New York"
+                shippingDetails.country = "US"
+                shippingDetails.state = "MA"
+                shippingDetails.email = "mary@gmail.com"
+            }
+        }
+        
         // open the purchase screen
         fillPaymentDetails()
         BlueSnapSDK.showPurchaseScreen(
@@ -117,12 +143,42 @@ class ViewController: UIViewController {
         let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
             paymentDetails: paymentDetails,
             bsToken: bsToken!)
+        logResultDetails(result)
         if (result.success == true) {
             resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
         } else {
             let errorDesc = result.data ?? ""
             resultTextView.text = "An error occurred trying to create BLS transaction.\n\n\(errorDesc)"
         }
+    }
+    
+    private func logResultDetails(_ result : (success:Bool, data: String?)) {
+        
+        NSLog("--------------------------------------------------------")
+        NSLog("Result success: \(result.success)")
+        if let billingDetails = paymentDetails.getBillingDetails() {
+            NSLog("Result Data: Name:\(billingDetails.name)")
+            if let zip = billingDetails.zip {
+                NSLog(" Zip code:\(zip)")
+            }
+            if self.fullBillingSwitch.isOn {
+                NSLog(" Email:\(billingDetails.email)")
+                NSLog(" Street address:\(billingDetails.address)")
+                NSLog(" City:\(billingDetails.city)")
+                NSLog(" Country code:\(billingDetails.country)")
+                NSLog(" State code:\(billingDetails.state)")
+            }
+        }
+        if let shippingDetails = paymentDetails.getShippingDetails() {
+            NSLog("Shipping Data: Name:\(shippingDetails.name)")
+            NSLog(" Zip code:\(shippingDetails.zip)")
+            NSLog(" Email:\(shippingDetails.email)")
+            NSLog(" Street address:\(shippingDetails.address)")
+            NSLog(" City:\(shippingDetails.city)")
+            NSLog(" Country code:\(shippingDetails.country)")
+            NSLog(" State code:\(shippingDetails.state)")
+        }
+        NSLog("--------------------------------------------------------")
     }
 }
 

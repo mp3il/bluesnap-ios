@@ -63,11 +63,14 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         countryManager : BSCountryManager,
-        selectedCountryCode : String!,
-        selectedStateCode : String!,
+        addressDetails: BSAddressDetails,
         updateFunc: @escaping (String, String)->Void) {
         
+        let selectedCountryCode = addressDetails.country ?? ""
+        let selectedStateCode = addressDetails.state ?? ""
+        
         if let states = countryManager.countryStates(countryCode: selectedCountryCode) {
+            
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.stateScreenStoryboardId) as! BSStatesViewController
             

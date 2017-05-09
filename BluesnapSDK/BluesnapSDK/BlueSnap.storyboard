@@ -291,14 +291,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Shipping email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Pv-hi-occ" userLabel="Email field">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="john@gmail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Pv-hi-occ" userLabel="Email field">
                                         <rect key="frame" x="87" y="160" width="249" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
-                                            <action selector="emailEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="VU5-40-gps"/>
-                                            <action selector="emailEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="9py-Ja-W6q"/>
+                                            <action selector="emailEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="t85-yf-Pb7"/>
+                                            <action selector="emailEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="gk8-DD-xN3"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Email error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oC-8W-g8m">
@@ -316,14 +316,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Shipping address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YD7-HW-CXb" userLabel="Street Field">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YD7-HW-CXb" userLabel="Street Field">
                                         <rect key="frame" x="87" y="209" width="249" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
-                                            <action selector="addressEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="TU0-ye-E0B"/>
-                                            <action selector="addressEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="Csc-hI-lOh"/>
+                                            <action selector="addressEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="zQm-Re-d3g"/>
+                                            <action selector="addressEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="vZV-i4-GhR"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Address error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oTz-wv-wk7" userLabel="Street Error">
@@ -344,8 +344,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
-                                            <action selector="zipEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="N6k-tz-cCK"/>
-                                            <action selector="zipEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="7PX-JE-A0b"/>
+                                            <action selector="zipEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="Xpy-DA-TE1"/>
+                                            <action selector="zipEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="HCz-gX-ZR3"/>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iMV-mS-Y33">
@@ -355,7 +355,7 @@
                                         </constraints>
                                         <state key="normal" title="Button" image="US"/>
                                         <connections>
-                                            <action selector="changeCountry:" destination="JMI-6r-Lwf" eventType="touchUpInside" id="8s0-BL-3gd"/>
+                                            <action selector="changeCountry:" destination="sH3-ph-K7G" eventType="touchUpInside" id="oVG-5B-Ced"/>
                                         </connections>
                                     </button>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Zip error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w6l-7R-rTa">
@@ -376,8 +376,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
-                                            <action selector="cityEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="vHe-TW-37U"/>
-                                            <action selector="cityEditingDidEnd:" destination="JMI-6r-Lwf" eventType="editingDidEnd" id="06A-CZ-1Zf"/>
+                                            <action selector="cityEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="T3i-iu-TvZ"/>
+                                            <action selector="cityEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="UvH-VD-sU9"/>
                                         </connections>
                                     </textField>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="City error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Mm-8c-raO">
@@ -398,7 +398,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
-                                            <action selector="stateEditingChanged:" destination="JMI-6r-Lwf" eventType="editingChanged" id="S1m-dd-F4E"/>
+                                            <action selector="stateEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="BRw-lQ-ArR"/>
                                             <action selector="statetouchDown:" destination="JMI-6r-Lwf" eventType="touchDown" id="xR0-X0-TiY"/>
                                         </connections>
                                     </textField>
