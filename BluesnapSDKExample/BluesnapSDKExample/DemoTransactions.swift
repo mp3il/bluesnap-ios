@@ -17,9 +17,9 @@ import BluesnapSDK
 
 class DemoTreansactions {
     
-    static let BS_SANDBOX_TEST_USER : String  = "GCpapi" //"sdkuser"
-    static let BS_SANDBOX_TEST_PASS : String  = "Plimus4321" //"SDKuser123"
-    static let BS_SANDBOX_DOMAIN : String = "https://us-qa-fct03.bluesnap.com/" // "https://sandbox.bluesnap.com/"
+    static let BS_SANDBOX_TEST_USER : String  = "sdkuser"
+    static let BS_SANDBOX_TEST_PASS : String  = "SDKuser123"
+    static let BS_SANDBOX_DOMAIN : String = "https://sandbox.bluesnap.com/"
 
     func createCreditCardTransaction(
         paymentDetails: BSPaymentDetails!,

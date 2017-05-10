@@ -15,9 +15,9 @@ class BSApiManager  {
     // MARK: Constants
     
     static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
-    static let BS_SANDBOX_DOMAIN = "https://us-qa-fct03.bluesnap.com/" // "https://sandbox.bluesnap.com/"
-    static let BS_SANDBOX_TEST_USER = "GCpapi" //"sdkuser"
-    static let BS_SANDBOX_TEST_PASS = "Plimus4321" //"SDKuser123"
+    static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
+    static let BS_SANDBOX_TEST_USER = "sdkuser"
+    static let BS_SANDBOX_TEST_PASS = "SDKuser123"
     static let TIME_DIFF_TO_RELOAD : Double = -60 * 60 // every hour (interval should be negative, and in seconds)
     
     // MARK: private properties
@@ -135,44 +135,6 @@ class BSApiManager  {
         task.resume()
         semaphore.wait()
         
-        // for debug: give dummy values
-        if bsCurrencies == nil {
-            
-            print("Don't forget to remove this!!!")
-            var currencies : [BSCurrency] = []
-            currencies.append(BSCurrency(name: "Albania Leke", code: "ALL", rate: 97.129))
-            currencies.append(BSCurrency(name: "Algeria Dinars", code: "DZD", rate: 74.74))
-            currencies.append(BSCurrency(name: "Argentina Pesos", code: "ARS", rate: 3.8))
-            currencies.append(BSCurrency(name: "Australia Dollars", code: "AUD", rate: 1.22))
-            currencies.append(BSCurrency(name: "Brazil Reals", code: "BRL", rate: 1.93))
-            currencies.append(BSCurrency(name: "Canada Dollar", code: "CAD", rate: 1.14))
-            currencies.append(BSCurrency(name: "Chile Pesos", code: "CLP", rate: 515.87))
-            currencies.append(BSCurrency(name: "China Yuan Renminbi", code: "CNY", rate: 6.839))
-            currencies.append(BSCurrency(name: "Colombia Pesos", code: "COP", rate: 2064.7))
-            currencies.append(BSCurrency(name: "Denmark Kroner", code: "DKK", rate: 5.42))
-            currencies.append(BSCurrency(name: "Egypt Pounds", code: "EGP", rate: 5.5))
-            currencies.append(BSCurrency(name: "Euro", code: "EUR", rate: 0.72))
-            currencies.append(BSCurrency(name: "Israel New Shekels", code: "ILS", rate: 4.0))
-            currencies.append(BSCurrency(name: "Japan Yen", code: "JPY", rate: 107.8))
-            currencies.append(BSCurrency(name: "Jordan Dinars", code: "JOD", rate: 0.71))
-            currencies.append(BSCurrency(name: "Mexico Pesos", code: "MXN", rate: 14.120))
-            currencies.append(BSCurrency(name: "New Zealand Dollars", code: "NZD", rate: 1.51))
-            currencies.append(BSCurrency(name: "Norway Kroner", code: "NOK", rate: 6.26))
-            currencies.append(BSCurrency(name: "Oman Rial", code: "OMR", rate: 0.41))
-            currencies.append(BSCurrency(name: "Poland Zlotych", code: "PLN", rate: 2.9))
-            currencies.append(BSCurrency(name: "Romania New Lei", code: "RON", rate: 2.967))
-            currencies.append(BSCurrency(name: "Russia Rubles", code: "RUB", rate: 32.990))
-            currencies.append(BSCurrency(name: "Singapour Dollars", code: "SGD", rate: 1.510))
-            currencies.append(BSCurrency(name: "South Africa Rand", code: "ZAR", rate: 8.04))
-            currencies.append(BSCurrency(name: "South Korea Won", code: "KRW", rate: 1181.33))
-            currencies.append(BSCurrency(name: "Turkey New Lira", code: "TRY", rate: 1.52))
-            currencies.append(BSCurrency(name: "United Kingdom Pounds", code: "GBP", rate: 0.63))
-            currencies.append(BSCurrency(name: "US Dollar", code: "USD", rate: 1.14))
-            currencies.append(BSCurrency(name: "Vietnam Dong", code: "VND", rate: 18664.40))
-            //currencies.append(BSCurrency(name: "", code: "", rate: 1.0))
-            bsCurrencies = BSCurrencies(currencies: currencies)
-            
-        }
         return bsCurrencies
     }
 
