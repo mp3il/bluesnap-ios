@@ -35,7 +35,7 @@ class ViewController: UIViewController {
         
         NSLog("Kount Init");
         //Init Kount
-        BlueSnapSDK.KountInit();
+        //BlueSnapSDK.KountInit();
         
         // get BS token!
         bsToken = BlueSnapSDK.getSandboxTestToken()
