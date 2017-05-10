@@ -89,7 +89,7 @@ class ViewController: UIViewController {
         
         // open the purchase screen
         fillPaymentDetails()
-        BlueSnapSDK.showPurchaseScreen(
+        BlueSnapSDK.showCheckoutScreen(
             inNavigationController: self.navigationController,
             animated: true,
             bsToken: bsToken!,
