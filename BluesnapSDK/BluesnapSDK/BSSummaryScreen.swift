@@ -1,7 +1,7 @@
 
 import UIKit
 
-class BSSummaryScreen: UIViewController {
+class BSSummaryScreen: UIViewController, UITextFieldDelegate {
 
 	// MARK: - Public properties
 	
@@ -78,6 +78,65 @@ class BSSummaryScreen: UIViewController {
     
     fileprivate var firstTime : Bool! = true
     
+    
+    // MARK: for scrolling to prevent keyboard hiding
+    
+    let scrollOffset : Int = -64 // this is the Y of scrollView
+
+    var movedUp = false
+    var fieldBottom : Int?
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        fieldBottom = Int(textField.frame.origin.y + textField.frame.height)
+    }
+    
+    // Do we need this?
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        self.view.endEditing(true)
+        return false
+    }
+    
+    private func scrollForKeyboard(direction: Int) {
+        
+        self.movedUp = (direction > 0)
+        let y = 200*direction
+        let point : CGPoint = CGPoint(x: 0, y: y)
+        self.scrollView.setContentOffset(point, animated: false)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+        var moveUp = false
+        if let fieldBottom = fieldBottom {
+            let userInfo = notification.userInfo as! [String: NSObject] as NSDictionary
+            let keyboardFrame = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! CGRect
+            let keyboardHeight = Int(keyboardFrame.height)
+            let viewHeight : Int = Int(self.view.frame.height)
+            let offset = fieldBottom + keyboardHeight - scrollOffset
+            //print("fieldBottom:\(fieldBottom), keyboardHeight:\(keyboardHeight), offset:\(offset), viewHeight:\(viewHeight)")
+            if (offset > viewHeight) {
+                moveUp = true
+            }
+        }
+        
+        if !self.movedUp && moveUp {
+            scrollForKeyboard(direction: 1)
+        } else if self.movedUp && !moveUp {
+            scrollForKeyboard(direction: 0)
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        
+        if self.movedUp {
+            scrollForKeyboard(direction: 0)
+        }
+    }
+    
+    
 	// MARK: - UIViewController's methods
 
 
@@ -87,6 +146,9 @@ class BSSummaryScreen: UIViewController {
     
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 		
 		self.navigationController!.isNavigationBarHidden = false
 
@@ -115,7 +177,19 @@ class BSSummaryScreen: UIViewController {
         hideShowFields()
 	}
     
+    override func viewDidAppear(_ animated: Bool) {
+
+        // if we remove this - there is blank space above CCN fields
+        scrollForKeyboard(direction: 0)
+    }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+    }
+
     // MARK: private methods
     
     private func hideShowFields() {

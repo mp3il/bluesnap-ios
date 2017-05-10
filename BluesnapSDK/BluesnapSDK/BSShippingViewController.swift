@@ -41,7 +41,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: for scrolling to prevent keyboard hiding
 
-    let scrollOffset : Int = -64 // ask Michal why this is???
+    let scrollOffset : Int = -68 // this is the Y of scrollView
     var movedUp = false
     var fieldBottom : Int?
     @IBOutlet weak var scrollView: UIScrollView!
