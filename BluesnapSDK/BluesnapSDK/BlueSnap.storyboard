@@ -18,9 +18,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="scrollIndicatorInsets" minX="0.0" minY="100" maxX="0.0" maxY="0.0"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search" showsSearchResultsButton="YES" id="ixX-Bo-UgK">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="tzL-ZD-OSs" id="X3A-m5-c4O"/>
+                            </connections>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="yfV-qT-H9M" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
-                                <rect key="frame" x="0.0" y="28" width="320" height="40"/>
+                                <rect key="frame" x="0.0" y="72" width="320" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yfV-qT-H9M" id="TgZ-F6-lHe">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
@@ -61,9 +70,21 @@
                             <outlet property="delegate" destination="tzL-ZD-OSs" id="q9E-0C-rby"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Select Currency" id="oxS-jD-IWE"/>
+                    <navigationItem key="navigationItem" title="Select Currency" id="zsE-D3-OB4"/>
+                    <connections>
+                        <outlet property="searchBar" destination="ixX-Bo-UgK" id="fFC-Jm-eyL"/>
+                        <outlet property="searchDisplayController" destination="rkj-cy-3SG" id="dh3-en-7ie"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LFy-of-8hp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="rkj-cy-3SG">
+                    <connections>
+                        <outlet property="delegate" destination="tzL-ZD-OSs" id="827-Dw-UAX"/>
+                        <outlet property="searchContentsController" destination="tzL-ZD-OSs" id="BEM-pe-8F6"/>
+                        <outlet property="searchResultsDataSource" destination="tzL-ZD-OSs" id="zYA-17-1hI"/>
+                        <outlet property="searchResultsDelegate" destination="tzL-ZD-OSs" id="Zpa-rX-yd0"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="2728.8000000000002" y="940.47976011994012"/>
         </scene>

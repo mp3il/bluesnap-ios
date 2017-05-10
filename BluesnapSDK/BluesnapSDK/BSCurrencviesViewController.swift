@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSCurrenciesViewController: UITableViewController {
+class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: puclic properties
     
@@ -27,8 +27,41 @@ class BSCurrenciesViewController: UITableViewController {
     // MARK: private properties
     
     fileprivate var bsCurrencies : BSCurrencies?
-    fileprivate var selectedCurrencyIndexPath : IndexPath?
+    fileprivate var filteredCurrencies : BSCurrencies?
+    
+    @IBOutlet weak var searchBar: UISearchBar!
 
+    // MARK: Search bar stuff
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print("begin editing: \(searchBar.text)")
+
+    }
+    
+
+    func searchBarResultsListButtonClicked(_ searchBar: UISearchBar) {
+        print("list button clicked: \(searchBar.text)")
+
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("search button clicked: \(searchBar.text)")
+
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("text change: \(searchBar.text)")
+
+        if searchText == "" {
+            self.filteredCurrencies = self.bsCurrencies
+        } else {
+            
+            //let filtered = bsCurrencies?.currencies.filter{(x) -> BSCurrency in
+            //    (x.name.lowercased().range(of: searchText.lowercased()) != nil)
+            
+        }
+        
+    }
     
     // MARK: - UIViewController's methods
     
@@ -90,7 +123,6 @@ class BSCurrenciesViewController: UITableViewController {
                 if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
                     cell.checkMarkImage.image = image
                 }
-                selectedCurrencyIndexPath = indexPath
             }
         }
         return cell
@@ -100,24 +132,20 @@ class BSCurrenciesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let bsCurrencies = bsCurrencies {
+            
+            // find and deselect previous option
             var oldBsCurrency : BSCurrency?
-            if let selectedCurrencyIndexPath = self.selectedCurrencyIndexPath {
-                oldBsCurrency = bsCurrencies.currencies[selectedCurrencyIndexPath.row]
+            if let oldIndex = bsCurrencies.getCurrencyIndex(code: selectedCurrencyCode) {
+                let path = IndexPath(row: oldIndex, section: 0)
+                oldBsCurrency = bsCurrencies.currencies[path.row]
+                selectedCurrencyCode = ""
+                self.tableView.reloadRows(at: [path], with: .none)
             }
-            let newBsCurrency : BSCurrency = bsCurrencies.currencies[indexPath.row]
-        
-            selectedCurrencyCode = newBsCurrency.getCode()
-        
-            // deselect previous option
-            if let selectedCurrencyIndexPath = self.selectedCurrencyIndexPath {
-                self.tableView.reloadRows(at: [selectedCurrencyIndexPath], with: .none)
-            }
-        
+            
             // select current option
-            selectedCurrencyIndexPath = indexPath
-            if let selectedCurrencyIndexPath = selectedCurrencyIndexPath {
-                self.tableView.reloadRows(at: [selectedCurrencyIndexPath], with: .none)
-            }
+            let newBsCurrency : BSCurrency = bsCurrencies.currencies[indexPath.row]
+            selectedCurrencyCode = newBsCurrency.getCode()
+            self.tableView.reloadRows(at: [indexPath], with: .none)
         
             // call updateFunc
             updateFunc(oldBsCurrency, newBsCurrency)
