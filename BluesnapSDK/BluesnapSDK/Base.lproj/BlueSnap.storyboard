@@ -1194,10 +1194,10 @@
             </objects>
             <point key="canvasLocation" x="2482.5" y="1070"/>
         </scene>
-        <!--Select State New-->
+        <!--Select State-->
         <scene sceneID="ZWS-TW-Oq9">
             <objects>
-                <viewController storyboardIdentifier="BSStatesStoryboardId" title="Select State New" id="2Ni-9L-E0D" customClass="BSStatesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSStatesStoryboardId" title="Select State" id="2Ni-9L-E0D" customClass="BSStatesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QYq-7U-9kH"/>
                         <viewControllerLayoutGuide type="bottom" id="VZz-ls-6bv"/>
@@ -1288,63 +1288,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nud-ba-zIi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2482.5" y="2408.75"/>
-        </scene>
-        <!--Select State-->
-        <scene sceneID="QDn-g5-VBl">
-            <objects>
-                <tableViewController storyboardIdentifier="BSStatesStoryboardId_old" id="AXy-HK-bl3" customClass="BSStatesViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="OHN-19-qZE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="hP5-1m-Eye" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
-                                <rect key="frame" x="0.0" y="28" width="320" height="40"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hP5-1m-Eye" id="bTs-1V-l1p">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ui-Dw-wU0">
-                                            <rect key="frame" x="8" y="8" width="98" height="24"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="qPu-RP-Eor" userLabel="checkMark">
-                                            <rect key="frame" x="280" y="7" width="32" height="26"/>
-                                            <accessibility key="accessibilityConfiguration">
-                                                <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
-                                            </accessibility>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="32" id="0Is-ah-G1p"/>
-                                            </constraints>
-                                        </imageView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="qPu-RP-Eor" firstAttribute="top" secondItem="bTs-1V-l1p" secondAttribute="topMargin" constant="-1" id="0x4-qN-7hL"/>
-                                        <constraint firstItem="7Ui-Dw-wU0" firstAttribute="leading" secondItem="bTs-1V-l1p" secondAttribute="leadingMargin" id="H0U-OT-7dQ"/>
-                                        <constraint firstItem="7Ui-Dw-wU0" firstAttribute="centerY" secondItem="qPu-RP-Eor" secondAttribute="centerY" id="o7p-E7-aWf"/>
-                                        <constraint firstItem="qPu-RP-Eor" firstAttribute="trailing" secondItem="bTs-1V-l1p" secondAttribute="trailingMargin" id="vo9-AP-3Qy"/>
-                                        <constraint firstItem="7Ui-Dw-wU0" firstAttribute="top" secondItem="bTs-1V-l1p" secondAttribute="topMargin" id="zJM-DI-zM5"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="checkMarkImage" destination="qPu-RP-Eor" id="s04-YE-1YC"/>
-                                    <outlet property="itemNameUILabel" destination="7Ui-Dw-wU0" id="0tI-tP-h6f"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="AXy-HK-bl3" id="ptT-iS-jri"/>
-                            <outlet property="delegate" destination="AXy-HK-bl3" id="g1x-5j-gxX"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Select State" id="SHT-tp-E3j"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vvP-WL-sT2" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3248" y="2359"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VNs-D6-HAF">
