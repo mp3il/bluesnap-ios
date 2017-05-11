@@ -302,9 +302,6 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         if (self.shippingScreen == nil) {
             if let storyboard = storyboard {
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
-                if let shippingDetails = paymentDetails.getShippingDetails() {
-                    shippingDetails.name = self.nameUiTextyField.text ?? ""
-                }
                 self.shippingScreen.paymentDetails = self.paymentDetails
                 self.shippingScreen.submitPaymentFields = submitPaymentFields
                 self.shippingScreen.countryManager = self.countryManager
