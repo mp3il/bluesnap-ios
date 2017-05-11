@@ -10,82 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Select Currency-->
-        <scene sceneID="69f-Rr-Zgv">
-            <objects>
-                <tableViewController storyboardIdentifier="BSCurrenciesStoryboardId_old" id="tzL-ZD-OSs" customClass="BSCurrenciesViewController_old" customModule="BluesnapSDK" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7nN-7c-yvV">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <inset key="scrollIndicatorInsets" minX="0.0" minY="100" maxX="0.0" maxY="0.0"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search" id="Brv-AV-qDr">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <outlet property="delegate" destination="tzL-ZD-OSs" id="779-Mb-Uaw"/>
-                            </connections>
-                        </searchBar>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="yfV-qT-H9M" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
-                                <rect key="frame" x="0.0" y="72" width="320" height="40"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yfV-qT-H9M" id="TgZ-F6-lHe">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEm-Qt-uFp">
-                                            <rect key="frame" x="8" y="8" width="82" height="24"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="DqE-Ga-cQ1" userLabel="checkMark">
-                                            <rect key="frame" x="280" y="7" width="32" height="26"/>
-                                            <accessibility key="accessibilityConfiguration">
-                                                <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
-                                            </accessibility>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="32" id="2eB-49-BVS"/>
-                                            </constraints>
-                                        </imageView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="top" secondItem="TgZ-F6-lHe" secondAttribute="topMargin" id="6G6-ZP-bvM"/>
-                                        <constraint firstItem="DqE-Ga-cQ1" firstAttribute="trailing" secondItem="TgZ-F6-lHe" secondAttribute="trailingMargin" id="gb2-mL-jnC"/>
-                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="leading" secondItem="TgZ-F6-lHe" secondAttribute="leadingMargin" id="hyt-U9-Ds3"/>
-                                        <constraint firstItem="DqE-Ga-cQ1" firstAttribute="top" secondItem="TgZ-F6-lHe" secondAttribute="topMargin" constant="-1" id="orR-5h-Ig7"/>
-                                        <constraint firstItem="pEm-Qt-uFp" firstAttribute="centerY" secondItem="DqE-Ga-cQ1" secondAttribute="centerY" id="upH-c5-Eeg"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="CurrencyUILabel" destination="pEm-Qt-uFp" id="3Kd-fI-CRG"/>
-                                    <outlet property="checkMarkImage" destination="DqE-Ga-cQ1" id="VlB-eA-GW2"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="tzL-ZD-OSs" id="ZDy-bN-rVA"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Select Currency" id="zsE-D3-OB4"/>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="rkj-cy-3SG" id="dh3-en-7ie"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LFy-of-8hp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="rkj-cy-3SG">
-                    <connections>
-                        <outlet property="delegate" destination="tzL-ZD-OSs" id="827-Dw-UAX"/>
-                        <outlet property="searchContentsController" destination="tzL-ZD-OSs" id="BEM-pe-8F6"/>
-                        <outlet property="searchResultsDataSource" destination="tzL-ZD-OSs" id="zYA-17-1hI"/>
-                        <outlet property="searchResultsDelegate" destination="tzL-ZD-OSs" id="Zpa-rX-yd0"/>
-                    </connections>
-                </searchDisplayController>
-            </objects>
-            <point key="canvasLocation" x="2728.8000000000002" y="940.47976011994012"/>
-        </scene>
         <!--Select Country-->
         <scene sceneID="DYu-86-uuE">
             <objects>
@@ -154,7 +78,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q2O-jA-r8M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2728.125" y="1609.8591549295775"/>
+            <point key="canvasLocation" x="2483" y="1748"/>
         </scene>
         <!--Payment-->
         <scene sceneID="ww0-E5-C5s">
@@ -1126,28 +1050,10 @@
             </objects>
             <point key="canvasLocation" x="925.60000000000002" y="277.51124437781112"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="wjd-UA-VaH">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BKp-M9-aHd" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="F5z-uo-hQA">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="tzL-ZD-OSs" kind="relationship" relationship="rootViewController" id="DIv-P7-NQP"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Z5j-Jb-8SZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1789.5999999999999" y="940.47976011994012"/>
-        </scene>
-        <!--Select currency 2-->
+        <!--Select Currency-->
         <scene sceneID="T9n-5J-QN1">
             <objects>
-                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select currency 2" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select Currency" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="T2c-iX-ssj"/>
                         <viewControllerLayoutGuide type="bottom" id="AeU-Nz-6go"/>
@@ -1231,7 +1137,7 @@
                             <constraint firstItem="7kx-hO-24w" firstAttribute="top" secondItem="T2c-iX-ssj" secondAttribute="bottom" id="aQX-sg-P2A"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="vbq-Vt-6wb"/>
+                    <navigationItem key="navigationItem" title="Select Currency" id="vbq-Vt-6wb"/>
                     <connections>
                         <outlet property="searchDisplayController" destination="m4Q-0f-btD" id="FtM-Pd-cMb"/>
                         <outlet property="tableView" destination="DXK-pe-9ap" id="Vq9-tg-TyB"/>
@@ -1247,7 +1153,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="4545" y="1320"/>
+            <point key="canvasLocation" x="2483" y="1070"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sCF-2L-hsI">
@@ -1265,7 +1171,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lID-ls-AC6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1790" y="1611"/>
+            <point key="canvasLocation" x="1740" y="1748"/>
         </scene>
         <!--Select State-->
         <scene sceneID="QDn-g5-VBl">
@@ -1322,7 +1228,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vvP-WL-sT2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2728.8000000000002" y="1610.6446776611695"/>
+            <point key="canvasLocation" x="3278" y="1653"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VNs-D6-HAF">
@@ -1340,7 +1246,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Ci-ug-ldM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3547.5" y="1320"/>
+            <point key="canvasLocation" x="1740" y="1071"/>
         </scene>
     </scenes>
     <resources>

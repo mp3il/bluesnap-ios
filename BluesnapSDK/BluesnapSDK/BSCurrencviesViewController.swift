@@ -1,14 +1,14 @@
 //
-//  BSCurrencviesViewController.swift
+//  BSCurrenciesViewController.swift
 //  BluesnapSDK
 //
-//  Created by Shevie Chen on 13/04/2017.
+//  Created by Shevie Chen on 11/05/2017.
 //  Copyright © 2017 Bluesnap. All rights reserved.
 //
 
 import UIKit
 
-class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate {
+class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     // MARK: puclic properties
     
@@ -22,12 +22,13 @@ class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate
         oldCurrency, newCurrency in
         NSLog("Currency \(newCurrency?.getCode()) was selected")
     }
-
-
+    
+    
     // MARK: private properties
     
     fileprivate var bsCurrencies : BSCurrencies?
     fileprivate var filteredCurrencies : BSCurrencies?
+    @IBOutlet weak var tableView: UITableView!
     
     
     // MARK: Search bar stuff
@@ -38,7 +39,7 @@ class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate
         self.searchBar = searchBar
         filterCurrencies(searchText)
     }
-
+    
     private func filterCurrencies(_ searchText : String) {
         
         if searchText == "" {
@@ -73,33 +74,18 @@ class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate
         
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
-
+        
         // scroll to selected
         if let index = filteredCurrencies?.getCurrencyIndex(code: selectedCurrencyCode) {
             let indexPath = IndexPath(row: index, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
-
-    // MARK: UITableView
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return 1
-    }
+    // MARK: UITableViewDataSource & UITableViewDelegate functions
     
-    // return #rows in table
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if let filteredCurrencies = filteredCurrencies {
-            return filteredCurrencies.currencies.count
-        } else {
-            return 0
-        }
-    }
-    
-    // "draw" a cell
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    // Create a cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let reusableCell = tableView.dequeueReusableCell(withIdentifier: "CurrencyTableViewCell", for: indexPath)
         guard let cell = reusableCell as? BSCurrencyTableViewCell else {
@@ -117,8 +103,17 @@ class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate
         return cell
     }
     
-    // When a cell is selected
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // Return # rows to display in the table
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let filteredCurrencies = filteredCurrencies {
+            return filteredCurrencies.currencies.count
+        } else {
+            return 0
+        }
+    }
+    
+    //Tells the delegate that the specified row is now selected.
+    func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         
         if let filteredCurrencies = filteredCurrencies, let bsCurrencies = bsCurrencies {
             
@@ -131,10 +126,10 @@ class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate
             }
             
             // select current option
-            let newBsCurrency : BSCurrency = filteredCurrencies.currencies[indexPath.row]
+            let newBsCurrency : BSCurrency = filteredCurrencies.currencies[didSelectRowAt.row]
             selectedCurrencyCode = newBsCurrency.getCode()
-            self.tableView.reloadRows(at: [indexPath], with: .none)
-        
+            self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
+            
             // call updateFunc
             updateFunc(oldBsCurrency, newBsCurrency)
         }
