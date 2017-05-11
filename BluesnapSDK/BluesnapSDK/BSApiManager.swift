@@ -266,6 +266,7 @@ class BSApiManager  {
                             }
                         }
                     }
+                    currencies = currencies.sorted { $0.name < $1.name }
                     resultData = BSCurrencies(currencies: currencies)
                 } else {
                     NSLog("Error parsing BS currency rates")

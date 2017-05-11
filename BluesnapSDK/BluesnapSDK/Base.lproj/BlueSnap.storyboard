@@ -19,12 +19,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="100" maxX="0.0" maxY="0.0"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search" showsSearchResultsButton="YES" id="ixX-Bo-UgK">
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search" id="Brv-AV-qDr">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
-                                <outlet property="delegate" destination="tzL-ZD-OSs" id="X3A-m5-c4O"/>
+                                <outlet property="delegate" destination="tzL-ZD-OSs" id="779-Mb-Uaw"/>
                             </connections>
                         </searchBar>
                         <prototypes>
@@ -67,12 +67,10 @@
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="tzL-ZD-OSs" id="ZDy-bN-rVA"/>
-                            <outlet property="delegate" destination="tzL-ZD-OSs" id="q9E-0C-rby"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Select Currency" id="zsE-D3-OB4"/>
                     <connections>
-                        <outlet property="searchBar" destination="ixX-Bo-UgK" id="fFC-Jm-eyL"/>
                         <outlet property="searchDisplayController" destination="rkj-cy-3SG" id="dh3-en-7ie"/>
                     </connections>
                 </tableViewController>

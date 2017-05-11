@@ -123,7 +123,7 @@ class ViewController: UIViewController {
         let taxPercent = (taxPercentTextField.text! as NSString).doubleValue
         let taxAmount = (taxTextField.text! as NSString).doubleValue + (taxPercent * amount / 100.0)
         
-        paymentDetails.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: (currencyButton.titleLabel?.text)!)
+        paymentDetails.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: paymentDetails.getCurrency())
     }
     
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {

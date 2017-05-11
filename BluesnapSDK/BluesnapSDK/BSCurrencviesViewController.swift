@@ -20,7 +20,7 @@ class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
     // this ids just a default
     internal var updateFunc : (BSCurrency?, BSCurrency?)->Void = {
         oldCurrency, newCurrency in
-        print("Currency \(newCurrency?.getCode()) was selected")
+        NSLog("Currency \(newCurrency?.getCode()) was selected")
     }
 
 
@@ -29,38 +29,27 @@ class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
     fileprivate var bsCurrencies : BSCurrencies?
     fileprivate var filteredCurrencies : BSCurrencies?
     
-    @IBOutlet weak var searchBar: UISearchBar!
-
+    
     // MARK: Search bar stuff
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("begin editing: \(searchBar.text)")
-
-    }
-    
-
-    func searchBarResultsListButtonClicked(_ searchBar: UISearchBar) {
-        print("list button clicked: \(searchBar.text)")
-
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("search button clicked: \(searchBar.text)")
-
-    }
-    
+    fileprivate var searchBar : UISearchBar?
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("text change: \(searchBar.text)")
+        
+        self.searchBar = searchBar
+        filterCurrencies(searchText)
+    }
 
+    private func filterCurrencies(_ searchText : String) {
+        
         if searchText == "" {
             self.filteredCurrencies = self.bsCurrencies
+        } else if let bsCurrencies = self.bsCurrencies {
+            let filtered = bsCurrencies.currencies.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
+            filteredCurrencies = BSCurrencies(currencies: filtered)
         } else {
-            
-            //let filtered = bsCurrencies?.currencies.filter{(x) -> BSCurrency in
-            //    (x.name.lowercased().range(of: searchText.lowercased()) != nil)
-            
+            filteredCurrencies = BSCurrencies(currencies: [])
         }
-        
+        self.tableView.reloadData()
     }
     
     // MARK: - UIViewController's methods
@@ -72,26 +61,26 @@ class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        super.viewWillAppear(animated)
-        
-        self.navigationController!.isNavigationBarHidden = false
-        
         // Re-load currencies data if necessary
         if let bsToken = bsToken {
             bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
         }
+        if let searchBar = self.searchBar {
+            filterCurrencies(searchBar.text ?? "")
+        } else {
+            filteredCurrencies = bsCurrencies
+        }
         
-        if let index = bsCurrencies?.getCurrencyIndex(code: selectedCurrencyCode) {
+        super.viewWillAppear(animated)
+        self.navigationController!.isNavigationBarHidden = false
+
+        // scroll to selected
+        if let index = filteredCurrencies?.getCurrencyIndex(code: selectedCurrencyCode) {
             let indexPath = IndexPath(row: index, section: 0)
-            var position = UITableViewScrollPosition.middle
-            if (index > bsCurrencies!.currencies.count-10) {
-                position = UITableViewScrollPosition.bottom
-            }
-            self.tableView.scrollToRow(at: indexPath, at: position, animated: false)
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
-    
-    
+
     // MARK: UITableView
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -102,8 +91,8 @@ class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
     // return #rows in table
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if let bsCurrencies = bsCurrencies {
-            return bsCurrencies.currencies.count
+        if let filteredCurrencies = filteredCurrencies {
+            return filteredCurrencies.currencies.count
         } else {
             return 0
         }
@@ -116,7 +105,7 @@ class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
         guard let cell = reusableCell as? BSCurrencyTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        if let bsCurrency = bsCurrencies?.currencies[indexPath.row] {
+        if let bsCurrency = filteredCurrencies?.currencies[indexPath.row] {
             cell.CurrencyUILabel.text = bsCurrency.getName() + " " + bsCurrency.getCode()
             cell.checkMarkImage.image = nil
             if (bsCurrency.getCode() == selectedCurrencyCode) {
@@ -131,19 +120,18 @@ class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
     // When a cell is selected
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let bsCurrencies = bsCurrencies {
+        if let filteredCurrencies = filteredCurrencies, let bsCurrencies = bsCurrencies {
             
             // find and deselect previous option
-            var oldBsCurrency : BSCurrency?
-            if let oldIndex = bsCurrencies.getCurrencyIndex(code: selectedCurrencyCode) {
+            let oldBsCurrency : BSCurrency? = bsCurrencies.getCurrencyByCode(code: selectedCurrencyCode)
+            if let oldIndex = filteredCurrencies.getCurrencyIndex(code: selectedCurrencyCode) {
                 let path = IndexPath(row: oldIndex, section: 0)
-                oldBsCurrency = bsCurrencies.currencies[path.row]
                 selectedCurrencyCode = ""
                 self.tableView.reloadRows(at: [path], with: .none)
             }
             
             // select current option
-            let newBsCurrency : BSCurrency = bsCurrencies.currencies[indexPath.row]
+            let newBsCurrency : BSCurrency = filteredCurrencies.currencies[indexPath.row]
             selectedCurrencyCode = newBsCurrency.getCode()
             self.tableView.reloadRows(at: [indexPath], with: .none)
         
