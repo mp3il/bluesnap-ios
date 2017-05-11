@@ -415,7 +415,11 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         let ok3 = validateExpMM(ignoreIfEmpty: false)
         let ok4 = validateExpYY(ignoreIfEmpty: false)
         let ok5 = validateCvv(ignoreIfEmpty: false)
-        var result = ok1 && ok2 && ok3 && ok4 && ok5
+        var okExp : Bool = true
+        if ok3 && ok4 {
+            okExp = BSValidator.validateExp(monthTextField: self.ExpMMUiTextField, yearTextField: self.ExpYYUiTextField, errorLabel: self.expErrorUiLabel, errorMessage: expInvalidMessage)
+        }
+        var result = ok1 && ok2 && ok3 && ok4 && ok5 && okExp
         
         if fullBilling {
             let ok1 = validateEmail(ignoreIfEmpty: false)

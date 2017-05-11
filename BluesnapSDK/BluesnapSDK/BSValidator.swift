@@ -380,6 +380,26 @@ class BSValidator {
         return ok
     }
     
+    class func validateExp(monthTextField: UITextField, yearTextField: UITextField, errorLabel: UILabel, errorMessage: String!) -> Bool {
+        
+        var ok : Bool = false
+        if let month = Int(monthTextField.text!), let year = Int(yearTextField.text!) {
+            var dateComponents = DateComponents()
+            dateComponents.year = year + (getCurrentYear() / 100)*100
+            dateComponents.month = month
+            dateComponents.day = 1
+            let expDate = Calendar.current.date(from: dateComponents)!
+            ok = expDate > Date()
+        }
+        if (ok) {
+            errorLabel.isHidden = true
+        } else {
+            errorLabel.text = errorMessage
+            errorLabel.isHidden = false
+        }
+        return ok
+    }
+    
     class func getCurrentYear() -> Int! {
         let date = Date()
         let calendar = Calendar.current
