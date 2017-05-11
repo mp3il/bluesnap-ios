@@ -29,7 +29,6 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var tableView: UITableView!
     fileprivate var countries : [(name: String, code: String)] = []
     fileprivate var filteredCountries : [(name: String, code: String)] = []
-    fileprivate var selectedCountryName : String = ""
 
     
     // MARK: Search bar stuff
@@ -135,11 +134,10 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         // select current option
         let country = filteredCountries[didSelectRowAt.row]
         selectedCountryCode = country.code
-        selectedCountryName = country.name
         self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
         
         // call updateFunc
-        updateFunc(selectedCountryCode, selectedCountryName)
+        updateFunc(selectedCountryCode, country.name)
     }
     
 }

@@ -8,13 +8,14 @@
 
 import Foundation
 
-class BSStatesViewController : UITableViewController {
+class BSStatesViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     // MARK: puclic properties
     
     internal var selectedCode : String = ""
+
     // data: state codes and names
-    internal var states : [String : String] = [:]
+    internal var allStates : [(name: String, code: String)] = []
     
     // the callback function that gets called when a state is selected;
     // this is just a default
@@ -25,13 +26,38 @@ class BSStatesViewController : UITableViewController {
     
     // MARK: private properties
     
-    // selected state name and index
-    fileprivate var selectedName : String = ""
-    fileprivate var selectedIndexPath : IndexPath?
+    @IBOutlet weak var tableView: UITableView!
+    fileprivate var filteredStates : [(name: String, code: String)] = []
     
-    // data: state codes and names (matching arrays)
-    fileprivate var codes : [String] = []
-    fileprivate var names : [String] = []
+    
+    // MARK: Search bar stuff
+    
+    fileprivate var searchBar : UISearchBar?
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        self.searchBar = searchBar
+        filterStates(searchText)
+    }
+    
+    private func filterStates(_ searchText : String) {
+        
+        if searchText == "" {
+            self.filteredStates = self.allStates
+        } else {
+            filteredStates = allStates.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
+        }
+        self.tableView.reloadData()
+    }
+    
+    private func getStateIndex(code: String) -> Int? {
+        
+        for (index, country) in filteredStates.enumerated() {
+            if country.code == code {
+                return index
+            }
+        }
+        return nil
+    }
     
     
     // MARK: - UIViewController's methods
@@ -39,78 +65,67 @@ class BSStatesViewController : UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        for (code, name) in states {
-            names.append(name)
-            codes.append(code)
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
+        filterStates(searchBar?.text ?? "")
+
         super.viewWillAppear(animated)
         
         self.navigationController!.isNavigationBarHidden = false
         
-        if let index = codes.index(of: self.selectedCode) {
+        if let index = getStateIndex(code: self.selectedCode) {
             let indexPath = IndexPath(row: index, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
-
     }
     
     
-    // MARK: UITableView
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return 1
-    }
+    // MARK: UITableViewDataSource & UITableViewDelegate functions
     
-    // return #rows in table
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return codes.count
-    }
-    
-    // "draw" a cell
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    // Create a cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let reusableCell = tableView.dequeueReusableCell(withIdentifier: "StateTableViewCell", for: indexPath)
         guard let cell = reusableCell as? BSStateTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        let name : String = names[indexPath.row]
-        let code : String = codes[indexPath.row]
-        cell.itemNameUILabel.text = name
+        let state = filteredStates[indexPath.row]
+        cell.itemNameUILabel.text = state.name
         cell.checkMarkImage.image = nil
-        if (code == selectedCode) {
+        if (state.code == selectedCode) {
             if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
                 cell.checkMarkImage.image = image
             }
-            selectedIndexPath = indexPath
         }
         return cell
     }
     
-    // When a cell is selected
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // Return # rows to display in the table
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        selectedCode = codes[indexPath.row]
-        selectedName = names[indexPath.row]
+        return filteredStates.count
+    }
+    
+    //Tells the delegate that the specified row is now selected.
+    func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         
-        // deselect previous option
-        if let selectedIndexPath = selectedIndexPath {
-            self.tableView.reloadRows(at: [selectedIndexPath], with: .none)
+        // find and deselect previous option
+        if let oldIndex = self.getStateIndex(code: selectedCode) {
+            let path = IndexPath(row: oldIndex, section: 0)
+            selectedCode = ""
+            self.tableView.reloadRows(at: [path], with: .none)
         }
         
         // select current option
-        selectedIndexPath = indexPath
-        if let selectedIndexPath = selectedIndexPath {
-            self.tableView.reloadRows(at: [selectedIndexPath], with: .none)
-        }
+        let state = filteredStates[didSelectRowAt.row]
+        selectedCode = state.code
+        self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
         
         // call updateFunc
-        updateFunc(selectedCode, selectedName)
+        updateFunc(selectedCode, state.name)
     }
+
 }

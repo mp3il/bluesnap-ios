@@ -483,9 +483,15 @@ class BSValidator {
         let selectedCountryCode = addressDetails.country ?? ""
         let selectedStateCode = addressDetails.state ?? ""
         var hideState : Bool = true
-        if let states = countryManager.countryStates(countryCode: selectedCountryCode){
-            stateUITextField.text = states[selectedStateCode]
+        if countryManager.countryHasStates(countryCode: selectedCountryCode) {
             hideState = false
+            stateUITextField.text = ""
+            if let stateName = countryManager.getStateName(countryCode: selectedCountryCode, stateCode: selectedStateCode){
+                stateUITextField.text = stateName
+            }
+        } else {
+            stateUITextField.text = ""
+            addressDetails.state = nil
         }
         stateUITextField.isHidden = hideState
         stateUILabel.isHidden = hideState

@@ -129,9 +129,32 @@ class BSCountryManager {
         let current = Locale(identifier: "en_US")
         return current.localizedString(forRegionCode: countryCode) ?? nil
     }
-
-    func countryStates(countryCode : String) -> [String : String]? {
-        let result = COUNTRY_STATES[countryCode]
-        return result //COUNTRY_STATES[countryCode]
+    
+    func countryHasStates(countryCode : String) -> Bool {
+        
+        if let _ = COUNTRY_STATES[countryCode] {
+            return true
+        }
+        return false
+    }
+    
+    func getCountryStates(countryCode : String) -> [(name: String, code: String)]? {
+        
+        if let states = COUNTRY_STATES[countryCode] {
+            var result : [(name: String, code: String)] = []
+            for (code, name) in states {
+                result.append((name: name, code: code))
+            }
+            return result
+        }
+        return nil
+    }
+    
+    func getStateName(countryCode : String, stateCode: String) -> String? {
+        
+        if let states = COUNTRY_STATES[countryCode] {
+            return states[stateCode]
+        }
+        return nil
     }
 }
