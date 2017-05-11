@@ -17,13 +17,14 @@
 		2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */; };
 		2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
-		FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */; };
+		FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController_old.swift */; };
 		FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */; };
 		FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */; };
 		FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */; };
 		FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */; };
 		FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */; };
 		FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */; };
+		FD52D55C1EC4341E00360863 /* BSCurrenciesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D55B1EC4341E00360863 /* BSCurrenciesViewController.swift */; };
 		FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */; };
 		FD6749491EBB12E700B8076C /* BSPopupMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */; };
 		FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */; };
@@ -57,17 +58,17 @@
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
 		2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KountDataCollector.h; sourceTree = "<group>"; };
 		2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKountDataCollector.a; sourceTree = "<group>"; };
-		2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CheckoutExampleSwift-Bridging-Header.h.h"; sourceTree = "<group>"; };
 		2DADB9D81EC31F4200C1A2D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BlueSnap.storyboard; sourceTree = "<group>"; };
 		2DADB9DA1EC31F5400C1A2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BlueSnap.strings; sourceTree = "<group>"; };
 		2DADB9DB1EC3201A00C1A2D2 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/BlueSnap.strings; sourceTree = "<group>"; };
-		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController.swift; sourceTree = "<group>"; };
+		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController_old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController_old.swift; sourceTree = "<group>"; };
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
 		FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
 		FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiManager.swift; sourceTree = "<group>"; };
 		FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStatesViewController.swift; sourceTree = "<group>"; };
 		FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStateTableViewCell.swift; sourceTree = "<group>"; };
+		FD52D55B1EC4341E00360863 /* BSCurrenciesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrenciesViewController.swift; sourceTree = "<group>"; };
 		FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPopupMenuViewController.swift; sourceTree = "<group>"; };
 		FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
@@ -177,13 +178,14 @@
 				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
 				FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
-				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
+				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController_old.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
 				FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */,
 				FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */,
 				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
 				FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */,
 				FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */,
+				FD52D55B1EC4341E00360863 /* BSCurrenciesViewController.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -287,8 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */,
-
-                2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */,
+				2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,8 +318,9 @@
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
 				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
 				FD6749491EBB12E700B8076C /* BSPopupMenuViewController.swift in Sources */,
-				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */,
+				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController_old.swift in Sources */,
 				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
+				FD52D55C1EC4341E00360863 /* BSCurrenciesViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
 				FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */,
 				FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */,

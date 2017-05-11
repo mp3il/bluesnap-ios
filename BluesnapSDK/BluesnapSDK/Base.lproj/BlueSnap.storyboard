@@ -13,7 +13,7 @@
         <!--Select Currency-->
         <scene sceneID="69f-Rr-Zgv">
             <objects>
-                <tableViewController storyboardIdentifier="BSCurrenciesStoryboardId" id="tzL-ZD-OSs" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="BSCurrenciesStoryboardId_old" id="tzL-ZD-OSs" customClass="BSCurrenciesViewController_old" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7nN-7c-yvV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1144,6 +1144,111 @@
             </objects>
             <point key="canvasLocation" x="1789.5999999999999" y="940.47976011994012"/>
         </scene>
+        <!--Select currency 2-->
+        <scene sceneID="T9n-5J-QN1">
+            <objects>
+                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select currency 2" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="T2c-iX-ssj"/>
+                        <viewControllerLayoutGuide type="bottom" id="AeU-Nz-6go"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mBG-P4-R6g">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="7kx-hO-24w">
+                                <rect key="frame" x="8" y="64" width="304" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="WBK-Zc-Ktm"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="CMN-vn-Foo" id="dhR-eb-iON"/>
+                                </connections>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="DXK-pe-9ap">
+                                <rect key="frame" x="8" y="112" width="281" height="368"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
+                                        <rect key="frame" x="0.0" y="28" width="281" height="40"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
+                                            <rect key="frame" x="0.0" y="0.0" width="281" height="39"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
+                                                    <rect key="frame" x="0.0" y="7" width="263" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="SPl-dB-Ocj" userLabel="checkMark">
+                                                    <rect key="frame" x="265" y="13" width="16" height="13"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                    </accessibility>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="16" id="FEr-94-zCu"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Lvq-lv-yB8" firstAttribute="leading" secondItem="vce-NJ-ojv" secondAttribute="leading" id="5hm-aA-e86"/>
+                                                <constraint firstItem="Lvq-lv-yB8" firstAttribute="centerY" secondItem="SPl-dB-Ocj" secondAttribute="centerY" id="BL7-Sj-KTS"/>
+                                                <constraint firstAttribute="trailing" secondItem="SPl-dB-Ocj" secondAttribute="trailing" id="aS5-Xq-OiE"/>
+                                                <constraint firstItem="Lvq-lv-yB8" firstAttribute="centerY" secondItem="vce-NJ-ojv" secondAttribute="centerY" id="wIG-40-mQL"/>
+                                                <constraint firstItem="Lvq-lv-yB8" firstAttribute="bottom" secondItem="vce-NJ-ojv" secondAttribute="bottomMargin" id="weW-IK-zeP"/>
+                                                <constraint firstItem="SPl-dB-Ocj" firstAttribute="leading" secondItem="Lvq-lv-yB8" secondAttribute="trailing" constant="2" id="zVE-Ay-3At"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="CurrencyUILabel" destination="Lvq-lv-yB8" id="1vb-69-usI"/>
+                                            <outlet property="checkMarkImage" destination="SPl-dB-Ocj" id="SVQ-Gm-zPu"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="CMN-vn-Foo" id="IwR-al-uW2"/>
+                                    <outlet property="delegate" destination="CMN-vn-Foo" id="CQ8-xg-lUd"/>
+                                </connections>
+                            </tableView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="scroll_alphanumericals" translatesAutoresizingMaskIntoConstraints="NO" id="yTU-Vv-5N8">
+                                <rect key="frame" x="297" y="108" width="15" height="372"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7kx-hO-24w" firstAttribute="centerX" secondItem="mBG-P4-R6g" secondAttribute="centerX" id="4bk-fF-6hj"/>
+                            <constraint firstItem="DXK-pe-9ap" firstAttribute="bottom" secondItem="AeU-Nz-6go" secondAttribute="top" id="D3c-A3-eNt"/>
+                            <constraint firstItem="yTU-Vv-5N8" firstAttribute="leading" secondItem="DXK-pe-9ap" secondAttribute="trailing" constant="8" symbolic="YES" id="DCk-1C-UNF"/>
+                            <constraint firstItem="DXK-pe-9ap" firstAttribute="top" secondItem="7kx-hO-24w" secondAttribute="bottom" constant="4" id="DNf-qV-FYM"/>
+                            <constraint firstItem="7kx-hO-24w" firstAttribute="leading" secondItem="mBG-P4-R6g" secondAttribute="leadingMargin" constant="-8" id="IPU-DH-7fq"/>
+                            <constraint firstItem="7kx-hO-24w" firstAttribute="trailing" secondItem="yTU-Vv-5N8" secondAttribute="trailing" id="Q79-YU-wZM"/>
+                            <constraint firstItem="7kx-hO-24w" firstAttribute="leading" secondItem="DXK-pe-9ap" secondAttribute="leading" id="QMw-m7-HXU"/>
+                            <constraint firstItem="yTU-Vv-5N8" firstAttribute="top" secondItem="7kx-hO-24w" secondAttribute="bottom" id="Wyz-Bn-nYf"/>
+                            <constraint firstItem="yTU-Vv-5N8" firstAttribute="bottom" secondItem="AeU-Nz-6go" secondAttribute="top" id="ZGT-NI-yOg"/>
+                            <constraint firstItem="7kx-hO-24w" firstAttribute="top" secondItem="T2c-iX-ssj" secondAttribute="bottom" id="aQX-sg-P2A"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="vbq-Vt-6wb"/>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="m4Q-0f-btD" id="FtM-Pd-cMb"/>
+                        <outlet property="tableView" destination="DXK-pe-9ap" id="Vq9-tg-TyB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m5g-w4-tzo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="m4Q-0f-btD">
+                    <connections>
+                        <outlet property="delegate" destination="CMN-vn-Foo" id="fMY-qk-JPq"/>
+                        <outlet property="searchContentsController" destination="CMN-vn-Foo" id="QZr-jo-3jx"/>
+                        <outlet property="searchResultsDataSource" destination="CMN-vn-Foo" id="fg7-66-Nf0"/>
+                        <outlet property="searchResultsDelegate" destination="CMN-vn-Foo" id="QGg-2E-ory"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="4545" y="1320"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="sCF-2L-hsI">
             <objects>
@@ -1219,12 +1324,31 @@
             </objects>
             <point key="canvasLocation" x="2728.8000000000002" y="1610.6446776611695"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="VNs-D6-HAF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="n9L-ed-m3M" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mBH-tz-0Wz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="CMN-vn-Foo" kind="relationship" relationship="rootViewController" id="rJq-JV-Jcp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Ci-ug-ldM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3547.5" y="1320"/>
+        </scene>
     </scenes>
     <resources>
         <image name="US" width="28" height="20"/>
         <image name="blue_check_mark" width="16" height="13"/>
         <image name="cc_default" width="25" height="17"/>
         <image name="menu_button" width="20" height="16"/>
+        <image name="scroll_alphanumericals" width="15" height="568"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="o5N-18-3TP"/>

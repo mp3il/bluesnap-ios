@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSCurrenciesViewController: UITableViewController, UISearchBarDelegate {
+class BSCurrenciesViewController_old: UITableViewController, UISearchBarDelegate {
     
     // MARK: puclic properties
     
