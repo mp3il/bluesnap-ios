@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BSCountryViewController : UITableViewController {
+class BSCountryViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     // MARK: puclic properties
     
@@ -23,16 +23,43 @@ class BSCountryViewController : UITableViewController {
 
     internal var countryManager : BSCountryManager!
     
+    
     // MARK: private properties
     
-    // data: country codes and names (matching arrays)
-    fileprivate var countryCodes : [String] = []
-    fileprivate var countryNames : [String] = []
-    
-    // selected country name and index
+    @IBOutlet weak var tableView: UITableView!
+    fileprivate var countries : [(name: String, code: String)] = []
+    fileprivate var filteredCountries : [(name: String, code: String)] = []
     fileprivate var selectedCountryName : String = ""
-    fileprivate var selectedCountryIndexPath : IndexPath?
+
     
+    // MARK: Search bar stuff
+    
+    fileprivate var searchBar : UISearchBar?
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        self.searchBar = searchBar
+        filterCountries(searchText)
+    }
+    
+    private func filterCountries(_ searchText : String) {
+        
+        if searchText == "" {
+            self.filteredCountries = self.countries
+        } else {
+            filteredCountries = countries.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
+        }
+        self.tableView.reloadData()
+    }
+    
+    private func getCountryIndex(code: String) -> Int? {
+        
+        for (index, country) in filteredCountries.enumerated() {
+            if country.code == code {
+                return index
+            }
+        }
+        return nil
+    }
     
     // MARK: - UIViewController's methods
     
@@ -42,12 +69,10 @@ class BSCountryViewController : UITableViewController {
         
         // Get country data
         if let manager = countryManager {
-            countryCodes = manager.getCountryCodes()
+            let countryCodes = manager.getCountryCodes()
             for countryCode in countryCodes {
                 if let countryName = manager.getCountryName(countryCode: countryCode) {
-                    countryNames.append(countryName)
-                } else {
-                    countryNames.append("Unbknown")
+                    countries.append((name: countryName, code: countryCode))
                 }
             }
         }
@@ -55,72 +80,66 @@ class BSCountryViewController : UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        super.viewWillAppear(animated)
+        filterCountries(searchBar?.text ?? "")
         
+        super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
         
-        if let index = countryCodes.index(of: self.selectedCountryCode) {
+        if let index = getCountryIndex(code: self.selectedCountryCode) {
             let indexPath = IndexPath(row: index, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
     
     
-    // MARK: UITableView
+    // MARK: UITableViewDataSource & UITableViewDelegate functions
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return 1
-    }
-    
-    // return #rows in table
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return self.countryCodes.count
-    }
-    
-    // "draw" a cell
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    // Create a cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let reusableCell = tableView.dequeueReusableCell(withIdentifier: "CountryTableViewCell", for: indexPath)
         guard let cell = reusableCell as? BSCountryTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        let countryName : String = countryNames[indexPath.row]
-        let countryCode : String = countryCodes[indexPath.row]
-        cell.itemNameUILabel.text = countryName
+        let country = self.filteredCountries[indexPath.row]
+        cell.itemNameUILabel.text = country.name
         cell.checkMarkImageView.image = nil
-        if (countryCode == selectedCountryCode) {
+        if (country.code == selectedCountryCode) {
             if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
                 cell.checkMarkImageView.image = image
             }
-            selectedCountryIndexPath = indexPath
         }
         // load the flag image
-        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
+        if let image = BSViewsManager.getImage(imageName: country.code.uppercased()) {
             cell.flagUIButton.imageView?.image = image
         }
         return cell
     }
     
-    // When a cell is selected
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // Return # rows to display in the table
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        selectedCountryCode = countryCodes[indexPath.row]
-        selectedCountryName = countryNames[indexPath.row]
+        return filteredCountries.count
+    }
+    
+    //Tells the delegate that the specified row is now selected.
+    func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         
-        // deselect previous option
-        if let selectedCountryIndexPath = selectedCountryIndexPath {
-            self.tableView.reloadRows(at: [selectedCountryIndexPath], with: .none)
+        // find and deselect previous option
+        if let oldIndex = self.getCountryIndex(code: selectedCountryCode) {
+            let path = IndexPath(row: oldIndex, section: 0)
+            selectedCountryCode = ""
+            self.tableView.reloadRows(at: [path], with: .none)
         }
-        
+
         // select current option
-        selectedCountryIndexPath = indexPath
-        if let selectedCountryIndexPath = selectedCountryIndexPath {
-            self.tableView.reloadRows(at: [selectedCountryIndexPath], with: .none)
-        }
+        let country = filteredCountries[didSelectRowAt.row]
+        selectedCountryCode = country.code
+        selectedCountryName = country.name
+        self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
         
         // call updateFunc
         updateFunc(selectedCountryCode, selectedCountryName)
     }
+    
 }

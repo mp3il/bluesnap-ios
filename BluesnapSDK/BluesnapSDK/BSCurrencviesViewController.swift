@@ -66,11 +66,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         if let bsToken = bsToken {
             bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
         }
-        if let searchBar = self.searchBar {
-            filterCurrencies(searchBar.text ?? "")
-        } else {
-            filteredCurrencies = bsCurrencies
-        }
+        filterCurrencies(searchBar?.text ?? "")
         
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
