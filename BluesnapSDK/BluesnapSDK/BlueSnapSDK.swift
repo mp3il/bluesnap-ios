@@ -46,14 +46,15 @@ import Foundation
             purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSSummaryScreen
         }
         
+        let defaultCountry = NSLocale.current.regionCode ?? "US"
         if (withShipping && paymentDetails.shippingDetails == nil) {
             paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
-            paymentDetails.getShippingDetails()!.country = "US"
+            paymentDetails.getShippingDetails()!.country = defaultCountry
         } else if (!withShipping && paymentDetails.shippingDetails != nil) {
             paymentDetails.setShippingDetails(shippingDetails: nil)
         }
         if (fullBilling == true) && (paymentDetails.getBillingDetails().country ?? "" == "") {
-            paymentDetails.getBillingDetails().country = "US"
+            paymentDetails.getBillingDetails().country = defaultCountry
         }
         purchaseScreen.paymentDetails = paymentDetails
         purchaseScreen.bsToken = bsToken
