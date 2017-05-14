@@ -18,6 +18,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     
     fileprivate var withShipping = false
     fileprivate var shippingScreen: BSShippingViewController!
+    fileprivate var previousCcn : String?
     
     // MARK: Constants
     
@@ -591,7 +592,27 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func cardEditingDidEnd(_ sender: UITextField) {
-        _ = validateCCN(ignoreIfEmpty: true)
+        if validateCCN(ignoreIfEmpty: true) {
+            if let ccn = self.cardUiTextField.text {
+                if previousCcn != ccn {
+                    previousCcn = ccn
+                    // get issuing country by ccn
+                    do {
+                        let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn)
+                        if let issuingCountry = result?.ccIssuingCountry {
+                            self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
+                        }
+                    } catch let error as BSCcDetailErrors {
+                        if (error == BSCcDetailErrors.invalidCcNumber) {
+                            ccnErrorUiLabel.text = ccnInvalidMessage
+                            ccnErrorUiLabel.isHidden = false
+                        }
+                    } catch {
+                        NSLog("Unexpected error submitting CCN to BS")
+                    }
+                }
+            }
+        }
     }
 
     @IBAction func emailEditingDidEnd(_ sender: UITextField) {

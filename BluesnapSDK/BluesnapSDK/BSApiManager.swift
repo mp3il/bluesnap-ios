@@ -145,6 +145,36 @@ class BSApiManager  {
     static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
         
         let requestBody = ["ccNumber": ccNumber.removeWhitespaces(), "cvv":cvv, "expDate": expDate]
+        do {
+            let result = try submitPaymentDetails(bsToken: bsToken, requestBody: requestBody)
+            return result
+        } catch let error {
+            throw error
+        }
+    }
+    
+    /**
+     Submit CCN only to BlueSnap server
+     */
+    static func submitCcn(bsToken : BSToken!, ccNumber: String) throws -> BSResultCcDetails? {
+        
+        let requestBody = ["ccNumber": ccNumber.removeWhitespaces()]
+        do {
+            let result = try submitPaymentDetails(bsToken: bsToken, requestBody: requestBody)
+            return result
+        } catch let error {
+            throw error
+        }
+    }
+
+    // MARK: Private functions
+    
+    
+    
+    /**
+     Submit CCN only to BlueSnap server
+     */
+    private static func submitPaymentDetails(bsToken : BSToken!, requestBody: [String:String]) throws -> BSResultCcDetails? {
         
         let domain : String! = bsToken.serverUrl
         let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken.getTokenStr();
@@ -205,8 +235,6 @@ class BSApiManager  {
         }
         return result
     }
-    
-    // MARK: Private functions
     
     private static func parseResultCCDetailsFromResponse(data: Data?) -> BSResultCcDetails? {
         
