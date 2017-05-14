@@ -215,6 +215,8 @@ class BSApiManager  {
                             resultError = .invalidCvv
                         } else if (errStr == "\"INVALID_EXP_DATE\"") {
                             resultError = .invalidExpDate
+                        } else if (errStr == "\"EXPIRED_TOKEN\"") {
+                            resultError = .expiredToken
                         }
                     }
                 } else {
@@ -314,6 +316,7 @@ enum BSCcDetailErrors : Error {
     case invalidCcNumber
     case invalidCvv
     case invalidExpDate
+    case expiredToken
     case unknown
 }
 

@@ -78,6 +78,9 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var cityError: UILabel!
     @IBOutlet weak var stateError: UILabel!
     
+    @IBOutlet weak var shippingSameAsBillingLabel: UILabel!
+    @IBOutlet weak var shippingSameAsBillingSwitch: UISwitch!
+    
     fileprivate var firstTime : Bool! = true
     
     
@@ -141,7 +144,6 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     
 	// MARK: - UIViewController's methods
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -155,6 +157,12 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
 		self.navigationController!.isNavigationBarHidden = false
 
         self.withShipping = paymentDetails.getShippingDetails() != nil
+        
+        let hideShippingSameAsBilling : Bool = !self.withShipping || !self.fullBilling
+        shippingSameAsBillingLabel.isHidden = hideShippingSameAsBilling
+        shippingSameAsBillingSwitch.isHidden = hideShippingSameAsBilling
+        // set the "shipping same as billing" to be true if no shipping name is supplied
+        shippingSameAsBillingSwitch.isOn = self.paymentDetails.getShippingDetails()?.name ?? "" == ""
         
         updateTexts()
         
@@ -241,14 +249,19 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
-        if (self.withShipping) {
+        updatePayButtonText()
+        subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
+        taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
+    }
+    
+    private func updatePayButtonText() {
+        
+        if (self.withShipping && !self.shippingSameAsBillingSwitch.isOn) {
             payButton.setTitle("Shipping ->", for: UIControlState())
         } else {
             payButton.setTitle(payButtonText, for: UIControlState())
         }
-        subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
-        taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
-    }
+   }
     
     private func getExpYearAsYYYY() -> String! {
         
@@ -291,6 +304,14 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             } else if (error == BSCcDetailErrors.invalidCvv) {
                 cvvErrorUiLabel.text = cvvInvalidMessage
                 cvvErrorUiLabel.isHidden = false
+            } else if (error == BSCcDetailErrors.expiredToken) {
+                // should be popup here
+                cvvErrorUiLabel.text = "Your session has expired, please try again"
+                cvvErrorUiLabel.isHidden = false
+            } else {
+                // should be popup here
+                ccnErrorUiLabel.text = "An error occurred, please try again"
+                ccnErrorUiLabel.isHidden = false
             }
         } catch {
             NSLog("Unexpected error submitting Payment Fields to BS")
@@ -399,11 +420,16 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
 
     // MARK: button actions
     
+    @IBAction func shippingSameAsBillingValueChanged(_ sender: Any) {
+        
+        updatePayButtonText()
+    }
+    
     @IBAction func clickPay(_ sender: UIButton) {
         
         if (validateForm()) {
             
-            if (withShipping) {
+            if (withShipping && (!shippingSameAsBillingSwitch.isOn || shippingSameAsBillingSwitch.isHidden)) {
                 gotoShippingScreen()
             } else {
                 let _ = submitPaymentFields()
@@ -439,6 +465,19 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         } else if !zipField.isHidden {
             let ok = validateCountryAndZip(ignoreIfEmpty: false)
             result = result && ok
+        }
+        
+        if result && shippingSameAsBillingSwitch.isOn && !shippingSameAsBillingSwitch.isHidden {
+            // copy billing details to shipping
+            if let shippingDetails = self.paymentDetails.getShippingDetails(), let billingDetails = self.paymentDetails.getBillingDetails() {
+                shippingDetails.address = billingDetails.address
+                shippingDetails.city = billingDetails.city
+                shippingDetails.country = billingDetails.country
+                shippingDetails.email = billingDetails.email
+                shippingDetails.name = billingDetails.name
+                shippingDetails.state = billingDetails.state
+                shippingDetails.zip = billingDetails.zip
+            }
         }
 
         return result

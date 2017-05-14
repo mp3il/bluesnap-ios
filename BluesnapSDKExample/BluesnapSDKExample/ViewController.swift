@@ -162,21 +162,21 @@ class ViewController: UIViewController {
                 NSLog(" Zip code:\(zip)")
             }
             if self.fullBillingSwitch.isOn {
-                NSLog(" Email:\(billingDetails.email)")
-                NSLog(" Street address:\(billingDetails.address)")
-                NSLog(" City:\(billingDetails.city)")
-                NSLog(" Country code:\(billingDetails.country)")
-                NSLog(" State code:\(billingDetails.state)")
+                NSLog(" Email:\(billingDetails.email ?? "")")
+                NSLog(" Street address:\(billingDetails.address ?? "")")
+                NSLog(" City:\(billingDetails.city ?? "")")
+                NSLog(" Country code:\(billingDetails.country ?? "")")
+                NSLog(" State code:\(billingDetails.state ?? "")")
             }
         }
         if let shippingDetails = paymentDetails.getShippingDetails() {
             NSLog("Shipping Data: Name:\(shippingDetails.name)")
-            NSLog(" Zip code:\(shippingDetails.zip)")
-            NSLog(" Email:\(shippingDetails.email)")
-            NSLog(" Street address:\(shippingDetails.address)")
-            NSLog(" City:\(shippingDetails.city)")
-            NSLog(" Country code:\(shippingDetails.country)")
-            NSLog(" State code:\(shippingDetails.state)")
+            NSLog(" Zip code:\(shippingDetails.zip ?? "")")
+            NSLog(" Email:\(shippingDetails.email ?? "")")
+            NSLog(" Street address:\(shippingDetails.address ?? "")")
+            NSLog(" City:\(shippingDetails.city ?? "")")
+            NSLog(" Country code:\(shippingDetails.country ?? "")")
+            NSLog(" State code:\(shippingDetails.state ?? "")")
         }
         NSLog("--------------------------------------------------------")
     }
