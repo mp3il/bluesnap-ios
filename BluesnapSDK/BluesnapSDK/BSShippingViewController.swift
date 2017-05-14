@@ -118,7 +118,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
-            updateZipByCountry()
+            updateZipByCountry(countryCode: paymentDetails.getShippingDetails()?.country ?? "")
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }
@@ -286,7 +286,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         if let shippingDetails = paymentDetails.getShippingDetails() {
             shippingDetails.country = countryCode
-            updateZipByCountry()
+            updateZipByCountry(countryCode: countryCode)
         }
         // load the flag image
         if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
@@ -294,9 +294,14 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func updateZipByCountry() {
+    private func updateZipByCountry(countryCode: String) {
         
-        let hideZip = self.countryManager.countryHasNoZip(countryCode: paymentDetails.getShippingDetails()?.country ?? "")
+        let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
+        if countryCode.lowercased() == "us" {
+            self.zipLabel.text = "Billing Zip"
+        } else {
+            self.zipLabel.text = "Postal Code"
+        }
         self.zipLabel.isHidden = hideZip
         self.zipUITextField.isHidden = hideZip
         self.zipErrorUILabel.isHidden = true

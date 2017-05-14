@@ -19,6 +19,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     fileprivate var withShipping = false
     fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var previousCcn : String?
+    fileprivate var cardType : String?
     
     // MARK: Constants
     
@@ -200,7 +201,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         emailField.isHidden = hideFields
         streetLabel.isHidden = hideFields
         streetField.isHidden = hideFields
-        updateZipByCountry()
+        updateZipByCountry(countryCode: self.paymentDetails.getBillingDetails().zip ?? "")
         //countryFlagButton.isHidden = hideFields
         cityLabel.isHidden = hideFields
         cityField.isHidden = hideFields
@@ -314,6 +315,8 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     
     private func updateCcIcon(ccType : String?) {
 
+        self.cardType = ccType
+
         // change the image in ccIconImage
         var imageName : String?
         if let ccType = ccType?.lowercased() {
@@ -331,7 +334,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
         paymentDetails.getBillingDetails().country = countryCode
-        updateZipByCountry()
+        updateZipByCountry(countryCode: countryCode)
 
         // load the flag image
         if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
@@ -339,9 +342,14 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func updateZipByCountry() {
+    private func updateZipByCountry(countryCode : String) {
         
-        let hideZip = self.countryManager.countryHasNoZip(countryCode: paymentDetails.getBillingDetails().country ?? "")
+        let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
+        if countryCode.lowercased() == "us" {
+            self.zipLabel.text = "Billing Zip"
+        } else {
+            self.zipLabel.text = "Postal Code"
+        }
         self.zipLabel.isHidden = hideZip
         self.zipField.isHidden = hideZip
         self.zipError.isHidden = true
@@ -427,8 +435,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             let ok5 = validateCountryAndZip(ignoreIfEmpty: false)
             result = result && ok1 && ok2 && ok3 && ok4 && ok5
         } else if !zipField.isHidden {
-            // if not full billing, zip is optional (if visible at all)
-            let ok = validateCountryAndZip(ignoreIfEmpty: true)
+            let ok = validateCountryAndZip(ignoreIfEmpty: false)
             result = result && ok
         }
 
@@ -500,7 +507,13 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             result = BSValidator.validateCountry(ignoreIfEmpty: ignoreIfEmpty, errorLabel: zipError, addressDetails: paymentDetails.getBillingDetails())
         }
         if result == true {
-            result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, textField: zipField, errorLabel: zipError, addressDetails: paymentDetails.getBillingDetails())
+            // make zip optional for cards other than visa/discover
+            var ignoreEmptyZip = ignoreIfEmpty
+            let ccType = self.cardType?.lowercased() ?? ""
+            if !ignoreIfEmpty && !fullBilling && ccType != "visa" && ccType != "discover" {
+                ignoreEmptyZip = true
+            }
+            result = BSValidator.validateZip(ignoreIfEmpty: ignoreEmptyZip, textField: zipField, errorLabel: zipError, addressDetails: paymentDetails.getBillingDetails())
         }
         return result
     }
