@@ -94,6 +94,13 @@ class BSViewsManager {
         }
         return result
     }
-
+    
+    open class func createErrorAlert(title: String, message: String) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+        alert.addAction(cancel)
+        return alert
+        //After you create alert, you show it like this: present(alert, animated: true, completion: nil)
+    }
 
 }

@@ -306,17 +306,21 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
                 cvvErrorUiLabel.isHidden = false
             } else if (error == BSCcDetailErrors.expiredToken) {
                 // should be popup here
-                cvvErrorUiLabel.text = "Your session has expired, please try again"
-                cvvErrorUiLabel.isHidden = false
+                showAlert("Your session has expired, please go back and try again")
             } else {
                 // should be popup here
-                ccnErrorUiLabel.text = "An error occurred, please try again"
-                ccnErrorUiLabel.isHidden = false
+                showAlert("An error occurred, please try again")
             }
         } catch {
             NSLog("Unexpected error submitting Payment Fields to BS")
+            showAlert("An error occurred, please try again")
         }
         return result
+    }
+    
+    private func showAlert(_ message : String) {
+        let alert = BSViewsManager.createErrorAlert(title: "Oops", message: message)
+        present(alert, animated: true, completion: nil)
     }
     
     private func gotoShippingScreen() {
@@ -669,9 +673,12 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
                         if (error == BSCcDetailErrors.invalidCcNumber) {
                             ccnErrorUiLabel.text = ccnInvalidMessage
                             ccnErrorUiLabel.isHidden = false
+                        } else {
+                            showAlert("An error occurred")
                         }
                     } catch {
                         NSLog("Unexpected error submitting CCN to BS")
+                        showAlert("An error occurred")
                     }
                 }
             }
