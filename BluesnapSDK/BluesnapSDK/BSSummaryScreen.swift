@@ -347,8 +347,10 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
         if countryCode.lowercased() == "us" {
             self.zipLabel.text = "Billing Zip"
+            self.zipField.keyboardType = .numberPad
         } else {
             self.zipLabel.text = "Postal Code"
+            self.zipField.keyboardType = .numbersAndPunctuation
         }
         self.zipLabel.isHidden = hideZip
         self.zipField.isHidden = hideZip

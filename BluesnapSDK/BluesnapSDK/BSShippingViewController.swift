@@ -299,8 +299,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
         if countryCode.lowercased() == "us" {
             self.zipLabel.text = "Billing Zip"
+            self.zipUITextField.keyboardType = .numberPad
         } else {
             self.zipLabel.text = "Postal Code"
+            self.zipUITextField.keyboardType = .numbersAndPunctuation
         }
         self.zipLabel.isHidden = hideZip
         self.zipUITextField.isHidden = hideZip
