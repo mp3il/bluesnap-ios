@@ -84,7 +84,7 @@ class BSPopupMenuViewController : UIViewController {
     {
         let menuHeight = menuView.frame.height
         menuView.frame.origin.y = menuHeight
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn,
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseIn,
             animations: {
                 self.menuView.frame.origin.y = 0
             }, completion: {_ in }
@@ -94,7 +94,7 @@ class BSPopupMenuViewController : UIViewController {
     func removeAnimate()
     {
         let menuHeight = menuView.frame.height
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseOut,
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut,
             animations: {
                 self.menuView.frame.origin.y = menuHeight
             }, completion: {_ in
