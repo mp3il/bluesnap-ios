@@ -10,7 +10,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     internal var bsToken: BSToken!
     internal var purchaseFunc: (BSPaymentDetails!)->Void = {
         paymentDetails in
-        print("Payment Details were submitted")
+        print("purchaseFunc should be overridden")
     }
     internal var countryManager = BSCountryManager()
     
@@ -28,15 +28,15 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
     fileprivate let doValidations = true;
     fileprivate let ccImages = [
-        "americanexpress": "amex",
+        "amex": "amex",
         //"cartebleue": "visa",
         "cirrus": "cirrus",
-        "dinersclub": "dinersclub",
+        "diners": "dinersclub",
         "discover": "discover",
         "jcb": "jcb",
-        "maestro": "maestro",
+        "maestr_uk": "maestro",
         "mastercard": "mastercard",
-        "unionpay": "unionpay",
+        "china_union_pay": "unionpay",
         "visa": "visa"]
 
 	// MARK: - Data
@@ -169,10 +169,10 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
                 }
             }
             // this is for debug, should bve removed
-            self.cardUiTextField.text = "4111 1111 1111 1111"
-            self.ExpMMUiTextField.text = "11"
-            self.ExpYYUiTextField.text = "20"
-            self.cvvUiTextField.text = "444"
+            //self.cardUiTextField.text = "4111 1111 1111 1111"
+            //self.ExpMMUiTextField.text = "11"
+            //self.ExpYYUiTextField.text = "20"
+            //self.cvvUiTextField.text = "444"
         }
 
         hideShowFields()
@@ -200,9 +200,8 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         emailField.isHidden = hideFields
         streetLabel.isHidden = hideFields
         streetField.isHidden = hideFields
-        zipLabel.isHidden = hideFields
-        zipField.isHidden = hideFields
-        countryFlagButton.isHidden = hideFields
+        updateZipByCountry()
+        //countryFlagButton.isHidden = hideFields
         cityLabel.isHidden = hideFields
         cityField.isHidden = hideFields
         if (fullBilling) {
@@ -223,8 +222,8 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         cityError.isHidden = true
         stateError.isHidden = true
         
-        let cardType = cardUiTextField.text?.getCCType() ?? ""
-        updateCcIcon(ccType: cardType)
+        //let cardType = cardUiTextField.text?.getCCType() ?? ""
+        //updateCcIcon(ccType: cardType)
     }
     
     private func updateState() {
@@ -277,7 +276,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
             self.paymentDetails.setCcDetails(ccDetails: result)
             // return to previous screen
-            _ = navigationController?.popViewController(animated: true)
+            _ = navigationController?.popViewController(animated: false)
             // execute callback
             purchaseFunc(paymentDetails)
             
@@ -327,21 +326,25 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         if let image = BSViewsManager.getImage(imageName: "cc_\(imageName!)") {
             self.ccIconImage.image = image
         }
-        if !fullBilling {
-            let hideZip = (ccType != "Visa")
-            zipLabel.isHidden = hideZip
-            zipField.isHidden = hideZip
-        }
     }
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
         paymentDetails.getBillingDetails().country = countryCode
+        updateZipByCountry()
 
         // load the flag image
         if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
             self.countryFlagButton.imageView?.image = image
         }
+    }
+    
+    private func updateZipByCountry() {
+        
+        let hideZip = self.countryManager.countryHasNoZip(countryCode: paymentDetails.getBillingDetails().country ?? "")
+        self.zipLabel.isHidden = hideZip
+        self.zipField.isHidden = hideZip
+        self.zipError.isHidden = true
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
@@ -393,10 +396,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             if (withShipping) {
                 gotoShippingScreen()
             } else {
-                if let result = submitPaymentFields() {
-                    // call callback
-                    print("Should close window here and call the callback; result: \(result)")
-                }
+                let _ = submitPaymentFields()
             }
         } else {
             //return false
@@ -450,10 +450,10 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     func validateCCN(ignoreIfEmpty : Bool) -> Bool {
         
         let result : Bool = BSValidator.validateCCN(ignoreIfEmpty: ignoreIfEmpty, textField: cardUiTextField, errorLabel: ccnErrorUiLabel, errorMessage: ccnInvalidMessage)
-        if result == true {
-            let cardType = cardUiTextField.text?.getCCType() ?? ""
-            updateCcIcon(ccType: cardType)
-        }
+        //if result == true {
+        //    let cardType = cardUiTextField.text?.getCCType() ?? ""
+        //    updateCcIcon(ccType: cardType)
+        //}
         return result
     }
     
@@ -489,6 +489,12 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     
     func validateCountryAndZip(ignoreIfEmpty : Bool) -> Bool {
         
+        if (zipField.isHidden) {
+            paymentDetails.getBillingDetails().zip = ""
+            zipField.text = ""
+            return true
+        }
+
         var result : Bool = true
         if fullBilling {
             result = BSValidator.validateCountry(ignoreIfEmpty: ignoreIfEmpty, errorLabel: zipError, addressDetails: paymentDetails.getBillingDetails())
@@ -596,11 +602,14 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             if let ccn = self.cardUiTextField.text {
                 if previousCcn != ccn {
                     previousCcn = ccn
-                    // get issuing country by ccn
+                    // get issuing country and card type from server
                     do {
                         let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn)
                         if let issuingCountry = result?.ccIssuingCountry {
                             self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
+                        }
+                        if let cardType = result?.ccType {
+                            updateCcIcon(ccType: cardType)
                         }
                     } catch let error as BSCcDetailErrors {
                         if (error == BSCcDetailErrors.invalidCcNumber) {

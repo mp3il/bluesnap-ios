@@ -165,7 +165,7 @@ extension String {
         return result;
     }
     
-    func getCCType() -> String? {
+/*    func getCCType() -> String? {
         
         // remove blanks
         let ccn = self.removeWhitespaces()
@@ -197,7 +197,7 @@ extension String {
         }
         return nil
     }
-
+*/
 }
 
 class BSValidator {

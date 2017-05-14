@@ -29,6 +29,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var stateUILabel: UILabel!
     @IBOutlet weak var countryFlagButton: UIButton!
     
+    @IBOutlet weak var zipLabel: UILabel!
     
     @IBOutlet weak var nameErrorUILabel: UILabel!
     @IBOutlet weak var emailErrorUILabel: UILabel!
@@ -117,6 +118,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
+            updateZipByCountry()
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }
@@ -133,7 +135,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         if (validateForm()) {
             
-            _ = navigationController?.popViewController(animated: true)
+            _ = navigationController?.popViewController(animated: false)
             _ = submitPaymentFields()
             
         } else {
@@ -180,6 +182,14 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     func validateCountryAndZip(ignoreIfEmpty : Bool) -> Bool {
+        
+        if (zipUITextField.isHidden) {
+            if let shippingDetails = paymentDetails.getShippingDetails() {
+                shippingDetails.zip = ""
+            }
+            zipUITextField.text = ""
+            return true
+        }
         
         var result : Bool = BSValidator.validateCountry(ignoreIfEmpty: ignoreIfEmpty, errorLabel: zipErrorUILabel, addressDetails: paymentDetails.getShippingDetails())
         
@@ -276,6 +286,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         if let shippingDetails = paymentDetails.getShippingDetails() {
             shippingDetails.country = countryCode
+            updateZipByCountry()
         }
         // load the flag image
         if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
@@ -283,6 +294,14 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    private func updateZipByCountry() {
+        
+        let hideZip = self.countryManager.countryHasNoZip(countryCode: paymentDetails.getShippingDetails()?.country ?? "")
+        self.zipLabel.isHidden = hideZip
+        self.zipUITextField.isHidden = hideZip
+        self.zipErrorUILabel.isHidden = true
+    }
+
     private func updateState() {
         
         BSValidator.updateState(addressDetails: paymentDetails.getShippingDetails()!, countryManager: countryManager, stateUILabel: stateUILabel, stateUITextField: stateUITextField, stateErrorUILabel: stateErrorUILabel)
