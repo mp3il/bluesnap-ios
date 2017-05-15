@@ -46,7 +46,24 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     var movedUp = false
     var fieldBottom : Int?
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var fieldsView: UIScrollView!
     
+    override func viewDidLayoutSubviews()
+    {
+        let scrollViewBounds = scrollView.bounds
+        //let containerViewBounds = fieldsView.bounds
+        
+        var scrollViewInsets = UIEdgeInsets.zero
+        scrollViewInsets.top = scrollViewBounds.size.height/2.0;
+        scrollViewInsets.top -= fieldsView.bounds.size.height/2.0;
+        
+        scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
+        scrollViewInsets.bottom -= fieldsView.bounds.size.height/2.0;
+        scrollViewInsets.bottom += 1
+        
+        scrollView.contentInset = scrollViewInsets
+    }
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         fieldBottom = Int(textField.frame.origin.y + textField.frame.height)
@@ -61,10 +78,16 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func scrollForKeyboard(direction: Int) {
         
+        //self.movedUp = (direction > 0)
+        //let y = scrollOffset + 100*direction
+        //let point : CGPoint = CGPoint(x: 0, y: y)
+        //self.scrollView.setContentOffset(point, animated: true)
+        
         self.movedUp = (direction > 0)
-        let y = scrollOffset + 100*direction
+        let y = 200*direction
         let point : CGPoint = CGPoint(x: 0, y: y)
-        self.scrollView.setContentOffset(point, animated: true)
+        self.scrollView.setContentOffset(point, animated: false)
+
     }
     
     func keyboardWillShow(notification: NSNotification) {
@@ -100,9 +123,14 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollForKeyboard(direction: 0)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        // if we remove this - there is blank space above CCN fields
+        scrollForKeyboard(direction: 0)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
   
@@ -298,7 +326,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
         if countryCode.lowercased() == "us" {
-            self.zipLabel.text = "Billing Zip"
+            self.zipLabel.text = "Shipping Zip"
             self.zipUITextField.keyboardType = .numberPad
         } else {
             self.zipLabel.text = "Postal Code"

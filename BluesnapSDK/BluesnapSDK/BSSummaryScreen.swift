@@ -195,10 +195,10 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
                 }
             }
             // this is for debug, should bve removed
-            //self.cardUiTextField.text = "4111 1111 1111 1111"
-            //self.ExpMMUiTextField.text = "11"
-            //self.ExpYYUiTextField.text = "20"
-            //self.cvvUiTextField.text = "444"
+            self.cardUiTextField.text = "4111 1111 1111 1111"
+            self.ExpMMUiTextField.text = "11"
+            self.ExpYYUiTextField.text = "20"
+            self.cvvUiTextField.text = "444"
         }
 
         hideShowFields()
