@@ -205,7 +205,7 @@ class BSValidator {
     class func validateName(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
-        let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        let newValue = textField.text?.trimmingCharacters(in: .whitespaces).capitalized ?? ""
         textField.text = newValue
         if newValue.characters.count == 0 && ignoreIfEmpty {
             // ignore
