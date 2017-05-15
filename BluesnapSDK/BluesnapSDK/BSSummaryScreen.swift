@@ -91,6 +91,23 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     var movedUp = false
     var fieldBottom : Int?
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var fieldsView: UIView!
+
+    override func viewDidLayoutSubviews()
+    {
+        let scrollViewBounds = scrollView.bounds
+        //let containerViewBounds = fieldsView.bounds
+        
+        var scrollViewInsets = UIEdgeInsets.zero
+        scrollViewInsets.top = scrollViewBounds.size.height/2.0;
+        scrollViewInsets.top -= fieldsView.bounds.size.height/2.0;
+        
+        scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
+        scrollViewInsets.bottom -= fieldsView.bounds.size.height/2.0;
+        scrollViewInsets.bottom += 1
+        
+        scrollView.contentInset = scrollViewInsets
+    }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
