@@ -64,7 +64,12 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         
         // Re-load currencies data if necessary
         if let bsToken = bsToken {
-            bsCurrencies = BSApiManager.getCurrencyRates(bsToken: bsToken)
+            do {
+                let tmp = try BSApiManager.getCurrencyRates(bsToken: bsToken)
+                bsCurrencies = tmp
+            } catch {
+                NSLog("Failed to fetch currencies")
+            }
         }
         filterCurrencies(searchBar?.text ?? "")
         

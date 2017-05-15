@@ -38,7 +38,12 @@ class ViewController: UIViewController {
         //BlueSnapSDK.KountInit();
         
         // get BS token!
-        bsToken = BlueSnapSDK.getSandboxTestToken()
+        do {
+            bsToken = try BlueSnapSDK.getSandboxTestToken()
+        } catch {
+            NSLog("Error: Failed to get BS token")
+            fatalError()
+        }
         NSLog("Got BS token= \(bsToken!.getTokenStr())")
         resultTextView.text = ""
  	}

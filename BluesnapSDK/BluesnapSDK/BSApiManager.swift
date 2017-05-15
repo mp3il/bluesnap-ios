@@ -25,17 +25,30 @@ class BSApiManager  {
     static var lastCurrencyFetchDate : Date?
     
 
-    // Use this method only in tests to get a token for sandbox
-    static func getSandboxBSToken() -> BSToken? {
+    /**
+        Use this method only in tests to get a token for sandbox
+     - throws BSApiErrors.unknown in case of some server error
+    */
+    static func getSandboxBSToken() throws -> BSToken? {
                 
-        return getBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS)
+        do {
+            let result = try getBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS)
+            return result
+        } catch let error {
+            throw error
+        }
     }
     
     
     /**
         Get BlueSnap Token from BlueSnap server
+     - parameters:
+     - domain: look at BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
+     - user: username
+     - password: password
+     - throws BSApiErrors.invalidInput if user/pass are incorrect, BSApiErrors.unknown otherwise
     */
-    static func getBSToken(domain: String, user: String, password: String) -> BSToken? {
+    static func getBSToken(domain: String, user: String, password: String) throws -> BSToken? {
         
         // create request
         let authorization = getBasicAuth(user: user, password: password)
@@ -51,6 +64,7 @@ class BSApiManager  {
         // fire request
 
         var result : BSToken?
+        var resultError : BSApiErrors?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             defer {
@@ -58,27 +72,41 @@ class BSApiManager  {
             }
             if let error = error {
                 NSLog("error getting BSToken: \(error.localizedDescription)")
+                resultError = .unknown
                 return
             }
             let httpResponse = response as? HTTPURLResponse
             if let httpStatusCode:Int = (httpResponse?.statusCode) {
                 if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                     result = extractTokenFromResponse(httpResponse : httpResponse, domain : domain)
+                    if result == nil {
+                        resultError = .unknown
+                    }
+                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                    resultError = .invalidInput
                 } else {
+                    resultError = .unknown
                     NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
                 }
             } else {
+                resultError = .unknown
                 NSLog("Http error getting response for BSToken")
             }
         }
         task.resume()
         semaphore.wait()
         
+        if let resultError = resultError {
+            throw resultError
+        }
         return result
     }
     
     /**
         Build the basic authentication header from username/password
+     - parameters:
+     - user: username
+     - password: password
     */
     static func getBasicAuth(user: String!, password: String!) -> String {
         let loginStr = String(format: "%@:%@", user, password)
@@ -90,8 +118,11 @@ class BSApiManager  {
     
     /**
         Return a list of currencies and their rates from BlueSnap server
+     - parameters:
+     - bsToken: valid BSToken
+     - throws BSApiErrors
     */
-    static func getCurrencyRates(bsToken : BSToken!) -> BSCurrencies? {
+    static func getCurrencyRates(bsToken : BSToken!) throws -> BSCurrencies? {
         
         if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
             let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
@@ -110,22 +141,30 @@ class BSApiManager  {
         
         // fire request
         
+        var resultError : BSApiErrors?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data : Data?, response, error) in
             if let error = error {
                 NSLog("Error getting BS currencies: \(error.localizedDescription)")
+                resultError = .unknown
                 return
             }
             let httpResponse = response as? HTTPURLResponse
             if let httpStatusCode:Int = (httpResponse?.statusCode) {
                 if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    bsCurrencies = parseCurrenciesJSON(data: data)
-                    self.lastCurrencyFetchDate = Date()
-
+                    let tmp = parseCurrenciesJSON(data: data)
+                    if tmp != nil {
+                        bsCurrencies = tmp
+                        self.lastCurrencyFetchDate = Date()
+                    } else {
+                        resultError = .unknown
+                    }
                 } else {
+                    resultError = .unknown
                     NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
                 }
             } else {
+                resultError = .unknown
                 NSLog("Http error getting BS currencies response")
             }
             defer {
@@ -140,7 +179,13 @@ class BSApiManager  {
 
     
     /**
-    Submit CC details to BlueSnap server
+     Submit CC details to BlueSnap server
+     - parameters:
+     - bsToken: valid BSToken
+     - ccNumber: Credit card number
+     - expDate: CC expiration date in format MM/YYYY
+     - cvv: CC security code (CVV)
+     - throws BSApiErrors
     */
     static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
         
@@ -155,6 +200,10 @@ class BSApiManager  {
     
     /**
      Submit CCN only to BlueSnap server
+     - parameters:
+     - bsToken: valid BSToken
+     - ccNumber: Credit card number
+     - throws BSApiErrors
      */
     static func submitCcn(bsToken : BSToken!, ccNumber: String) throws -> BSResultCcDetails? {
         
@@ -204,7 +253,9 @@ class BSApiManager  {
             if let httpStatusCode:Int = (httpResponse?.statusCode) {
                 if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                     result = parseResultCCDetailsFromResponse(data: data)
-                    
+                    if (result == nil) {
+                        resultError = .unknown
+                    }
                 } else if (httpStatusCode == 400) {
                     resultError = .unknown
                     if let data = data {
@@ -250,13 +301,13 @@ class BSApiManager  {
                     result!.last4Digits = json["last4Digits"] as? String
                     result!.ccIssuingCountry = json["issuingCountry"] as? String
                 } else {
-                    NSLog("Error parsing BS result on CC detauils submit")
+                    NSLog("Error parsing BS result on CC details submit")
                 }
             } catch let error as NSError {
-                NSLog("Error parsing BS result on CC detauils submit: \(error.localizedDescription)")
+                NSLog("Error parsing BS result on CC details submit: \(error.localizedDescription)")
             }
         } else {
-            NSLog("No data in BS result on CC detauils submit")
+            NSLog("No data in BS result on CC details submit")
         }
         return result
     }
@@ -268,7 +319,11 @@ class BSApiManager  {
             if let lastIndexOfSlash = location.range(of:"/", options:String.CompareOptions.backwards, range:nil, locale:nil) {
                 let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
                 result = BSToken(tokenStr: tokenStr, serverUrl: domain)
+            } else {
+                NSLog("Error: BS Token does not contain /")
             }
+        } else {
+            NSLog("Error: BS Token does not appear in response headers")
         }
         return result
     }
@@ -316,6 +371,12 @@ enum BSCcDetailErrors : Error {
     case invalidCcNumber
     case invalidCvv
     case invalidExpDate
+    case expiredToken
+    case unknown
+}
+
+enum BSApiErrors : Error {
+    case invalidInput
     case expiredToken
     case unknown
 }

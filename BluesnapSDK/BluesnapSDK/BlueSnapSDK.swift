@@ -70,6 +70,12 @@ import Foundation
      Submit Payment token fields
      If you do not wanrt to use our check-out page, you can implement your own.
      You need to generate a token, and then call this function to submit the CC details to BlueSnap instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction.
+     - parameters:
+     - bsToken: valid BSToken
+     - ccNumber: Credit card number
+     - expDate: CC expiration date in format MM/YYYY
+     - cvv: CC security code (CVV)
+     - throws BSApiErrors
      */
     static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
         
@@ -85,10 +91,18 @@ import Foundation
     // MARK: - Currency functions
     
     /**
-     Returns Currency Rates data.
+     Return a list of currencies and their rates from BlueSnap server
+     - parameters:
+     - bsToken: valid BSToken
+     - throws BSApiErrors
      */
-    open class func getCurrencyRates(bsToken : BSToken) -> BSCurrencies? {
-        return BSApiManager.getCurrencyRates(bsToken: bsToken)
+    open class func getCurrencyRates(bsToken : BSToken) throws -> BSCurrencies? {
+        do {
+            let result = try BSApiManager.getCurrencyRates(bsToken: bsToken)
+            return result
+        } catch let error {
+            throw error
+        }
     }
 
     /**
@@ -147,8 +161,12 @@ import Foundation
      Returns token for BlueSnap Sandbox environment; useful for tests.
      In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
     */
-    open class func getSandboxTestToken() -> BSToken? {
-        return BSApiManager.getSandboxBSToken()
+    open class func getSandboxTestToken() throws -> BSToken? {
+        do {
+            return try BSApiManager.getSandboxBSToken()
+        } catch let error {
+            throw error
+        }
     }
     
 }

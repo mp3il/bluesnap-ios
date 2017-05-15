@@ -69,17 +69,22 @@ class BluesnapSDKTests: XCTestCase {
         submitCCDetailsExpectError(token: token!, ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSCcDetailErrors.invalidExpDate)
     }
     
-    
-    private func submitCCDetailsExpectError(token : BSToken!, ccn: String!, cvv: String!, exp: String!, expectedError: BSCcDetailErrors) {
+    func testGetTokenWithBadCredentials() {
         
         do {
-            let result = try BSApiManager.submitCcDetails(bsToken: token, ccNumber: ccn, expDate: exp, cvv: cvv)
-            XCTAssert(false, "Should have thrown error")
-        } catch let error as BSCcDetailErrors {
-            XCTAssertEqual(error, expectedError)
-            NSLog("Got the right error!")
-        } catch {
-            XCTAssert(false, "Unexpected error")
+            let _ = try BSApiManager.getBSToken(domain: BSApiManager.BS_SANDBOX_DOMAIN, user: "dummy", password: "dummypass")
+            print("We should have crashed here")
+            fatalError()
+        } catch let error as BSApiErrors {
+            if error == BSApiErrors.invalidInput {
+                print("Got the correct error")
+            } else {
+                print("Got wrong error \(error.localizedDescription)")
+                fatalError()
+            }
+        } catch let error {
+            print("Got wrong error \(error.localizedDescription)")
+            fatalError()
         }
     }
 
@@ -91,17 +96,43 @@ class BluesnapSDKTests: XCTestCase {
         }
     }*/
     
+    private func submitCCDetailsExpectError(token : BSToken!, ccn: String!, cvv: String!, exp: String!, expectedError: BSCcDetailErrors) {
+        
+        do {
+            let _ = try BSApiManager.submitCcDetails(bsToken: token, ccNumber: ccn, expDate: exp, cvv: cvv)
+            XCTAssert(false, "Should have thrown error")
+        } catch let error as BSCcDetailErrors {
+            XCTAssertEqual(error, expectedError)
+            NSLog("Got the right error!")
+        } catch {
+            XCTAssert(false, "Unexpected error")
+        }
+    }
+    
+    
+
+    
     private func getToken() -> BSToken! {
         
-        let token = BSApiManager.getSandboxBSToken()
-        NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
-        return token!
+        do {
+            let token = try BSApiManager.getSandboxBSToken()
+            NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
+            return token!
+        } catch let error {
+            print("Got error \(error.localizedDescription)")
+            fatalError()
+        }
     }
     
     private func getCurrencies(token : BSToken!) -> BSCurrencies! {
         
-        let bsCurrencies = BSApiManager.getCurrencyRates(bsToken: token!)
-        return bsCurrencies!
+        do {
+            let bsCurrencies = try BSApiManager.getCurrencyRates(bsToken: token!)
+            return bsCurrencies!
+        } catch let error {
+            print("Got wrong error \(error.localizedDescription)")
+            fatalError()
+        }
     }
     
 }
