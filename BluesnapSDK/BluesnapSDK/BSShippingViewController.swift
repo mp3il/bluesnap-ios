@@ -42,11 +42,11 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: for scrolling to prevent keyboard hiding
 
-    let scrollOffset : Int = -68 // this is the Y of scrollView
+    let scrollOffset : Int = -64 // this is the Y of scrollView
     var movedUp = false
     var fieldBottom : Int?
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var fieldsView: UIScrollView!
+    @IBOutlet weak var fieldsView: UIView!
     
     override func viewDidLayoutSubviews()
     {
@@ -77,12 +77,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func scrollForKeyboard(direction: Int) {
-        
-        //self.movedUp = (direction > 0)
-        //let y = scrollOffset + 100*direction
-        //let point : CGPoint = CGPoint(x: 0, y: y)
-        //self.scrollView.setContentOffset(point, animated: true)
-        
+        /*
+        self.movedUp = (direction > 0)
+        let y = scrollOffset + 100*direction
+        let point : CGPoint = CGPoint(x: 0, y: y)
+        self.scrollView.setContentOffset(point, animated: true)
+        */
         self.movedUp = (direction > 0)
         let y = 200*direction
         let point : CGPoint = CGPoint(x: 0, y: y)
