@@ -202,6 +202,9 @@ extension String {
 
 class BSValidator {
     
+    static let defaultFieldColor = UIColor.black
+    static let errorFieldColor = UIColor.red
+    
     class func validateName(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
@@ -214,12 +217,14 @@ class BSValidator {
         }
         if result {
             errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
             if let addressDetails = addressDetails {
                 addressDetails.name = newValue
             }
         } else {
             errorLabel.text = errorMessage
             errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }
@@ -227,19 +232,24 @@ class BSValidator {
     class func validateEmail(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        if let addressDetails = addressDetails {
-            addressDetails.email = newValue
-        }
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (!newValue.isValidEmail) {
-            errorLabel.text = "Please fill a valid email address"
-            errorLabel.isHidden = false
             result = false
         } else {
-            errorLabel.isHidden = true
             result = true
+        }
+        if result {
+            errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
+            if let addressDetails = addressDetails {
+                addressDetails.email = newValue
+            }
+        } else {
+            errorLabel.text = "Please fill a valid email address"
+            errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }
@@ -247,19 +257,24 @@ class BSValidator {
     class func validateAddress(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        if let addressDetails = addressDetails {
-            addressDetails.address = newValue
-        }
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 3) {
-            errorLabel.text = "Please fill a valid address"
-            errorLabel.isHidden = false
             result = false
         } else {
-            errorLabel.isHidden = true
             result = true
+        }
+        if result {
+            errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
+            if let addressDetails = addressDetails {
+                addressDetails.address = newValue
+            }
+        } else {
+            errorLabel.text = "Please fill a valid address"
+            errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }
@@ -267,19 +282,24 @@ class BSValidator {
     class func validateCity(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        if let addressDetails = addressDetails {
-            addressDetails.city = newValue
-        }
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 3) {
-            errorLabel.text = "Please fill a valid city"
-            errorLabel.isHidden = false
             result = false
         } else {
-            errorLabel.isHidden = true
             result = true
+        }
+        if result {
+            errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
+            if let addressDetails = addressDetails {
+                addressDetails.city = newValue
+            }
+        } else {
+            errorLabel.text = "Please fill a valid city"
+            errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }
@@ -291,12 +311,17 @@ class BSValidator {
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 2) {
-            errorLabel.text = "Please choosen a country"
-            errorLabel.isHidden = false
             result = false
         } else {
-            errorLabel.isHidden = true
             result = true
+        }
+        if result {
+            errorLabel.isHidden = true
+            //textField.textColor = defaultFieldColor
+        } else {
+            errorLabel.text = "Please choosen a country"
+            errorLabel.isHidden = false
+            //textField.textColor = errorFieldColor
         }
         return result
     }
@@ -305,18 +330,23 @@ class BSValidator {
         
         var result : Bool = true
         let newValue : String = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        if let addressDetails = addressDetails {
-            addressDetails.zip = newValue
-        }
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 3) {
-            errorLabel.text = "Please fill a valid zip code"
-            errorLabel.isHidden = false
             result = false
         } else {
-            errorLabel.isHidden = true
             result = true
+        }
+        if result {
+            errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
+            if let addressDetails = addressDetails {
+                addressDetails.zip = newValue
+            }
+        } else {
+            errorLabel.text = "Please fill a valid code"
+            errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }
@@ -328,12 +358,17 @@ class BSValidator {
         if ((ignoreIfEmpty || textField.isHidden) && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 2) {
-            errorLabel.text = "Please fill a valid state"
-            errorLabel.isHidden = false
             result = false
         } else {
-            errorLabel.isHidden = true
             result = true
+        }
+        if result {
+            errorLabel.isHidden = true
+            //textField.textColor = defaultFieldColor
+        } else {
+            errorLabel.text = "Please fill a valid state"
+            errorLabel.isHidden = false
+            //textField.textColor = errorFieldColor
         }
         return result
     }
@@ -352,9 +387,11 @@ class BSValidator {
         }
         if (ok) {
             errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
         } else {
             errorLabel.text = errorMessage
             errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return ok
     }
@@ -373,9 +410,11 @@ class BSValidator {
         }
         if (ok) {
             errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
         } else {
             errorLabel.text = errorMessage
             errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return ok
     }
@@ -393,9 +432,13 @@ class BSValidator {
         }
         if (ok) {
             errorLabel.isHidden = true
+            monthTextField.textColor = defaultFieldColor
+            yearTextField.textColor = defaultFieldColor
         } else {
             errorLabel.text = errorMessage
             errorLabel.isHidden = false
+            monthTextField.textColor = errorFieldColor
+            yearTextField.textColor = errorFieldColor
         }
         return ok
     }
@@ -418,9 +461,11 @@ class BSValidator {
         }
         if result {
             errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
         } else {
             errorLabel.text = "Please fill a valid CVV number"
             errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }
@@ -436,9 +481,11 @@ class BSValidator {
         }
         if result {
             errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
         } else {
             errorLabel.text = errorMessage
             errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
         }
         return result
     }

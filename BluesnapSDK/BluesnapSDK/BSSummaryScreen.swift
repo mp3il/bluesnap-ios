@@ -465,7 +465,8 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
             let ok3 = validateAddress(ignoreIfEmpty: false)
             let ok4 = validateCity(ignoreIfEmpty: false)
             let ok5 = validateCountryAndZip(ignoreIfEmpty: false)
-            result = result && ok1 && ok2 && ok3 && ok4 && ok5
+            let ok6 = validateState(ignoreIfEmpty: false)
+            result = result && ok1 && ok2 && ok3 && ok4 && ok5 && ok6
         } else if !zipField.isHidden {
             let ok = validateCountryAndZip(ignoreIfEmpty: false)
             result = result && ok
