@@ -53,7 +53,7 @@ import Foundation
         } else if (!withShipping && paymentDetails.shippingDetails != nil) {
             paymentDetails.setShippingDetails(shippingDetails: nil)
         }
-        if (fullBilling == true) && (paymentDetails.getBillingDetails().country ?? "" == "") {
+        if paymentDetails.getBillingDetails().country ?? "" == "" {
             paymentDetails.getBillingDetails().country = defaultCountry
         }
         purchaseScreen.paymentDetails = paymentDetails

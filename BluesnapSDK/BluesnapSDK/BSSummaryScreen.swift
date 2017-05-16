@@ -52,8 +52,11 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var ExpYYUiTextField: UITextField!
     @IBOutlet weak var ExpMMUiTextField: UITextField!
     @IBOutlet weak var cvvUiTextField: UITextField!
+    
     @IBOutlet weak var subtotalUILabel: UILabel!
     @IBOutlet weak var taxAmountUILabel: UILabel!
+    @IBOutlet weak var taxDetailsView: UIView!
+
     @IBOutlet weak var ccIconImage: UIImageView!
 
     @IBOutlet weak var emailLabel: UILabel!
@@ -182,6 +185,8 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         shippingSameAsBillingSwitch.isOn = self.paymentDetails.getShippingDetails()?.name ?? "" == ""
         
         updateTexts()
+        
+        taxDetailsView.isHidden = self.paymentDetails.getTaxAmount() == 0
         
         if self.firstTime == true {
             self.firstTime = false
