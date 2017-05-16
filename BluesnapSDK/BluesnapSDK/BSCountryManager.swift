@@ -136,7 +136,7 @@ class BSCountryManager {
     
     func countryHasStates(countryCode : String) -> Bool {
         
-        if let _ = COUNTRY_STATES[countryCode] {
+        if let _ = COUNTRY_STATES[countryCode.uppercased()] {
             return true
         }
         return false
@@ -144,7 +144,7 @@ class BSCountryManager {
     
     func getCountryStates(countryCode : String) -> [(name: String, code: String)]? {
         
-        if let states = COUNTRY_STATES[countryCode] {
+        if let states = COUNTRY_STATES[countryCode.uppercased()] {
             var result : [(name: String, code: String)] = []
             for (code, name) in states {
                 result.append((name: name, code: code))
@@ -156,7 +156,7 @@ class BSCountryManager {
     
     func getStateName(countryCode : String, stateCode: String) -> String? {
         
-        if let states = COUNTRY_STATES[countryCode] {
+        if let states = COUNTRY_STATES[countryCode.uppercased()] {
             return states[stateCode]
         }
         return nil

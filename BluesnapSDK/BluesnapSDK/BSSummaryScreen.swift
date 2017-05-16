@@ -204,12 +204,6 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         hideShowFields()
 	}
     
-    override func viewDidAppear(_ animated: Bool) {
-
-        // if we remove this - there is blank space above CCN fields
-        scrollForKeyboard(direction: 0)
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
@@ -226,16 +220,11 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         emailField.isHidden = hideFields
         streetLabel.isHidden = hideFields
         streetField.isHidden = hideFields
-        updateZipByCountry(countryCode: self.paymentDetails.getBillingDetails().zip ?? "")
+        updateZipByCountry(countryCode: self.paymentDetails.getBillingDetails().country ?? "")
         //countryFlagButton.isHidden = hideFields
         cityLabel.isHidden = hideFields
         cityField.isHidden = hideFields
-        if (fullBilling) {
-            updateState()
-        } else {
-            stateLabel.isHidden = hideFields
-            stateField.isHidden = hideFields
-        }
+        updateState()
         
         // hide all errors
         nameErrorUiLabel.isHidden = true
@@ -254,7 +243,12 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     
     private func updateState() {
         
-        BSValidator.updateState(addressDetails: paymentDetails.getBillingDetails(), countryManager: countryManager, stateUILabel: stateLabel, stateUITextField: stateField, stateErrorUILabel: stateError)
+        if (fullBilling) {
+            BSValidator.updateState(addressDetails: paymentDetails.getBillingDetails(), countryManager: countryManager, stateUILabel: stateLabel, stateUITextField: stateField, stateErrorUILabel: stateError)
+        } else {
+            stateLabel.isHidden = true
+            stateField.isHidden = true
+        }
     }
     
     
@@ -274,7 +268,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
     private func updatePayButtonText() {
         
         if (self.withShipping && !self.shippingSameAsBillingSwitch.isOn) {
-            payButton.setTitle("Shipping ->", for: UIControlState())
+            payButton.setTitle("Shipping >", for: UIControlState())
         } else {
             payButton.setTitle(payButtonText, for: UIControlState())
         }
@@ -377,6 +371,7 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         
         paymentDetails.getBillingDetails().country = countryCode
         updateZipByCountry(countryCode: countryCode)
+        updateState()
 
         // load the flag image
         if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {

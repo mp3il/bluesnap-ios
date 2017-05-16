@@ -299,7 +299,7 @@ class BSApiManager  {
                     result = BSResultCcDetails()
                     result!.ccType = json["ccType"] as? String
                     result!.last4Digits = json["last4Digits"] as? String
-                    result!.ccIssuingCountry = json["issuingCountry"] as? String
+                    result!.ccIssuingCountry = (json["issuingCountry"] as? String ?? "").uppercased()
                 } else {
                     NSLog("Error parsing BS result on CC details submit")
                 }

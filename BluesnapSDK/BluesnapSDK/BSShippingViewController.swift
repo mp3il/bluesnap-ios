@@ -77,17 +77,11 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func scrollForKeyboard(direction: Int) {
-        /*
-        self.movedUp = (direction > 0)
-        let y = scrollOffset + 100*direction
-        let point : CGPoint = CGPoint(x: 0, y: y)
-        self.scrollView.setContentOffset(point, animated: true)
-        */
+
         self.movedUp = (direction > 0)
         let y = 200*direction
         let point : CGPoint = CGPoint(x: 0, y: y)
         self.scrollView.setContentOffset(point, animated: false)
-
     }
     
     func keyboardWillShow(notification: NSNotification) {
@@ -125,12 +119,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-        // if we remove this - there is blank space above CCN fields
-        scrollForKeyboard(direction: 0)
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
   
