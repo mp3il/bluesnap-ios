@@ -305,8 +305,13 @@ class BSSummaryScreen: UIViewController, UITextFieldDelegate {
         do {
             result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
             self.paymentDetails.setCcDetails(ccDetails: result)
-            // return to previous screen
-            _ = navigationController?.popViewController(animated: false)
+            // return to merchant screen
+            if let navigationController = navigationController {
+                let viewControllers = navigationController.viewControllers
+                let merchantControllerIndex = viewControllers.count-3
+                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+            }
+            //_ = navigationController?.popViewController(animated: false)
             // execute callback
             purchaseFunc(paymentDetails)
             

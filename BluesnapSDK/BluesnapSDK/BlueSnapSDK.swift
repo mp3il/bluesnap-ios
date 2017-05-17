@@ -12,7 +12,7 @@ import Foundation
 	// MARK: - UI Controllers
 	
 	fileprivate static var currencyScreen: BSCurrenciesViewController!
-	fileprivate static var purchaseScreen: BSSummaryScreen!
+	fileprivate static var startScreen: BSSummaryScreen!
     
     // MARK: data
     
@@ -21,7 +21,7 @@ import Foundation
     // MARK: - Show checkout screen
     
     /**
-     Open the check-out screen, where the shopper payment details are entered.
+     Start the check-out flow, where the shopper payment details are entered.
      
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
@@ -41,6 +41,17 @@ import Foundation
         fullBilling : Bool,
         purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
         
+        adjustPaymentDetails(paymentDetails: paymentDetails,
+                             withShipping: withShipping)
+        
+        BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
+                                          animated: animated,
+                                          bsToken: bsToken,
+                                          paymentDetails: paymentDetails,
+                                          withShipping: withShipping,
+                                          fullBilling: fullBilling,
+                                          purchaseFunc: purchaseFunc)
+        /*
         if purchaseScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSSummaryScreen
@@ -62,6 +73,7 @@ import Foundation
         purchaseScreen.fullBilling = fullBilling
         
         inNavigationController.pushViewController(purchaseScreen, animated: animated)
+ */
     }
     
     // MARK: - Submit Payment token fields
@@ -167,6 +179,24 @@ import Foundation
         } catch let error {
             throw error
         }
+    }
+    
+    // MARK: Private functions
+    
+    private class func adjustPaymentDetails(paymentDetails: BSPaymentDetails!,
+                                            withShipping: Bool) {
+        
+        let defaultCountry = NSLocale.current.regionCode ?? "US"
+        if (withShipping && paymentDetails.shippingDetails == nil) {
+            paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
+            paymentDetails.getShippingDetails()!.country = defaultCountry
+        } else if (!withShipping && paymentDetails.shippingDetails != nil) {
+            paymentDetails.setShippingDetails(shippingDetails: nil)
+        }
+        if paymentDetails.getBillingDetails().country ?? "" == "" {
+            paymentDetails.getBillingDetails().country = defaultCountry
+        }
+
     }
     
 }
