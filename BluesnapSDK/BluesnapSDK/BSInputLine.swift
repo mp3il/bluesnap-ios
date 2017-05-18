@@ -35,7 +35,7 @@ class BSInputLine: UIControl /*UIView*/ {
     
     internal var label : UILabel! = UILabel()
     internal var textField : UITextField! = UITextField()
-    internal var imageView : UIImageView?
+    internal var imageButton : UIButton!
     internal var errorLabel : UILabel?
 
     // MARK: private properties
@@ -86,21 +86,6 @@ class BSInputLine: UIControl /*UIView*/ {
         }
     }
     
-    // MARK:- ---> Textfield Delegates
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //print("****************** TextField did begin editing method called")
-        sendActions(for: UIControlEvents.editingDidBegin)
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        //print("****************** TextField did end editing method called")
-        sendActions(for: UIControlEvents.editingDidEnd)
-    }
-    func textFieldEditingChanged(_ textField: UITextField) {
-        //print("****************** TextField editing changed")
-        sendActions(for: UIControlEvents.editingChanged)
-    }
-
     
     // MARK: Internal functions
     
@@ -132,9 +117,18 @@ class BSInputLine: UIControl /*UIView*/ {
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidBeginEditing(_:)), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidEndEditing(_:)), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(BSInputLine.textFieldEditingChanged(_:)), for: .editingChanged)
+        
+        self.imageButton = UIButton(type: UIButtonType.custom)
+        self.addSubview(imageButton)
+        imageButton.addTarget(self, action: #selector(BSInputLine.imageTouchUpInside(_:)), for: .touchUpInside)
+        imageButton.contentVerticalAlignment = .fill
+        imageButton.contentHorizontalAlignment = .center
+        imageButton.backgroundColor = UIColor.yellow
     }
-    
+
     private func resizeElements() {
+        
+        NSLog("in resizeElements")
         
         // To make sure we fit in the givemn size, we set all widths and horizontal margins
         // according to this ratio.
@@ -149,21 +143,15 @@ class BSInputLine: UIControl /*UIView*/ {
         
         label.frame = CGRect(x: leftMargin*hRatio, y: (totalHeight-labelHeight)/2*vRatio, width: labelWidth*hRatio, height: labelHeight*vRatio)
         
-        if image == nil && imageView != nil {
-            print("Need to remove subview")
-        }
-        if image != nil && imageView == nil {
-            self.imageView = UIImageView()
-            if let imageView = imageView {
-                self.addSubview(imageView)
-            }
-        }
-        if let imageView = imageView {
-            imageView.image = image
-            imageView.frame = CGRect(x: (totalWidth-rightMargin-imageWidth)*hRatio, y: (totalHeight-imageHeight)/2*vRatio, width: imageWidth*hRatio, height: imageHeight*vRatio)
+        if image == nil {
+            imageButton.isHidden = true
+        } else {
+            imageButton.isHidden = false
+            imageButton.setImage(image, for: UIControlState.normal)
+            imageButton.frame = CGRect(x: (totalWidth-rightMargin-imageWidth)*hRatio, y: (totalHeight-imageHeight)/2*vRatio, width: imageWidth*hRatio, height: imageHeight*vRatio)
         }
         
-        let fieldWidth : CGFloat = totalWidth - labelWidth - (imageView != nil ? imageWidth : 0) - leftMargin - rightMargin - middleMargin*2
+        let fieldWidth : CGFloat = totalWidth - labelWidth - (image != nil ? imageWidth : 0) - leftMargin - rightMargin - middleMargin*2
         textField.frame = CGRect(x: (leftMargin + labelWidth + middleMargin)*hRatio, y: (totalHeight-fieldHeight)/2*vRatio, width: fieldWidth*hRatio, height: fieldHeight*vRatio)
         
         resizeError()
@@ -201,5 +189,27 @@ class BSInputLine: UIControl /*UIView*/ {
         }
         super.updateConstraints()
     }
+    
+    // MARK:- ---> Action methods
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        //print("****************** TextField did begin editing method called")
+        sendActions(for: UIControlEvents.editingDidBegin)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        //print("****************** TextField did end editing method called")
+        sendActions(for: UIControlEvents.editingDidEnd)
+    }
+    func textFieldEditingChanged(_ textField: UITextField) {
+        //print("****************** TextField editing changed")
+        sendActions(for: UIControlEvents.editingChanged)
+    }
+    
+    func imageTouchUpInside(_ sender: Any) {
+        print("****************** Image click")
+        sendActions(for: UIControlEvents.touchUpInside)
+    }
+
     
 }

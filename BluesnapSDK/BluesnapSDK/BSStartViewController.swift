@@ -52,5 +52,8 @@ class BSStartViewController: UIViewController {
     @IBAction func editingChanged(_ sender: BSInputLine) {
         print("****************** editingChanged, value=\(sender.getValue())")
     }
+    @IBAction func touchUpInside(_ sender: BSInputLine) {
+        print("****************** container touchUpInside")
+    }
     
 }
