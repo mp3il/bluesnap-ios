@@ -42,4 +42,15 @@ class BSStartViewController: UIViewController {
         _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: true, bsToken: bsToken, paymentDetails: paymentDetails, fullBilling: fullBilling, purchaseFunc: purchaseFunc)
     }
 
+    @IBAction func editingDidBegin(_ sender: Any) {
+        print("****************** EditingDidBegin")
+    }
+    
+    @IBAction func editingDidEnd(_ sender: BSInputLine) {
+        print("****************** EditingDidEnd, value=\(sender.getValue())")
+    }
+    @IBAction func editingChanged(_ sender: BSInputLine) {
+        print("****************** editingChanged, value=\(sender.getValue())")
+    }
+    
 }

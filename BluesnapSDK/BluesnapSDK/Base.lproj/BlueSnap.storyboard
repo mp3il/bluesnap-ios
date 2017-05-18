@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
@@ -1008,11 +1008,11 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Card Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mJ9-w3-pns">
-                                        <rect key="frame" x="69" y="54" width="104" height="17"/>
+                                        <rect key="frame" x="69" y="54" width="104" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="104" id="llr-YW-3Lc"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1052,6 +1052,21 @@
                                     <constraint firstAttribute="bottom" secondItem="jaZ-la-5xf" secondAttribute="bottom" id="aOt-Hi-4mH"/>
                                     <constraint firstItem="mJ9-w3-pns" firstAttribute="top" secondItem="xwO-VY-sMe" secondAttribute="top" constant="54" id="gyM-Ek-bFT"/>
                                 </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lnU-li-rkg" customClass="BSInputLine" customModule="BluesnapSDK">
+                                <rect key="frame" x="0.0" y="400" width="375" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name:"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="John Doe"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="errorOn" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="editingChanged:" destination="f14-WO-daN" eventType="editingChanged" id="uC7-oK-nHW"/>
+                                    <action selector="editingDidBegin:" destination="f14-WO-daN" eventType="editingDidBegin" id="36u-3L-hVg"/>
+                                    <action selector="editingDidEnd:" destination="f14-WO-daN" eventType="editingDidEnd" id="nhk-Ik-gkK"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1280,7 +1295,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -1388,7 +1403,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
