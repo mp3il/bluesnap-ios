@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
@@ -679,7 +679,7 @@
         <!--Shipping-->
         <scene sceneID="A55-z9-4mk">
             <objects>
-                <viewController storyboardIdentifier="ShippingDetailsScreen" title="Shipping" id="JMI-6r-Lwf" customClass="BSShippingViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ShippingDetailsScreen_old" title="Shipping" id="JMI-6r-Lwf" customClass="BSShipping_old_ViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8gW-xm-ZzT"/>
                         <viewControllerLayoutGuide type="bottom" id="z2H-MF-Ah7"/>
@@ -970,6 +970,174 @@
             </objects>
             <point key="canvasLocation" x="4453.125" y="618.75"/>
         </scene>
+        <!--Shipping 2-->
+        <scene sceneID="rbP-bj-wQc">
+            <objects>
+                <viewController storyboardIdentifier="ShippingDetailsScreen" id="PPS-Pq-6Wu" userLabel="Shipping 2" customClass="BSShippingViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gGu-wC-psG"/>
+                        <viewControllerLayoutGuide type="bottom" id="Wqo-FT-qWo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KnJ-zC-fwY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BiT-2P-8ND">
+                                <rect key="frame" x="8" y="64" width="359" height="549"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xjb-2n-SG7" userLabel="Fields View">
+                                        <rect key="frame" x="0.0" y="-64" width="359" height="550"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Tf-NL-jP3" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="4" width="359" height="40"/>
+                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="John Doe"/>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="image" value="US"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient name"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="nameEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="PJr-fd-Lon"/>
+                                                    <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="zgd-4x-pby"/>
+                                                </connections>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dcv-01-70G" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="52" width="359" height="40"/>
+                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="emailEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="Vb9-WE-GeG"/>
+                                                    <action selector="emailEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="b8D-bn-aa7"/>
+                                                </connections>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="99" width="359" height="40"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="streetEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="tRO-pj-qne"/>
+                                                    <action selector="streetEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="iDh-Ub-8b9"/>
+                                                </connections>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="147" width="359" height="40"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="zipEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="9CM-dg-qYG"/>
+                                                    <action selector="zipEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="g6C-zH-XDa"/>
+                                                </connections>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="243" width="359" height="40"/>
+                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="stateEditingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="UZK-ob-CXG"/>
+                                                </connections>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="195" width="359" height="40"/>
+                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="cityEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="vNS-gh-mJI"/>
+                                                    <action selector="cityEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="wQh-cu-NlD"/>
+                                                </connections>
+                                            </view>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="Dcv-01-70G" firstAttribute="leading" secondItem="jMo-vo-Aht" secondAttribute="leading" id="2fo-ZD-JTV"/>
+                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="trailing" secondItem="M8Q-CA-XJP" secondAttribute="trailing" id="5XO-6X-61j"/>
+                                            <constraint firstItem="Dcv-01-70G" firstAttribute="trailing" secondItem="jMo-vo-Aht" secondAttribute="trailing" id="7Fg-Dw-poS"/>
+                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="8" symbolic="YES" id="94E-Cc-kmW"/>
+                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Dcv-01-70G" secondAttribute="leading" id="A2e-Js-cZn"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="leading" secondItem="7GX-8o-fbs" secondAttribute="leading" id="Djy-fJ-Lbf"/>
+                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="243" id="FBc-22-5Gj"/>
+                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="147" id="HIn-pt-BZd"/>
+                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="trailing" secondItem="Dcv-01-70G" secondAttribute="trailing" id="Itr-CR-btC"/>
+                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" id="KqI-SA-OaG"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="Dcv-01-70G" secondAttribute="bottom" constant="7" id="Q2i-aw-2Ug"/>
+                                            <constraint firstAttribute="bottom" secondItem="Qye-kG-IzH" secondAttribute="bottom" constant="267" id="TG9-tS-1H7"/>
+                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="leading" secondItem="Qye-kG-IzH" secondAttribute="leading" id="WU8-ZH-fwW"/>
+                                            <constraint firstAttribute="trailing" secondItem="5Tf-NL-jP3" secondAttribute="trailing" id="WZP-6L-iUd"/>
+                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="leading" secondItem="M8Q-CA-XJP" secondAttribute="leading" id="X6t-qw-BxD"/>
+                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="8" symbolic="YES" id="bkZ-Fh-Yrh"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="99" id="eOp-cj-sbb"/>
+                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="8" symbolic="YES" id="fIA-ZO-94c"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="trailing" secondItem="7GX-8o-fbs" secondAttribute="trailing" id="fcS-ms-6W9"/>
+                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="trailing" secondItem="Qye-kG-IzH" secondAttribute="trailing" id="h7T-oi-NUN"/>
+                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="195" id="kBU-pn-jX6"/>
+                                            <constraint firstItem="Dcv-01-70G" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="52" id="qET-KT-gMo"/>
+                                            <constraint firstItem="Dcv-01-70G" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" constant="8" symbolic="YES" id="qq1-14-Leq"/>
+                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="4" id="sWd-oi-e1p"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="centerY" secondItem="BiT-2P-8ND" secondAttribute="centerY" id="5uL-6T-0qW"/>
+                                    <constraint firstAttribute="bottom" secondItem="Xjb-2n-SG7" secondAttribute="bottom" constant="-1" id="9qr-Kv-4z3"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="leading" secondItem="BiT-2P-8ND" secondAttribute="leading" id="HDE-0v-Bei"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xjb-2n-SG7" secondAttribute="trailing" id="RGe-s7-yUO"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="top" secondItem="BiT-2P-8ND" secondAttribute="top" id="hq8-Rt-0XA"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="centerX" secondItem="BiT-2P-8ND" secondAttribute="centerX" id="yYo-3k-CRm"/>
+                                </constraints>
+                            </scrollView>
+                            <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lFE-br-NNC">
+                                <rect key="frame" x="0.0" y="621" width="375" height="46"/>
+                                <color key="backgroundColor" red="0.23921568630000001" green="0.23137254900000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="Pay $100">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="SubmitClick:" destination="JMI-6r-Lwf" eventType="touchUpInside" id="85V-Ua-KUf"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BiT-2P-8ND" firstAttribute="leading" secondItem="KnJ-zC-fwY" secondAttribute="leadingMargin" constant="-8" id="Anb-um-E8p"/>
+                            <constraint firstAttribute="trailing" secondItem="lFE-br-NNC" secondAttribute="trailing" id="KL5-f6-mhF"/>
+                            <constraint firstItem="lFE-br-NNC" firstAttribute="leading" secondItem="KnJ-zC-fwY" secondAttribute="leading" id="ZZd-aT-3Ye"/>
+                            <constraint firstItem="lFE-br-NNC" firstAttribute="top" secondItem="BiT-2P-8ND" secondAttribute="bottom" constant="8" symbolic="YES" id="dGF-dT-T68"/>
+                            <constraint firstItem="lFE-br-NNC" firstAttribute="bottom" secondItem="Wqo-FT-qWo" secondAttribute="top" id="jH2-cV-lEZ"/>
+                            <constraint firstItem="BiT-2P-8ND" firstAttribute="top" secondItem="gGu-wC-psG" secondAttribute="bottom" id="jrQ-EU-SOH"/>
+                            <constraint firstItem="BiT-2P-8ND" firstAttribute="centerX" secondItem="lFE-br-NNC" secondAttribute="centerX" id="oyY-iX-GK9"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="fu9-sO-bVo"/>
+                    <connections>
+                        <outlet property="cityInputLine" destination="M8Q-CA-XJP" id="gDI-cN-8tC"/>
+                        <outlet property="emailInputLine" destination="Dcv-01-70G" id="suc-ja-Fvj"/>
+                        <outlet property="fieldsView" destination="Xjb-2n-SG7" id="Bd2-zq-zjH"/>
+                        <outlet property="nameInputLine" destination="5Tf-NL-jP3" id="smj-ra-V3T"/>
+                        <outlet property="payUIButton" destination="lFE-br-NNC" id="X1a-Qu-bCK"/>
+                        <outlet property="scrollView" destination="BiT-2P-8ND" id="anU-3o-hb0"/>
+                        <outlet property="stateInputLine" destination="Qye-kG-IzH" id="UsF-BN-FWV"/>
+                        <outlet property="streetInputLine" destination="jMo-vo-Aht" id="3XO-UG-1RJ"/>
+                        <outlet property="zipInputLine" destination="7GX-8o-fbs" id="iHa-fe-ugP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hfL-eJ-YBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5096.8000000000002" y="617.54122938530736"/>
+        </scene>
         <!--Start-->
         <scene sceneID="urS-zv-Kno">
             <objects>
@@ -1254,6 +1422,8 @@
             <objects>
                 <navigationController storyboardIdentifier="startNavigControllerNotInUse" automaticallyAdjustsScrollViewInsets="NO" id="u6P-qB-Vy2" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="150" height="100"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="b95-OD-KU9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1265,7 +1435,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fit-lH-hq0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="925.60000000000002" y="277.51124437781112"/>
+            <point key="canvasLocation" x="1350" y="51"/>
         </scene>
         <!--Select Currency-->
         <scene sceneID="T9n-5J-QN1">
@@ -1297,7 +1467,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -1405,7 +1575,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
@@ -1526,6 +1696,8 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="U8l-OW-D4x" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wyN-tO-td4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1537,7 +1709,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FVX-hP-CJ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3455.625" y="618.75"/>
+            <point key="canvasLocation" x="3782" y="618"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5Dn-3y-Min">
@@ -1556,6 +1728,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fxW-DM-hAh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1789.5999999999999" y="-380.05997001499253"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kMu-UY-6EB">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4q2-oc-g7O" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uOi-ZJ-xAK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="PPS-Pq-6Wu" kind="relationship" relationship="rootViewController" id="7Ca-Jv-ofa"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H7e-80-BdY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5831" y="618"/>
         </scene>
     </scenes>
     <resources>

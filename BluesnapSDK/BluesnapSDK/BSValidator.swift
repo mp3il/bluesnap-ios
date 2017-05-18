@@ -205,6 +205,27 @@ class BSValidator {
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
     
+    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, errorMessage: String, addressDetails: BSAddressDetails?) -> Bool {
+        
+        var result : Bool = true
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces).capitalized ?? ""
+        input.setValue(newValue)
+        if newValue.characters.count == 0 && ignoreIfEmpty {
+            // ignore
+        } else if !newValue.isValidName {
+            result = false
+        }
+        if result {
+            input.hideError()
+            if let addressDetails = addressDetails {
+                addressDetails.name = newValue
+            }
+        } else {
+            input.showError(errorMessage)
+        }
+        return result
+    }
+    
     class func validateName(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
@@ -228,7 +249,7 @@ class BSValidator {
         }
         return result
     }
-
+    
     class func validateEmail(ignoreIfEmpty: Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
@@ -250,6 +271,28 @@ class BSValidator {
             errorLabel.text = "Please fill a valid email address"
             errorLabel.isHidden = false
             textField.textColor = errorFieldColor
+        }
+        return result
+    }
+    
+    class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (!newValue.isValidEmail) {
+            result = false
+        } else {
+            result = true
+        }
+        if result {
+            input.hideError()
+            if let addressDetails = addressDetails {
+                addressDetails.email = newValue
+            }
+        } else {
+            input.showError("Please fill a valid email address")
         }
         return result
     }
@@ -278,7 +321,29 @@ class BSValidator {
         }
         return result
     }
-
+    
+    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
+            result = false
+        } else {
+            result = true
+        }
+        if result {
+            input.hideError()
+            if let addressDetails = addressDetails {
+                addressDetails.address = newValue
+            }
+        } else {
+            input.showError("Please fill a valid address")
+        }
+        return result
+    }
+    
     class func validateCity(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
@@ -304,6 +369,29 @@ class BSValidator {
         return result
     }
     
+    class func validateCity(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        input.setValue(newValue)
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
+            result = false
+        } else {
+            result = true
+        }
+        if result {
+            input.hideError()
+            if let addressDetails = addressDetails {
+                addressDetails.city = newValue
+            }
+        } else {
+            input.showError("Please fill a valid city")
+        }
+        return result
+    }
+    
     class func validateCountry(ignoreIfEmpty : Bool, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = addressDetails?.country ?? ""
@@ -325,7 +413,26 @@ class BSValidator {
         }
         return result
     }
-
+    
+    class func validateCountry(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = addressDetails?.country ?? ""
+        var result : Bool = true
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 2) {
+            result = false
+        } else {
+            result = true
+        }
+        if result {
+            input.hideError()
+        } else {
+            input.showError("Please choosen a country")
+        }
+        return result
+    }
+    
     class func validateZip(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
@@ -351,6 +458,28 @@ class BSValidator {
         return result
     }
 
+    class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+        
+        var result : Bool = true
+        let newValue : String = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        if (ignoreIfEmpty && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 3) {
+            result = false
+        } else {
+            result = true
+        }
+        if result {
+            input.hideError()
+            if let addressDetails = addressDetails {
+                addressDetails.zip = newValue
+            }
+        } else {
+            input.showError("Please fill a valid code")
+        }
+        return result
+    }
+
     class func validateState(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = addressDetails?.state ?? ""
@@ -369,6 +498,25 @@ class BSValidator {
             errorLabel.text = "Please fill a valid state"
             errorLabel.isHidden = false
             //textField.textColor = errorFieldColor
+        }
+        return result
+    }
+    
+    class func validateState(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+        
+        let newValue = addressDetails?.state ?? ""
+        var result : Bool = true
+        if ((ignoreIfEmpty || input.isHidden) && newValue.characters.count == 0) {
+            // ignore
+        } else if (newValue.characters.count < 2) {
+            result = false
+        } else {
+            result = true
+        }
+        if result {
+            input.hideError()
+        } else {
+            input.showError("Please fill a valid state")
         }
         return result
     }
@@ -497,11 +645,25 @@ class BSValidator {
         sender.text = input
     }
     
+    class func nameEditingChanged(_ sender: BSInputLine) {
+        
+        var input : String = sender.getValue() ?? ""
+        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 100)
+        sender.setValue(input)
+    }
+    
     class func emailEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
         input = input.removeNoneEmailCharacters.cutToMaxLength(maxLength: 1200)
         sender.text = input
+    }
+    
+    class func emailEditingChanged(_ sender: BSInputLine) {
+        
+        var input : String = sender.getValue() ?? ""
+        input = input.removeNoneEmailCharacters.cutToMaxLength(maxLength: 1200)
+        sender.setValue(input)
     }
     
     class func addressEditingChanged(_ sender: UITextField) {
@@ -511,6 +673,13 @@ class BSValidator {
         sender.text = input
     }
     
+    class func addressEditingChanged(_ sender: BSInputLine) {
+        
+        var input : String = sender.getValue() ?? ""
+        input = input.cutToMaxLength(maxLength: 100)
+        sender.setValue(input)
+    }
+    
     class func cityEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
@@ -518,11 +687,25 @@ class BSValidator {
         sender.text = input
     }
     
+    class func cityEditingChanged(_ sender: BSInputLine) {
+        
+        var input : String = sender.getValue() ?? ""
+        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 50)
+        sender.setValue(input)
+    }
+    
     class func zipEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
         input = input.cutToMaxLength(maxLength: 20)
         sender.text = input
+    }
+    
+    class func zipEditingChanged(_ sender: BSInputLine) {
+        
+        var input : String = sender.getValue() ?? ""
+        input = input.cutToMaxLength(maxLength: 20)
+        sender.setValue(input)
     }
     
     class func ccnEditingChanged(_ sender: UITextField) {
@@ -563,6 +746,24 @@ class BSValidator {
         stateUITextField.isHidden = hideState
         stateUILabel.isHidden = hideState
         stateErrorUILabel.isHidden = true
+    }
+    
+    class func updateState(addressDetails: BSAddressDetails!, countryManager: BSCountryManager, stateInputLine: BSInputLine) {
+        
+        let selectedCountryCode = addressDetails.country ?? ""
+        let selectedStateCode = addressDetails.state ?? ""
+        var hideState : Bool = true
+        stateInputLine.setValue("")
+        if countryManager.countryHasStates(countryCode: selectedCountryCode) {
+            hideState = false
+            if let stateName = countryManager.getStateName(countryCode: selectedCountryCode, stateCode: selectedStateCode){
+                stateInputLine.setValue(stateName)
+            }
+        } else {
+            addressDetails.state = nil
+        }
+        stateInputLine.isHidden = hideState
+        stateInputLine.hideError()
     }
 
 }

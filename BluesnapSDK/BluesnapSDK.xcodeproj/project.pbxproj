@@ -34,6 +34,7 @@
 		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
 		FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077321EACACD50045E920 /* BSViewsManager.swift */; };
 		FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE301E938B63006C3359 /* BSValidator.swift */; };
+		FDAB3AC21ECDAE9600AC8A71 /* BSShipping2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAB3AC11ECDAE9600AC8A71 /* BSShipping2ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
 		FDA077321EACACD50045E920 /* BSViewsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSViewsManager.swift; sourceTree = "<group>"; };
 		FDA6BE301E938B63006C3359 /* BSValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidator.swift; sourceTree = "<group>"; };
+		FDAB3AC11ECDAE9600AC8A71 /* BSShipping2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShipping2ViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 			children = (
 				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
 				FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */,
+				FDAB3AC11ECDAE9600AC8A71 /* BSShipping2ViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
 				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
@@ -330,6 +333,7 @@
 				FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */,
 				2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */,
 				FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */,
+				FDAB3AC21ECDAE9600AC8A71 /* BSShipping2ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

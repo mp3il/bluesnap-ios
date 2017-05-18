@@ -64,6 +64,12 @@ class BSInputLine: UIControl /*UIView*/ {
         textField.text = newValue
     }
     
+    public func showError(_ errorText : String) {
+        
+        self.errorText = errorText
+        showError()
+    }
+    
     public func showError() {
         
         if errorLabel == nil {
@@ -86,6 +92,10 @@ class BSInputLine: UIControl /*UIView*/ {
         }
     }
     
+    public func closeKeyboard() {
+        
+        self.textField.resignFirstResponder()
+    }
     
     // MARK: Internal functions
     
