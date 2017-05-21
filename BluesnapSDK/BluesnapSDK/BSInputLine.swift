@@ -211,8 +211,6 @@ class BSInputLine: UIControl {
 
     private func resizeElements() {
         
-        NSLog("in resizeElements")
-        
         // To make sure we fit in the givemn size, we set all widths and horizontal margins
         // according to this ratio.
         let hRatio : CGFloat = self.frame.width / totalWidth
@@ -294,7 +292,7 @@ class BSInputLine: UIControl {
     
     override func updateConstraints() {
         
-        NSLog("updateConstraints, shouldSetupConstraints=\(shouldSetupConstraints)")
+        //NSLog("updateConstraints, shouldSetupConstraints=\(shouldSetupConstraints)")
         if (shouldSetupConstraints) {
             // AutoLayout constraints
             shouldSetupConstraints = false
@@ -305,27 +303,27 @@ class BSInputLine: UIControl {
     // MARK:- ---> Action methods
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        //print("****************** TextField did begin editing method called")
+
         hideError()
         sendActions(for: UIControlEvents.editingDidBegin)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        //print("****************** TextField did end editing method called")
+
         sendActions(for: UIControlEvents.editingDidEnd)
     }
     func textFieldEditingChanged(_ textField: UITextField) {
-        //print("****************** TextField editing changed")
+
         sendActions(for: UIControlEvents.editingChanged)
     }
     
     func imageTouchUpInside(_ sender: Any) {
-        //print("****************** Image click")
+
         sendActions(for: UIControlEvents.touchUpInside)
     }
     
     func fieldCoverButtonTouchUpInside(_ sender: Any) {
-        //print("****************** field cover click")
+
         sendActions(for: UIControlEvents.touchUpInside)
     }
     

@@ -677,10 +677,10 @@
             </objects>
             <point key="canvasLocation" x="1862.8125" y="276.25"/>
         </scene>
-        <!--Shipping-->
+        <!--Shipping To Delete-->
         <scene sceneID="A55-z9-4mk">
             <objects>
-                <viewController storyboardIdentifier="ShippingDetailsScreen_old" title="Shipping" id="JMI-6r-Lwf" customClass="BSShipping_old_ViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ShippingDetailsScreen_old" title="Shipping" id="JMI-6r-Lwf" userLabel="Shipping To Delete" customClass="BSShipping_old_ViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8gW-xm-ZzT"/>
                         <viewControllerLayoutGuide type="bottom" id="z2H-MF-Ah7"/>
@@ -974,10 +974,10 @@
             </objects>
             <point key="canvasLocation" x="4453.125" y="618.75"/>
         </scene>
-        <!--Shipping 2-->
+        <!--Shipping-->
         <scene sceneID="rbP-bj-wQc">
             <objects>
-                <viewController storyboardIdentifier="ShippingDetailsScreen" id="PPS-Pq-6Wu" userLabel="Shipping 2" customClass="BSShippingViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ShippingDetailsScreen" id="PPS-Pq-6Wu" userLabel="Shipping" customClass="BSShippingViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gGu-wC-psG"/>
                         <viewControllerLayoutGuide type="bottom" id="Wqo-FT-qWo"/>
@@ -1005,6 +1005,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="flagTouchUpInside:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="G9f-Yn-TyQ"/>
                                                     <action selector="nameEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="PJr-fd-Lon"/>
                                                     <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="y0Q-RU-Oq9"/>
                                                 </connections>
@@ -1066,7 +1067,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="fieldIsEditable" value="No"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="stateEditingDidBegin:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="bnQ-Bi-Oid"/>
+                                                    <action selector="stateTouchUpInside:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="gft-FF-jWL"/>
                                                 </connections>
                                             </view>
                                         </subviews>

@@ -28,13 +28,13 @@
 		FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */; };
 		FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */; };
 		FD6749491EBB12E700B8076C /* BSPopupMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */; };
-		FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */; };
+		FD7B0E191E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift */; };
 		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
 		FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */; };
 		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
 		FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077321EACACD50045E920 /* BSViewsManager.swift */; };
 		FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE301E938B63006C3359 /* BSValidator.swift */; };
-		FDAB3AC21ECDAE9600AC8A71 /* BSShipping2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAB3AC11ECDAE9600AC8A71 /* BSShipping2ViewController.swift */; };
+		FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,13 +74,13 @@
 		FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStateTableViewCell.swift; sourceTree = "<group>"; };
 		FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPopupMenuViewController.swift; sourceTree = "<group>"; };
-		FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
+		FD7B0E181E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewControllerToDelete.swift; sourceTree = "<group>"; };
 		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
 		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
 		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
 		FDA077321EACACD50045E920 /* BSViewsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSViewsManager.swift; sourceTree = "<group>"; };
 		FDA6BE301E938B63006C3359 /* BSValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidator.swift; sourceTree = "<group>"; };
-		FDAB3AC11ECDAE9600AC8A71 /* BSShipping2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShipping2ViewController.swift; sourceTree = "<group>"; };
+		FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,8 +180,8 @@
 			isa = PBXGroup;
 			children = (
 				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
-				FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */,
-				FDAB3AC11ECDAE9600AC8A71 /* BSShipping2ViewController.swift */,
+				FD7B0E181E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift */,
+				FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
 				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
@@ -313,7 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */,
+				FD7B0E191E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift in Sources */,
 				2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */,
 				FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */,
 				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
@@ -333,7 +333,7 @@
 				FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */,
 				2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */,
 				FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */,
-				FDAB3AC21ECDAE9600AC8A71 /* BSShipping2ViewController.swift in Sources */,
+				FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
