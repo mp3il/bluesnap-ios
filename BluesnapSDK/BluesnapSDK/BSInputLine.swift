@@ -14,7 +14,7 @@ protocol BSInputLineDelegate {
 }
 
 @IBDesignable
-class BSInputLine: UIControl /*UIView*/ {
+class BSInputLine: UIControl {
 
     // MARK: Configurable properties
     
@@ -22,6 +22,7 @@ class BSInputLine: UIControl /*UIView*/ {
     @IBInspectable var labelTextColor: UIColor = UIColor.darkGray
     @IBInspectable var labelBkdColor: UIColor = UIColor.white
     @IBInspectable var fieldPlaceHolder: String! = ""
+    @IBInspectable var fieldIsEditable: String?
     @IBInspectable var image: UIImage?
     @IBInspectable var fieldTextColor: UIColor = UIColor.black
     @IBInspectable var fieldBkdColor: UIColor = UIColor.white
@@ -37,6 +38,7 @@ class BSInputLine: UIControl /*UIView*/ {
     internal var textField : UITextField! = UITextField()
     internal var imageButton : UIButton!
     internal var errorLabel : UILabel?
+    internal var fieldCoverButton : UIButton?
 
     // MARK: private properties
     
@@ -53,7 +55,8 @@ class BSInputLine: UIControl /*UIView*/ {
     internal let imageWidth : CGFloat = 21
     internal let imageHeight : CGFloat = 15
     internal let fontName = "Helvetica Neue"
-    internal let fontSize : CGFloat = 14
+    internal let labelFontSize : CGFloat = 14
+    internal let fieldFontSize : CGFloat = 17
     
     
     public func getValue() -> String! {
@@ -81,6 +84,7 @@ class BSInputLine: UIControl /*UIView*/ {
             errorLabel.backgroundColor = UIColor.red
             errorLabel.textColor = UIColor.white
             errorLabel.textAlignment = .right
+            errorLabel.isHidden = false
             resizeError()
         }
     }
@@ -95,6 +99,7 @@ class BSInputLine: UIControl /*UIView*/ {
     public func closeKeyboard() {
         
         self.textField.resignFirstResponder()
+        self.resignFirstResponder()
     }
     
     // MARK: Internal functions
@@ -111,18 +116,15 @@ class BSInputLine: UIControl /*UIView*/ {
         buildElements()
     }
     
+    private func shouldCoverTextField()-> Bool {
+        return self.fieldIsEditable != nil
+    }
+    
     private func buildElements() {
         
         // init stuff on the items that needs to run only once (as opposed to sizes that may change)
         self.addSubview(label)
         self.addSubview(textField)
-        
-        textField.keyboardType = self.keyboardType
-        textField.backgroundColor = self.fieldBkdColor
-        textField.textColor = self.fieldTextColor
-        label.backgroundColor = self.labelBkdColor
-        label.textColor = self.labelTextColor
-        textField.returnKeyType = UIReturnKeyType.done
         
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidBeginEditing(_:)), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidEndEditing(_:)), for: .editingDidEnd)
@@ -133,7 +135,28 @@ class BSInputLine: UIControl /*UIView*/ {
         imageButton.addTarget(self, action: #selector(BSInputLine.imageTouchUpInside(_:)), for: .touchUpInside)
         imageButton.contentVerticalAlignment = .fill
         imageButton.contentHorizontalAlignment = .center
-        imageButton.backgroundColor = UIColor.yellow
+        //imageButton.backgroundColor = UIColor.yellow
+        
+        setElementAttributes()
+    }
+    
+    private func setElementAttributes() {
+        
+        label.backgroundColor = self.labelBkdColor
+        label.shadowColor = UIColor.clear
+        label.textColor = self.labelTextColor
+        
+        textField.keyboardType = self.keyboardType
+        textField.backgroundColor = self.fieldBkdColor
+        textField.textColor = self.fieldTextColor
+        textField.returnKeyType = UIReturnKeyType.done
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        
+        super.prepareForInterfaceBuilder()
+        setElementAttributes()
+        resizeElements()
     }
 
     private func resizeElements() {
@@ -146,9 +169,12 @@ class BSInputLine: UIControl /*UIView*/ {
         let vRatio : CGFloat = self.frame.height / totalHeight
         NSLog("width=\(self.frame.width), hRatio=\(hRatio), height=\(self.frame.height), vRatio=\(vRatio)")
         
-        if let font : UIFont = UIFont(name: self.fontName, size: fontSize*hRatio) {
-            label.font = font
-            textField.font = font
+        if let labelFont : UIFont = UIFont(name: self.fontName, size: labelFontSize*vRatio) {
+            label.font = labelFont
+        }
+        
+        if let fieldFont : UIFont = UIFont(name: self.fontName, size: fieldFontSize*vRatio) {
+            textField.font = fieldFont
         }
         
         label.frame = CGRect(x: leftMargin*hRatio, y: (totalHeight-labelHeight)/2*vRatio, width: labelWidth*hRatio, height: labelHeight*vRatio)
@@ -161,8 +187,18 @@ class BSInputLine: UIControl /*UIView*/ {
             imageButton.frame = CGRect(x: (totalWidth-rightMargin-imageWidth)*hRatio, y: (totalHeight-imageHeight)/2*vRatio, width: imageWidth*hRatio, height: imageHeight*vRatio)
         }
         
-        let fieldWidth : CGFloat = totalWidth - labelWidth - (image != nil ? imageWidth : 0) - leftMargin - rightMargin - middleMargin*2
-        textField.frame = CGRect(x: (leftMargin + labelWidth + middleMargin)*hRatio, y: (totalHeight-fieldHeight)/2*vRatio, width: fieldWidth*hRatio, height: fieldHeight*vRatio)
+        let actualFieldWidth : CGFloat = (totalWidth - labelWidth - (image != nil ? imageWidth : 0) - leftMargin - rightMargin - middleMargin*2) * hRatio
+        let fieldX = (leftMargin + labelWidth + middleMargin) * hRatio
+        let fieldY = (totalHeight-fieldHeight)/2*vRatio
+        let actualFieldHeight = self.fieldHeight * vRatio
+        textField.frame = CGRect(x: fieldX, y: fieldY, width: actualFieldWidth, height: actualFieldHeight)
+        
+        if shouldCoverTextField() == true {
+            buildFieldCoverButton()
+        }
+        if let fieldCoverButton = fieldCoverButton {
+            fieldCoverButton.frame = CGRect(x: fieldX, y: fieldY, width: actualFieldWidth, height: actualFieldHeight)
+        }
         
         resizeError()
         
@@ -174,6 +210,29 @@ class BSInputLine: UIControl /*UIView*/ {
         }
     }
     
+    private func buildFieldCoverButton() {
+        
+        if shouldCoverTextField() == false {
+            if let fieldCoverButton = fieldCoverButton {
+                fieldCoverButton.isHidden = true
+                textField.isUserInteractionEnabled = true
+            }
+        } else {
+            if fieldCoverButton == nil {
+                fieldCoverButton = UIButton()
+                if let fieldCoverButton = fieldCoverButton {
+                    fieldCoverButton.backgroundColor = UIColor.clear
+                    //fieldCoverButton.alpha = 0.3
+                    self.addSubview(fieldCoverButton)
+                    fieldCoverButton.addTarget(self, action: #selector(BSInputLine.fieldCoverButtonTouchUpInside(_:)), for: .touchUpInside)
+                }
+            }
+            if let fieldCoverButton = fieldCoverButton {
+                fieldCoverButton.isHidden = false
+                textField.isUserInteractionEnabled = false
+            }
+        }
+    }
     private func resizeError() {
         if let errorLabel = errorLabel {
             if !errorLabel.isHidden {
@@ -204,6 +263,7 @@ class BSInputLine: UIControl /*UIView*/ {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         //print("****************** TextField did begin editing method called")
+        hideError()
         sendActions(for: UIControlEvents.editingDidBegin)
     }
     
@@ -217,9 +277,13 @@ class BSInputLine: UIControl /*UIView*/ {
     }
     
     func imageTouchUpInside(_ sender: Any) {
-        print("****************** Image click")
+        //print("****************** Image click")
         sendActions(for: UIControlEvents.touchUpInside)
     }
-
+    
+    func fieldCoverButtonTouchUpInside(_ sender: Any) {
+        //print("****************** field cover click")
+        sendActions(for: UIControlEvents.touchUpInside)
+    }
     
 }

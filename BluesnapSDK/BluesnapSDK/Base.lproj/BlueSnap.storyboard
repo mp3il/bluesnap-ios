@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
@@ -405,7 +405,7 @@
                                                 </connections>
                                             </textField>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="6qK-6f-cHE" firstAttribute="leading" secondItem="3WQ-te-Dk5" secondAttribute="leading" id="0YJ-WB-z58"/>
                                             <constraint firstItem="Fwb-mL-cwK" firstAttribute="bottom" secondItem="gRz-oW-p3f" secondAttribute="bottom" id="1Oe-Fi-taW"/>
@@ -696,9 +696,12 @@
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="exr-Hd-zHP">
                                                 <rect key="frame" x="0.0" y="10" width="97" height="30"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
+                                                <color key="highlightedColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bwC-vA-Bd6">
                                                 <rect key="frame" x="109" y="10" width="214" height="30"/>
@@ -988,23 +991,28 @@
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xjb-2n-SG7" userLabel="Fields View">
                                         <rect key="frame" x="0.0" y="-64" width="359" height="550"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Tf-NL-jP3" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="0.0" y="4" width="359" height="40"/>
-                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Tf-NL-jP3" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="7" width="359" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="John Doe"/>
-                                                    <userDefinedRuntimeAttribute type="image" keyPath="image" value="US"/>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="image" value="IL"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient name"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
+                                                        <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="nameEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="PJr-fd-Lon"/>
-                                                    <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="zgd-4x-pby"/>
+                                                    <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="y0Q-RU-Oq9"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dcv-01-70G" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="0.0" y="52" width="359" height="40"/>
-                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dcv-01-70G" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="50" width="359" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
@@ -1014,9 +1022,10 @@
                                                     <action selector="emailEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="b8D-bn-aa7"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="0.0" y="99" width="359" height="40"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="93" width="359" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
                                                 </userDefinedRuntimeAttributes>
@@ -1025,9 +1034,10 @@
                                                     <action selector="streetEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="iDh-Ub-8b9"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="0.0" y="147" width="359" height="40"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="136" width="359" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
                                                 </userDefinedRuntimeAttributes>
@@ -1036,20 +1046,23 @@
                                                     <action selector="zipEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="g6C-zH-XDa"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="0.0" y="243" width="359" height="40"/>
-                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="222" width="359" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldIsEditable" value="No"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="stateEditingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="UZK-ob-CXG"/>
+                                                    <action selector="stateEditingDidBegin:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="bnQ-Bi-Oid"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="0.0" y="195" width="359" height="40"/>
-                                                <color key="backgroundColor" red="0.8645167265" green="0.96195042129999997" blue="0.84622798990000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="0.0" y="179" width="359" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
@@ -1060,41 +1073,16 @@
                                                 </connections>
                                             </view>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="Dcv-01-70G" firstAttribute="leading" secondItem="jMo-vo-Aht" secondAttribute="leading" id="2fo-ZD-JTV"/>
-                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="trailing" secondItem="M8Q-CA-XJP" secondAttribute="trailing" id="5XO-6X-61j"/>
-                                            <constraint firstItem="Dcv-01-70G" firstAttribute="trailing" secondItem="jMo-vo-Aht" secondAttribute="trailing" id="7Fg-Dw-poS"/>
-                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="8" symbolic="YES" id="94E-Cc-kmW"/>
-                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Dcv-01-70G" secondAttribute="leading" id="A2e-Js-cZn"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="leading" secondItem="7GX-8o-fbs" secondAttribute="leading" id="Djy-fJ-Lbf"/>
-                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="243" id="FBc-22-5Gj"/>
-                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="147" id="HIn-pt-BZd"/>
-                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="trailing" secondItem="Dcv-01-70G" secondAttribute="trailing" id="Itr-CR-btC"/>
-                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" id="KqI-SA-OaG"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="Dcv-01-70G" secondAttribute="bottom" constant="7" id="Q2i-aw-2Ug"/>
-                                            <constraint firstAttribute="bottom" secondItem="Qye-kG-IzH" secondAttribute="bottom" constant="267" id="TG9-tS-1H7"/>
-                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="leading" secondItem="Qye-kG-IzH" secondAttribute="leading" id="WU8-ZH-fwW"/>
-                                            <constraint firstAttribute="trailing" secondItem="5Tf-NL-jP3" secondAttribute="trailing" id="WZP-6L-iUd"/>
-                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="leading" secondItem="M8Q-CA-XJP" secondAttribute="leading" id="X6t-qw-BxD"/>
-                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="8" symbolic="YES" id="bkZ-Fh-Yrh"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="99" id="eOp-cj-sbb"/>
-                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="8" symbolic="YES" id="fIA-ZO-94c"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="trailing" secondItem="7GX-8o-fbs" secondAttribute="trailing" id="fcS-ms-6W9"/>
-                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="trailing" secondItem="Qye-kG-IzH" secondAttribute="trailing" id="h7T-oi-NUN"/>
-                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="195" id="kBU-pn-jX6"/>
-                                            <constraint firstItem="Dcv-01-70G" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="52" id="qET-KT-gMo"/>
-                                            <constraint firstItem="Dcv-01-70G" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" constant="8" symbolic="YES" id="qq1-14-Leq"/>
-                                            <constraint firstItem="5Tf-NL-jP3" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="4" id="sWd-oi-e1p"/>
-                                        </constraints>
+                                        <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="centerY" secondItem="BiT-2P-8ND" secondAttribute="centerY" id="5uL-6T-0qW"/>
-                                    <constraint firstAttribute="bottom" secondItem="Xjb-2n-SG7" secondAttribute="bottom" constant="-1" id="9qr-Kv-4z3"/>
-                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="leading" secondItem="BiT-2P-8ND" secondAttribute="leading" id="HDE-0v-Bei"/>
-                                    <constraint firstAttribute="trailing" secondItem="Xjb-2n-SG7" secondAttribute="trailing" id="RGe-s7-yUO"/>
-                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="top" secondItem="BiT-2P-8ND" secondAttribute="top" id="hq8-Rt-0XA"/>
-                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="centerX" secondItem="BiT-2P-8ND" secondAttribute="centerX" id="yYo-3k-CRm"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="centerY" secondItem="BiT-2P-8ND" secondAttribute="centerY" id="3YT-NZ-N1u"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xjb-2n-SG7" secondAttribute="trailing" id="7kC-P6-hQp"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="centerX" secondItem="BiT-2P-8ND" secondAttribute="centerX" id="8c7-z1-a3S"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="top" secondItem="BiT-2P-8ND" secondAttribute="top" id="W6m-lm-H7w"/>
+                                    <constraint firstItem="Xjb-2n-SG7" firstAttribute="leading" secondItem="BiT-2P-8ND" secondAttribute="leading" id="cd8-L5-WHE"/>
+                                    <constraint firstAttribute="bottom" secondItem="Xjb-2n-SG7" secondAttribute="bottom" constant="-1" id="rzp-GY-bAz"/>
                                 </constraints>
                             </scrollView>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lFE-br-NNC">
@@ -1221,25 +1209,8 @@
                                     <constraint firstItem="mJ9-w3-pns" firstAttribute="top" secondItem="xwO-VY-sMe" secondAttribute="top" constant="54" id="gyM-Ek-bFT"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lnU-li-rkg" customClass="BSInputLine" customModule="BluesnapSDK">
-                                <rect key="frame" x="0.0" y="400" width="375" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name:"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="John Doe"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="errorOn" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="image" value="IL"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="editingChanged:" destination="f14-WO-daN" eventType="editingChanged" id="uC7-oK-nHW"/>
-                                    <action selector="editingDidBegin:" destination="f14-WO-daN" eventType="editingDidBegin" id="36u-3L-hVg"/>
-                                    <action selector="editingDidEnd:" destination="f14-WO-daN" eventType="editingDidEnd" id="nhk-Ik-gkK"/>
-                                    <action selector="touchUpInside:" destination="f14-WO-daN" eventType="touchUpInside" id="QGo-G7-6jL"/>
-                                </connections>
-                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="xwO-VY-sMe" secondAttribute="trailing" id="3RU-uX-vMT"/>
                             <constraint firstItem="Xk8-02-9HE" firstAttribute="top" secondItem="y0h-By-eMw" secondAttribute="bottom" id="4SB-MQ-f77"/>
@@ -1467,7 +1438,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -1575,7 +1546,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">

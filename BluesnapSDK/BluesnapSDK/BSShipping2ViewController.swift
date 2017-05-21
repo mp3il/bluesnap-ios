@@ -260,6 +260,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBAction func stateEditingDidBegin(_ sender: BSInputLine) {
         // prevent typing
         sender.closeKeyboard()
+        sender.resignFirstResponder()
         
         BSViewsManager.showStateList(
             inNavigationController: self.navigationController,
