@@ -27,7 +27,6 @@ class BSInputLine: UIControl {
     @IBInspectable var fieldTextColor: UIColor = UIColor.black
     @IBInspectable var fieldBkdColor: UIColor = UIColor.white
     @IBInspectable var keyboardType : UIKeyboardType = UIKeyboardType.default
-    @IBInspectable var errorText: String! = "Please supply a valid value"
     @IBInspectable var delegate: BSInputLineDelegate?
     
     @IBInspectable var cornerRadius: CGFloat = 5.0
@@ -60,6 +59,7 @@ class BSInputLine: UIControl {
     
     var shouldSetupConstraints = true
 
+    internal var errorText: String! = "Please supply a valid value"
     internal let totalWidth : CGFloat = 375
     internal let totalHeight : CGFloat = 40
     internal let leftMargin : CGFloat = 16
@@ -86,10 +86,6 @@ class BSInputLine: UIControl {
     public func showError(_ errorText : String) {
         
         self.errorText = errorText
-        showError()
-    }
-    
-    public func showError() {
         
         if errorLabel == nil {
             errorLabel = UILabel()
@@ -258,7 +254,7 @@ class BSInputLine: UIControl {
         
         // for debug of error
         if self.errorOn == true {
-            showError()
+            showError(self.errorText)
         } else {
             hideError()
         }
