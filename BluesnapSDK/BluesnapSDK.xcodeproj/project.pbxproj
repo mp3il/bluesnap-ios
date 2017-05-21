@@ -35,6 +35,7 @@
 		FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077321EACACD50045E920 /* BSViewsManager.swift */; };
 		FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE301E938B63006C3359 /* BSValidator.swift */; };
 		FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */; };
+		FDF630881ED1AA2A00BE6F48 /* BSPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		FDA077321EACACD50045E920 /* BSViewsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSViewsManager.swift; sourceTree = "<group>"; };
 		FDA6BE301E938B63006C3359 /* BSValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidator.swift; sourceTree = "<group>"; };
 		FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
+		FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
+				FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */,
 				FD7B0E181E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift */,
 				FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
@@ -313,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDF630881ED1AA2A00BE6F48 /* BSPaymentViewController.swift in Sources */,
 				FD7B0E191E9283F1006F4CBC /* BSShippingViewControllerToDelete.swift in Sources */,
 				2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */,
 				FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */,
