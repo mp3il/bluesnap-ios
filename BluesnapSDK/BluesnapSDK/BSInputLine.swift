@@ -29,6 +29,22 @@ class BSInputLine: UIControl {
     @IBInspectable var keyboardType : UIKeyboardType = UIKeyboardType.default
     @IBInspectable var errorText: String! = "Please supply a valid value"
     @IBInspectable var delegate: BSInputLineDelegate?
+    
+    @IBInspectable var cornerRadius: CGFloat = 5.0
+    @IBInspectable var borderColor: UIColor = UIColor(red: 248, green: 248, blue: 248, alpha: 1)
+    @IBInspectable var borderWidth: CGFloat = 0.5
+    private var customBackgroundColor = UIColor.white
+    override var backgroundColor: UIColor? {
+        didSet {
+            customBackgroundColor = backgroundColor!
+            super.backgroundColor = UIColor.clear
+        }
+    }
+    @IBInspectable var shadowDarkColor: UIColor = UIColor.lightGray //(red: 100, green: 100, blue: 100, alpha: 1)
+    @IBInspectable var shadowRadius: CGFloat = 15.0
+    @IBInspectable var shadowOpacity: CGFloat = 0.5
+    
+    
     // This is just for debug
     @IBInspectable var errorOn: Bool! = false
     
@@ -116,6 +132,31 @@ class BSInputLine: UIControl {
         buildElements()
     }
     
+    override func draw(_ rect: CGRect) {
+        
+        // set item attributes
+        
+        label.text = self.labelText
+        textField.placeholder = self.fieldPlaceHolder
+        resizeElements()
+        
+        // set rounded corners
+        
+        customBackgroundColor.setFill()
+        UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).fill()
+        
+        // set shadow
+        
+        let borderRect = bounds.insetBy(dx: borderWidth/2, dy: borderWidth/2)
+        let borderPath = UIBezierPath(roundedRect: borderRect, cornerRadius: cornerRadius - borderWidth/2)
+        borderColor.setStroke()
+        borderPath.lineWidth = borderWidth
+        borderPath.stroke()
+        //UIColor.clear.setStroke()
+        //self.layer.shouldRasterize = true
+        
+    }
+    
     private func shouldCoverTextField()-> Bool {
         return self.fieldIsEditable != nil
     }
@@ -142,14 +183,27 @@ class BSInputLine: UIControl {
     
     private func setElementAttributes() {
         
+        // set stuff for shadow
+        layer.shadowColor = shadowDarkColor.cgColor
+        layer.shadowOffset = CGSize.zero
+        layer.shadowRadius = shadowRadius
+        layer.shadowOpacity = Float(shadowOpacity)
+        super.backgroundColor = UIColor.clear
+
+        //self.layer.cornerRadius = cornerRadius
+
         label.backgroundColor = self.labelBkdColor
         label.shadowColor = UIColor.clear
+        label.shadowOffset = CGSize.zero
+        label.layer.shadowRadius = 0
+        label.layer.shadowColor = UIColor.clear.cgColor
         label.textColor = self.labelTextColor
         
         textField.keyboardType = self.keyboardType
         textField.backgroundColor = self.fieldBkdColor
         textField.textColor = self.fieldTextColor
         textField.returnKeyType = UIReturnKeyType.done
+        textField.borderStyle = .none
     }
     
     override func prepareForInterfaceBuilder() {
@@ -240,13 +294,6 @@ class BSInputLine: UIControl {
                 errorLabel.frame = CGRect(x: textField.frame.minX + textField.frame.width*0.25, y: textField.frame.minY, width: textField.frame.width*0.75, height: textField.frame.height)
             }
         }
-    }
-    
-    override func draw(_ rect: CGRect) {
-        
-        label.text = self.labelText
-        textField.placeholder = self.fieldPlaceHolder
-        resizeElements()
     }
     
     override func updateConstraints() {
