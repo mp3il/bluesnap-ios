@@ -124,7 +124,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
-            updateZipByCountry(countryCode: paymentDetails.getShippingDetails()?.country ?? "")
+            let countryCode = paymentDetails.getShippingDetails()?.country ?? ""
+            updateZipByCountry(countryCode: countryCode)
+            updateFlagImage(countryCode: countryCode)
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
         }
@@ -293,6 +295,11 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             shippingDetails.country = countryCode
             updateZipByCountry(countryCode: countryCode)
         }
+        updateFlagImage(countryCode: countryCode)
+    }
+    
+    private func updateFlagImage(countryCode : String) {
+        
         // load the flag image
         if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
             nameInputLine.image = image
