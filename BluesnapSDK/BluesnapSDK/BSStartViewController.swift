@@ -19,7 +19,7 @@ class BSStartViewController: UIViewController {
         paymentDetails in
         print("purchaseFunc should be overridden")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,5 +55,5 @@ class BSStartViewController: UIViewController {
     @IBAction func touchUpInside(_ sender: BSInputLine) {
         print("****************** container touchUpInside")
     }
-    
+
 }

@@ -25,7 +25,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     
     fileprivate var withShipping = false
     fileprivate var shippingScreen: BSShippingViewController!
-    fileprivate var previousCcn : String?
     fileprivate var cardType : String?
     
     // MARK: Constants
@@ -34,18 +33,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     fileprivate let ccnInvalidMessage = "Please fill a valid Credit Card number"
     fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
     fileprivate let expInvalidMessage = "Please fill a valid exiration date"
-    fileprivate let doValidations = true;
-    fileprivate let ccImages = [
-        "amex": "amex",
-        //"cartebleue": "visa",
-        "cirrus": "cirrus",
-        "diners": "dinersclub",
-        "discover": "discover",
-        "jcb": "jcb",
-        "maestr_uk": "maestro",
-        "mastercard": "mastercard",
-        "china_union_pay": "unionpay",
-        "visa": "visa"]
+
     
     // MARK: - Data
     
@@ -54,16 +42,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Outlets
     
     @IBOutlet weak var payButton: UIButton!
-    @IBOutlet weak var cardUiTextField: UITextField!
-    @IBOutlet weak var ExpYYUiTextField: UITextField!
-    @IBOutlet weak var ExpMMUiTextField: UITextField!
-    @IBOutlet weak var cvvUiTextField: UITextField!
     
     @IBOutlet weak var subtotalUILabel: UILabel!
     @IBOutlet weak var taxAmountUILabel: UILabel!
     @IBOutlet weak var taxDetailsView: UIView!
     
-    @IBOutlet weak var ccIconImage: UIImageView!
+    @IBOutlet weak var ccInputLine: BSCcInputLine!
     
     @IBOutlet weak var nameInputLine: BSInputLine!
     @IBOutlet weak var emailInputLine: BSInputLine!
@@ -71,10 +55,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var zipInputLine: BSInputLine!
     @IBOutlet weak var cityInputLine: BSInputLine!
     @IBOutlet weak var stateInputLine: BSInputLine!
-    
-    @IBOutlet weak var ccnErrorUiLabel: UILabel!
-    @IBOutlet weak var expErrorUiLabel: UILabel!
-    @IBOutlet weak var cvvErrorUiLabel: UILabel!
     
     @IBOutlet weak var shippingSameAsBillingView: UIView!
     @IBOutlet weak var shippingSameAsBillingSwitch: UISwitch!
@@ -159,6 +139,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        emailInputLine.fieldKeyboardType = .emailAddress
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -181,6 +163,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         taxDetailsView.isHidden = self.paymentDetails.getTaxAmount() == 0
         
+        ccInputLine.ccnIsOpen = firstTime
+        ccInputLine.submitCcFunc = submitCcFunc
         if self.firstTime == true {
             self.firstTime = false
             if let billingDetails = paymentDetails.getBillingDetails() {
@@ -193,10 +177,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
                 }
             }
             // this is for debug, should bve removed
-            self.cardUiTextField.text = "4111 1111 1111 1111"
-            self.ExpMMUiTextField.text = "11"
-            self.ExpYYUiTextField.text = "20"
-            self.cvvUiTextField.text = "444"
+            //self.cardUiTextField.text = "4111 1111 1111 1111"
+            //self.ExpMMUiTextField.text = "11"
+            //self.ExpYYUiTextField.text = "20"
+            //self.cvvUiTextField.text = "444"
         }
         
         hideShowFields()
@@ -221,14 +205,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         updateFlagImage(countryCode: countryCode)
         cityInputLine.isHidden = hideFields
         updateState()
-        
-        // hide all errors
-        ccnErrorUiLabel.isHidden = true
-        expErrorUiLabel.isHidden = true
-        cvvErrorUiLabel.isHidden = true
-        
-        //let cardType = cardUiTextField.text?.getCCType() ?? ""
-        //updateCcIcon(ccType: cardType)
     }
     
     private func updateState() {
@@ -262,29 +238,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func getExpYearAsYYYY() -> String! {
-        
-        let yearStr = String(BSValidator.getCurrentYear())
-        let p = yearStr.index(yearStr.startIndex, offsetBy: 2)
-        let first2Digits = yearStr.substring(with: yearStr.startIndex..<p)
-        let last2Digits = self.ExpYYUiTextField.text ?? ""
-        return "\(first2Digits)\(last2Digits)"
-    }
-    
-    private func getExpDateAsMMYYYY() -> String! {
-        
-        let mm = self.ExpMMUiTextField.text ?? ""
-        let yyyy = getExpYearAsYYYY()
-        return "\(mm)/\(yyyy!)"
-    }
-    
     private func submitPaymentFields() -> BSResultCcDetails? {
         
         var result : BSResultCcDetails?
         
-        let ccn = self.cardUiTextField.text ?? ""
-        let cvv = self.cvvUiTextField.text ?? ""
-        let exp = self.getExpDateAsMMYYYY() ?? ""
+        let ccn = self.ccInputLine.getValue() ?? ""
+        let cvv = self.ccInputLine.getCvv() ?? ""
+        let exp = self.ccInputLine.getExpDateAsMMYYYY() ?? ""
         do {
             result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
             self.paymentDetails.setCcDetails(ccDetails: result)
@@ -300,14 +260,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
-                ccnErrorUiLabel.text = ccnInvalidMessage
-                ccnErrorUiLabel.isHidden = false
+                ccInputLine.showError(ccnInvalidMessage)
             } else if (error == BSCcDetailErrors.invalidExpDate) {
-                expErrorUiLabel.text = expInvalidMessage
-                expErrorUiLabel.isHidden = false
+                ccInputLine.showError(expInvalidMessage)
             } else if (error == BSCcDetailErrors.invalidCvv) {
-                cvvErrorUiLabel.text = cvvInvalidMessage
-                cvvErrorUiLabel.isHidden = false
+                ccInputLine.showError(cvvInvalidMessage)
             } else if (error == BSCcDetailErrors.expiredToken) {
                 // should be popup here
                 showAlert("Your session has expired, please go back and try again")
@@ -343,24 +300,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    private func updateCcIcon(ccType : String?) {
-        
-        self.cardType = ccType
-        
-        // change the image in ccIconImage
-        var imageName : String?
-        if let ccType = ccType?.lowercased() {
-            imageName = ccImages[ccType]
-        }
-        if imageName == nil {
-            imageName = "default"
-            NSLog("ccTypew \(ccType) does not have an icon")
-        }
-        if let image = BSViewsManager.getImage(imageName: "cc_\(imageName!)") {
-            self.ccIconImage.image = image
-        }
-    }
-    
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
         paymentDetails.getBillingDetails().country = countryCode
@@ -376,10 +315,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
         if countryCode.lowercased() == "us" {
             self.zipInputLine.labelText = "Billing Zip"
-            self.zipInputLine.keyboardType = .numberPad
+            self.zipInputLine.fieldKeyboardType = .numberPad
         } else {
             self.zipInputLine.labelText = "Postal Code"
-            self.zipInputLine.keyboardType = .numbersAndPunctuation
+            self.zipInputLine.fieldKeyboardType = .numbersAndPunctuation
         }
         self.zipInputLine.isHidden = hideZip
         self.zipInputLine.hideError()
@@ -460,15 +399,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     func validateForm() -> Bool {
         
         let ok1 = validateName(ignoreIfEmpty: false)
-        let ok2 = validateCCN(ignoreIfEmpty: false)
-        let ok3 = validateExpMM(ignoreIfEmpty: false)
-        let ok4 = validateExpYY(ignoreIfEmpty: false)
-        let ok5 = validateCvv(ignoreIfEmpty: false)
-        var okExp : Bool = true
-        if ok3 && ok4 {
-            okExp = BSValidator.validateExp(monthTextField: self.ExpMMUiTextField, yearTextField: self.ExpYYUiTextField, errorLabel: self.expErrorUiLabel, errorMessage: expInvalidMessage)
-        }
-        var result = ok1 && ok2 && ok3 && ok4 && ok5 && okExp
+        let ok2 = ccInputLine.validate()
+        var result = ok1 && ok2
         
         if fullBilling {
             let ok1 = validateEmail(ignoreIfEmpty: false)
@@ -498,38 +430,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         return result
     }
-
-    func validateCvv(ignoreIfEmpty : Bool) -> Bool {
-        
-        let result = BSValidator.validateCvv(ignoreIfEmpty: ignoreIfEmpty, textField: cvvUiTextField, errorLabel: cvvErrorUiLabel)
-        return result
-    }
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
         let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, errorMessage: nameInvalidMessage, addressDetails: paymentDetails.getBillingDetails())
-        return result
-    }
-
-    func validateCCN(ignoreIfEmpty : Bool) -> Bool {
-        
-        let result : Bool = BSValidator.validateCCN(ignoreIfEmpty: ignoreIfEmpty, textField: cardUiTextField, errorLabel: ccnErrorUiLabel, errorMessage: ccnInvalidMessage)
-        //if result == true {
-        //    let cardType = cardUiTextField.text?.getCCType() ?? ""
-        //    updateCcIcon(ccType: cardType)
-        //}
-        return result
-    }
-    
-    func validateExpMM(ignoreIfEmpty : Bool) -> Bool {
-        
-        let result = BSValidator.validateExpMM(ignoreIfEmpty: ignoreIfEmpty, textField: ExpMMUiTextField, errorLabel: expErrorUiLabel, errorMessage: expInvalidMessage)
-        return result
-    }
-    
-    func validateExpYY(ignoreIfEmpty : Bool) -> Bool {
-        
-        let result = BSValidator.validateExpYY(ignoreIfEmpty: ignoreIfEmpty, textField: ExpYYUiTextField, errorLabel: expErrorUiLabel, errorMessage: expInvalidMessage)
         return result
     }
     
@@ -566,7 +470,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         if result == true {
             // make zip optional for cards other than visa/discover
             var ignoreEmptyZip = ignoreIfEmpty
-            let ccType = self.cardType?.lowercased() ?? ""
+            let ccType = self.ccInputLine.getCardType().lowercased()
             if !ignoreIfEmpty && !fullBilling && ccType != "visa" && ccType != "discover" {
                 ignoreEmptyZip = true
             }
@@ -581,65 +485,36 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         return result
     }
 
+    // MARK: CC details additions
     
-    // MARK: real-time formatting and Validations on text fields
-    
-    @IBAction func cardEditingChanged(_ sender: UITextField) {
+    func submitCcFunc(ccn: String!) -> Bool! {
         
-        BSValidator.ccnEditingChanged(sender)
-    }
-    
-    @IBAction func cardEditingDidEnd(_ sender: UITextField) {
-        if validateCCN(ignoreIfEmpty: true) {
-            if let ccn = self.cardUiTextField.text {
-                if previousCcn != ccn {
-                    previousCcn = ccn
-                    // get issuing country and card type from server
-                    do {
-                        let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn)
-                        if let issuingCountry = result?.ccIssuingCountry {
-                            self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
-                        }
-                        if let cardType = result?.ccType {
-                            updateCcIcon(ccType: cardType)
-                        }
-                    } catch let error as BSCcDetailErrors {
-                        if (error == BSCcDetailErrors.invalidCcNumber) {
-                            ccnErrorUiLabel.text = ccnInvalidMessage
-                            ccnErrorUiLabel.isHidden = false
-                        } else {
-                            showAlert("An error occurred")
-                        }
-                    } catch {
-                        NSLog("Unexpected error submitting CCN to BS")
-                        showAlert("An error occurred")
-                    }
-                }
+        // get issuing country and card type from server
+        var ok = false
+        do {
+            let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn)
+            if let issuingCountry = result?.ccIssuingCountry {
+                self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             }
+            if let cardType = result?.ccType {
+                ccInputLine.cardType = cardType
+            }
+            ok = true
+        } catch let error as BSCcDetailErrors {
+            if (error == BSCcDetailErrors.invalidCcNumber) {
+                ccInputLine.showError(ccnInvalidMessage)
+            } else {
+                showAlert("An error occurred")
+            }
+        } catch {
+            NSLog("Unexpected error submitting CCN to BS")
+            showAlert("An error occurred")
         }
+        return ok
     }
 
-    @IBAction func expEditingChanged(_ sender: UITextField) {
-        
-        BSValidator.expEditingChanged(sender)
-    }
     
-    @IBAction func expYYEditingDidEnd(_ sender: UITextField) {
-        _ = validateExpYY(ignoreIfEmpty: true)
-    }
-    
-    @IBAction func expMMEditingDidEnd(_ sender: UITextField) {
-        _ = validateExpMM(ignoreIfEmpty: true)
-    }
-    
-    @IBAction func cvvEditingChanged(_ sender: UITextField) {
-        
-        BSValidator.cvvEditingChanged(sender)
-    }
-    
-    @IBAction func cvvEditingDidEnd(_ sender: UITextField) {
-        _ = validateCvv(ignoreIfEmpty: true)
-    }
+    // MARK: real-time formatting and Validations on text fields
     
     @IBAction func nameEditingChanged(_ sender: BSInputLine) {
         
@@ -704,9 +579,5 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             addressDetails: paymentDetails.getBillingDetails(),
             updateFunc: updateWithNewState)
     }
-
-    
-
-    
 
 }

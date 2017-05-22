@@ -79,6 +79,17 @@ extension String {
         }
     }
     
+    var last4 : String {
+        
+        let digits = self.removeNoneDigits
+        if digits.characters.count >= 4 {
+            let p = digits.characters.index(digits.endIndex, offsetBy: -4)
+            return digits.substring(with: p..<digits.endIndex)
+        } else {
+            return ""
+        }
+    }
+    
     var removeNoneAlphaCharacters : String {
         
         var result : String = "";
@@ -159,6 +170,19 @@ extension String {
             } else {
                 result += substring(from: idx1)
             }
+        } else {
+            result = self
+        }
+        return result;
+    }
+    
+    var formatExp : String {
+        
+        var result: String
+        let myLength = characters.count
+        if (myLength > 2) {
+            let idx1 = index(startIndex, offsetBy: 2)
+            result = substring(to: idx1) + "/" + substring(from: idx1)
         } else {
             result = self
         }
@@ -522,6 +546,46 @@ class BSValidator {
     }
     
     
+    class func validateExp(textField: UITextField, errorLabel: UILabel) -> Bool {
+        
+        var ok : Bool = true
+        
+        let newValue = textField.text ?? ""
+        if let p = newValue.characters.index(of: "/") {
+            let mm = newValue.substring(with: newValue.startIndex..<p)
+            let yy = newValue.substring(with: p ..< newValue.endIndex)
+            if (mm.characters.count < 2) {
+                ok = false
+            } else if !mm.isValidMonth {
+                ok = false
+            } else if (yy.characters.count < 2) {
+                ok = false
+            } else if let month = Int(mm), let year = Int(yy) {
+                var dateComponents = DateComponents()
+                dateComponents.year = year + (getCurrentYear() / 100)*100
+                dateComponents.month = month
+                dateComponents.day = 1
+                let expDate = Calendar.current.date(from: dateComponents)!
+                ok = expDate > Date()
+            } else {
+                ok = false
+            }
+        } else {
+            ok = false
+        }
+
+        if (ok) {
+            errorLabel.isHidden = true
+            textField.textColor = defaultFieldColor
+        } else {
+            errorLabel.text = "Please fill a valid exiration date"
+            errorLabel.isHidden = false
+            textField.textColor = errorFieldColor
+        }
+        return ok
+    }
+
+    
     class func validateExpMM(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String!) -> Bool {
         
         var ok : Bool = true
@@ -718,7 +782,7 @@ class BSValidator {
     class func expEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 2)
+        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4).formatExp
         sender.text = input
     }
     
