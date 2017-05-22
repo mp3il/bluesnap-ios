@@ -1496,9 +1496,9 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
-                                                    <action selector="cardEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="8l4-vX-zaW"/>
-                                                    <action selector="ccnEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="3yu-cT-xPc"/>
-                                                    <outlet property="delegate" destination="sH3-ph-K7G" id="Qdk-Q3-tgC"/>
+                                                    <action selector="cardEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="3bY-0O-x3N"/>
+                                                    <action selector="cardEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="dXy-ra-QcB"/>
+                                                    <outlet property="delegate" destination="W0G-M6-3dM" id="9Ob-PA-J2p"/>
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="CCN Error Message" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZz-Y2-KBX">
@@ -1528,9 +1528,9 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
-                                                    <action selector="expEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="0Aa-eM-dJP"/>
-                                                    <action selector="expMMEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="I3E-FA-Wfu"/>
-                                                    <outlet property="delegate" destination="sH3-ph-K7G" id="hCA-x3-BQB"/>
+                                                    <action selector="expEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="Oqe-sU-zVj"/>
+                                                    <action selector="expMMEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="wfQ-Ho-8Pc"/>
+                                                    <outlet property="delegate" destination="W0G-M6-3dM" id="jgT-Km-We0"/>
                                                 </connections>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V7Q-1P-JgO">
@@ -1551,9 +1551,9 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
-                                                    <action selector="expEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="amr-zb-rkP"/>
-                                                    <action selector="expYYEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="qEH-e7-j0c"/>
-                                                    <outlet property="delegate" destination="sH3-ph-K7G" id="2rM-TK-oxb"/>
+                                                    <action selector="expEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="k5r-jT-XWV"/>
+                                                    <action selector="expYYEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="8gY-ym-Wpx"/>
+                                                    <outlet property="delegate" destination="W0G-M6-3dM" id="rip-5Q-0An"/>
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="EXP Error Message" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXa-HX-ltx">
@@ -1580,9 +1580,9 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
-                                                    <action selector="cvvEditingChanged:" destination="sH3-ph-K7G" eventType="editingChanged" id="0Ip-J2-nfC"/>
-                                                    <action selector="cvvEditingDidEnd:" destination="sH3-ph-K7G" eventType="editingDidEnd" id="r1o-8F-l5M"/>
-                                                    <outlet property="delegate" destination="sH3-ph-K7G" id="VDU-JG-agH"/>
+                                                    <action selector="cvvEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="wWl-H6-rXV"/>
+                                                    <action selector="cvvEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="ZEq-Xj-gTu"/>
+                                                    <outlet property="delegate" destination="W0G-M6-3dM" id="JPN-89-f30"/>
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="CVV Error Message" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VdP-WR-x4C">
@@ -1607,9 +1607,9 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="flagTouchUpInside:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="PHY-zk-NKH"/>
-                                                    <action selector="nameEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="h01-Gm-NmW"/>
-                                                    <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="Efx-03-Ttw"/>
+                                                    <action selector="countryFlagClick:" destination="W0G-M6-3dM" eventType="touchUpInside" id="jiX-jP-adA"/>
+                                                    <action selector="nameEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="8VK-3z-fnc"/>
+                                                    <action selector="nameEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="QJz-yK-d7l"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAV-CU-OEK" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -1620,8 +1620,8 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="emailEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="oLu-6z-tDO"/>
-                                                    <action selector="emailEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="wzI-pi-bAl"/>
+                                                    <action selector="emailEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="A4y-os-NRv"/>
+                                                    <action selector="emailEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="aRR-MW-CVj"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yRx-IZ-fub" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -1632,8 +1632,8 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill code"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="zipEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="i95-PZ-sx2"/>
-                                                    <action selector="zipEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="tdh-J1-gbt"/>
+                                                    <action selector="zipEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="4PL-N2-ZEl"/>
+                                                    <action selector="zipEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="3XR-p0-fvD"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Vk-vx-UOS" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -1644,8 +1644,8 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill address"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="streetEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="OrF-7J-0Md"/>
-                                                    <action selector="streetEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="Ly5-VT-CdF"/>
+                                                    <action selector="addressEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="9eT-pS-hme"/>
+                                                    <action selector="addressEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="EfC-d0-WFf"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sW-jJ-zDD" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -1656,8 +1656,8 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill city"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="cityEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="nKZ-iI-Us4"/>
-                                                    <action selector="cityEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="s1C-Xs-uE6"/>
+                                                    <action selector="cityEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="Jnn-5Y-xfU"/>
+                                                    <action selector="cityEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="4HK-eB-GUR"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EKc-lR-XxG" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -1669,7 +1669,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="fieldIsEditable" value="No"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="stateTouchUpInside:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="fC2-cr-x2U"/>
+                                                    <action selector="stateClick:" destination="W0G-M6-3dM" eventType="touchUpInside" id="vOq-lV-QCq"/>
                                                 </connections>
                                             </view>
                                         </subviews>
@@ -1757,7 +1757,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="clickPay:" destination="sH3-ph-K7G" eventType="touchUpInside" id="sAD-BT-LkH"/>
+                                    <action selector="clickPay:" destination="W0G-M6-3dM" eventType="touchUpInside" id="jhn-KN-RNq"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yCg-Wt-HfE" userLabel="Same as billing View">
@@ -1766,7 +1766,7 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWl-8L-gmv">
                                         <rect key="frame" x="266" y="3" width="51" height="31"/>
                                         <connections>
-                                            <action selector="shippingSameAsBillingValueChanged:" destination="sH3-ph-K7G" eventType="valueChanged" id="XNK-gY-goH"/>
+                                            <action selector="shippingSameAsBillingValueChanged:" destination="W0G-M6-3dM" eventType="valueChanged" id="TrO-Bd-u8l"/>
                                         </connections>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping same as billing" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0EE-XI-ScQ">
@@ -1849,8 +1849,10 @@
                         <outlet property="cvvUiTextField" destination="EjQ-Q6-EMO" id="Wvu-3M-klY"/>
                         <outlet property="emailInputLine" destination="zAV-CU-OEK" id="WNj-qi-hal"/>
                         <outlet property="expErrorUiLabel" destination="mXa-HX-ltx" id="Mdt-Vy-5lV"/>
+                        <outlet property="fieldsView" destination="TbD-vW-amX" id="U1w-eW-6K9"/>
                         <outlet property="nameInputLine" destination="gcs-xh-zfv" id="29n-uG-jyO"/>
                         <outlet property="payButton" destination="vTt-Ww-2zE" id="eH4-gr-psr"/>
+                        <outlet property="scrollView" destination="evC-6K-ko8" id="Mxf-pm-31b"/>
                         <outlet property="shippingSameAsBillingSwitch" destination="XWl-8L-gmv" id="XV9-nJ-CaA"/>
                         <outlet property="shippingSameAsBillingView" destination="yCg-Wt-HfE" id="CdY-hJ-sZj"/>
                         <outlet property="stateInputLine" destination="EKc-lR-XxG" id="Yje-Ab-5bX"/>

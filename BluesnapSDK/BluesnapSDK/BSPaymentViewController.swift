@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSPaymentViewController: UIViewController {
+class BSPaymentViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: - Public properties
     
@@ -216,13 +216,13 @@ class BSPaymentViewController: UIViewController {
         let hideFields = !self.fullBilling
         emailInputLine.isHidden = hideFields
         streetInputLine.isHidden = hideFields
-        updateZipByCountry(countryCode: self.paymentDetails.getBillingDetails().country ?? "")
-        //countryFlagButton.isHidden = hideFields
+        let countryCode = self.paymentDetails.getBillingDetails().country ?? ""
+        updateZipByCountry(countryCode: countryCode)
+        updateFlagImage(countryCode: countryCode)
         cityInputLine.isHidden = hideFields
         updateState()
         
         // hide all errors
-        nameInputLine.isHidden = true
         ccnErrorUiLabel.isHidden = true
         expErrorUiLabel.isHidden = true
         cvvErrorUiLabel.isHidden = true
@@ -368,9 +368,7 @@ class BSPaymentViewController: UIViewController {
         updateState()
         
         // load the flag image
-        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
-            self.nameInputLine.image = image
-        }
+        updateFlagImage(countryCode: countryCode.uppercased())
     }
 
     private func updateZipByCountry(countryCode : String) {
@@ -392,6 +390,15 @@ class BSPaymentViewController: UIViewController {
         paymentDetails.getBillingDetails().state = stateCode
         self.stateInputLine.setValue(stateName)
     }
+    
+    private func updateFlagImage(countryCode : String) {
+        
+        // load the flag image
+        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
+            nameInputLine.image = image
+        }
+    }
+
     
     // MARK: menu actions
     

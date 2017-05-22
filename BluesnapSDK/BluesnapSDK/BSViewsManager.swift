@@ -16,12 +16,12 @@ class BSViewsManager {
     static let storyboardName = "BlueSnap"
     static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
     static let startScreenStoryboardId = "BSStartScreenStoryboardId"
-    static let purchaseScreenStoryboardId = "BSPurchaseScreenStoryboardId"
+    static let purchaseScreenStoryboardId = "BSPaymentScreenStoryboardId" //"BSPurchaseScreenStoryboardId"
     static let countryScreenStoryboardId = "BSCountriesStoryboardId"
     static let stateScreenStoryboardId = "BSStatesStoryboardId"
 
     fileprivate static var startScreen: BSStartViewController!
-    fileprivate static var purchaseScreen: BSSummaryScreen!
+    fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
     fileprivate static var currencyScreen: BSCurrenciesViewController!
 
     /**
@@ -79,7 +79,7 @@ class BSViewsManager {
         
         if purchaseScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
-            purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSSummaryScreen
+            purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController //BSSummaryScreen
         }
         
         purchaseScreen.paymentDetails = paymentDetails

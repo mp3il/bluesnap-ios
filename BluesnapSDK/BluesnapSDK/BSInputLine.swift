@@ -8,11 +8,6 @@
 
 import UIKit
 
-protocol BSInputLineDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField)
-    func textFieldDidEndEditing(_ textField: UITextField)
-}
-
 @IBDesignable
 class BSInputLine: UIControl {
 
@@ -23,11 +18,14 @@ class BSInputLine: UIControl {
     @IBInspectable var labelBkdColor: UIColor = UIColor.white
     @IBInspectable var fieldPlaceHolder: String! = ""
     @IBInspectable var fieldIsEditable: String?
-    @IBInspectable var image: UIImage?
+    @IBInspectable var image: UIImage? {
+        didSet {
+            imageButton.imageView?.image = image
+        }
+    }
     @IBInspectable var fieldTextColor: UIColor = UIColor.black
     @IBInspectable var fieldBkdColor: UIColor = UIColor.white
     @IBInspectable var keyboardType : UIKeyboardType = UIKeyboardType.default
-    @IBInspectable var delegate: BSInputLineDelegate?
     
     @IBInspectable var cornerRadius: CGFloat = 5.0
     @IBInspectable var borderColor: UIColor = UIColor(red: 248, green: 248, blue: 248, alpha: 1)
