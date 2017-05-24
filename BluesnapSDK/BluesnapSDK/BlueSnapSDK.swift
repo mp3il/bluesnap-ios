@@ -12,7 +12,6 @@ import Foundation
 	// MARK: - UI Controllers
 	
 	fileprivate static var currencyScreen: BSCurrenciesViewController!
-	fileprivate static var startScreen: BSSummaryScreen!
     
     // MARK: data
     
