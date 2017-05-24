@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSCcInputLine: BSBaseInputControl {
+class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
 
     // We use the BSBaseInputControl for the CCN field and image,
     // and add fields for EXP and CVV
@@ -19,6 +19,12 @@ class BSCcInputLine: BSBaseInputControl {
         ccn in
         print("submitCcFunc should be overridden")
         return true
+    }
+    internal var startEditCcFunc: () -> Void = {
+        print("startEditCcFunc should be overridden")
+    }
+    internal var endEditCcFunc: () -> Void = {
+        print("endEditCcFunc should be overridden")
     }
     internal var cardType : String! = "" {
         didSet {
@@ -36,14 +42,15 @@ class BSCcInputLine: BSBaseInputControl {
 
     // MARK: private properties
     
-    private let ccnWidth : CGFloat = 155
+    private let ccnWidth : CGFloat = 200
     private let last4Width : CGFloat = 46
     private let expLeftMargin : CGFloat = 150
     private let expWidth : CGFloat = 80
-    private let cvvLeftMargin : CGFloat = 284
-    private let cvvWidth : CGFloat = 62
+    private let cvvLeftMargin : CGFloat = 264
+    private let cvvWidth : CGFloat = 52
+    private let errorWidth : CGFloat = 180
     
-    private var ccn : String! = ""
+    internal var ccn : String! = ""
     internal var ccnIsOpen : Bool = true {
         didSet {
             self.fieldIsEditable = ccnIsOpen ? nil : "NO"
@@ -58,9 +65,6 @@ class BSCcInputLine: BSBaseInputControl {
     
     // MARK: Constants
 
-    fileprivate let ccnInvalidMessage = "Please fill a valid Credit Card number"
-    fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
-    fileprivate let expInvalidMessage = "Please fill a valid exiration date"
     fileprivate let ccImages = [
         "amex": "amex",
         //"cartebleue": "visa",
@@ -74,10 +78,6 @@ class BSCcInputLine: BSBaseInputControl {
         "visa": "visa"]
 
     // MARK: Public functions
-    
-    //func getExp() -> String! {
-    //    return self.expTextField.text ?? ""
-    //}
     
     func getExpDateAsMMYYYY() -> String! {
         
@@ -114,12 +114,10 @@ class BSCcInputLine: BSBaseInputControl {
     
     func validate() -> Bool {
         
-        let ok1 = validateCCN()
-        let ok2 = validateExp()
-        let ok3 = validateCvv()
-        let result = ok1 && ok2 && ok3
+        let result = validateCCN() && validateExp() && validateCvv()
         return result
     }
+    
     
     // MARK: BSBaseInputControl Override functions
 
@@ -128,21 +126,24 @@ class BSCcInputLine: BSBaseInputControl {
         //self.fieldIsEditable = ccnIsOpen ? nil : "NO"
 
         super.buildElements()
+        
+        self.textField.delegate = self
         self.addSubview(expTextField)
+        self.expTextField.delegate = self
         self.addSubview(cvvTextField)
+        self.cvvTextField.delegate = self
         
         fieldKeyboardType = .numberPad
         
         expTextField.addTarget(self, action: #selector(BSCcInputLine.expFieldDidBeginEditing(_:)), for: .editingDidBegin)
-        expTextField.addTarget(self, action: #selector(BSCcInputLine.expFieldDidEndEditing(_:)), for: .editingDidEnd)
         expTextField.addTarget(self, action: #selector(BSCcInputLine.expFieldEditingChanged(_:)), for: .editingChanged)
 
         cvvTextField.addTarget(self, action: #selector(BSCcInputLine.cvvFieldDidBeginEditing(_:)), for: .editingDidBegin)
-        cvvTextField.addTarget(self, action: #selector(BSCcInputLine.cvvFieldDidEndEditing(_:)), for: .editingDidEnd)
         cvvTextField.addTarget(self, action: #selector(BSCcInputLine.cvvFieldEditingChanged(_:)), for: .editingChanged)
         
         errorLabel = UILabel()
         self.addSubview(errorLabel!)
+        showError(nil)
         errorLabel?.isHidden = true
     }
 
@@ -151,14 +152,14 @@ class BSCcInputLine: BSBaseInputControl {
         super.setElementAttributes()
         
         expTextField.keyboardType = .numberPad
-        expTextField.backgroundColor = UIColor.yellow // self.fieldBkdColor
+        expTextField.backgroundColor = self.fieldBkdColor
         expTextField.textColor = self.fieldTextColor
         expTextField.returnKeyType = UIReturnKeyType.done
         expTextField.borderStyle = .none
         expTextField.placeholder = "MM/YY"
 
         cvvTextField.keyboardType = .numberPad
-        cvvTextField.backgroundColor = UIColor.green //self.fieldBkdColor
+        cvvTextField.backgroundColor = self.fieldBkdColor
         cvvTextField.textColor = self.fieldTextColor
         cvvTextField.returnKeyType = UIReturnKeyType.done
         cvvTextField.borderStyle = .none
@@ -209,21 +210,65 @@ class BSCcInputLine: BSBaseInputControl {
 
     override func resizeError() {
         if let errorLabel = errorLabel {
-             if let labelFont : UIFont = UIFont(name: self.fontName, size: errorFontSize*vRatio) {
+            if let labelFont : UIFont = UIFont(name: self.fontName, size: errorFontSize*vRatio) {
                 errorLabel.font = labelFont
             }
-            errorLabel.frame = CGRect(x: leftMargin, y: textField.frame.minY, width: totalWidth*hRatio - rightMargin, height: errorHeight*vRatio)
-            errorLabel.backgroundColor = UIColor.brown
+            var x: CGFloat = leftMargin
+            if let errorField = self.errorField {
+                x = errorField.frame.minX
+            }
+            if x + errorWidth > totalWidth - rightMargin {
+                x = (totalWidth - rightMargin - errorWidth)*hRatio
+                errorLabel.textAlignment = .right
+            } else {
+                errorLabel.textAlignment = .left
+            }
+            errorLabel.frame = CGRect(x: x, y: (totalHeight-errorHeight)*vRatio, width: self.errorWidth, height: errorHeight*vRatio)
         }
+    }
+    
+    func resizeError(field: UITextField) {
+        if let errorLabel = errorLabel {
+            if let labelFont : UIFont = UIFont(name: self.fontName, size: errorFontSize*vRatio) {
+                errorLabel.font = labelFont
+            }
+            errorLabel.frame = CGRect(x: field.frame.minX, y: (totalHeight-errorHeight)*vRatio, width: errorWidth*hRatio, height: errorHeight*vRatio)
+        }
+    }
+    
+    // MARK: TextFieldDelegate functions
+    
+    func textFieldShouldEndEditing(_ sender: UITextField) -> Bool {
+        
+        var ok : Bool = false
+        if sender == self.textField {
+            ok = tryCloseCcn()
+        } else if sender == self.expTextField {
+            ok = validateExp()
+            if ok == true {
+                cvvTextField.becomeFirstResponder()
+            }
+        } else {
+            ok = validateCvv()
+            if ok == true {
+                // focus on next field in screen
+                let nextTage=cvvTextField.tag+1;
+                let nextResponder = self.superview?.viewWithTag(nextTage) as UIResponder!
+                if nextResponder != nil {
+                    nextResponder?.becomeFirstResponder()
+                }
+            }
+        }
+        return ok
     }
 
     // MARK: event handlers
     
     override func fieldCoverButtonTouchUpInside(_ sender: Any) {
         
-        ccnIsOpen = true
-        //self.fieldIsEditable = nil
-        resizeElements()
+        if errorLabel?.isHidden == true {
+            openCcn()
+        }
     }
     
     override func textFieldDidBeginEditing(_ sender: UITextField) {
@@ -231,21 +276,71 @@ class BSCcInputLine: BSBaseInputControl {
     }
     
     override func textFieldDidEndEditing(_ sender: UITextField) {
-        
-        // do not leave field until is valid
-        if validateCCN() {
-            if submitCcFunc(textField.text!) == true {
-                ccnIsOpen = false
-                //self.fieldIsEditable = nil
-                hideError()
-                resizeElements()
-            }
-        }
+        print("textFieldDidEndEditing")
+        endEditCcFunc()
     }
     
     override func textFieldEditingChanged(_ sender: UITextField) {
         
+        self.ccn = self.textField.text
         BSValidator.ccnEditingChanged(textField)
+        
+        let ccn = textField.text?.removeNoneDigits ?? ""
+        let ccnLength = ccn.characters.count
+        print("textFieldEditingChanged; ccnLength=\(ccnLength)")
+        
+        if ccnLength >= 6 {
+            cardType = textField.text?.getCCTypeByRegex()?.lowercased() ?? ""
+        }
+        var maxLength : Int = 16
+        if cardType == "amex" {
+            maxLength = 15
+        } else if cardType == "dinersclub" {
+            maxLength = 14
+        }
+        if checkMaxLength(textField: sender, maxLength: maxLength) == true {
+            if ccnLength == maxLength {
+                // try to resign first responder
+                print("textFieldEditingChanged; resigning")
+                self.textField.resignFirstResponder()
+            }
+        }
+    }
+
+    
+    private func tryCloseCcn() -> Bool {
+        print("************* close CCN")
+        ccn = self.textField.text
+        // do not leave field until is valid
+        var ok = false
+        if validateCCN() {
+            if submitCcFunc(textField.text!) == true {
+                ok = true
+            }
+        }
+        if ok == true {
+            print("textFieldDidEndEditing; valid = true")
+            ccnIsOpen = false
+            hideError()
+            resizeElements()
+            self.expTextField.becomeFirstResponder()
+        } else {
+            self.textField.becomeFirstResponder()
+        }
+        return ok
+    }
+    
+    private func openCcn() {
+        print("************* open CCN")
+        ccnIsOpen = true
+        //self.fieldIsEditable = nil
+        resizeElements()
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                self.textField.becomeFirstResponder()
+            }
+        }
+        startEditCcFunc()
     }
 
     func expFieldDidBeginEditing(_ sender: UITextField) {
@@ -256,11 +351,11 @@ class BSCcInputLine: BSBaseInputControl {
     func expFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.expEditingChanged(sender)
-    }
-
-    func expFieldDidEndEditing(_ sender: UITextField) {
-        
-        let _ = validateExp()
+        if checkMaxLength(textField: sender, maxLength: 5) == true {
+            if sender.text?.characters.count == 5 {
+                expTextField.resignFirstResponder()
+            }
+        }
     }
 
     func cvvFieldDidBeginEditing(_ sender: UITextField) {
@@ -271,30 +366,34 @@ class BSCcInputLine: BSBaseInputControl {
     func cvvFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.cvvEditingChanged(sender)
+        var cvvMaxLength = 3
+        if cardType == "amex" {
+            cvvMaxLength = 4
+        }
+        if checkMaxLength(textField: sender, maxLength: cvvMaxLength) == true {
+            if sender.text?.characters.count == cvvMaxLength {
+                cvvTextField.resignFirstResponder()
+            }
+        }
     }
     
-    func cvvFieldDidEndEditing(_ sender: UITextField) {
-        
-        let _ = validateCvv()
-    }
-
     // MARK: Validation methods
     
     func validateCCN() -> Bool {
         
-        let result = BSValidator.validateCCN(ignoreIfEmpty: false, textField: textField, errorLabel: errorLabel!, errorMessage: ccnInvalidMessage)
+        let result = BSValidator.validateCCN(input: self)
         return result
     }
     
     func validateExp() -> Bool {
         
-        let result = BSValidator.validateExp(textField: expTextField, errorLabel: errorLabel!)
+        let result = BSValidator.validateExp(input: self)
         return result
     }
     
     func validateCvv() -> Bool {
         
-        let result = BSValidator.validateCvv(ignoreIfEmpty: false, textField: cvvTextField, errorLabel: errorLabel!)
+        let result = BSValidator.validateCvv(input: self)
         return result
     }
 
@@ -316,5 +415,13 @@ class BSCcInputLine: BSBaseInputControl {
         }
     }
     
+    func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {
+        if (textField.text!.removeNoneDigits.characters.count > maxLength) {
+            textField.deleteBackward()
+            return false
+        } else {
+            return true
+        }
+    }
 
 }

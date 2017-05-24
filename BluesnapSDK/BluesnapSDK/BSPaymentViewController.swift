@@ -165,6 +165,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         ccInputLine.ccnIsOpen = firstTime
         ccInputLine.submitCcFunc = submitCcFunc
+        ccInputLine.startEditCcFunc = startEditCcFunc
+        ccInputLine.endEditCcFunc = endEditCcFunc
+        
         if self.firstTime == true {
             self.firstTime = false
             if let billingDetails = paymentDetails.getBillingDetails() {
@@ -176,6 +179,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
                     self.cityInputLine.setValue(billingDetails.city)
                 }
             }
+            ccInputLine.textField.becomeFirstResponder()
             // this is for debug, should bve removed
             //self.cardUiTextField.text = "4111 1111 1111 1111"
             //self.ExpMMUiTextField.text = "11"
@@ -197,14 +201,25 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     
     private func hideShowFields() {
         
-        let hideFields = !self.fullBilling
-        emailInputLine.isHidden = hideFields
-        streetInputLine.isHidden = hideFields
-        let countryCode = self.paymentDetails.getBillingDetails().country ?? ""
-        updateZipByCountry(countryCode: countryCode)
-        updateFlagImage(countryCode: countryCode)
-        cityInputLine.isHidden = hideFields
-        updateState()
+        if self.ccInputLine.ccnIsOpen {
+            // hide everything
+            nameInputLine.isHidden = true
+            emailInputLine.isHidden = true
+            streetInputLine.isHidden = true
+            cityInputLine.isHidden = true
+            zipInputLine.isHidden = true
+            stateInputLine.isHidden = true
+        } else {
+            nameInputLine.isHidden = false
+            let hideFields = !self.fullBilling
+            emailInputLine.isHidden = hideFields
+            streetInputLine.isHidden = hideFields
+            let countryCode = self.paymentDetails.getBillingDetails().country ?? ""
+            updateZipByCountry(countryCode: countryCode)
+            updateFlagImage(countryCode: countryCode)
+            cityInputLine.isHidden = hideFields
+            updateState()
+        }
     }
     
     private func updateState() {
@@ -260,11 +275,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
-                ccInputLine.showError(ccnInvalidMessage)
+                ccInputLine.showError(field: ccInputLine.textField, errorText: ccnInvalidMessage)
             } else if (error == BSCcDetailErrors.invalidExpDate) {
-                ccInputLine.showError(expInvalidMessage)
+                ccInputLine.showError(field: ccInputLine.expTextField, errorText: expInvalidMessage)
             } else if (error == BSCcDetailErrors.invalidCvv) {
-                ccInputLine.showError(cvvInvalidMessage)
+                ccInputLine.showError(field: ccInputLine.cvvTextField, errorText: cvvInvalidMessage)
             } else if (error == BSCcDetailErrors.expiredToken) {
                 // should be popup here
                 showAlert("Your session has expired, please go back and try again")
@@ -487,7 +502,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: CC details additions
     
-    func submitCcFunc(ccn: String!) -> Bool! {
+    internal func submitCcFunc(ccn: String!) -> Bool! {
         
         // get issuing country and card type from server
         var ok = false
@@ -511,6 +526,16 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             showAlert("An error occurred")
         }
         return ok
+    }
+
+    internal func startEditCcFunc() {
+        print("startEditCcFunc")
+        hideShowFields()
+    }
+    
+    internal func endEditCcFunc() {
+        print("endEditCcFunc;")
+        hideShowFields()
     }
 
     

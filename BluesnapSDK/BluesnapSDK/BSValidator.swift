@@ -189,30 +189,30 @@ extension String {
         return result;
     }
     
-/*    func getCCType() -> String? {
+    func getCCTypeByRegex() -> String? {
         
         // remove blanks
         let ccn = self.removeWhitespaces()
         
         // Display the card type for the card Regex
         let cardTypesRegex = [
-            "Elo": "^(40117[8-9]|431274|438935|451416|457393|45763[1-2]|504175|506699|5067[0-6][0-9]|50677[0-8]|509[0-9][0-9][0-9]|636368|636369|636297|627780).*",
-            "HiperCard": "^(606282|637095).*",
-            "Cencosud": "^603493.*",
-            "Naranja": "^589562.*",
-            "TarjetaShopping": "^(603488|(27995[0-9])).*",
-            "ArgenCard": "^(501105).*",
-            "Cabal": "^((627170)|(589657)|(603522)|(604((20[1-9])|(2[1-9][0-9])|(3[0-9]{2})|(400)))).*",
-            "Solo": "^(6334|6767).*",
-            "Visa": "^4.+",
-            "MasterCard": "^(5(([1-5])|(0[1-5]))|2(([2-6])|(7(1|20)))|6((0(0[2-9]|1[2-9]|2[6-9]|[3-5]))|(2((1(0|2|3|[5-9]))|20|7[0-9]|80))|(60|3(0|[3-9]))|(4[0-2]|[6-8]))).+",
-            "AmericanExpress": "^3(24|4[0-9]|7|56904|379(41|12|13)).+",
-            "Discover": "^(3[8-9]|(6((01(1|300))|4[4-9]|5))).+",
-            "MaestroUK": "^6759.+|560000227571480302|5200000000000049|560000841211092515|6331101234567892|560000000000000193|560000000000000193|6331101250353227|6331100610194313|6331100266977839|560000511607577094",
-            "DinersClub": "^(3(0([0-5]|9|55)|6)).*",
-            "JCB": "^(2131|1800|35).*",
-            "ChinaUnionPay": "(^62(([4-6]|8)[0-9]{13,16}|2[2-9][0-9]{12,15}))$",
-            "CarteBleue": "^((3(6[1-4]|77451))|(4(059(?!34)|150|201|561|562|533|556|97))|(5(0[1-4]|13|30066|341[0-1]|587[0-2]|6|8))|(6(27244|390|75[1-6]|799999998))).*"
+            //"elo": "^(40117[8-9]|431274|438935|451416|457393|45763[1-2]|504175|506699|5067[0-6][0-9]|50677[0-8]|509[0-9][0-9][0-9]|636368|636369|636297|627780).*",
+            //"HiperCard": "^(606282|637095).*",
+            //"Cencosud": "^603493.*",
+            //"Naranja": "^589562.*",
+            //"TarjetaShopping": "^(603488|(27995[0-9])).*",
+            //"ArgenCard": "^(501105).*",
+            //"Cabal": "^((627170)|(589657)|(603522)|(604((20[1-9])|(2[1-9][0-9])|(3[0-9]{2})|(400)))).*",
+            //"Solo": "^(6334|6767).*",
+            "visa": "^4.+",
+            "mastercard": "^(5(([1-5])|(0[1-5]))|2(([2-6])|(7(1|20)))|6((0(0[2-9]|1[2-9]|2[6-9]|[3-5]))|(2((1(0|2|3|[5-9]))|20|7[0-9]|80))|(60|3(0|[3-9]))|(4[0-2]|[6-8]))).+",
+            "amex": "^3(24|4[0-9]|7|56904|379(41|12|13)).+",
+            "discover": "^(3[8-9]|(6((01(1|300))|4[4-9]|5))).+",
+            "maestro": "^6759.+|560000227571480302|5200000000000049|560000841211092515|6331101234567892|560000000000000193|560000000000000193|6331101250353227|6331100610194313|6331100266977839|560000511607577094",
+            "dinersclub": "^(3(0([0-5]|9|55)|6)).*",
+            "jcb": "^(2131|1800|35).*",
+            "unionpay": "(^62(([4-6]|8)[0-9]{13,16}|2[2-9][0-9]{12,15}))$"
+            //,"CarteBleue": "^((3(6[1-4]|77451))|(4(059(?!34)|150|201|561|562|533|556|97))|(5(0[1-4]|13|30066|341[0-1]|587[0-2]|6|8))|(6(27244|390|75[1-6]|799999998))).*"
         ];
         for (cardType, regexp) in cardTypesRegex {
             if let _ = ccn.range(of:regexp, options: .regularExpression) {
@@ -221,7 +221,7 @@ extension String {
         }
         return nil
     }
-*/
+
 }
 
 class BSValidator {
@@ -485,7 +485,8 @@ class BSValidator {
     class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
-        let newValue : String = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        let newValue1 : String = input.getValue() ?? ""
+        let newValue : String = newValue1.trimmingCharacters(in: .whitespaces)
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 3) {
@@ -546,14 +547,14 @@ class BSValidator {
     }
     
     
-    class func validateExp(textField: UITextField, errorLabel: UILabel) -> Bool {
+    class func validateExp(input: BSCcInputLine) -> Bool {
         
         var ok : Bool = true
         
-        let newValue = textField.text ?? ""
+        let newValue = input.expTextField.text ?? ""
         if let p = newValue.characters.index(of: "/") {
             let mm = newValue.substring(with: newValue.startIndex..<p)
-            let yy = newValue.substring(with: p ..< newValue.endIndex)
+            let yy = newValue.substring(with: p ..< newValue.endIndex).removeNoneDigits
             if (mm.characters.count < 2) {
                 ok = false
             } else if !mm.isValidMonth {
@@ -575,12 +576,9 @@ class BSValidator {
         }
 
         if (ok) {
-            errorLabel.isHidden = true
-            textField.textColor = defaultFieldColor
+            input.hideError()
         } else {
-            errorLabel.text = "Please fill a valid exiration date"
-            errorLabel.isHidden = false
-            textField.textColor = errorFieldColor
+            input.showError(field: input.expTextField, errorText: "Please fill a valid exiration date")
         }
         return ok
     }
@@ -681,7 +679,22 @@ class BSValidator {
         }
         return result
     }
-
+    
+    class func validateCvv(input: BSCcInputLine) -> Bool {
+        
+        var result : Bool = true;
+        let newValue = input.cvvTextField.text ?? ""
+        if newValue.characters.count < 3 {
+            result = false
+        }
+        if result {
+            input.hideError()
+        } else {
+            input.showError(field: input.cvvTextField, errorText: "Please fill a valid CVV number")
+        }
+        return result
+    }
+    
     class func validateCCN(ignoreIfEmpty : Bool, textField: UITextField, errorLabel: UILabel, errorMessage: String!) -> Bool {
         
         var result : Bool = true;
@@ -701,6 +714,22 @@ class BSValidator {
         }
         return result
     }
+    
+    class func validateCCN(input: BSCcInputLine) -> Bool {
+        
+        var result : Bool = true;
+        let newValue : String! = input.ccnIsOpen ? (input.textField.text ?? "") : (input.ccn ?? "")
+        if !newValue.isValidCCN {
+            result = false
+        }
+        if result {
+            input.hideError()
+        } else {
+            input.showError(field: input.textField, errorText: "Please fill a valid Credit Card number")
+        }
+        return result
+    }
+
 
     class func nameEditingChanged(_ sender: UITextField) {
         

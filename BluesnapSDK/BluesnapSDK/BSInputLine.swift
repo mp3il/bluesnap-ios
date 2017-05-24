@@ -28,7 +28,7 @@ class BSInputLine: BSBaseInputControl {
     
     // MARK: private properties
 
-    internal let labelWidth : CGFloat = 100
+    internal let labelWidth : CGFloat = 104
     internal let labelHeight : CGFloat = 17
     internal let labelFontSize : CGFloat = 14
     
