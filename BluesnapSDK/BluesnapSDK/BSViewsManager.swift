@@ -172,5 +172,33 @@ class BSViewsManager {
         return alert
         //After you create alert, you show it like this: present(alert, animated: true, completion: nil)
     }
+    
+    open class func createActivityIndicator(view: UIView!) -> UIActivityIndicatorView {
+        let indicator = UIActivityIndicatorView()
+        view.addSubview(indicator)
+        indicator.center = view.center
+        return indicator
+    }
+    
+    open class func startActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
+        
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                activityIndicator.hidesWhenStopped = true
+                activityIndicator.activityIndicatorViewStyle = .gray
+                activityIndicator.startAnimating()
+            }
+        }
+    }
 
+    open class func stopActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
+        
+        UIApplication.shared.endIgnoringInteractionEvents()
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                activityIndicator.stopAnimating()
+            }
+        }
+    }
 }

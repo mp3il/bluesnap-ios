@@ -26,6 +26,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     fileprivate var withShipping = false
     fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var cardType : String?
+    fileprivate var activityIndicator : UIActivityIndicatorView?
     
     // MARK: Constants
     
@@ -141,6 +142,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         emailInputLine.fieldKeyboardType = .emailAddress
+        activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -502,12 +504,26 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: CC details additions
     
+    func startActivityIndicator() {
+        // start Activity Indicator
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
+            }
+        }
+    }
+    func stopActivityIndicator() {
+        BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)
+    }
+    
     internal func submitCcFunc(ccn: String!) -> Bool! {
+        
+        //startActivityIndicator()
         
         // get issuing country and card type from server
         var ok = false
         do {
-            let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn)
+            let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn/*, activityIndicator: self.activityIndicator*/)
             if let issuingCountry = result?.ccIssuingCountry {
                 self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             }
@@ -525,6 +541,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             NSLog("Unexpected error submitting CCN to BS")
             showAlert("An error occurred")
         }
+        
+        //stopActivityIndicator()
         return ok
     }
 
