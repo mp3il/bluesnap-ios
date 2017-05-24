@@ -149,6 +149,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="yyh-Xt-HOQ"/>
                                                     <action selector="flagTouchUpInside:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="G9f-Yn-TyQ"/>
                                                     <action selector="nameEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="PJr-fd-Lon"/>
                                                     <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="y0Q-RU-Oq9"/>
@@ -162,6 +163,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="2sS-wR-i8X"/>
                                                     <action selector="emailEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="Vb9-WE-GeG"/>
                                                     <action selector="emailEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="b8D-bn-aa7"/>
                                                 </connections>
@@ -174,6 +176,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill address"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="jdY-ii-VKc"/>
                                                     <action selector="streetEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="tRO-pj-qne"/>
                                                     <action selector="streetEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="iDh-Ub-8b9"/>
                                                 </connections>
@@ -186,6 +189,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill code"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="yza-e3-oxC"/>
                                                     <action selector="zipEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="9CM-dg-qYG"/>
                                                     <action selector="zipEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="g6C-zH-XDa"/>
                                                 </connections>
@@ -200,6 +204,7 @@
                                                 <connections>
                                                     <action selector="cityEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="vNS-gh-mJI"/>
                                                     <action selector="cityEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="wQh-cu-NlD"/>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="lTA-Or-Nb5"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -211,6 +216,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="fieldIsEditable" value="No"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="xuB-Xr-C5G"/>
                                                     <action selector="stateTouchUpInside:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="gft-FF-jWL"/>
                                                 </connections>
                                             </view>
@@ -581,9 +587,7 @@
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="cc_default"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="ccDetailsEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="hX6-sA-FgM"/>
-                                                    <action selector="ccDetailsEditingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="ztX-5K-bu2"/>
-                                                    <action selector="ccDetailsEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="PBd-sn-zQJ"/>
+                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="HBK-wC-AJ2"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcs-xh-zfv" userLabel="Name Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -600,6 +604,7 @@
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="countryFlagClick:" destination="W0G-M6-3dM" eventType="touchUpInside" id="jiX-jP-adA"/>
+                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="bZy-8L-YxX"/>
                                                     <action selector="nameEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="8VK-3z-fnc"/>
                                                     <action selector="nameEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="QJz-yK-d7l"/>
                                                 </connections>
@@ -612,6 +617,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="fJw-47-23H"/>
                                                     <action selector="emailEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="A4y-os-NRv"/>
                                                     <action selector="emailEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="aRR-MW-CVj"/>
                                                 </connections>
@@ -624,6 +630,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill code"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="AHR-lP-oYN"/>
                                                     <action selector="zipEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="4PL-N2-ZEl"/>
                                                     <action selector="zipEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="3XR-p0-fvD"/>
                                                 </connections>
@@ -638,6 +645,7 @@
                                                 <connections>
                                                     <action selector="addressEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="9eT-pS-hme"/>
                                                     <action selector="addressEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="EfC-d0-WFf"/>
+                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="XBM-8g-XUK"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sW-jJ-zDD" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -650,6 +658,7 @@
                                                 <connections>
                                                     <action selector="cityEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="Jnn-5Y-xfU"/>
                                                     <action selector="cityEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="4HK-eB-GUR"/>
+                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="WIS-YD-en9"/>
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EKc-lR-XxG" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">

@@ -87,16 +87,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         scrollView.contentInset = scrollViewInsets
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    @IBAction func editingDidBegin(_ sender: BSBaseInputControl) {
         
-        fieldBottom = Int(textField.frame.origin.y + textField.frame.height)
-    }
-    
-    // Do we need this?
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        self.view.endEditing(true)
-        return false
+        fieldBottom = Int(sender.frame.origin.y + sender.frame.height)
     }
     
     private func scrollForKeyboard(direction: Int) {
