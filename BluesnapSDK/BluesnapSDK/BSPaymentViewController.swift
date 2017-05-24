@@ -155,9 +155,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         self.withShipping = paymentDetails.getShippingDetails() != nil
         
-        let hideShippingSameAsBilling : Bool = !self.withShipping || !self.fullBilling
-        shippingSameAsBillingView.isHidden = hideShippingSameAsBilling
-        shippingSameAsBillingSwitch.isHidden = hideShippingSameAsBilling
+        //let hideShippingSameAsBilling : Bool = !self.withShipping || !self.fullBilling
+        shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
+        //shippingSameAsBillingSwitch.isHidden = hideShippingSameAsBilling
         // set the "shipping same as billing" to be true if no shipping name is supplied
         shippingSameAsBillingSwitch.isOn = self.paymentDetails.getShippingDetails()?.name ?? "" == ""
         
@@ -211,6 +211,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             cityInputLine.isHidden = true
             zipInputLine.isHidden = true
             stateInputLine.isHidden = true
+            shippingSameAsBillingView.isHidden = true
+            taxDetailsView.isHidden = true
         } else {
             nameInputLine.isHidden = false
             let hideFields = !self.fullBilling
@@ -221,6 +223,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             updateFlagImage(countryCode: countryCode)
             cityInputLine.isHidden = hideFields
             updateState()
+            shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
+            taxDetailsView.isHidden = self.paymentDetails.taxAmount == 0
         }
     }
     
