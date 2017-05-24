@@ -44,8 +44,8 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     
     private let ccnWidth : CGFloat = 180
     private let last4Width : CGFloat = 46
-    private let expLeftMargin : CGFloat = 160
-    private let expWidth : CGFloat = 60
+    private let expLeftMargin : CGFloat = 150
+    private let expWidth : CGFloat = 70
     private let cvvLeftMargin : CGFloat = 280
     private let cvvWidth : CGFloat = 50
     private let errorWidth : CGFloat = 180
@@ -57,7 +57,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             if ccnIsOpen {
                 self.textField.text = ccn
             } else {
-                ccn = self.textField.text
+                //ccn = self.textField.text
                 self.textField.text = ccn.last4
             }
         }
@@ -319,7 +319,9 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     
     private func tryCloseCcn() -> Bool {
         print("************* close CCN")
-        ccn = self.textField.text
+        if self.ccnIsOpen {
+            ccn = self.textField.text
+        }
         // do not leave field until is valid
         var ok = false
         if validateCCN() {
