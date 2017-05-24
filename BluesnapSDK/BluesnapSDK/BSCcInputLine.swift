@@ -84,7 +84,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         let newValue = self.expTextField.text ?? ""
         if let p = newValue.characters.index(of: "/") {
             let mm = newValue.substring(with: newValue.startIndex..<p)
-            let yy = newValue.substring(with: p ..< newValue.endIndex)
+            let yy = newValue.substring(with: p ..< newValue.endIndex).removeNoneDigits
             let currentYearStr = String(BSValidator.getCurrentYear())
             let p1 = currentYearStr.index(currentYearStr.startIndex, offsetBy: 2)
             let first2Digits = currentYearStr.substring(with: currentYearStr.startIndex..<p1)

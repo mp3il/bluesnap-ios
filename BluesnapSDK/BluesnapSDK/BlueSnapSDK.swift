@@ -50,29 +50,6 @@ import Foundation
                                           withShipping: withShipping,
                                           fullBilling: fullBilling,
                                           purchaseFunc: purchaseFunc)
-        /*
-        if purchaseScreen == nil {
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
-            purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSSummaryScreen
-        }
-        
-        let defaultCountry = NSLocale.current.regionCode ?? "US"
-        if (withShipping && paymentDetails.shippingDetails == nil) {
-            paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
-            paymentDetails.getShippingDetails()!.country = defaultCountry
-        } else if (!withShipping && paymentDetails.shippingDetails != nil) {
-            paymentDetails.setShippingDetails(shippingDetails: nil)
-        }
-        if paymentDetails.getBillingDetails().country ?? "" == "" {
-            paymentDetails.getBillingDetails().country = defaultCountry
-        }
-        purchaseScreen.paymentDetails = paymentDetails
-        purchaseScreen.bsToken = bsToken
-        purchaseScreen.purchaseFunc = purchaseFunc
-        purchaseScreen.fullBilling = fullBilling
-        
-        inNavigationController.pushViewController(purchaseScreen, animated: animated)
- */
     }
     
     // MARK: - Submit Payment token fields
