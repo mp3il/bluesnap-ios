@@ -396,11 +396,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             let ok2 = validateCity(ignoreIfEmpty: false)
             let ok3 = validateAddress(ignoreIfEmpty: false)
             let ok4 = validateCity(ignoreIfEmpty: false)
-            let ok5 = validateCountryAndZip(ignoreIfEmpty: false)
+            let ok5 = validateZip(ignoreIfEmpty: false)
             let ok6 = validateState(ignoreIfEmpty: false)
             result = result && ok1 && ok2 && ok3 && ok4 && ok5 && ok6
         } else if !zipInputLine.isHidden {
-            let ok = validateCountryAndZip(ignoreIfEmpty: false)
+            let ok = validateZip(ignoreIfEmpty: false)
             result = result && ok
         }
         
@@ -444,7 +444,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         return result
     }
 
-    func validateCountryAndZip(ignoreIfEmpty : Bool) -> Bool {
+    func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         if (zipInputLine.isHidden) {
             paymentDetails.getBillingDetails().zip = ""
@@ -452,19 +452,14 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             return true
         }
         
-        var result : Bool = true
-        if fullBilling {
-            result = BSValidator.validateCountry(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentDetails.getBillingDetails())
+        // make zip optional for cards other than visa/discover
+        var ignoreEmptyZip = ignoreIfEmpty
+        let ccType = self.ccInputLine.getCardType().lowercased()
+        if !ignoreIfEmpty && !fullBilling && ccType != "visa" && ccType != "discover" {
+            ignoreEmptyZip = true
         }
-        if result == true {
-            // make zip optional for cards other than visa/discover
-            var ignoreEmptyZip = ignoreIfEmpty
-            let ccType = self.ccInputLine.getCardType().lowercased()
-            if !ignoreIfEmpty && !fullBilling && ccType != "visa" && ccType != "discover" {
-                ignoreEmptyZip = true
-            }
-            result = BSValidator.validateZip(ignoreIfEmpty: ignoreEmptyZip, input: zipInputLine, addressDetails: paymentDetails.getBillingDetails())
-        }
+        
+        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreEmptyZip, input: zipInputLine, addressDetails: paymentDetails.getBillingDetails())
         return result
     }
     
@@ -589,7 +584,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func zipEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateCountryAndZip(ignoreIfEmpty: true)
+        _ = validateZip(ignoreIfEmpty: true)
     }
     
     @IBAction func stateClick(_ sender: BSInputLine) {

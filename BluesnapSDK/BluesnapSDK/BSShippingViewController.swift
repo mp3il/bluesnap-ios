@@ -152,7 +152,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         let ok2 = validateEmail(ignoreIfEmpty: false)
         let ok3 = validateAddress(ignoreIfEmpty: false)
         let ok4 = validateCity(ignoreIfEmpty: false)
-        let ok5 = validateCountryAndZip(ignoreIfEmpty: false)
+        let ok5 = validateZip(ignoreIfEmpty: false)
         let ok6 = validateState(ignoreIfEmpty: false)
         return ok1 && ok2 && ok3 && ok4 && ok5 && ok6
     }
@@ -181,7 +181,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         return result
     }
     
-    func validateCountryAndZip(ignoreIfEmpty : Bool) -> Bool {
+    func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         if (zipInputLine.isHidden) {
             if let shippingDetails = paymentDetails.getShippingDetails() {
@@ -191,11 +191,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             return true
         }
         
-        var result : Bool = BSValidator.validateCountry(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentDetails.getShippingDetails())
-        
-        if result == true {
-            result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: paymentDetails.getShippingDetails())
-        }
+        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: paymentDetails.getShippingDetails())
         return result
     }
     
@@ -245,7 +241,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func zipEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateCountryAndZip(ignoreIfEmpty: true)
+        _ = validateZip(ignoreIfEmpty: true)
     }
     
     // enter state field - open the state screen

@@ -50,9 +50,6 @@ class BSBaseInputControl: UIControl {
     @IBInspectable var shadowOpacity: CGFloat = 0.5
     
     
-    // This is just for debug
-    @IBInspectable var errorOn: Bool! = false
-    
     // MARK: UI elements
     
     internal var textField : UITextField! = UITextField()
@@ -249,13 +246,6 @@ class BSBaseInputControl: UIControl {
         }
         
         resizeError()
-        
-        // for debug of error
-        if self.errorOn == true {
-            showError(self.errorText)
-        } else {
-            hideError()
-        }
     }
     
     internal func getImageRect() -> CGRect {

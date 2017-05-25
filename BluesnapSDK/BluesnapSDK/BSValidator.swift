@@ -237,6 +237,9 @@ class BSValidator {
         var result : Bool = true
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces).capitalized ?? ""
         input.setValue(newValue)
+        if let addressDetails = addressDetails {
+            addressDetails.name = newValue
+        }
         if newValue.characters.count == 0 && ignoreIfEmpty {
             // ignore
         } else if !newValue.isValidName {
@@ -244,9 +247,6 @@ class BSValidator {
         }
         if result {
             input.hideError()
-            if let addressDetails = addressDetails {
-                addressDetails.name = newValue
-            }
         } else {
             input.showError(nameInvalidMessage)
         }
@@ -256,6 +256,9 @@ class BSValidator {
     class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.email = newValue
+        }
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
@@ -266,9 +269,6 @@ class BSValidator {
         }
         if result {
             input.hideError()
-            if let addressDetails = addressDetails {
-                addressDetails.email = newValue
-            }
         } else {
             input.showError(emailInvalidMessage)
         }
@@ -278,6 +278,9 @@ class BSValidator {
     class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.address = newValue
+        }
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
@@ -288,9 +291,6 @@ class BSValidator {
         }
         if result {
             input.hideError()
-            if let addressDetails = addressDetails {
-                addressDetails.address = newValue
-            }
         } else {
             input.showError(streetInvalidMessage)
         }
@@ -301,6 +301,9 @@ class BSValidator {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         input.setValue(newValue)
+        if let addressDetails = addressDetails {
+            addressDetails.city = newValue
+        }
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
@@ -311,9 +314,6 @@ class BSValidator {
         }
         if result {
             input.hideError()
-            if let addressDetails = addressDetails {
-                addressDetails.city = newValue
-            }
         } else {
             input.showError(cityInvalidMessage)
         }
@@ -344,6 +344,9 @@ class BSValidator {
         var result : Bool = true
         let newValue1 : String = input.getValue() ?? ""
         let newValue : String = newValue1.trimmingCharacters(in: .whitespaces)
+        if let addressDetails = addressDetails {
+            addressDetails.zip = newValue
+        }
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
         } else if (newValue.characters.count < 3) {
@@ -353,9 +356,6 @@ class BSValidator {
         }
         if result {
             input.hideError()
-            if let addressDetails = addressDetails {
-                addressDetails.zip = newValue
-            }
         } else {
             input.showError(zipInvalidMessage)
         }
