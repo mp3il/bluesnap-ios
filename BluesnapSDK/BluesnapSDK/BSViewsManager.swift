@@ -19,6 +19,7 @@ class BSViewsManager {
     static let purchaseScreenStoryboardId = "BSPaymentScreenStoryboardId" //"BSPurchaseScreenStoryboardId"
     static let countryScreenStoryboardId = "BSCountriesStoryboardId"
     static let stateScreenStoryboardId = "BSStatesStoryboardId"
+    static let webScreenStoryboardId = "BSWebViewController"
 
     fileprivate static var startScreen: BSStartViewController!
     fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
@@ -200,5 +201,72 @@ class BSViewsManager {
                 activityIndicator.stopAnimating()
             }
         }
+    }
+    
+    
+    /**
+     Navigate to the web browser screen, showing the given URL.
+     
+     - parameters:
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - url : URL for the browser
+     */
+    open class func showBrowserScreen(
+        inNavigationController: UINavigationController!,
+        url: String!) {
+        
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+        let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
+            
+        screen.url = url
+        inNavigationController.pushViewController(screen, animated: true)
+    }
+    
+    /*
+     Create the popup menu for payment screen
+    */
+    static internal let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
+    static internal let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
+    static internal let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
+    open class func openPopupMenu(paymentDetails: BSPaymentDetails?, bsToken: BSToken?,
+            inNavigationController : UINavigationController,
+            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void) -> UIAlertController {
+        
+        let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        let currencyMenuOption = UIAlertAction(title: "Currency", style: UIAlertActionStyle.default) { _ in
+            if let paymentDetails = paymentDetails, let bsToken = bsToken {
+                BlueSnapSDK.showCurrencyList(
+                    inNavigationController: inNavigationController,
+                    animated: true,
+                    bsToken: bsToken,
+                    selectedCurrencyCode: paymentDetails.getCurrency(),
+                    updateFunc: updateCurrencyFunc)
+            }
+        }
+        
+        let refundPolicyMenuOption = UIAlertAction(title: "Refund Policy", style: .default) { _ in
+            showBrowserScreen(inNavigationController: inNavigationController, url: refundPolicyURL)
+        }
+        
+        let privacyPolicyMenuOption = UIAlertAction(title: "Privacy Policy", style: .default) { _ in
+            showBrowserScreen(inNavigationController: inNavigationController, url: privacyPolicyURL)
+        }
+        
+        let termsMenuOption = UIAlertAction(title: "Terms & Conditions", style: .default) { _ in
+            showBrowserScreen(inNavigationController: inNavigationController, url: termsURL)
+        }
+        
+        let cancelMenuOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        
+        // relate actions to controllers
+        menu.addAction(currencyMenuOption)
+        menu.addAction(refundPolicyMenuOption)
+        menu.addAction(privacyPolicyMenuOption)
+        menu.addAction(termsMenuOption)
+        menu.addAction(cancelMenuOption)
+        
+        //presentViewController(otherAlert, animated: true, completion: nil)
+        return menu
     }
 }

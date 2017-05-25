@@ -140,9 +140,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         self.withShipping = paymentDetails.getShippingDetails() != nil
         
-        //let hideShippingSameAsBilling : Bool = !self.withShipping || !self.fullBilling
         shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-        //shippingSameAsBillingSwitch.isHidden = hideShippingSameAsBilling
         // set the "shipping same as billing" to be true if no shipping name is supplied
         shippingSameAsBillingSwitch.isOn = self.paymentDetails.getShippingDetails()?.name ?? "" == ""
         
@@ -150,7 +148,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         taxDetailsView.isHidden = self.paymentDetails.getTaxAmount() == 0
         
-        ccInputLine.ccnIsOpen = firstTime
         ccInputLine.submitCcFunc = submitCcFunc
         ccInputLine.startEditCcFunc = startEditCcFunc
         ccInputLine.endEditCcFunc = endEditCcFunc
@@ -166,12 +163,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
                     self.cityInputLine.setValue(billingDetails.city)
                 }
             }
+            ccInputLine.ccnIsOpen = true
             ccInputLine.textField.becomeFirstResponder()
-            // this is for debug, should bve removed
-            //self.cardUiTextField.text = "4111 1111 1111 1111"
-            //self.ExpMMUiTextField.text = "11"
-            //self.ExpYYUiTextField.text = "20"
-            //self.cvvUiTextField.text = "444"
         }
         
         hideShowFields()
@@ -347,35 +340,15 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: menu actions
     
-    fileprivate var popupMenuViewController : BSPopupMenuViewController?
+    private func updateCurrencyFunc(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
+        
+        paymentDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
+    }
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
-        if popupMenuViewController != nil {
-            //closeMenu()
-            return
-        }
-        
-        if let storyboard = storyboard, popupMenuViewController == nil {
-            popupMenuViewController = storyboard.instantiateViewController(withIdentifier: "bsPopupMenu") as? BSPopupMenuViewController
-            if let popupMenuViewController = popupMenuViewController {
-                popupMenuViewController.paymentDetails = self.paymentDetails
-                popupMenuViewController.bsToken = self.bsToken
-                popupMenuViewController.closeFunc = self.closeMenu
-                popupMenuViewController.view.frame = self.view.frame
-                self.addChildViewController(popupMenuViewController)
-                self.view.addSubview(popupMenuViewController.view)
-                popupMenuViewController.didMove(toParentViewController: self)
-            }
-        }
-    }
-    
-    private func closeMenu() {
-        
-        if let _ = popupMenuViewController {
-            self.popupMenuViewController!.view.removeFromSuperview()
-            self.popupMenuViewController = nil
-        }
+        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentDetails: paymentDetails, bsToken: bsToken, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc)
+        present(menu, animated: true, completion: nil)
     }
     
     // MARK: button actions

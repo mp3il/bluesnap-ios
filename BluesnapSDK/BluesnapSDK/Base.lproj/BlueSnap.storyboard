@@ -42,7 +42,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
@@ -408,7 +408,7 @@
         <!--Web View Controller-->
         <scene sceneID="3S2-G5-bad">
             <objects>
-                <viewController storyboardIdentifier="WebViewController" id="jsJ-VA-rD0" customClass="BSWebViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSWebViewController" id="jsJ-VA-rD0" customClass="BSWebViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vtV-VR-Bao"/>
                         <viewControllerLayoutGuide type="bottom" id="hIE-9k-5Qv"/>
@@ -437,132 +437,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sFL-uH-6VE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4383" y="-380"/>
-        </scene>
-        <!--Popup Menu View Controller-->
-        <scene sceneID="aem-Pd-eck">
-            <objects>
-                <viewController storyboardIdentifier="bsPopupMenu" id="Eo7-LU-CCH" customClass="BSPopupMenuViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="OCl-yr-AYo"/>
-                        <viewControllerLayoutGuide type="bottom" id="2ER-qU-DQN"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="R4i-nO-cFk">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KwH-qQ-DXe">
-                                <rect key="frame" x="0.0" y="353" width="375" height="270"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yYu-zd-ykP">
-                                        <rect key="frame" x="8" y="1" width="359" height="50"/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="xgn-lG-hfI"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Currency"/>
-                                        <connections>
-                                            <action selector="currencyMenuClick:" destination="Eo7-LU-CCH" eventType="touchUpInside" id="eUt-zs-2kc"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZdJ-In-erq">
-                                        <rect key="frame" x="8" y="52" width="359" height="50"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="9A3-PN-PcE"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Refund Policy">
-                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="jsJ-VA-rD0" kind="show" identifier="webViewRefundPolicy" id="gq4-JQ-uvu"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fDf-ZW-uon">
-                                        <rect key="frame" x="8" y="103" width="359" height="50"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="TSZ-bc-Vjf"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Privacy Policy">
-                                            <color key="titleShadowColor" cocoaTouchSystemColor="lightTextColor"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="jsJ-VA-rD0" kind="show" identifier="webViewPrivacyPolicy" id="5YN-Ce-E0w"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MA6-fZ-hhT">
-                                        <rect key="frame" x="8" y="154" width="359" height="50"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="sZJ-Ku-SHD"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Terms &amp; Conditions">
-                                            <color key="titleShadowColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="jsJ-VA-rD0" kind="show" identifier="webViewTerms" id="EDM-GX-fbW"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="We3-zh-Xij">
-                                        <rect key="frame" x="7" y="211" width="360" height="50"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="e0a-pK-ok6"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Cancel">
-                                            <color key="titleShadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="cancelMenuClick:" destination="Eo7-LU-CCH" eventType="touchUpInside" id="i4E-kA-B3d"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="fDf-ZW-uon" firstAttribute="trailing" secondItem="MA6-fZ-hhT" secondAttribute="trailing" id="0MI-HQ-ziB"/>
-                                    <constraint firstItem="yYu-zd-ykP" firstAttribute="leading" secondItem="KwH-qQ-DXe" secondAttribute="leadingMargin" id="2vk-Yh-aFB"/>
-                                    <constraint firstItem="MA6-fZ-hhT" firstAttribute="top" secondItem="fDf-ZW-uon" secondAttribute="bottom" constant="1" id="4ra-nP-34t"/>
-                                    <constraint firstItem="ZdJ-In-erq" firstAttribute="trailing" secondItem="fDf-ZW-uon" secondAttribute="trailing" id="BVS-9I-hFt"/>
-                                    <constraint firstItem="ZdJ-In-erq" firstAttribute="top" secondItem="yYu-zd-ykP" secondAttribute="bottom" constant="1" id="Fml-kv-Y9g"/>
-                                    <constraint firstItem="yYu-zd-ykP" firstAttribute="trailing" secondItem="ZdJ-In-erq" secondAttribute="trailing" id="MRd-1i-ToV"/>
-                                    <constraint firstAttribute="bottom" secondItem="We3-zh-Xij" secondAttribute="bottom" constant="9" id="Oah-cY-rfU"/>
-                                    <constraint firstItem="fDf-ZW-uon" firstAttribute="top" secondItem="ZdJ-In-erq" secondAttribute="bottom" constant="1" id="RPi-Qi-htA"/>
-                                    <constraint firstItem="We3-zh-Xij" firstAttribute="trailing" secondItem="MA6-fZ-hhT" secondAttribute="trailing" id="YWN-l4-IrQ"/>
-                                    <constraint firstItem="We3-zh-Xij" firstAttribute="centerX" secondItem="MA6-fZ-hhT" secondAttribute="centerX" id="YxL-XD-Aks"/>
-                                    <constraint firstItem="ZdJ-In-erq" firstAttribute="leading" secondItem="fDf-ZW-uon" secondAttribute="leading" id="a7f-bZ-fZi"/>
-                                    <constraint firstItem="yYu-zd-ykP" firstAttribute="leading" secondItem="ZdJ-In-erq" secondAttribute="leading" id="i2V-tb-XOx"/>
-                                    <constraint firstItem="yYu-zd-ykP" firstAttribute="trailing" secondItem="KwH-qQ-DXe" secondAttribute="trailingMargin" id="kaH-Zp-8qm"/>
-                                    <constraint firstItem="We3-zh-Xij" firstAttribute="top" secondItem="MA6-fZ-hhT" secondAttribute="bottom" constant="7" id="pHk-Lf-6Zk"/>
-                                    <constraint firstItem="yYu-zd-ykP" firstAttribute="top" secondItem="KwH-qQ-DXe" secondAttribute="top" constant="1" id="s1j-hO-jO5"/>
-                                    <constraint firstItem="fDf-ZW-uon" firstAttribute="leading" secondItem="MA6-fZ-hhT" secondAttribute="leading" id="wYy-fg-cfN"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="2ER-qU-DQN" firstAttribute="top" secondItem="KwH-qQ-DXe" secondAttribute="bottom" id="CUX-BM-fao"/>
-                            <constraint firstItem="KwH-qQ-DXe" firstAttribute="leading" secondItem="R4i-nO-cFk" secondAttribute="leading" id="GsQ-7p-2xn"/>
-                            <constraint firstAttribute="trailing" secondItem="KwH-qQ-DXe" secondAttribute="trailing" id="ldZ-vI-8iU"/>
-                        </constraints>
-                    </view>
-                    <toolbarItems/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="cancelButton" destination="We3-zh-Xij" id="3gJ-y8-Kqx"/>
-                        <outlet property="currencyButton" destination="yYu-zd-ykP" id="8oL-hw-woD"/>
-                        <outlet property="menuView" destination="R4i-nO-cFk" id="CEH-Lw-Fkv"/>
-                        <outlet property="subView" destination="KwH-qQ-DXe" id="K2C-0I-Kfg"/>
-                        <outlet property="termsButton" destination="MA6-fZ-hhT" id="NQm-lG-46J"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9dd-tt-N4Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3599" y="-380"/>
         </scene>
         <!--Payment-->
         <scene sceneID="7hI-Z7-7qB">
@@ -832,7 +706,13 @@
                             <constraint firstItem="evC-6K-ko8" firstAttribute="width" secondItem="bcK-ji-r2M" secondAttribute="width" id="uKf-uz-gSg"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Payment" id="SMO-Vb-QOG"/>
+                    <navigationItem key="navigationItem" title="Payment" id="SMO-Vb-QOG">
+                        <barButtonItem key="rightBarButtonItem" image="menu_button" style="plain" id="ODe-4v-aVb">
+                            <connections>
+                                <action selector="MenuClick:" destination="W0G-M6-3dM" id="7S4-w1-Lfd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="ccInputLine" destination="okv-vf-cV8" id="tzJ-xG-p0J"/>
                         <outlet property="cityInputLine" destination="3sW-jJ-zDD" id="QDd-Hd-Ghv"/>
@@ -885,7 +765,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -993,7 +873,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
@@ -1170,10 +1050,8 @@
         <image name="apple_pay_button" width="375" height="143"/>
         <image name="blue_check_mark" width="16" height="13"/>
         <image name="cc_default" width="25" height="17"/>
+        <image name="menu_button" width="20" height="16"/>
         <image name="scroll_alphanumericals" width="15" height="568"/>
         <image name="text_input_box" width="375" height="143"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="gq4-JQ-uvu"/>
-    </inferredMetricsTieBreakers>
 </document>

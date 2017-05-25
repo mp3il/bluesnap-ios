@@ -288,7 +288,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     }
     
     override func textFieldDidEndEditing(_ sender: UITextField) {
-        print("textFieldDidEndEditing")
+        //print("textFieldDidEndEditing")
         endEditCcFunc()
     }
     
@@ -299,7 +299,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         
         let ccn = textField.text?.removeNoneDigits ?? ""
         let ccnLength = ccn.characters.count
-        print("textFieldEditingChanged; ccnLength=\(ccnLength)")
+        //print("textFieldEditingChanged; ccnLength=\(ccnLength)")
         
         if ccnLength >= 6 {
             cardType = textField.text?.getCCTypeByRegex()?.lowercased() ?? ""
@@ -313,7 +313,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         if checkMaxLength(textField: sender, maxLength: maxLength) == true {
             if ccnLength == maxLength {
                 // try to resign first responder
-                print("textFieldEditingChanged; resigning")
+                //print("textFieldEditingChanged; resigning")
                 self.textField.resignFirstResponder()
             }
         }
@@ -321,7 +321,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
 
     
     private func tryCloseCcn() -> Bool {
-        print("************* close CCN")
+        //print("************* close CCN")
         if self.ccnIsOpen {
             ccn = self.textField.text
         }
@@ -333,7 +333,6 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             }
         }
         if ok == true {
-            print("textFieldDidEndEditing; valid = true")
             ccnIsOpen = false
             hideError()
             resizeElements()
@@ -345,7 +344,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     }
     
     private func openCcn() {
-        print("************* open CCN")
+        //print("************* open CCN")
         ccnIsOpen = true
         //self.fieldIsEditable = nil
         resizeElements()

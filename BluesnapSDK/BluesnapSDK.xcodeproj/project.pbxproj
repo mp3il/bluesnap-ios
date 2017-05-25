@@ -28,7 +28,6 @@
 		FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */; };
 		FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */; };
 		FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */; };
-		FD6749491EBB12E700B8076C /* BSPopupMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */; };
 		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
 		FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */; };
 		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
@@ -75,7 +74,6 @@
 		FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStatesViewController.swift; sourceTree = "<group>"; };
 		FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStateTableViewCell.swift; sourceTree = "<group>"; };
 		FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPopupMenuViewController.swift; sourceTree = "<group>"; };
 		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
 		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
 		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
@@ -190,7 +188,6 @@
 				FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */,
 				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
 				FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */,
-				FD6749481EBB12E700B8076C /* BSPopupMenuViewController.swift */,
 				FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */,
 				FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */,
 				FD0D34311ED2A629005F03CB /* BSBaseInputControl.swift */,
@@ -327,7 +324,6 @@
 				FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */,
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
 				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
-				FD6749491EBB12E700B8076C /* BSPopupMenuViewController.swift in Sources */,
 				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */,
 				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
