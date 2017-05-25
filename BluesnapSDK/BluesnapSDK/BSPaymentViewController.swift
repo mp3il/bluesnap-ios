@@ -27,10 +27,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
-    
-    // MARK: - Data
-    
+    fileprivate var firstTime : Bool! = true
     fileprivate var payButtonText : String?
+    fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     
     // MARK: - Outlets
     
@@ -52,7 +51,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var shippingSameAsBillingView: UIView!
     @IBOutlet weak var shippingSameAsBillingSwitch: UISwitch!
     
-    fileprivate var firstTime : Bool! = true
+    @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
+    
     
     // MARK: for scrolling to prevent keyboard hiding
     
@@ -128,6 +128,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         emailInputLine.fieldKeyboardType = .emailAddress
         activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
+        if let zipTopConstraint = self.zipTopConstraint {
+            zipTopConstraintOriginalConstant = zipTopConstraint.constant
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -205,6 +208,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.paymentDetails.taxAmount == 0
+            if hideFields == false {
+                zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+            } else {
+                zipTopConstraint.constant = -1 * emailInputLine.frame.height
+            }
         }
     }
     

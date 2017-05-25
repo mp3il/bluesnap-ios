@@ -729,6 +729,7 @@
                         <outlet property="taxAmountUILabel" destination="F7K-PK-GEx" id="7Pq-mU-M5h"/>
                         <outlet property="taxDetailsView" destination="m6H-ac-auh" id="DF6-HT-KO5"/>
                         <outlet property="zipInputLine" destination="yRx-IZ-fub" id="n5X-b7-TOL"/>
+                        <outlet property="zipTopConstraint" destination="Zch-dH-6RJ" id="A8W-lo-FnM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A8J-iy-m7u" userLabel="First Responder" sceneMemberID="firstResponder"/>
