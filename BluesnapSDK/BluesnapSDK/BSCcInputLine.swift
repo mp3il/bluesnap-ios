@@ -26,6 +26,10 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     internal var endEditCcFunc: () -> Void = {
         print("endEditCcFunc should be overridden")
     }
+    internal var focusOnNextFieldFunc: () -> Void = {
+        print("focusOnNextFieldFunc should be overridden")
+    }
+    
     internal var cardType : String! = "" {
         didSet {
             updateCcIcon(ccType: cardType)
@@ -280,7 +284,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         } else {
             ok = validateCvv()
             if ok == true {
-                focusOnNextField()
+                focusOnNextFieldFunc()
             }
         }
         return ok
@@ -311,7 +315,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             }
         }
     }
-    
+    /*
     func focusOnNextField() {
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.main.async {
@@ -322,7 +326,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
                 }
             }
         }
-    }
+    }*/
     
 
     // MARK: event handlers
