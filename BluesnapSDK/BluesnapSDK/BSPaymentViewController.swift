@@ -164,10 +164,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
                 }
             }
             ccInputLine.ccnIsOpen = true
-            ccInputLine.textField.becomeFirstResponder()
         }
-        
         hideShowFields()
+        if ccInputLine.ccnIsOpen == true {
+             self.ccInputLine.focusOnCcnField()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

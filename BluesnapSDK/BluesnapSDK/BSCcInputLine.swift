@@ -250,6 +250,23 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     
     // MARK: TextFieldDelegate functions
     
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if textField == self.textField {
+            print("ccn should return")
+        } else if textField == self.expTextField {
+            print("exp should return")
+        } else if textField == self.cvvTextField {
+            print("cvv should return")
+        } else {
+            print("UNKNOWN should return")
+        }
+        return  true
+    }
     func textFieldShouldEndEditing(_ sender: UITextField) -> Bool {
         
         var ok : Bool = false
@@ -258,21 +275,55 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         } else if sender == self.expTextField {
             ok = validateExp()
             if ok == true {
-                cvvTextField.becomeFirstResponder()
+                focusOnCvvField()
             }
         } else {
             ok = validateCvv()
             if ok == true {
-                // focus on next field in screen
-                let nextTage=cvvTextField.tag+1;
+                focusOnNextField()
+            }
+        }
+        return ok
+    }
+    
+    // MARK: focus on fields
+    
+    func focusOnCcnField() {
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                self.textField.becomeFirstResponder()
+            }
+        }
+    }
+    
+    func focusOnExpField() {
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                self.expTextField.becomeFirstResponder()
+            }
+        }
+    }
+    
+    func focusOnCvvField() {
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                self.cvvTextField.becomeFirstResponder()
+            }
+        }
+    }
+    
+    func focusOnNextField() {
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                let nextTage = self.cvvTextField.tag+1;
                 let nextResponder = self.superview?.viewWithTag(nextTage) as UIResponder!
                 if nextResponder != nil {
                     nextResponder?.becomeFirstResponder()
                 }
             }
         }
-        return ok
     }
+    
 
     // MARK: event handlers
     
@@ -336,9 +387,10 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             ccnIsOpen = false
             hideError()
             resizeElements()
-            self.expTextField.becomeFirstResponder()
+            focusOnExpField()
         } else {
-            self.textField.becomeFirstResponder()
+            focusOnCcnField()
+            //self.textField.becomeFirstResponder()
         }
         return ok
     }
@@ -346,13 +398,8 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     private func openCcn() {
         //print("************* open CCN")
         ccnIsOpen = true
-        //self.fieldIsEditable = nil
         resizeElements()
-        DispatchQueue.global(qos: .background).async {
-            DispatchQueue.main.async {
-                self.textField.becomeFirstResponder()
-            }
-        }
+        focusOnCcnField()
         startEditCcFunc()
     }
 

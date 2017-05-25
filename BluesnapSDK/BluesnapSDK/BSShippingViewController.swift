@@ -250,9 +250,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     // enter state field - open the state screen
     @IBAction func stateTouchUpInside(_ sender: BSInputLine) {
-        // prevent typing
-        sender.closeKeyboard()
-        sender.resignFirstResponder()
         
         BSViewsManager.showStateList(
             inNavigationController: self.navigationController,
@@ -263,8 +260,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func flagTouchUpInside(_ sender: BSInputLine) {
-        
-        // open the country screen
         
         let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
         BSViewsManager.showCountryList(

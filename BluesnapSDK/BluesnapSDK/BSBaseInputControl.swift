@@ -134,12 +134,6 @@ class BSBaseInputControl: UIControl {
         }
     }
     
-    public func closeKeyboard() {
-        
-        self.textField.resignFirstResponder()
-        self.resignFirstResponder()
-    }
-    
     // MARK: Internal functions
     
     override init(frame: CGRect) {
