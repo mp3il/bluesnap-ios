@@ -8,16 +8,7 @@ import Foundation
 
 @objc open class BlueSnapSDK: NSObject {
 	
-	
-	// MARK: - UI Controllers
-	
-	fileprivate static var currencyScreen: BSCurrenciesViewController!
-    
-    // MARK: data
-    
-    static var paymentDetails : BSPaymentDetails?
-
-    // MARK: - Show checkout screen
+    // MARK: SDK functions
     
     /**
      Start the check-out flow, where the shopper payment details are entered.
@@ -52,8 +43,6 @@ import Foundation
                                           purchaseFunc: purchaseFunc)
     }
     
-    // MARK: - Submit Payment token fields
-
     /**
      Submit Payment token fields
      If you do not wanrt to use our check-out page, you can implement your own.
@@ -74,9 +63,6 @@ import Foundation
             throw error
         }
     }
-
-    
-    // MARK: - Currency functions
     
     /**
      Return a list of currencies and their rates from BlueSnap server
@@ -97,11 +83,11 @@ import Foundation
      Navigate to the currency list, allow changing current selection.
      
      - parameters:
-        - inNavigationController: your viewController's navigationController (to be able to navigate back)
-        - animated: how to navigate to the new screen
-        - bsToken: BlueSnap token, should be fresh and valid
-        - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
-        - updateFunc: callback; will be called each time a new value is selected
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+     - bsToken: BlueSnap token, should be fresh and valid
+     - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
+     - updateFunc: callback; will be called each time a new value is selected
      */
     open class func showCurrencyList(
         inNavigationController: UINavigationController!,
@@ -109,23 +95,12 @@ import Foundation
         bsToken: BSToken!,
         selectedCurrencyCode : String!,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
-
-		if currencyScreen == nil {
-			let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
-			currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
-		}
-		
-        currencyScreen.bsToken = bsToken
-        currencyScreen.selectedCurrencyCode = selectedCurrencyCode
-        currencyScreen.updateFunc = updateFunc
-
-        inNavigationController.pushViewController(currencyScreen, animated: animated)
-	}
-	
-    // MARK: init Kount for device data collection
+        
+        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, bsToken: bsToken, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc)
+    }
     
     /**
-     Call Kount SDK to initialize devicde data collection
+     Call Kount SDK to initialize device data collection
      - parameters:
      - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
      - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction

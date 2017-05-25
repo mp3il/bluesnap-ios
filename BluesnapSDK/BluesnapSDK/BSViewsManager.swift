@@ -118,6 +118,35 @@ class BSViewsManager {
         inNavigationController.pushViewController(screen, animated: animated)
     }
     
+    /**
+     Navigate to the currency list, allow changing current selection.
+     
+     - parameters:
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+     - bsToken: BlueSnap token, should be fresh and valid
+     - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
+     - updateFunc: callback; will be called each time a new value is selected
+     */
+    open class func showCurrencyList(
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        bsToken: BSToken!,
+        selectedCurrencyCode : String!,
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
+        
+        if currencyScreen == nil {
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+            currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
+        }
+        
+        currencyScreen.bsToken = bsToken
+        currencyScreen.selectedCurrencyCode = selectedCurrencyCode
+        currencyScreen.updateFunc = updateFunc
+        
+        inNavigationController.pushViewController(currencyScreen, animated: animated)
+    }
+
     
     /**
      Navigate to the state list, allow changing current selection.
@@ -236,7 +265,7 @@ class BSViewsManager {
         
         let currencyMenuOption = UIAlertAction(title: "Currency", style: UIAlertActionStyle.default) { _ in
             if let paymentDetails = paymentDetails, let bsToken = bsToken {
-                BlueSnapSDK.showCurrencyList(
+                BSViewsManager.showCurrencyList(
                     inNavigationController: inNavigationController,
                     animated: true,
                     bsToken: bsToken,
