@@ -28,14 +28,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
     
-    // MARK: Constants
-    
-    fileprivate let nameInvalidMessage = "Please fill Card holder name"
-    fileprivate let ccnInvalidMessage = "Please fill a valid Credit Card number"
-    fileprivate let cvvInvalidMessage = "Please fill a valid CVV number"
-    fileprivate let expInvalidMessage = "Please fill a valid exiration date"
-
-    
     // MARK: - Data
     
     fileprivate var payButtonText : String?
@@ -274,11 +266,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
-                ccInputLine.showError(field: ccInputLine.textField, errorText: ccnInvalidMessage)
+                ccInputLine.showError(field: ccInputLine.textField, errorText: BSValidator.ccnInvalidMessage)
             } else if (error == BSCcDetailErrors.invalidExpDate) {
-                ccInputLine.showError(field: ccInputLine.expTextField, errorText: expInvalidMessage)
+                ccInputLine.showError(field: ccInputLine.expTextField, errorText: BSValidator.expInvalidMessage)
             } else if (error == BSCcDetailErrors.invalidCvv) {
-                ccInputLine.showError(field: ccInputLine.cvvTextField, errorText: cvvInvalidMessage)
+                ccInputLine.showError(field: ccInputLine.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
             } else if (error == BSCcDetailErrors.expiredToken) {
                 // should be popup here
                 showAlert("Your session has expired, please go back and try again")
@@ -447,7 +439,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, errorMessage: nameInvalidMessage, addressDetails: paymentDetails.getBillingDetails())
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentDetails.getBillingDetails())
         return result
     }
     
@@ -530,7 +522,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             ok = true
         } catch let error as BSCcDetailErrors {
             if (error == BSCcDetailErrors.invalidCcNumber) {
-                ccInputLine.showError(ccnInvalidMessage)
+                ccInputLine.showError(BSValidator.ccnInvalidMessage)
             } else {
                 showAlert("An error occurred")
             }

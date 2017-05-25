@@ -263,6 +263,9 @@
                                 <state key="normal" title="Pay $100">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="SubmitClick:" destination="PPS-Pq-6Wu" eventType="touchUpInside" id="Hu1-9g-tJS"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

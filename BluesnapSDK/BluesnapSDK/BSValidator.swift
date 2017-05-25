@@ -213,10 +213,26 @@ extension String {
 
 class BSValidator {
     
+    
+    // MARK: Constants
+    
+    internal static let ccnInvalidMessage = "Invalid card number"
+    internal static let cvvInvalidMessage = "Invalid CVV"
+    internal static let expMonthInvalidMessage = "Invalid expiration month"
+    internal static let expPastInvalidMessage = "Expiration date is in the past"
+    internal static let expInvalidMessage = "Invalid expiration date"
+    internal static let nameInvalidMessage = "Enter a first and last name"
+    internal static let emailInvalidMessage = "Invalid email"
+    internal static let streetInvalidMessage = "Invalid street"
+    internal static let cityInvalidMessage = "Invalid city"
+    internal static let countryInvalidMessage = "Invalid country"
+    internal static let stateInvalidMessage = "Invalid state"
+    internal static let zipInvalidMessage = "Invalid code"
+
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
     
-    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, errorMessage: String, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces).capitalized ?? ""
@@ -232,7 +248,7 @@ class BSValidator {
                 addressDetails.name = newValue
             }
         } else {
-            input.showError(errorMessage)
+            input.showError(nameInvalidMessage)
         }
         return result
     }
@@ -254,7 +270,7 @@ class BSValidator {
                 addressDetails.email = newValue
             }
         } else {
-            input.showError("Please fill a valid email address")
+            input.showError(emailInvalidMessage)
         }
         return result
     }
@@ -276,7 +292,7 @@ class BSValidator {
                 addressDetails.address = newValue
             }
         } else {
-            input.showError("Please fill a valid address")
+            input.showError(streetInvalidMessage)
         }
         return result
     }
@@ -299,7 +315,7 @@ class BSValidator {
                 addressDetails.city = newValue
             }
         } else {
-            input.showError("Please fill a valid city")
+            input.showError(cityInvalidMessage)
         }
         return result
     }
@@ -318,7 +334,7 @@ class BSValidator {
         if result {
             input.hideError()
         } else {
-            input.showError("Please choosen a country")
+            input.showError(countryInvalidMessage)
         }
         return result
     }
@@ -341,7 +357,7 @@ class BSValidator {
                 addressDetails.zip = newValue
             }
         } else {
-            input.showError("Please fill a valid code")
+            input.showError(zipInvalidMessage)
         }
         return result
     }
@@ -360,7 +376,7 @@ class BSValidator {
         if result {
             input.hideError()
         } else {
-            input.showError("Please fill a valid state")
+            input.showError(stateInvalidMessage)
         }
         return result
     }
@@ -368,6 +384,7 @@ class BSValidator {
     class func validateExp(input: BSCcInputLine) -> Bool {
         
         var ok : Bool = true
+        var msg : String = expInvalidMessage
         
         let newValue = input.expTextField.text ?? ""
         if let p = newValue.characters.index(of: "/") {
@@ -377,6 +394,7 @@ class BSValidator {
                 ok = false
             } else if !mm.isValidMonth {
                 ok = false
+                msg = expMonthInvalidMessage
             } else if (yy.characters.count < 2) {
                 ok = false
             } else if let month = Int(mm), let year = Int(yy) {
@@ -386,6 +404,7 @@ class BSValidator {
                 dateComponents.day = 1
                 let expDate = Calendar.current.date(from: dateComponents)!
                 ok = expDate > Date()
+                msg = expPastInvalidMessage
             } else {
                 ok = false
             }
@@ -396,7 +415,7 @@ class BSValidator {
         if (ok) {
             input.hideError()
         } else {
-            input.showError(field: input.expTextField, errorText: "Please fill a valid exiration date")
+            input.showError(field: input.expTextField, errorText: msg)
         }
         return ok
     }
@@ -418,7 +437,7 @@ class BSValidator {
         if result {
             input.hideError()
         } else {
-            input.showError(field: input.cvvTextField, errorText: "Please fill a valid CVV number")
+            input.showError(field: input.cvvTextField, errorText: cvvInvalidMessage)
         }
         return result
     }
@@ -433,7 +452,7 @@ class BSValidator {
         if result {
             input.hideError()
         } else {
-            input.showError(field: input.textField, errorText: "Please fill a valid Credit Card number")
+            input.showError(field: input.textField, errorText: ccnInvalidMessage)
         }
         return result
     }

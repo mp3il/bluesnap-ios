@@ -132,8 +132,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
-    @IBAction func SubmitClick(_ sender: Any) {
-        
+    @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
             
             _ = navigationController?.popViewController(animated: false)
@@ -160,12 +159,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, errorMessage: "Please fill Card holder name", addressDetails: paymentDetails.getShippingDetails())
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentDetails.getShippingDetails())
         return result
     }
 
-    
-    
     func validateEmail(ignoreIfEmpty : Bool) -> Bool {
         
         let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: paymentDetails.getShippingDetails())

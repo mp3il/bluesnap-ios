@@ -44,11 +44,11 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     
     private let ccnWidth : CGFloat = 180
     private let last4Width : CGFloat = 46
-    private let expLeftMargin : CGFloat = 150
+    private let expLeftMargin : CGFloat = 120
     private let expWidth : CGFloat = 70
-    private let cvvLeftMargin : CGFloat = 280
+    private let cvvLeftMargin : CGFloat = 250
     private let cvvWidth : CGFloat = 50
-    private let errorWidth : CGFloat = 180
+    private let errorWidth : CGFloat = 150
     
     internal var ccn : String! = ""
     internal var ccnIsOpen : Bool = true {
@@ -141,6 +141,9 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         cvvTextField.addTarget(self, action: #selector(BSCcInputLine.cvvFieldDidBeginEditing(_:)), for: .editingDidBegin)
         cvvTextField.addTarget(self, action: #selector(BSCcInputLine.cvvFieldEditingChanged(_:)), for: .editingChanged)
         
+        expTextField.textAlignment = .center
+        cvvTextField.textAlignment = .center
+        
         errorLabel = UILabel()
         self.addSubview(errorLabel!)
         showError(nil)
@@ -221,16 +224,16 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             if let errorField = self.errorField {
                 x = errorField.frame.minX
                 errorLabel.textAlignment = .left
-                if errorField == self.expTextField {
+                if errorField == self.expTextField || errorField == self.cvvTextField {
                     // center error around the field
                     let fieldCenter : CGFloat! = errorField.frame.minX + errorField.frame.width/2.0
                     x = fieldCenter - errorWidth*hRatio/2.0
                     errorLabel.textAlignment = .center
-                } else if errorField == self.cvvTextField {
+                }/* else if errorField == self.cvvTextField {
                     // right - justify
                     x = (totalWidth - rightMargin - errorWidth)*hRatio
                     errorLabel.textAlignment = .right
-                }
+                }*/
             }
             errorLabel.frame = CGRect(x: x, y: (totalHeight-errorHeight)*vRatio, width: self.errorWidth, height: errorHeight*vRatio)
         }
