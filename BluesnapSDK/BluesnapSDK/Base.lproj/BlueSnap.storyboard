@@ -314,7 +314,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y0h-By-eMw">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y0h-By-eMw" userLabel="Apple Pay Button">
                                 <rect key="frame" x="0.0" y="72" width="375" height="143"/>
                                 <state key="normal" title="Button" image="apple_pay_button"/>
                                 <connections>
@@ -327,75 +327,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xwO-VY-sMe">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1a-n9-LUQ" userLabel="Card Number Button">
                                 <rect key="frame" x="0.0" y="227" width="375" height="143"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="text_input_box" translatesAutoresizingMaskIntoConstraints="NO" id="jaZ-la-5xf">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="143"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cc_default" translatesAutoresizingMaskIntoConstraints="NO" id="c4E-WV-Pf7">
-                                        <rect key="frame" x="35" y="54" width="25" height="17"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="25" id="0GY-hV-bL5"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Card Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mJ9-w3-pns">
-                                        <rect key="frame" x="69" y="54" width="104" height="19"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="104" id="llr-YW-3Lc"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1234 5678 9012 3456" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A7t-tW-gtu">
-                                        <rect key="frame" x="179" y="54" width="154" height="17"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="154" id="OOp-AB-3cp"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1a-n9-LUQ">
-                                        <rect key="frame" x="24" y="41" width="322" height="46"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Button">
-                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="ccDetailsClick:" destination="f14-WO-daN" eventType="touchUpInside" id="oDn-h8-X7r"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="A7t-tW-gtu" firstAttribute="top" secondItem="xwO-VY-sMe" secondAttribute="top" constant="54" id="70Q-Og-0dF"/>
-                                    <constraint firstItem="A7t-tW-gtu" firstAttribute="leading" secondItem="mJ9-w3-pns" secondAttribute="trailing" constant="6" id="75p-al-pbm"/>
-                                    <constraint firstItem="mJ9-w3-pns" firstAttribute="leading" secondItem="c4E-WV-Pf7" secondAttribute="trailing" constant="9" id="EO0-I2-fk3"/>
-                                    <constraint firstItem="c4E-WV-Pf7" firstAttribute="leading" secondItem="xwO-VY-sMe" secondAttribute="leading" constant="35" id="IY3-bs-5r1"/>
-                                    <constraint firstItem="jaZ-la-5xf" firstAttribute="top" secondItem="xwO-VY-sMe" secondAttribute="top" id="Kvr-sW-KgK"/>
-                                    <constraint firstAttribute="trailing" secondItem="jaZ-la-5xf" secondAttribute="trailing" id="L28-f3-7Yp"/>
-                                    <constraint firstItem="jaZ-la-5xf" firstAttribute="leading" secondItem="xwO-VY-sMe" secondAttribute="leading" id="Lav-sa-nEu"/>
-                                    <constraint firstItem="c4E-WV-Pf7" firstAttribute="top" secondItem="xwO-VY-sMe" secondAttribute="top" constant="54" id="Mjq-Ou-gqj"/>
-                                    <constraint firstAttribute="bottom" secondItem="jaZ-la-5xf" secondAttribute="bottom" id="aOt-Hi-4mH"/>
-                                    <constraint firstItem="mJ9-w3-pns" firstAttribute="top" secondItem="xwO-VY-sMe" secondAttribute="top" constant="54" id="gyM-Ek-bFT"/>
-                                </constraints>
-                            </view>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Button" image="card_number_box">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="ccDetailsClick:" destination="f14-WO-daN" eventType="touchUpInside" id="oDn-h8-X7r"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="xwO-VY-sMe" secondAttribute="trailing" id="3RU-uX-vMT"/>
                             <constraint firstItem="Xk8-02-9HE" firstAttribute="top" secondItem="y0h-By-eMw" secondAttribute="bottom" id="4SB-MQ-f77"/>
+                            <constraint firstAttribute="trailing" secondItem="M1a-n9-LUQ" secondAttribute="trailing" id="6bF-iu-PbU"/>
                             <constraint firstItem="Xk8-02-9HE" firstAttribute="leading" secondItem="zLN-4V-elS" secondAttribute="leading" id="EgZ-hd-IXp"/>
+                            <constraint firstItem="M1a-n9-LUQ" firstAttribute="leading" secondItem="zLN-4V-elS" secondAttribute="leading" id="II2-vD-ICF"/>
+                            <constraint firstItem="M1a-n9-LUQ" firstAttribute="top" secondItem="Xk8-02-9HE" secondAttribute="bottom" id="M5A-tK-McN"/>
                             <constraint firstItem="y0h-By-eMw" firstAttribute="leading" secondItem="zLN-4V-elS" secondAttribute="leading" id="PPM-Xr-SvB"/>
                             <constraint firstAttribute="trailing" secondItem="Xk8-02-9HE" secondAttribute="trailing" id="TBh-WN-zwV"/>
-                            <constraint firstItem="xwO-VY-sMe" firstAttribute="top" secondItem="Xk8-02-9HE" secondAttribute="bottom" id="YqO-SD-cZf"/>
                             <constraint firstAttribute="trailing" secondItem="y0h-By-eMw" secondAttribute="trailing" id="d5R-8t-1hn"/>
-                            <constraint firstItem="xwO-VY-sMe" firstAttribute="leading" secondItem="zLN-4V-elS" secondAttribute="leading" id="rvc-Ah-VVN"/>
                             <constraint firstItem="y0h-By-eMw" firstAttribute="top" secondItem="gFH-Ws-TOv" secondAttribute="bottom" constant="8" symbolic="YES" id="tgr-wL-7Mn"/>
                         </constraints>
                     </view>
@@ -1050,9 +1004,9 @@
         <image name="US" width="28" height="20"/>
         <image name="apple_pay_button" width="375" height="143"/>
         <image name="blue_check_mark" width="16" height="13"/>
+        <image name="card_number_box" width="375" height="143"/>
         <image name="cc_default" width="25" height="17"/>
         <image name="menu_button" width="20" height="16"/>
         <image name="scroll_alphanumericals" width="15" height="568"/>
-        <image name="text_input_box" width="375" height="143"/>
     </resources>
 </document>
