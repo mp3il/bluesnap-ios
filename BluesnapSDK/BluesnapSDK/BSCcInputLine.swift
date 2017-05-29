@@ -64,6 +64,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             }
         }
     }
+    internal var closing = false
     
     // MARK: Constants
 
@@ -80,6 +81,22 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         "visa": "visa"]
 
     // MARK: Public functions
+    
+    internal func reset() {
+        hideError(textField)
+        hideError(expTextField)
+        hideError(cvvTextField)
+        textField.text = ""
+        expTextField.text = ""
+        cvvTextField.text = ""
+        ccn = ""
+        //ccnIsOpen = true
+        openCcn()
+    }
+
+    internal func closeOnLeave() {
+        closing = true
+    }
     
     func getExpDateAsMMYYYY() -> String! {
         
@@ -146,9 +163,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         expTextField.textAlignment = .center
         cvvTextField.textAlignment = .center
         
-        errorLabel = UILabel()
-        self.addSubview(errorLabel!)
-        showError(nil)
+        buildErrorLabel()
         errorLabel?.isHidden = true
         
         if let img = BSViewsManager.getImage(imageName: "forward_arrow") {
@@ -277,7 +292,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        if textField == self.textField {
+        /*if textField == self.textField {
             print("ccn should return")
         } else if textField == self.expTextField {
             print("exp should return")
@@ -285,24 +300,36 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             print("cvv should return")
         } else {
             print("UNKNOWN should return")
-        }
+        }*/
         return  true
     }
+
     func textFieldShouldEndEditing(_ sender: UITextField) -> Bool {
         
+        if closing {
+            closing = false
+            return true
+        }
         var ok : Bool = false
         if sender == self.textField {
-            ok = tryCloseCcn()
+            if ccnIsOpen {
+                ccn = self.textField.text
+                if validateCCN() {
+                    if submitCcFunc(textField.text!) == true {
+                        ok = true
+                    }
+                }
+                if ok == true {
+                    ccnIsOpen = false
+                    resizeElements()
+                }
+            } else {
+                ok = true
+            }
         } else if sender == self.expTextField {
             ok = validateExp()
-            if ok == true {
-                focusOnCvvField()
-            }
-        } else {
+        } else if sender == self.cvvTextField {
             ok = validateCvv()
-            if ok == true {
-                focusOnNextField()
-            }
         }
         return ok
     }
@@ -312,7 +339,9 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     func focusOnCcnField() {
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.main.async {
-                self.textField.becomeFirstResponder()
+                if self.ccnIsOpen == true {
+                    self.textField.becomeFirstResponder()
+                }
             }
         }
     }
@@ -320,7 +349,9 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     func focusOnExpField() {
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.main.async {
-                self.expTextField.becomeFirstResponder()
+                if self.ccnIsOpen == false {
+                    self.expTextField.becomeFirstResponder()
+                }
             }
         }
     }
@@ -328,7 +359,9 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     func focusOnCvvField() {
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.main.async {
-                self.cvvTextField.becomeFirstResponder()
+                if self.ccnIsOpen == false {
+                    self.cvvTextField.becomeFirstResponder()
+                }
             }
         }
     }
@@ -356,11 +389,10 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     }
     
     override func textFieldDidBeginEditing(_ sender: UITextField) {
-        hideError()
+        //hideError(textField)
     }
     
     override func textFieldDidEndEditing(_ sender: UITextField) {
-        //print("textFieldDidEndEditing")
         endEditCcFunc()
     }
     
@@ -371,7 +403,6 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         
         let ccn = textField.text?.removeNoneDigits ?? ""
         let ccnLength = ccn.characters.count
-        //print("textFieldEditingChanged; ccnLength=\(ccnLength)")
         
         if ccnLength >= 6 {
             cardType = textField.text?.getCCTypeByRegex()?.lowercased() ?? ""
@@ -384,49 +415,35 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         }
         if checkMaxLength(textField: sender, maxLength: maxLength) == true {
             if ccnLength == maxLength {
-                // try to resign first responder
-                self.textField.resignFirstResponder()
+                if self.textField.canResignFirstResponder {
+                    focusOnExpField()
+                }
             }
         }
     }
 
-    
-    private func tryCloseCcn() -> Bool {
-        //print("************* close CCN")
-        if self.ccnIsOpen {
-            ccn = self.textField.text
-        }
-        // do not leave field until is valid
-        var ok = false
-        if validateCCN() {
-            if submitCcFunc(textField.text!) == true {
-                ok = true
+    private func openCcn() {
+        var canOpen = true
+        if cvvTextField.isFirstResponder {
+            if !cvvTextField.canResignFirstResponder {
+                canOpen = false
+            }
+        } else if expTextField.isFirstResponder {
+            if !expTextField.canResignFirstResponder {
+                canOpen = false
             }
         }
-        if ok == true {
-            ccnIsOpen = false
-            //hideError()
+        if canOpen {
+            ccnIsOpen = true
             resizeElements()
-            focusOnExpField()
-        } else {
+            startEditCcFunc()
             focusOnCcnField()
-            //self.textField.becomeFirstResponder()
         }
-        return ok
-    }
-    
-    private func openCcn() {
-        //print("************* open CCN")
-        ccnIsOpen = true
-        //hideError()
-        resizeElements()
-        focusOnCcnField()
-        startEditCcFunc()
     }
 
     func expFieldDidBeginEditing(_ sender: UITextField) {
         
-        hideError()
+        //hideError(expTextField)
     }
     
     func expFieldEditingChanged(_ sender: UITextField) {
@@ -434,14 +451,16 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         BSValidator.expEditingChanged(sender)
         if checkMaxLength(textField: sender, maxLength: 5) == true {
             if sender.text?.characters.count == 5 {
-                expTextField.resignFirstResponder()
+                if expTextField.canResignFirstResponder {
+                    focusOnCvvField()
+                }
             }
         }
     }
 
     func cvvFieldDidBeginEditing(_ sender: UITextField) {
         
-        hideError()
+        //hideError(cvvTextField)
     }
     
     func cvvFieldEditingChanged(_ sender: UITextField) {
@@ -453,14 +472,18 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         }
         if checkMaxLength(textField: sender, maxLength: cvvMaxLength) == true {
             if sender.text?.characters.count == cvvMaxLength {
-                cvvTextField.resignFirstResponder()
+                if cvvTextField.canResignFirstResponder == true {
+                    focusOnNextField()
+                }
             }
         }
     }
     
     func nextArrowTouchUpInside(_ sender: Any) {
         
-        _ = tryCloseCcn()
+        if textField.canResignFirstResponder {
+            focusOnExpField()
+        }
     }
 
     // MARK: Validation methods

@@ -246,7 +246,7 @@ class BSValidator {
             result = false
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(nameInvalidMessage)
         }
@@ -268,7 +268,7 @@ class BSValidator {
             result = true
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(emailInvalidMessage)
         }
@@ -290,7 +290,7 @@ class BSValidator {
             result = true
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(streetInvalidMessage)
         }
@@ -313,7 +313,7 @@ class BSValidator {
             result = true
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(cityInvalidMessage)
         }
@@ -332,7 +332,7 @@ class BSValidator {
             result = true
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(countryInvalidMessage)
         }
@@ -355,7 +355,7 @@ class BSValidator {
             result = true
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(zipInvalidMessage)
         }
@@ -374,7 +374,7 @@ class BSValidator {
             result = true
         }
         if result {
-            input.hideError()
+            input.hideError(nil)
         } else {
             input.showError(stateInvalidMessage)
         }
@@ -413,7 +413,7 @@ class BSValidator {
         }
 
         if (ok) {
-            input.hideError()
+            input.hideError(input.expTextField)
         } else {
             input.showError(field: input.expTextField, errorText: msg)
         }
@@ -435,7 +435,7 @@ class BSValidator {
             result = false
         }
         if result {
-            input.hideError()
+            input.hideError(input.cvvTextField)
         } else {
             input.showError(field: input.cvvTextField, errorText: cvvInvalidMessage)
         }
@@ -450,7 +450,7 @@ class BSValidator {
             result = false
         }
         if result {
-            input.hideError()
+            input.hideError(input.textField)
         } else {
             input.showError(field: input.textField, errorText: ccnInvalidMessage)
         }
@@ -535,7 +535,7 @@ class BSValidator {
             addressDetails.state = nil
         }
         stateInputLine.isHidden = hideState
-        stateInputLine.hideError()
+        stateInputLine.hideError(nil)
     }
 
 }

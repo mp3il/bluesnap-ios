@@ -123,11 +123,13 @@ class BSBaseInputControl: UIControl {
         }
     }
     
-    public func hideError() {
+    public func hideError(_ field: UITextField?) {
         
-        if let errorLabel = errorLabel {
-            errorLabel.isHidden = true
-            errorField?.textColor = self.fieldTextColor
+        if field == nil || errorField == field {
+            if let errorLabel = errorLabel {
+                errorLabel.isHidden = true
+                errorField?.textColor = self.fieldTextColor
+            }
         }
     }
     
@@ -331,7 +333,7 @@ class BSBaseInputControl: UIControl {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
-        hideError()
+        hideError(textField)
         sendActions(for: UIControlEvents.editingDidBegin)
     }
     

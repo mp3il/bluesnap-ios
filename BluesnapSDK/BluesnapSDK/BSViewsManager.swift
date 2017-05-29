@@ -56,6 +56,10 @@ class BSViewsManager {
         startScreen.purchaseFunc = purchaseFunc
         startScreen.fullBilling = fullBilling
         
+        if purchaseScreen != nil {
+            purchaseScreen.resetCC()
+        }
+
         inNavigationController.pushViewController(startScreen, animated: animated)
     }
     

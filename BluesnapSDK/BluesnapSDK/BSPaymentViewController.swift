@@ -169,13 +169,18 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             ccInputLine.ccnIsOpen = true
         }
         hideShowFields()
-        if ccInputLine.ccnIsOpen == true {
-             self.ccInputLine.focusOnCcnField()
-        }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+
+        if ccInputLine.ccnIsOpen == true {
+            self.ccInputLine.focusOnCcnField()
+        }
+    }
+        
     override func viewWillDisappear(_ animated: Bool) {
         
+        ccInputLine.closeOnLeave()
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
@@ -329,7 +334,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
             self.zipInputLine.fieldKeyboardType = .numbersAndPunctuation
         }
         self.zipInputLine.isHidden = hideZip
-        self.zipInputLine.hideError()
+        self.zipInputLine.hideError(nil)
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
@@ -470,6 +475,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: CC details additions
     
+    internal func resetCC() {
+        ccInputLine.reset()
+    }
+    
     func startActivityIndicator() {
         // start Activity Indicator
         DispatchQueue.global(qos: .background).async {
@@ -513,12 +522,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     }
 
     internal func startEditCcFunc() {
-        print("startEditCcFunc")
         hideShowFields()
     }
     
     internal func endEditCcFunc() {
-        print("endEditCcFunc;")
         hideShowFields()
     }
 
