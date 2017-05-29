@@ -26,9 +26,6 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     internal var endEditCcFunc: () -> Void = {
         print("endEditCcFunc should be overridden")
     }
-    internal var focusOnNextFieldFunc: () -> Void = {
-        print("focusOnNextFieldFunc should be overridden")
-    }
     
     internal var cardType : String! = "" {
         didSet {
@@ -304,7 +301,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         } else {
             ok = validateCvv()
             if ok == true {
-                focusOnNextFieldFunc()
+                focusOnNextField()
             }
         }
         return ok
@@ -335,18 +332,18 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             }
         }
     }
-    /*
+    
     func focusOnNextField() {
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.main.async {
-                let nextTage = self.cvvTextField.tag+1;
-                let nextResponder = self.superview?.viewWithTag(nextTage) as UIResponder!
+                let nextTage = self.tag+1;
+                let nextResponder = self.superview?.viewWithTag(nextTage) as? BSInputLine
                 if nextResponder != nil {
-                    nextResponder?.becomeFirstResponder()
+                    nextResponder?.textField.becomeFirstResponder()
                 }
             }
         }
-    }*/
+    }
     
 
     // MARK: event handlers

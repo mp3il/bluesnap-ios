@@ -154,7 +154,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         ccInputLine.submitCcFunc = submitCcFunc
         ccInputLine.startEditCcFunc = startEditCcFunc
         ccInputLine.endEditCcFunc = endEditCcFunc
-        ccInputLine.focusOnNextFieldFunc = focusOnNameFieldFunc
         
         if self.firstTime == true {
             self.firstTime = false
@@ -521,14 +520,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     internal func endEditCcFunc() {
         print("endEditCcFunc;")
         hideShowFields()
-    }
-
-    internal func focusOnNameFieldFunc() {
-        DispatchQueue.global(qos: .background).async {
-            DispatchQueue.main.async {
-                self.nameInputLine.textField.becomeFirstResponder()
-            }
-        }
     }
 
     
