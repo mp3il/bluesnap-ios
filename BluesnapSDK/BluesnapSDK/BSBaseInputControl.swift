@@ -181,7 +181,7 @@ class BSBaseInputControl: UIControl {
         
         self.imageButton = UIButton(type: UIButtonType.custom)
         self.addSubview(imageButton)
-        imageButton.addTarget(self, action: #selector(BSInputLine.imageTouchUpInside(_:)), for: .touchUpInside)
+        imageButton.addTarget(self, action: #selector(BSBaseInputControl.imageTouchUpInside(_:)), for: .touchUpInside)
         imageButton.contentVerticalAlignment = .fill
         imageButton.contentHorizontalAlignment = .center
         //imageButton.backgroundColor = UIColor.yellow

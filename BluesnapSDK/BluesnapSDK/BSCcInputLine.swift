@@ -43,6 +43,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     internal var expErrorLabel : UILabel?
     internal var cvvTextField : UITextField! = UITextField()
     internal var cvvErrorLabel : UILabel?
+    internal var nextButton : UIButton = UIButton()
 
     // MARK: private properties
     
@@ -152,6 +153,14 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         self.addSubview(errorLabel!)
         showError(nil)
         errorLabel?.isHidden = true
+        
+        if let img = BSViewsManager.getImage(imageName: "forward_arrow") {
+            nextButton.setImage(img, for: .normal)
+            nextButton.contentVerticalAlignment = .fill
+            nextButton.contentHorizontalAlignment = .center
+            nextButton.addTarget(self, action: #selector(BSCcInputLine.nextArrowTouchUpInside(_:)), for: .touchUpInside)
+            self.addSubview(nextButton)
+        }
     }
 
     override func setElementAttributes() {
@@ -194,6 +203,17 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
             let actualFieldHeight = textField.bounds.height
             expTextField.frame = CGRect(x: expFieldX, y: fieldY, width: actualExpFieldWidth, height: actualFieldHeight)
             cvvTextField.frame = CGRect(x: cvvFieldX, y: fieldY, width: actualCvvFieldWidth, height: actualFieldHeight)
+        }
+
+        if self.ccnIsOpen && textField.text != "" {
+            let nextButtonWidth : CGFloat = 22
+            let nextButtonHeight : CGFloat = 22
+            let x : CGFloat = (totalWidth - rightMargin - nextButtonWidth)*hRatio
+            let y : CGFloat = (totalHeight-nextButtonHeight) * vRatio / 2.0
+            nextButton.frame = CGRect(x: x, y: y, width: nextButtonWidth*hRatio, height: nextButtonHeight*vRatio)
+            nextButton.isHidden = false
+        } else {
+            nextButton.isHidden = true
         }
 
     }
@@ -368,7 +388,6 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         if checkMaxLength(textField: sender, maxLength: maxLength) == true {
             if ccnLength == maxLength {
                 // try to resign first responder
-                //print("textFieldEditingChanged; resigning")
                 self.textField.resignFirstResponder()
             }
         }
@@ -389,7 +408,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         }
         if ok == true {
             ccnIsOpen = false
-            hideError()
+            //hideError()
             resizeElements()
             focusOnExpField()
         } else {
@@ -402,6 +421,7 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     private func openCcn() {
         //print("************* open CCN")
         ccnIsOpen = true
+        //hideError()
         resizeElements()
         focusOnCcnField()
         startEditCcFunc()
@@ -441,6 +461,11 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         }
     }
     
+    func nextArrowTouchUpInside(_ sender: Any) {
+        
+        _ = tryCloseCcn()
+    }
+
     // MARK: Validation methods
     
     func validateCCN() -> Bool {
