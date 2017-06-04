@@ -57,7 +57,7 @@ class BSInputLine: BSBaseInputControl {
             label.font = labelFont
         }
         
-        label.frame = CGRect(x: leftMargin*hRatio, y: (totalHeight-labelHeight)/2*vRatio, width: labelWidth*hRatio, height: labelHeight*vRatio)
+        label.frame = CGRect(x: leftMargin*hRatio, y: (totalHeight-labelHeight)/2*vRatio, width: (labelWidth*hRatio).rounded(), height: labelHeight)
     }
     
     override func getFieldWidth() -> CGFloat {
