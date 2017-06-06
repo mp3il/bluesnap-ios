@@ -12,7 +12,7 @@
 import UIKit
 
 @IBDesignable
-class BSBaseInputControl: UIControl {
+class BSBaseInputControl: UIControl, UITextFieldDelegate {
 
     // MARK: Configurable properties
     
@@ -83,6 +83,7 @@ class BSBaseInputControl: UIControl {
     internal var hRatio : CGFloat = 1.0
     internal var vRatio : CGFloat = 1.0
 
+    // MARK: public functions
     
     public func getValue() -> String! {
         return textField.text
@@ -94,16 +95,6 @@ class BSBaseInputControl: UIControl {
     
     public func showError(_ errorText : String?) {
         
-        /*self.errorText = errorText ?? ""
-        
-        buildErrorLabel()
-        if let errorLabel = errorLabel {
-            if errorText != nil {
-                errorLabel.text = self.errorText
-                errorLabel.isHidden = false
-                resizeError()
-            }
-        }*/
         showError(field: self.textField, errorText: errorText)
     }
     
@@ -131,7 +122,15 @@ class BSBaseInputControl: UIControl {
                 errorField?.textColor = self.fieldTextColor
             }
         }
+    }    
+    
+    // MARK: TextFieldDelegate functions
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
+
     
     // MARK: Internal functions
     
@@ -180,6 +179,7 @@ class BSBaseInputControl: UIControl {
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidBeginEditing(_:)), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidEndEditing(_:)), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(BSInputLine.textFieldEditingChanged(_:)), for: .editingChanged)
+        textField.delegate = self
         
         self.imageButton = UIButton(type: UIButtonType.custom)
         self.addSubview(imageButton)

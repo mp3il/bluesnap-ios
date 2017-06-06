@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
+class BSCcInputLine: BSBaseInputControl {
 
     // We use the BSBaseInputControl for the CCN field and image,
     // and add fields for EXP and CVV
@@ -163,6 +163,8 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         expTextField.textAlignment = .center
         cvvTextField.textAlignment = .center
         
+        addDoneButtonToKeyboard()
+        
         buildErrorLabel()
         errorLabel?.isHidden = true
         
@@ -289,20 +291,6 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return true
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        /*if textField == self.textField {
-            print("ccn should return")
-        } else if textField == self.expTextField {
-            print("exp should return")
-        } else if textField == self.cvvTextField {
-            print("cvv should return")
-        } else {
-            print("UNKNOWN should return")
-        }*/
-        return  true
-    }
 
     func textFieldShouldEndEditing(_ sender: UITextField) -> Bool {
         
@@ -334,6 +322,25 @@ class BSCcInputLine: BSBaseInputControl, UITextFieldDelegate {
         return ok
     }
     
+    // MARK: Keyboard "done" button enhancement
+    
+    internal func addDoneButtonToKeyboard() {
+        
+        let viewForDoneButtonOnKeyboard = UIToolbar()
+        viewForDoneButtonOnKeyboard.sizeToFit()
+        let btnDoneOnKeyboard = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneBtnfromKeyboardClicked))
+        viewForDoneButtonOnKeyboard.items = [btnDoneOnKeyboard]
+        
+        self.textField.inputAccessoryView = viewForDoneButtonOnKeyboard
+        self.expTextField.inputAccessoryView = viewForDoneButtonOnKeyboard
+        self.cvvTextField.inputAccessoryView = viewForDoneButtonOnKeyboard
+    }
+    
+    @IBAction func doneBtnfromKeyboardClicked (sender: Any) {
+        //Hide Keyboard by endEditing
+        self.endEditing(true)
+    }
+
     // MARK: focus on fields
     
     func focusOnCcnField() {
