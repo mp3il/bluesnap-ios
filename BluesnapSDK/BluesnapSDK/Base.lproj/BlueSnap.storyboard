@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -42,7 +42,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
@@ -121,7 +121,7 @@
         <!--Shipping-->
         <scene sceneID="rbP-bj-wQc">
             <objects>
-                <viewController storyboardIdentifier="ShippingDetailsScreen" id="PPS-Pq-6Wu" userLabel="Shipping" customClass="BSShippingViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSShippingDetailsScreen" id="PPS-Pq-6Wu" userLabel="Shipping" customClass="BSShippingViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gGu-wC-psG"/>
                         <viewControllerLayoutGuide type="bottom" id="Wqo-FT-qWo"/>
@@ -661,7 +661,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Payment" id="SMO-Vb-QOG">
-                        <barButtonItem key="rightBarButtonItem" image="menu_button" style="plain" id="ODe-4v-aVb">
+                        <barButtonItem key="rightBarButtonItem" image="menu_button" style="done" id="ODe-4v-aVb">
                             <connections>
                                 <action selector="MenuClick:" destination="W0G-M6-3dM" id="7S4-w1-Lfd"/>
                             </connections>
@@ -720,7 +720,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -828,7 +828,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
@@ -890,10 +890,10 @@
             </objects>
             <point key="canvasLocation" x="2729" y="1705"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller to Currency Scene-->
         <scene sceneID="VNs-D6-HAF">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="n9L-ed-m3M" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BSNavToCurrency" automaticallyAdjustsScrollViewInsets="NO" id="n9L-ed-m3M" userLabel="Navigation Controller to Currency Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mBH-tz-0Wz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -908,10 +908,10 @@
             </objects>
             <point key="canvasLocation" x="1950" y="1004"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller to Country Scene-->
         <scene sceneID="lxD-O3-2U2">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7Sq-7r-cAr" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BSNavToCountry" automaticallyAdjustsScrollViewInsets="NO" id="7Sq-7r-cAr" userLabel="Navigation Controller to Country Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="odG-Z4-bNj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -926,10 +926,10 @@
             </objects>
             <point key="canvasLocation" x="4382" y="1003"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller to State Scene-->
         <scene sceneID="Fu6-Ll-d6D">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IwX-4e-IhH" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BSNavToState" automaticallyAdjustsScrollViewInsets="NO" id="IwX-4e-IhH" userLabel="Navigation Controller to State Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VRB-KX-jfZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -944,10 +944,10 @@
             </objects>
             <point key="canvasLocation" x="1950" y="1704"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller to Start Scene-->
         <scene sceneID="5Dn-3y-Min">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="laJ-Gr-piP" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BSNavToStart" automaticallyAdjustsScrollViewInsets="NO" id="laJ-Gr-piP" userLabel="Navigation Controller to Start Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2fe-kR-029">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -962,10 +962,10 @@
             </objects>
             <point key="canvasLocation" x="1950" y="-380"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller to Shipping Scene-->
         <scene sceneID="kMu-UY-6EB">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4q2-oc-g7O" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BSNavToShipping" automaticallyAdjustsScrollViewInsets="NO" id="4q2-oc-g7O" userLabel="Navigation Controller to Shipping Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="uOi-ZJ-xAK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -980,10 +980,10 @@
             </objects>
             <point key="canvasLocation" x="4382" y="304"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller to Payment Scene-->
         <scene sceneID="WdT-4h-Qji">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Lc4-G9-eue" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BSNavToPayment" automaticallyAdjustsScrollViewInsets="NO" id="Lc4-G9-eue" userLabel="Navigation Controller to Payment Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xJ1-Ni-3xo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

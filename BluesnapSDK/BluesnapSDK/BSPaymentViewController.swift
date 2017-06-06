@@ -302,7 +302,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         
         if (self.shippingScreen == nil) {
             if let storyboard = storyboard {
-                self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "ShippingDetailsScreen") as! BSShippingViewController
+                self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
                 self.shippingScreen.paymentDetails = self.paymentDetails
                 self.shippingScreen.submitPaymentFields = submitPaymentFields
                 self.shippingScreen.countryManager = self.countryManager
