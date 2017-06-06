@@ -45,7 +45,7 @@ public class BSPaymentDetails : NSObject {
     }
     
     /*
-    Change currencvy will also change the amounts according to the change rates
+    Change currency will also change the amounts according to the change rates
     */
     public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?) {
         

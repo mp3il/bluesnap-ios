@@ -8,7 +8,7 @@ public class BSToken {
     internal var tokenStr: String! = ""
     internal var serverUrl: String! = ""
     
-    init(tokenStr : String!, serverUrl : String!) {
+    public init(tokenStr : String!, serverUrl : String!) {
         self.tokenStr = tokenStr
         self.serverUrl = serverUrl
     }
