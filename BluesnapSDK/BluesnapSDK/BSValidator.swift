@@ -399,12 +399,17 @@ class BSValidator {
                 ok = false
             } else if let month = Int(mm), let year = Int(yy) {
                 var dateComponents = DateComponents()
-                dateComponents.year = year + (getCurrentYear() / 100)*100
+                let currYear : Int! = getCurrentYear()
+                dateComponents.year = year + (currYear / 100)*100
                 dateComponents.month = month
                 dateComponents.day = 1
                 let expDate = Calendar.current.date(from: dateComponents)!
-                ok = expDate > Date()
-                msg = expPastInvalidMessage
+                if dateComponents.year! > currYear + 10 {
+                    ok = false
+                } else {
+                    ok = expDate > Date()
+                    msg = expPastInvalidMessage
+                }
             } else {
                 ok = false
             }
