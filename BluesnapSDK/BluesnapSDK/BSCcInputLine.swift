@@ -166,7 +166,7 @@ class BSCcInputLine: BSBaseInputControl {
         expTextField.textAlignment = .center
         cvvTextField.textAlignment = .center
         
-        addDoneButtonToKeyboard()
+        setNumericKeyboard()
         
         buildErrorLabel()
         errorLabel?.isHidden = true
@@ -329,24 +329,16 @@ class BSCcInputLine: BSBaseInputControl {
         return ok
     }
     
-    // MARK: Keyboard "done" button enhancement
+    // MARK: Numeric Keyboard "done" button enhancement
     
-    internal func addDoneButtonToKeyboard() {
+    override internal func setNumericKeyboard() {
         
-        let viewForDoneButtonOnKeyboard = UIToolbar()
-        viewForDoneButtonOnKeyboard.sizeToFit()
-        let btnDoneOnKeyboard = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneBtnfromKeyboardClicked))
-        viewForDoneButtonOnKeyboard.items = [btnDoneOnKeyboard]
-        
+        let viewForDoneButtonOnKeyboard = createDoneButtonForKeyboard()
         self.textField.inputAccessoryView = viewForDoneButtonOnKeyboard
         self.expTextField.inputAccessoryView = viewForDoneButtonOnKeyboard
         self.cvvTextField.inputAccessoryView = viewForDoneButtonOnKeyboard
     }
     
-    @IBAction func doneBtnfromKeyboardClicked (sender: Any) {
-        //Hide Keyboard by endEditing
-        self.endEditing(true)
-    }
 
     // MARK: focus on fields
     

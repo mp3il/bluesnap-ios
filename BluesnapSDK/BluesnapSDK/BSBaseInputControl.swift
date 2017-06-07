@@ -32,6 +32,11 @@ class BSBaseInputControl: UIControl, UITextFieldDelegate {
     @IBInspectable var fieldKeyboardType : UIKeyboardType = UIKeyboardType.default {
         didSet {
             textField.keyboardType = fieldKeyboardType
+            if fieldKeyboardType == .numberPad {
+                self.setNumericKeyboard()
+            } else {
+                self.removeNumericKeyboard()
+            }
         }
     }
     
@@ -354,6 +359,34 @@ class BSBaseInputControl: UIControl, UITextFieldDelegate {
     func fieldCoverButtonTouchUpInside(_ sender: Any) {
         
         sendActions(for: UIControlEvents.touchUpInside)
+    }
+
+    // MARK: Numeric Keyboard "done" button enhancement
+    
+    internal func createDoneButtonForKeyboard() -> UIToolbar {
+        
+        let viewForDoneButtonOnKeyboard = UIToolbar()
+        viewForDoneButtonOnKeyboard.sizeToFit()
+        let btnDoneOnKeyboard = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneBtnfromKeyboardClicked))
+        viewForDoneButtonOnKeyboard.semanticContentAttribute = .forceRightToLeft
+        viewForDoneButtonOnKeyboard.items = [btnDoneOnKeyboard]
+        return viewForDoneButtonOnKeyboard
+     }
+
+    @IBAction func doneBtnfromKeyboardClicked (sender: Any) {
+        //Hide Keyboard by endEditing
+        self.endEditing(true)
+    }
+    
+    internal func setNumericKeyboard() {
+        
+        let viewForDoneButtonOnKeyboard = createDoneButtonForKeyboard()
+        self.textField.inputAccessoryView = viewForDoneButtonOnKeyboard
+    }
+    
+    internal func removeNumericKeyboard() {
+        
+        self.textField.inputAccessoryView = nil
     }
 
 

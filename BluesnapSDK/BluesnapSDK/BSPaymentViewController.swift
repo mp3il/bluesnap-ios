@@ -374,6 +374,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if countryCode.lowercased() == "us" {
             self.zipInputLine.labelText = "Billing Zip"
             self.zipInputLine.fieldKeyboardType = .numberPad
+            
         } else {
             self.zipInputLine.labelText = "Postal Code"
             self.zipInputLine.fieldKeyboardType = .numbersAndPunctuation

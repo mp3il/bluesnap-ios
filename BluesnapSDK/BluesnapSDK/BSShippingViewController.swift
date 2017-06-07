@@ -292,10 +292,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
         if countryCode.lowercased() == "us" {
             zipInputLine.labelText = "Shipping Zip"
-            zipInputLine.textField.keyboardType = .numberPad
+            zipInputLine.fieldKeyboardType = .numberPad
         } else {
             zipInputLine.labelText = "Postal Code"
-            zipInputLine.textField.keyboardType = .numbersAndPunctuation
+            zipInputLine.fieldKeyboardType = .numbersAndPunctuation
         }
         zipInputLine.isHidden = hideZip
         zipInputLine.hideError(nil)
