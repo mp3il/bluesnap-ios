@@ -15,7 +15,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     internal var paymentDetails : BSPaymentDetails!
     internal var payText : String!
-    internal var submitPaymentFields : () -> BSResultCcDetails? = { return nil }
+    internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
     
     // MARK: outlets
@@ -136,7 +136,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         if (validateForm()) {
             
             _ = navigationController?.popViewController(animated: false)
-            _ = submitPaymentFields()
+            submitPaymentFields()
             
         } else {
             //return false

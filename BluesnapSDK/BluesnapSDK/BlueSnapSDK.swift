@@ -52,16 +52,11 @@ import Foundation
      - ccNumber: Credit card number
      - expDate: CC expiration date in format MM/YYYY
      - cvv: CC security code (CVV)
-     - throws BSApiErrors
+     - completion: callback with either result details if OK, or error details if not OK
      */
-    open class func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String) throws -> BSResultCcDetails? {
+    open class func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
         
-        do {
-            let result = try BSApiManager.submitCcDetails(bsToken: bsToken, ccNumber: ccNumber, expDate: expDate, cvv: cvv)
-            return result
-        } catch let error {
-            throw error
-        }
+        BSApiManager.submitCcDetails(bsToken: bsToken, ccNumber: ccNumber, expDate: expDate, cvv: cvv, completion: completion)
     }
     
     /**

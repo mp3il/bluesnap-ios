@@ -294,45 +294,47 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    private func submitPaymentFields() -> BSResultCcDetails? {
+    private func submitPaymentFields() {
         
-        var result : BSResultCcDetails?
+        startActivityIndicator()
         
         let ccn = self.ccInputLine.getValue() ?? ""
         let cvv = self.ccInputLine.getCvv() ?? ""
         let exp = self.ccInputLine.getExpDateAsMMYYYY() ?? ""
-        do {
-            result = try BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv)
-            self.paymentDetails.setCcDetails(ccDetails: result)
-            // return to merchant screen
-            if let navigationController = navigationController {
-                let viewControllers = navigationController.viewControllers
-                let merchantControllerIndex = viewControllers.count-3
-                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
-            }
-            //_ = navigationController?.popViewController(animated: false)
-            // execute callback
-            purchaseFunc(paymentDetails)
+
+        BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
             
-        } catch let error as BSCcDetailErrors {
-            if (error == BSCcDetailErrors.invalidCcNumber) {
-                ccInputLine.showError(field: ccInputLine.textField, errorText: BSValidator.ccnInvalidMessage)
-            } else if (error == BSCcDetailErrors.invalidExpDate) {
-                ccInputLine.showError(field: ccInputLine.expTextField, errorText: BSValidator.expInvalidMessage)
-            } else if (error == BSCcDetailErrors.invalidCvv) {
-                ccInputLine.showError(field: ccInputLine.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
-            } else if (error == BSCcDetailErrors.expiredToken) {
-                // should be popup here
-                showAlert("Your session has expired, please go back and try again")
-            } else {
-                // should be popup here
-                showAlert("An error occurred, please try again")
+            self.stopActivityIndicator()
+            
+            //Check for error
+            if let error = error{
+                if (error == BSCcDetailErrors.invalidCcNumber) {
+                    self.ccInputLine.showError(field: self.ccInputLine.textField, errorText: BSValidator.ccnInvalidMessage)
+                } else if (error == BSCcDetailErrors.invalidExpDate) {
+                    self.ccInputLine.showError(field: self.ccInputLine.expTextField, errorText: BSValidator.expInvalidMessage)
+                } else if (error == BSCcDetailErrors.invalidCvv) {
+                    self.ccInputLine.showError(field: self.ccInputLine.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
+                } else if (error == BSCcDetailErrors.expiredToken) {
+                    self.showAlert("Your session has expired, please go back and try again")
+                } else {
+                    NSLog("Unexpected error submitting Payment Fields to BS")
+                    self.showAlert("An error occurred, please try again")
+                }
             }
-        } catch {
-            NSLog("Unexpected error submitting Payment Fields to BS")
-            showAlert("An error occurred, please try again")
-        }
-        return result
+            
+            // Check for result
+            if let result = result {
+                self.paymentDetails.setCcDetails(ccDetails: result)
+                // return to merchant screen
+                if let navigationController = self.navigationController {
+                    let viewControllers = navigationController.viewControllers
+                    let merchantControllerIndex = viewControllers.count-3
+                    _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+                }
+                // execute callback
+                self.purchaseFunc(self.paymentDetails)
+            }
+        })
     }
     
     
@@ -422,7 +424,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             if (withShipping && (!shippingSameAsBillingSwitch.isOn || shippingSameAsBillingSwitch.isHidden)) {
                 gotoShippingScreen()
             } else {
-                let _ = submitPaymentFields()
+                submitPaymentFields()
             }
         } else {
             //return false
