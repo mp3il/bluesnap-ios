@@ -123,6 +123,15 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: BSCcInputLineDelegate methods
     
+    
+    func startEditCreditCard() {
+        hideShowFields()
+    }
+    
+    func endEditCreditCard() {
+        hideShowFields()
+    }
+
     func willCheckCreditCard() {
         startActivityIndicator()
     }
@@ -194,10 +203,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         updateTexts()
         
         taxDetailsView.isHidden = self.paymentDetails.getTaxAmount() == 0
-        
-        ccInputLine.startEditCcFunc = startEditCcFunc
-        ccInputLine.endEditCcFunc = endEditCcFunc
-        
+         
         if self.firstTime == true {
             self.firstTime = false
             if let billingDetails = paymentDetails.getBillingDetails() {
@@ -519,25 +525,19 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         return result
     }
 
-    // MARK: CC details additions
+    // MARK: public functions
     
-    internal func resetCC() {
+    public func resetCC() {
         ccInputLine.reset()
     }
+    
+    // MARK: activity indicator methods
     
     func startActivityIndicator() {
         BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
     }
     func stopActivityIndicator() {
         BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)
-    }
-
-    internal func startEditCcFunc() {
-        hideShowFields()
-    }
-    
-    internal func endEditCcFunc() {
-        hideShowFields()
     }
 
     

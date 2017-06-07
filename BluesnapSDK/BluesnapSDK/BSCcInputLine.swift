@@ -8,7 +8,9 @@
 
 import UIKit
 
-protocol BSCcInputLineDelegate :class{
+protocol BSCcInputLineDelegate : class {
+    func startEditCreditCard()
+    func endEditCreditCard()
     func willCheckCreditCard()
     func didCheckCreditCard()
     func checkCreditCard(ccn: String, completion : @escaping (Bool)->Void)
@@ -22,13 +24,6 @@ class BSCcInputLine: BSBaseInputControl {
     // MARK: public properties
 
     var delegate : BSCcInputLineDelegate?
-
-    internal var startEditCcFunc: () -> Void = {
-        print("startEditCcFunc should be overridden")
-    }
-    internal var endEditCcFunc: () -> Void = {
-        print("endEditCcFunc should be overridden")
-    }
     
     internal var cardType : String! = "" {
         didSet {
@@ -399,7 +394,7 @@ class BSCcInputLine: BSBaseInputControl {
     }
     
     override func textFieldDidEndEditing(_ sender: UITextField) {
-        endEditCcFunc()
+        delegate?.endEditCreditCard()
     }
     
     override func textFieldEditingChanged(_ sender: UITextField) {
@@ -442,7 +437,7 @@ class BSCcInputLine: BSBaseInputControl {
         if canOpen {
             ccnIsOpen = true
             resizeElements()
-            startEditCcFunc()
+            delegate?.startEditCreditCard()
             focusOnCcnField()
         }
     }
