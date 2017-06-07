@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BSPaymentViewController: UIViewController, UITextFieldDelegate {
+class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputLineDelegate {
 
     // MARK: - Public properties
     
@@ -121,10 +121,21 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // MARK: BSCcInputLineDelegate methods
+    
+    func willCheckCreditCard() {
+        startActivityIndicator()
+    }
+    func didCheckCreditCard() {
+        stopActivityIndicator()
+    }
+    
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        ccInputLine.delegate = self
         
         emailInputLine.fieldKeyboardType = .emailAddress
         activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
@@ -480,12 +491,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate {
     }
     
     func startActivityIndicator() {
-        // start Activity Indicator
-        DispatchQueue.global(qos: .background).async {
-            DispatchQueue.main.async {
-                BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
-            }
-        }
+        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
     }
     func stopActivityIndicator() {
         BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)

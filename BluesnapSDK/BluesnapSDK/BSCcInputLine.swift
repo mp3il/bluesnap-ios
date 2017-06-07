@@ -8,12 +8,19 @@
 
 import UIKit
 
+protocol BSCcInputLineDelegate :class{
+    func willCheckCreditCard()
+    func didCheckCreditCard()
+}
+
 class BSCcInputLine: BSBaseInputControl {
 
     // We use the BSBaseInputControl for the CCN field and image,
     // and add fields for EXP and CVV
 
     // MARK: public properties
+
+    var delegate : BSCcInputLineDelegate?
 
     internal var submitCcFunc: (String!)->Bool! = {
         ccn in
@@ -303,8 +310,16 @@ class BSCcInputLine: BSBaseInputControl {
             if ccnIsOpen {
                 ccn = self.textField.text
                 if validateCCN() {
-                    if submitCcFunc(textField.text!) == true {
-                        ok = true
+                    self.delegate?.willCheckCreditCard()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        if self.submitCcFunc(self.textField.text!) == true {
+                            ok = true
+                            self.ccnIsOpen = false
+                            self.resizeElements()
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.delegate?.didCheckCreditCard()
+                        }
                     }
                 }
                 if ok == true {

@@ -13,7 +13,6 @@ class BSTransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIVi
     // MARK: UIViewControllerAnimatedTransitioning protocol methods
     
     // animate a change from one viewcontroller to another
-    func ani
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         // TODO: Perform the animation

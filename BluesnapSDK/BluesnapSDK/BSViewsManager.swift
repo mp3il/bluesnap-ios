@@ -217,6 +217,8 @@ class BSViewsManager {
         let indicator = UIActivityIndicatorView()
         view.addSubview(indicator)
         indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .gray
         return indicator
     }
     
@@ -225,8 +227,6 @@ class BSViewsManager {
         UIApplication.shared.beginIgnoringInteractionEvents()
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.main.async {
-                activityIndicator.hidesWhenStopped = true
-                activityIndicator.activityIndicatorViewStyle = .gray
                 activityIndicator.startAnimating()
             }
         }
