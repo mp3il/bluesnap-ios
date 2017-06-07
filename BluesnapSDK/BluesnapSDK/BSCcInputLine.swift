@@ -11,6 +11,7 @@ import UIKit
 protocol BSCcInputLineDelegate :class{
     func willCheckCreditCard()
     func didCheckCreditCard()
+    func checkCreditCard(ccn: String, completion : @escaping (Bool)->Void)
 }
 
 class BSCcInputLine: BSBaseInputControl {
@@ -22,11 +23,6 @@ class BSCcInputLine: BSBaseInputControl {
 
     var delegate : BSCcInputLineDelegate?
 
-    internal var submitCcFunc: (String!)->Bool! = {
-        ccn in
-        print("submitCcFunc should be overridden")
-        return true
-    }
     internal var startEditCcFunc: () -> Void = {
         print("startEditCcFunc should be overridden")
     }
@@ -311,20 +307,15 @@ class BSCcInputLine: BSBaseInputControl {
                 ccn = self.textField.text
                 if validateCCN() {
                     self.delegate?.willCheckCreditCard()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        if self.submitCcFunc(self.textField.text!) == true {
-                            ok = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
+                        self.delegate?.checkCreditCard(ccn: self.textField.text ?? "", completion: { (result) in
                             self.ccnIsOpen = false
                             self.resizeElements()
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.delegate?.didCheckCreditCard()
-                        }
-                    }
-                }
-                if ok == true {
-                    ccnIsOpen = false
-                    resizeElements()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                self.delegate?.didCheckCreditCard()
+                            }
+                        })
+                    })
                 }
             } else {
                 ok = true

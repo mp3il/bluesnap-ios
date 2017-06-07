@@ -130,6 +130,39 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         stopActivityIndicator()
     }
     
+    func checkCreditCard(ccn: String, completion: @escaping (Bool) -> Void) {
+        
+        // get issuing country and card type from server
+        var isOK = false
+        
+        BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn, completion: { (result, error) in
+            //Check for error
+            if let error = error{
+                if (error == BSCcDetailErrors.invalidCcNumber) {
+                    self.ccInputLine.showError(BSValidator.ccnInvalidMessage)
+                } else {
+                    self.showAlert("An error occurred")
+                }
+                isOK = false
+                completion(isOK)
+            }
+            
+            // Check for result
+            guard let result = result,
+                let issuingCountry = result.ccIssuingCountry,
+                let cardType = result.ccType
+                else{
+                    return
+            }
+            
+            self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
+            self.ccInputLine.cardType = cardType
+            isOK = true
+            completion(isOK)
+            
+        })
+    }
+    
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
@@ -162,7 +195,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         taxDetailsView.isHidden = self.paymentDetails.getTaxAmount() == 0
         
-        ccInputLine.submitCcFunc = submitCcFunc
         ccInputLine.startEditCcFunc = startEditCcFunc
         ccInputLine.endEditCcFunc = endEditCcFunc
         
@@ -495,36 +527,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
     func stopActivityIndicator() {
         BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)
-    }
-    
-    internal func submitCcFunc(ccn: String!) -> Bool! {
-        
-        //startActivityIndicator()
-        
-        // get issuing country and card type from server
-        var ok = false
-        do {
-            let result = try BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn/*, activityIndicator: self.activityIndicator*/)
-            if let issuingCountry = result?.ccIssuingCountry {
-                self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
-            }
-            if let cardType = result?.ccType {
-                ccInputLine.cardType = cardType
-            }
-            ok = true
-        } catch let error as BSCcDetailErrors {
-            if (error == BSCcDetailErrors.invalidCcNumber) {
-                ccInputLine.showError(BSValidator.ccnInvalidMessage)
-            } else {
-                showAlert("An error occurred")
-            }
-        } catch {
-            NSLog("Unexpected error submitting CCN to BS")
-            showAlert("An error occurred")
-        }
-        
-        //stopActivityIndicator()
-        return ok
     }
 
     internal func startEditCcFunc() {

@@ -205,19 +205,96 @@ class BSApiManager  {
      - ccNumber: Credit card number
      - throws BSApiErrors
      */
-    static func submitCcn(bsToken : BSToken!, ccNumber: String) throws -> BSResultCcDetails? {
+    static func submitCcn(bsToken : BSToken!, ccNumber: String,completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void){
         
         let requestBody = ["ccNumber": ccNumber.removeWhitespaces()]
-        do {
-            let result = try submitPaymentDetails(bsToken: bsToken, requestBody: requestBody)
-            return result
-        } catch let error {
-            throw error
-        }
+        
+        submitPaymentDetails(bsToken: bsToken, requestBody: requestBody, completion: { (result, error) in
+            if let error = error{
+                completion(nil,error)
+                debugPrint(error.localizedDescription)
+                return
+            }
+            completion(result, nil)
+        })
     }
+ 
 
     // MARK: Private functions
     
+    private static func submitPaymentDetails(bsToken : BSToken!, requestBody: [String:String], completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
+        
+        DispatchQueue.global().async {
+            
+            let domain : String! = bsToken.serverUrl
+            let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken.getTokenStr();
+            let url = NSURL(string: urlStr)!
+            var request = NSMutableURLRequest(url: url as URL)
+            request.httpMethod = "PUT"
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
+            } catch let error {
+                NSLog("Error serializing CC details: \(error.localizedDescription)")
+            }
+            //request.timeoutInterval = 60
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            // fire request
+            
+            var result : BSResultCcDetails?
+            var resultError : BSCcDetailErrors?
+            
+            let semaphore = DispatchSemaphore(value: 0)
+            let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+                if let error = error {
+                    print("error")
+                    return
+                }
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        result = parseResultCCDetailsFromResponse(data: data)
+                        if (result == nil) {
+                            resultError = .unknown
+                        }
+                    } else if (httpStatusCode == 400) {
+                        resultError = .unknown
+                        if let data = data {
+                            let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+                            if (errStr == "\"INVALID_CC_NUMBER\"") {
+                                resultError = .invalidCcNumber
+                            } else if (errStr == "\"INVALID_CVV\"") {
+                                resultError = .invalidCvv
+                            } else if (errStr == "\"INVALID_EXP_DATE\"") {
+                                resultError = .invalidExpDate
+                            } else if (errStr == "\"EXPIRED_TOKEN\"") {
+                                resultError = .expiredToken
+                            }
+                        }
+                    } else {
+                        print("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
+                        resultError = .unknown
+                    }
+                } else {
+                    NSLog("Error getting response from BS on submitting Payment details")
+                }
+                defer {
+                    semaphore.signal()
+                }
+            }
+            task.resume()
+            semaphore.wait()
+            if let resultError = resultError {
+                DispatchQueue.main.async {
+                    completion(nil, resultError)
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                completion(result,nil)
+            }
+        }
+    }
     
     
     /**
