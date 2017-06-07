@@ -313,6 +313,7 @@ class BSCcInputLine: BSBaseInputControl {
                             self.resizeElements()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 self.delegate?.didCheckCreditCard()
+                                self.focusOnExpField()
                             }
                         })
                     })
