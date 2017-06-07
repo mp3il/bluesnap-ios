@@ -24,6 +24,8 @@ class BSViewsManager {
     fileprivate static var startScreen: BSStartViewController!
     fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
     fileprivate static var currencyScreen: BSCurrenciesViewController!
+    
+    //static let transitionManager = BSTransitionManager()
 
     /**
      Open the check-out start screen, where the shopper chooses CC/ApplePay.
@@ -59,6 +61,8 @@ class BSViewsManager {
         if purchaseScreen != nil {
             purchaseScreen.resetCC()
         }
+        
+        //startScreen.transitioningDelegate = BSViewsManager.transitionManager
 
         inNavigationController.pushViewController(startScreen, animated: animated)
     }
@@ -92,6 +96,8 @@ class BSViewsManager {
         purchaseScreen.purchaseFunc = purchaseFunc
         purchaseScreen.fullBilling = fullBilling
         
+        //purchaseScreen.transitioningDelegate = BSViewsManager.transitionManager
+       
         inNavigationController.pushViewController(purchaseScreen, animated: animated)
     }
     
