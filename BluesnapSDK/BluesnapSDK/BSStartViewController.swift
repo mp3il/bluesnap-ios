@@ -20,10 +20,10 @@ class BSStartViewController: UIViewController {
         print("purchaseFunc should be overridden")
     }
     
+    // MARK: UIViewController functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -31,10 +31,7 @@ class BSStartViewController: UIViewController {
         self.navigationController!.isNavigationBarHidden = false
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    // MARK: button functions
     
     @IBAction func applePayClick(_ sender: Any) {
         
@@ -44,21 +41,22 @@ class BSStartViewController: UIViewController {
     
     @IBAction func ccDetailsClick(_ sender: Any) {
         
-        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: true, bsToken: bsToken, paymentDetails: paymentDetails, fullBilling: fullBilling, purchaseFunc: purchaseFunc)
-    }
-
-    @IBAction func editingDidBegin(_ sender: Any) {
-        print("****************** EditingDidBegin")
+        animateToPaymentScreen(completion: { animate in
+        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, bsToken: self.bsToken, paymentDetails: self.paymentDetails, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
+        })
     }
     
-    @IBAction func editingDidEnd(_ sender: BSInputLine) {
-        print("****************** EditingDidEnd, value=\(sender.getValue())")
-    }
-    @IBAction func editingChanged(_ sender: BSInputLine) {
-        print("****************** editingChanged, value=\(sender.getValue())")
-    }
-    @IBAction func touchUpInside(_ sender: BSInputLine) {
-        print("****************** container touchUpInside")
+    // Mark: private functions
+    
+    private func animateToPaymentScreen(completion: ((Bool) -> Void)!) {
+        
+        let transition = CATransition()
+        transition.duration = 0.25
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromTop
+        self.view.window!.layer.add(transition, forKey: kCATransition)
+        
+        completion(false)
     }
 
 }
