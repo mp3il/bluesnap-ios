@@ -32,6 +32,8 @@ class BSInputLine: BSBaseInputControl {
     internal let labelHeight : CGFloat = 17
     internal let labelFontSize : CGFloat = 14
     
+    // Override functions
+    
     override func buildElements() {
         super.buildElements()
         self.addSubview(label)

@@ -132,6 +132,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
+    // MARK: Payment click
+    
     @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
             

@@ -299,19 +299,18 @@ class BSCcInputLine: BSBaseInputControl {
         var ok : Bool = false
         if sender == self.textField {
             if ccnIsOpen {
-                ccn = self.textField.text
-                if validateCCN() {
-                    self.delegate?.willCheckCreditCard()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
-                        self.delegate?.checkCreditCard(ccn: self.textField.text ?? "", completion: { (result) in
-                            self.ccnIsOpen = false
-                            self.resizeElements()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                self.delegate?.didCheckCreditCard()
-                                self.focusOnExpField()
-                            }
+                if ccn == self.textField.text {
+                    self.closeCcn()
+                } else {
+                    ccn = self.textField.text
+                    if validateCCN() {
+                        self.delegate?.willCheckCreditCard()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
+                            self.delegate?.checkCreditCard(ccn: self.textField.text ?? "", completion: { (result) in
+                                self.closeCcn()
+                            })
                         })
-                    })
+                    }
                 }
             } else {
                 ok = true
@@ -423,6 +422,19 @@ class BSCcInputLine: BSBaseInputControl {
         }
     }
 
+    private func closeCcn() {
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.ccnIsOpen = false
+            self.resizeElements()
+        }, completion: { animate in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.delegate?.didCheckCreditCard()
+                self.focusOnExpField()
+            }
+        })
+    }
+
     private func openCcn() {
         var canOpen = true
         if cvvTextField.isFirstResponder {
@@ -435,11 +447,14 @@ class BSCcInputLine: BSBaseInputControl {
             }
         }
         if canOpen {
-            ccnIsOpen = true
-            resizeElements()
-            delegate?.startEditCreditCard()
-            focusOnCcnField()
-        }
+            UIView.animate(withDuration: 0.4, animations: {
+                self.ccnIsOpen = true
+                self.resizeElements()
+            }, completion: { animate in
+                self.delegate?.startEditCreditCard()
+                self.focusOnCcnField()
+           })
+         }
     }
 
     func expFieldDidBeginEditing(_ sender: UITextField) {
