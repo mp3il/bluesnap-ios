@@ -134,16 +134,15 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     func willCheckCreditCard() {
         startActivityIndicator()
     }
-    func didCheckCreditCard() {
-        stopActivityIndicator()
-    }
     
     func checkCreditCard(ccn: String, completion: @escaping (Bool) -> Void) {
         
         // get issuing country and card type from server
-        var isOK = false
         
         BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
+
+            self.stopActivityIndicator()
+
             //Check for error
             if let error = error{
                 if (error == BSCcDetailErrors.invalidCcNumber) {
@@ -151,23 +150,21 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 } else {
                     self.showAlert("An error occurred")
                 }
-                isOK = false
-                completion(isOK)
+                completion(false)
             }
             
             // Check for result
             guard let result = result,
                 let issuingCountry = result.ccIssuingCountry,
                 let cardType = result.ccType
-                else{
-                    return
+            else {
+                completion(false)
+                return
             }
             
             self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             self.ccInputLine.cardType = cardType
-            isOK = true
-            completion(isOK)
-            
+            completion(true)
         })
     }
     

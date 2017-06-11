@@ -37,15 +37,9 @@ class ViewController: UIViewController {
         //NSLog("Kount Init");
         //BlueSnapSDK.KountInit();
         
-        // create a test BS token and set it in BlueSnapSDK
-        do {
-            bsToken = try BlueSnapSDK.createSandboxTestToken()
-            BlueSnapSDK.setBsToken(bsToken: bsToken)
-        } catch {
-            NSLog("Error: Failed to get BS token")
-            fatalError()
-        }
-        NSLog("Got BS token= \(bsToken!.getTokenStr())")
+        generateAndSetBsToken()
+        listenForBsTokenExpiration()
+
         resultTextView.text = ""
  	}
 	
@@ -183,6 +177,32 @@ class ViewController: UIViewController {
             NSLog(" State code:\(shippingDetails.state ?? "")")
         }
         NSLog("--------------------------------------------------------")
+    }
+    
+    // MARK: BS Token functions
+    
+    // create a test BS token and set it in BlueSnapSDK
+    func generateAndSetBsToken() {
+        
+        do {
+            bsToken = try BlueSnapSDK.createSandboxTestToken()
+            BlueSnapSDK.setBsToken(bsToken: bsToken)
+        } catch {
+            NSLog("Error: Failed to get BS token")
+            fatalError()
+        }
+        NSLog("Got BS token= \(bsToken!.getTokenStr())")
+    }
+    
+    func listenForBsTokenExpiration() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
+    }
+    
+    func bsTokenExpired() {
+        
+        NSLog("Got BS token expiration notification!")
+        generateAndSetBsToken()
     }
 }
 

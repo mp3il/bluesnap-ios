@@ -24,6 +24,8 @@ class BSApiManager  {
     internal static var bsCurrencies : BSCurrencies?
     internal static var lastCurrencyFetchDate : Date?
     internal static var apiToken : BSToken?
+    
+    internal static var simulateTokenExpired = false
 
     // MARK: bsToken setter/getter
     
@@ -105,11 +107,21 @@ class BSApiManager  {
                     } else {
                         resultError = .unknown
                     }
+                } else if (httpStatusCode == 400) {
+                    resultError = .unknown
+                    if let data = data {
+                        let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+                        NSLog("Http error 400 getting BS currencies; error = \(errStr)")
+                        if (errStr == "\"EXPIRED_TOKEN\"") {
+                            resultError = .expiredToken
+                            notifyTokenExpired()
+                        }
+                    }
                 } else {
                     resultError = .unknown
                     NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
                 }
-            } else {
+           } else {
                 resultError = .unknown
                 NSLog("Http error getting BS currencies response")
             }
@@ -191,6 +203,7 @@ class BSApiManager  {
             
             var result : BSResultCcDetails?
             var resultError : BSCcDetailErrors?
+            //self.simulateTokenExpired = !self.simulateTokenExpired
             
             let semaphore = DispatchSemaphore(value: 0)
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
@@ -200,23 +213,24 @@ class BSApiManager  {
                 }
                 let httpResponse = response as? HTTPURLResponse
                 if let httpStatusCode:Int = (httpResponse?.statusCode) {
-                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299 && !self.simulateTokenExpired) {
                         result = parseResultCCDetailsFromResponse(data: data)
                         if (result == nil) {
                             resultError = .unknown
                         }
-                    } else if (httpStatusCode == 400) {
+                    } else if (httpStatusCode == 400 || self.simulateTokenExpired) {
                         resultError = .unknown
                         if let data = data {
                             let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                            if (errStr == "\"INVALID_CC_NUMBER\"") {
+                            if (errStr == "\"EXPIRED_TOKEN\"" || self.simulateTokenExpired) {
+                                resultError = .expiredToken
+                                notifyTokenExpired()
+                            } else if (errStr == "\"INVALID_CC_NUMBER\"") {
                                 resultError = .invalidCcNumber
                             } else if (errStr == "\"INVALID_CVV\"") {
                                 resultError = .invalidCvv
                             } else if (errStr == "\"INVALID_EXP_DATE\"") {
                                 resultError = .invalidExpDate
-                            } else if (errStr == "\"EXPIRED_TOKEN\"") {
-                                resultError = .expiredToken
                             }
                         }
                     } else {
@@ -398,6 +412,11 @@ class BSApiManager  {
         return "Basic \(base64LoginStr)"
     }
     
+    private static func notifyTokenExpired() {
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.bsTokenExpirationNotification, object: nil)
+        }
+    }
     
 
 }
