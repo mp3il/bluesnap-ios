@@ -11,7 +11,7 @@ import Foundation
     // MARK: SDK functions
     
     /**
-     Set the token for BS API
+     Set the token used for BS API
      This needs to be done before calling any of the methods below, and also if you catch notification 
      for token expired
      

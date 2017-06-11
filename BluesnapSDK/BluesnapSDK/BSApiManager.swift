@@ -25,10 +25,18 @@ class BSApiManager  {
     internal static var lastCurrencyFetchDate : Date?
     internal static var apiToken : BSToken?
 
+    // MARK: bsToken setter/getter
+    
+    /**
+    Set the bsToken used in all API calls
+    */
     static func setBsToken(bsToken : BSToken!) {
         apiToken = bsToken
     }
     
+    /**
+     Get the bsToken used in all API calls - if empty, throw fatal error
+     */
     static func getBsToken() -> BSToken! {
         
         if apiToken != nil {
@@ -37,6 +45,8 @@ class BSApiManager  {
             fatalError("BsToken has not been initialized")
         }
     }
+    
+    // MARK: Main functions
     
     /**
         Use this method only in tests to get a token for sandbox
@@ -51,85 +61,6 @@ class BSApiManager  {
             throw error
         }
     }
-    
-    
-    /**
-    Get BlueSnap Token from BlueSnap server
-     Normally you will not do this from the app.
-     
-     - parameters:
-     - domain: look at BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
-     - user: username
-     - password: password
-     - throws BSApiErrors.invalidInput if user/pass are incorrect, BSApiErrors.unknown otherwise
-    */
-    static func createBSToken(domain: String, user: String, password: String) throws -> BSToken? {
-        
-        // create request
-        let authorization = getBasicAuth(user: user, password: password)
-        let urlStr = domain + "services/2/payment-fields-tokens"
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        request.httpMethod = "POST"
-        //request.timeoutInterval = 60
-        request.setValue("text/xml", forHTTPHeaderField: "Content-Type")
-        request.setValue(authorization, forHTTPHeaderField: "Authorization")
-        request.setValue("0", forHTTPHeaderField: "Content-Length")
-        
-        // fire request
-
-        var result : BSToken?
-        var resultError : BSApiErrors?
-        let semaphore = DispatchSemaphore(value: 0)
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            defer {
-                semaphore.signal()
-            }
-            if let error = error {
-                NSLog("error getting BSToken: \(error.localizedDescription)")
-                resultError = .unknown
-                return
-            }
-            let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode:Int = (httpResponse?.statusCode) {
-                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    result = extractTokenFromResponse(httpResponse : httpResponse, domain : domain)
-                    if result == nil {
-                        resultError = .unknown
-                    }
-                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-                    resultError = .invalidInput
-                } else {
-                    resultError = .unknown
-                    NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
-                }
-            } else {
-                resultError = .unknown
-                NSLog("Http error getting response for BSToken")
-            }
-        }
-        task.resume()
-        semaphore.wait()
-        
-        if let resultError = resultError {
-            throw resultError
-        }
-        return result
-    }
-    
-    /**
-        Build the basic authentication header from username/password
-     - parameters:
-     - user: username
-     - password: password
-    */
-    static func getBasicAuth(user: String!, password: String!) -> String {
-        let loginStr = String(format: "%@:%@", user, password)
-        let loginData = loginStr.data(using: String.Encoding.utf8)!
-        let base64LoginStr = loginData.base64EncodedString()
-        return "Basic \(base64LoginStr)"
-    }
-    
     
     /**
         Return a list of currencies and their rates from BlueSnap server
@@ -389,4 +320,84 @@ class BSApiManager  {
         return resultData
     }
     
+    
+    /**
+     Get BlueSnap Token from BlueSnap server
+     Normally you will not do this from the app.
+     
+     - parameters:
+     - domain: look at BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
+     - user: username
+     - password: password
+     - throws BSApiErrors.invalidInput if user/pass are incorrect, BSApiErrors.unknown otherwise
+     */
+    internal static func createBSToken(domain: String, user: String, password: String) throws -> BSToken? {
+        
+        // create request
+        let authorization = getBasicAuth(user: user, password: password)
+        let urlStr = domain + "services/2/payment-fields-tokens"
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        //request.timeoutInterval = 60
+        request.setValue("text/xml", forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
+        request.setValue("0", forHTTPHeaderField: "Content-Length")
+        
+        // fire request
+        
+        var result : BSToken?
+        var resultError : BSApiErrors?
+        let semaphore = DispatchSemaphore(value: 0)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            defer {
+                semaphore.signal()
+            }
+            if let error = error {
+                NSLog("error getting BSToken: \(error.localizedDescription)")
+                resultError = .unknown
+                return
+            }
+            let httpResponse = response as? HTTPURLResponse
+            if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                    result = extractTokenFromResponse(httpResponse : httpResponse, domain : domain)
+                    if result == nil {
+                        resultError = .unknown
+                    }
+                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                    resultError = .invalidInput
+                } else {
+                    resultError = .unknown
+                    NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                }
+            } else {
+                resultError = .unknown
+                NSLog("Http error getting response for BSToken")
+            }
+        }
+        task.resume()
+        semaphore.wait()
+        
+        if let resultError = resultError {
+            throw resultError
+        }
+        return result
+    }
+    
+    /**
+     Build the basic authentication header from username/password
+     - parameters:
+     - user: username
+     - password: password
+     */
+    private static func getBasicAuth(user: String!, password: String!) -> String {
+        let loginStr = String(format: "%@:%@", user, password)
+        let loginData = loginStr.data(using: String.Encoding.utf8)!
+        let base64LoginStr = loginData.base64EncodedString()
+        return "Basic \(base64LoginStr)"
+    }
+    
+    
+
 }
