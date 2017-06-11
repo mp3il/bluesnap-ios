@@ -12,7 +12,6 @@ protocol BSCcInputLineDelegate : class {
     func startEditCreditCard()
     func endEditCreditCard()
     func willCheckCreditCard()
-    func didCheckCreditCard()
     func checkCreditCard(ccn: String, completion : @escaping (Bool)->Void)
 }
 
@@ -434,7 +433,6 @@ class BSCcInputLine: BSBaseInputControl {
             self.layoutIfNeeded()
         }, completion: { animate in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.delegate?.didCheckCreditCard()
                 self.focusOnExpField()
             }
         })

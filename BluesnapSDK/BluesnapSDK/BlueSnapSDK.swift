@@ -11,7 +11,7 @@ import Foundation
     // MARK: SDK functions
     
     /**
-     Set the token for BS API
+     Set the token used for BS API
      This needs to be done before calling any of the methods below, and also if you catch notification 
      for token expired
      
@@ -29,7 +29,7 @@ import Foundation
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - paymentDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
+     - checkoutDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
@@ -37,17 +37,17 @@ import Foundation
     open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        paymentDetails : BSPaymentDetails!,
+        checkoutDetails : BSCheckoutDetails!,
         withShipping: Bool,
         fullBilling : Bool,
-        purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
+        purchaseFunc: @escaping (BSCheckoutDetails!)->Void) {
         
-        adjustPaymentDetails(paymentDetails: paymentDetails,
+        adjustCheckoutDetails(checkoutDetails: checkoutDetails,
                              withShipping: withShipping)
         
         BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
                                           animated: animated,
-                                          paymentDetails: paymentDetails,
+                                          checkoutDetails: checkoutDetails,
                                           withShipping: withShipping,
                                           fullBilling: fullBilling,
                                           purchaseFunc: purchaseFunc)
@@ -135,18 +135,18 @@ import Foundation
     
     // MARK: Private functions
     
-    private class func adjustPaymentDetails(paymentDetails: BSPaymentDetails!,
+    private class func adjustCheckoutDetails(checkoutDetails: BSCheckoutDetails!,
                                             withShipping: Bool) {
         
         let defaultCountry = NSLocale.current.regionCode ?? "US"
-        if (withShipping && paymentDetails.shippingDetails == nil) {
-            paymentDetails.setShippingDetails(shippingDetails: BSAddressDetails())
-            paymentDetails.getShippingDetails()!.country = defaultCountry
-        } else if (!withShipping && paymentDetails.shippingDetails != nil) {
-            paymentDetails.setShippingDetails(shippingDetails: nil)
+        if (withShipping && checkoutDetails.shippingDetails == nil) {
+            checkoutDetails.setShippingDetails(shippingDetails: BSAddressDetails())
+            checkoutDetails.getShippingDetails()!.country = defaultCountry
+        } else if (!withShipping && checkoutDetails.shippingDetails != nil) {
+            checkoutDetails.setShippingDetails(shippingDetails: nil)
         }
-        if paymentDetails.getBillingDetails().country ?? "" == "" {
-            paymentDetails.getBillingDetails().country = defaultCountry
+        if checkoutDetails.getBillingDetails().country ?? "" == "" {
+            checkoutDetails.getBillingDetails().country = defaultCountry
         }
 
     }

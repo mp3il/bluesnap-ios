@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSPaymentDetails : NSObject {
+public class BSCheckoutDetails : NSObject {
     
     // These 3 fields are input + output (they may change if shopper changes currency)
     var amount : Double! = 0.0
@@ -19,8 +19,8 @@ public class BSPaymentDetails : NSObject {
     var billingDetails : BSAddressDetails! = BSAddressDetails()
     var shippingDetails : BSAddressDetails?
 
-    // Output only - result of submitting the CC details to BlueSnap server
-    var ccDetails : BSResultCcDetails?
+    // Output only - result of submitting the payment details to BlueSnap server
+    var resultPaymentDetails : BSResultPaymentDetails?
     
     
     // These fields hold the original amounts in USD, to keep precision in case of currency change
@@ -83,12 +83,12 @@ public class BSPaymentDetails : NSObject {
         return billingDetails
     }
     
-    public func getCcDetails() -> BSResultCcDetails? {
-        return ccDetails
+    public func getResultPaymentDetails() -> BSResultPaymentDetails? {
+        return self.resultPaymentDetails
     }
     
-    public func setCcDetails(ccDetails : BSResultCcDetails?) {
-        self.ccDetails = ccDetails
+    public func setResultPaymentDetails(resultPaymentDetails : BSResultPaymentDetails?) {
+        self.resultPaymentDetails = resultPaymentDetails
     }
     
     public func getShippingDetails() -> BSAddressDetails? {
@@ -120,10 +120,30 @@ public class BSAddressDetails {
     }
 }
 
+// MARK: purchase flow output
+
+public enum BSPaymentType {
+    case CreditCard
+    case ApplePay
+}
+
+/*
+ Purchase output
+ */
+public class BSResultPaymentDetails {
+    
+    var paymentType : BSPaymentType!
+}
+
 /**
- Output non-secured CC details for the purchase
+ Output (PCI-compliant) CC details for the purchase
 */
-public class BSResultCcDetails {
+public class BSResultCcDetails : BSResultPaymentDetails {
+    
+    override init() {
+        super.init()
+        self.paymentType = .CreditCard
+    }
     
     // these fields are output - result of submitting the CC details to BlueSnap server
     var ccType : String?
