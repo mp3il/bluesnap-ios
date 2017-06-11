@@ -14,25 +14,38 @@ class BSApiManager  {
     
     // MARK: Constants
     
-    static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
-    static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
-    static let BS_SANDBOX_TEST_USER = "sdkuser"
-    static let BS_SANDBOX_TEST_PASS = "SDKuser123"
-    static let TIME_DIFF_TO_RELOAD : Double = -60 * 60 // every hour (interval should be negative, and in seconds)
+    internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
+    internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
+    internal static let BS_SANDBOX_TEST_USER = "sdkuser"
+    internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
+    internal static let TIME_DIFF_TO_RELOAD : Double = -60 * 60 // every hour (interval should be negative, and in seconds)
     
     // MARK: private properties
-    static var bsCurrencies : BSCurrencies?
-    static var lastCurrencyFetchDate : Date?
-    
+    internal static var bsCurrencies : BSCurrencies?
+    internal static var lastCurrencyFetchDate : Date?
+    internal static var apiToken : BSToken?
 
+    static func setBsToken(bsToken : BSToken!) {
+        apiToken = bsToken
+    }
+    
+    static func getBsToken() -> BSToken! {
+        
+        if apiToken != nil {
+            return apiToken
+        } else {
+            fatalError("BsToken has not been initialized")
+        }
+    }
+    
     /**
         Use this method only in tests to get a token for sandbox
      - throws BSApiErrors.unknown in case of some server error
     */
-    static func getSandboxBSToken() throws -> BSToken? {
+    static func createSandboxBSToken() throws -> BSToken? {
                 
         do {
-            let result = try getBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS)
+            let result = try createBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS)
             return result
         } catch let error {
             throw error
@@ -41,14 +54,16 @@ class BSApiManager  {
     
     
     /**
-        Get BlueSnap Token from BlueSnap server
+    Get BlueSnap Token from BlueSnap server
+     Normally you will not do this from the app.
+     
      - parameters:
      - domain: look at BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
      - user: username
      - password: password
      - throws BSApiErrors.invalidInput if user/pass are incorrect, BSApiErrors.unknown otherwise
     */
-    static func getBSToken(domain: String, user: String, password: String) throws -> BSToken? {
+    static func createBSToken(domain: String, user: String, password: String) throws -> BSToken? {
         
         // create request
         let authorization = getBasicAuth(user: user, password: password)
@@ -118,11 +133,11 @@ class BSApiManager  {
     
     /**
         Return a list of currencies and their rates from BlueSnap server
-     - parameters:
-     - bsToken: valid BSToken
      - throws BSApiErrors
     */
-    static func getCurrencyRates(bsToken : BSToken!) throws -> BSCurrencies? {
+    static func getCurrencyRates() throws -> BSCurrencies? {
+        
+        let bsToken = getBsToken()
         
         if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
             let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
@@ -131,13 +146,13 @@ class BSApiManager  {
             }
         }
         
-        let domain : String! = bsToken.serverUrl
+        let domain : String! = bsToken!.serverUrl
         let urlStr = domain + "services/2/tokenized-services/rates"
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         //request.timeoutInterval = 60
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bsToken.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
         
         // fire request
         
@@ -181,16 +196,15 @@ class BSApiManager  {
     /**
      Submit CC details to BlueSnap server
      - parameters:
-     - bsToken: valid BSToken
      - ccNumber: Credit card number
      - expDate: CC expiration date in format MM/YYYY
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
+    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
         
         let requestBody = ["ccNumber": ccNumber.removeWhitespaces(), "cvv":cvv, "expDate": expDate]
-        submitPaymentDetails(bsToken: bsToken, requestBody: requestBody, completion: { (result, error) in
+        submitPaymentDetails(requestBody: requestBody, completion: { (result, error) in
             if let error = error{
                 completion(nil,error)
                 debugPrint(error.localizedDescription)
@@ -203,15 +217,14 @@ class BSApiManager  {
     /**
      Submit CCN only to BlueSnap server
      - parameters:
-     - bsToken: valid BSToken
      - ccNumber: Credit card number
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitCcn(bsToken : BSToken!, ccNumber: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void){
+    static func submitCcn(ccNumber: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void){
         
         let requestBody = ["ccNumber": ccNumber.removeWhitespaces()]
         
-        submitPaymentDetails(bsToken: bsToken, requestBody: requestBody, completion: { (result, error) in
+        submitPaymentDetails(requestBody: requestBody, completion: { (result, error) in
             if let error = error{
                 completion(nil,error)
                 debugPrint(error.localizedDescription)
@@ -224,12 +237,14 @@ class BSApiManager  {
 
     // MARK: Private functions
     
-    private static func submitPaymentDetails(bsToken : BSToken!, requestBody: [String:String], completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
+    private static func submitPaymentDetails(requestBody: [String:String], completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
         
         DispatchQueue.global().async {
             
-            let domain : String! = bsToken.serverUrl
-            let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken.getTokenStr();
+            let bsToken = getBsToken()
+            
+            let domain : String! = bsToken!.serverUrl
+            let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken!.getTokenStr();
             let url = NSURL(string: urlStr)!
             var request = NSMutableURLRequest(url: url as URL)
             request.httpMethod = "PUT"

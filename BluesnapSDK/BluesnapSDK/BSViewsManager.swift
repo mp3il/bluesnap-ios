@@ -33,7 +33,6 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - bsToken: BlueSnap token, should be fresh and valid
      - paymentDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
@@ -42,7 +41,6 @@ class BSViewsManager {
     open class func showStartScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        bsToken : BSToken!,
         paymentDetails : BSPaymentDetails!,
         withShipping: Bool,
         fullBilling : Bool,
@@ -54,7 +52,6 @@ class BSViewsManager {
         }
         
         startScreen.paymentDetails = paymentDetails
-        startScreen.bsToken = bsToken
         startScreen.purchaseFunc = purchaseFunc
         startScreen.fullBilling = fullBilling
         
@@ -73,7 +70,6 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - bsToken: BlueSnap token, should be fresh and valid
      - paymentDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
@@ -81,7 +77,6 @@ class BSViewsManager {
     open class func showCCDetailsScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        bsToken : BSToken!,
         paymentDetails : BSPaymentDetails!,
         fullBilling : Bool,
         purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
@@ -92,7 +87,6 @@ class BSViewsManager {
         }
         
         purchaseScreen.paymentDetails = paymentDetails
-        purchaseScreen.bsToken = bsToken
         purchaseScreen.purchaseFunc = purchaseFunc
         purchaseScreen.fullBilling = fullBilling
         
@@ -134,14 +128,12 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - bsToken: BlueSnap token, should be fresh and valid
      - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
      - updateFunc: callback; will be called each time a new value is selected
      */
     open class func showCurrencyList(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        bsToken: BSToken!,
         selectedCurrencyCode : String!,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
         
@@ -150,7 +142,6 @@ class BSViewsManager {
             currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
         }
         
-        currencyScreen.bsToken = bsToken
         currencyScreen.selectedCurrencyCode = selectedCurrencyCode
         currencyScreen.updateFunc = updateFunc
         
@@ -267,18 +258,17 @@ class BSViewsManager {
     static internal let privacyPolicyURL = "https://home.bluesnap.com/privacy-policy/"
     static internal let refundPolicyURL = "https://home.bluesnap.com/privacy-policy/refund-policy/"
     static internal let termsURL = "https://home.bluesnap.com/terms-and-conditions/"
-    open class func openPopupMenu(paymentDetails: BSPaymentDetails?, bsToken: BSToken?,
+    open class func openPopupMenu(paymentDetails: BSPaymentDetails?,
             inNavigationController : UINavigationController,
             updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void) -> UIAlertController {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
         let currencyMenuOption = UIAlertAction(title: "Currency", style: UIAlertActionStyle.default) { _ in
-            if let paymentDetails = paymentDetails, let bsToken = bsToken {
+            if let paymentDetails = paymentDetails {
                 BSViewsManager.showCurrencyList(
                     inNavigationController: inNavigationController,
                     animated: true,
-                    bsToken: bsToken,
                     selectedCurrencyCode: paymentDetails.getCurrency(),
                     updateFunc: updateCurrencyFunc)
             }

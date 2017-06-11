@@ -14,7 +14,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     internal var paymentDetails : BSPaymentDetails!
     internal var fullBilling = false
-    internal var bsToken: BSToken!
     internal var purchaseFunc: (BSPaymentDetails!)->Void = {
         paymentDetails in
         print("purchaseFunc should be overridden")
@@ -144,7 +143,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         // get issuing country and card type from server
         var isOK = false
         
-        BSApiManager.submitCcn(bsToken: bsToken, ccNumber: ccn, completion: { (result, error) in
+        BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
             //Check for error
             if let error = error{
                 if (error == BSCcDetailErrors.invalidCcNumber) {
@@ -308,7 +307,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         let cvv = self.ccInputLine.getCvv() ?? ""
         let exp = self.ccInputLine.getExpDateAsMMYYYY() ?? ""
 
-        BSApiManager.submitCcDetails(bsToken: self.bsToken, ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
+        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
             
             self.stopActivityIndicator()
             
@@ -413,7 +412,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
-        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentDetails: paymentDetails, bsToken: bsToken, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc)
+        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentDetails: paymentDetails, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc)
         present(menu, animated: true, completion: nil)
     }
     

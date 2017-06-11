@@ -11,12 +11,24 @@ import Foundation
     // MARK: SDK functions
     
     /**
+     Set the token for BS API
+     This needs to be done before calling any of the methods below, and also if you catch notification 
+     for token expired
+     
+     - parameters:
+     - bsToken: BlueSnap token, should be fresh and valid
+    */
+    open class func setBsToken(bsToken : BSToken!) {
+        
+        BSApiManager.setBsToken(bsToken: bsToken)
+    }
+    
+    /**
      Start the check-out flow, where the shopper payment details are entered.
      
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - bsToken: BlueSnap token, should be fresh and valid
      - paymentDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
@@ -25,7 +37,6 @@ import Foundation
     open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        bsToken : BSToken!,
         paymentDetails : BSPaymentDetails!,
         withShipping: Bool,
         fullBilling : Bool,
@@ -36,7 +47,6 @@ import Foundation
         
         BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
                                           animated: animated,
-                                          bsToken: bsToken,
                                           paymentDetails: paymentDetails,
                                           withShipping: withShipping,
                                           fullBilling: fullBilling,
@@ -48,26 +58,24 @@ import Foundation
      If you do not want to use our check-out page, you can implement your own.
      You need to generate a token, and then call this function to submit the CC details to BlueSnap instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction.
      - parameters:
-     - bsToken: valid BSToken
      - ccNumber: Credit card number
      - expDate: CC expiration date in format MM/YYYY
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
      */
-    open class func submitCcDetails(bsToken : BSToken!, ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
         
-        BSApiManager.submitCcDetails(bsToken: bsToken, ccNumber: ccNumber, expDate: expDate, cvv: cvv, completion: completion)
+        BSApiManager.submitCcDetails(ccNumber: ccNumber, expDate: expDate, cvv: cvv, completion: completion)
     }
     
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
-     - bsToken: valid BSToken
      - throws BSApiErrors
      */
-    open class func getCurrencyRates(bsToken : BSToken) throws -> BSCurrencies? {
+    open class func getCurrencyRates() throws -> BSCurrencies? {
         do {
-            let result = try BSApiManager.getCurrencyRates(bsToken: bsToken)
+            let result = try BSApiManager.getCurrencyRates()
             return result
         } catch let error {
             throw error
@@ -80,18 +88,16 @@ import Foundation
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - bsToken: BlueSnap token, should be fresh and valid
      - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
      - updateFunc: callback; will be called each time a new value is selected
      */
     open class func showCurrencyList(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        bsToken: BSToken!,
         selectedCurrencyCode : String!,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
         
-        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, bsToken: bsToken, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc)
+        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc)
     }
     
     /**
@@ -119,9 +125,9 @@ import Foundation
      Returns token for BlueSnap Sandbox environment; useful for tests.
      In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
     */
-    open class func getSandboxTestToken() throws -> BSToken? {
+    open class func createSandboxTestToken() throws -> BSToken? {
         do {
-            return try BSApiManager.getSandboxBSToken()
+            return try BSApiManager.createSandboxBSToken()
         } catch let error {
             throw error
         }

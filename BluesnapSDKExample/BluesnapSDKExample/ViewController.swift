@@ -37,9 +37,10 @@ class ViewController: UIViewController {
         //NSLog("Kount Init");
         //BlueSnapSDK.KountInit();
         
-        // get BS token!
+        // create a test BS token and set it in BlueSnapSDK
         do {
-            bsToken = try BlueSnapSDK.getSandboxTestToken()
+            bsToken = try BlueSnapSDK.createSandboxTestToken()
+            BlueSnapSDK.setBsToken(bsToken: bsToken)
         } catch {
             NSLog("Error: Failed to get BS token")
             fatalError()
@@ -97,7 +98,6 @@ class ViewController: UIViewController {
         BlueSnapSDK.showCheckoutScreen(
             inNavigationController: self.navigationController,
             animated: true,
-            bsToken: bsToken!,
             paymentDetails: paymentDetails,
             withShipping: withShippingSwitch.isOn,
             fullBilling: fullBillingSwitch.isOn,
@@ -110,7 +110,6 @@ class ViewController: UIViewController {
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
-            bsToken: bsToken,
             selectedCurrencyCode: paymentDetails.getCurrency(),
             updateFunc: updateViewWithNewCurrency)
 	}

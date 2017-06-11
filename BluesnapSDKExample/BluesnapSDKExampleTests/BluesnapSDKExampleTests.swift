@@ -27,11 +27,13 @@ class BluesnapSDKExampleTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
         do {
-            let token = try BlueSnapSDK.getSandboxTestToken()
+            let token = try BlueSnapSDK.createSandboxTestToken()
             XCTAssertNotNil(token, "Failed to get token")
             NSLog("Token: \(token?.getTokenStr())")
             
-            let bsCurrencies = try BlueSnapSDK.getCurrencyRates(bsToken: token!)
+            BlueSnapSDK.setBsToken(bsToken: token)
+            
+            let bsCurrencies = try BlueSnapSDK.getCurrencyRates()
             XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
             
             let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")

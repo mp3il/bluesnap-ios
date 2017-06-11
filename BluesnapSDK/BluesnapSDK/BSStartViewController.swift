@@ -14,7 +14,6 @@ class BSStartViewController: UIViewController {
     
     internal var paymentDetails : BSPaymentDetails!
     internal var fullBilling = false
-    internal var bsToken: BSToken!
     internal var purchaseFunc: (BSPaymentDetails!)->Void = {
         paymentDetails in
         print("purchaseFunc should be overridden")
@@ -42,7 +41,7 @@ class BSStartViewController: UIViewController {
     @IBAction func ccDetailsClick(_ sender: Any) {
         
         animateToPaymentScreen(completion: { animate in
-        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, bsToken: self.bsToken, paymentDetails: self.paymentDetails, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
+        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentDetails: self.paymentDetails, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
         })
     }
     

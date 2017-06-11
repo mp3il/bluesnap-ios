@@ -12,8 +12,6 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     // MARK: puclic properties
     
-    // BS token for API call to load currency rates
-    internal var bsToken: BSToken?
     // The currently selected currency code
     internal var selectedCurrencyCode : String = ""
     // the callback function that gets called when a currency is selected;
@@ -63,13 +61,11 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     override func viewWillAppear(_ animated: Bool) {
         
         // Re-load currencies data if necessary
-        if let bsToken = bsToken {
-            do {
-                let tmp = try BSApiManager.getCurrencyRates(bsToken: bsToken)
-                bsCurrencies = tmp
-            } catch {
-                NSLog("Failed to fetch currencies")
-            }
+        do {
+            let tmp = try BSApiManager.getCurrencyRates()
+            bsCurrencies = tmp
+        } catch {
+            NSLog("Failed to fetch currencies")
         }
         filterCurrencies(searchBar?.text ?? "")
         
