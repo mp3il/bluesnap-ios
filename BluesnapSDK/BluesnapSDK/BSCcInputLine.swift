@@ -431,6 +431,7 @@ class BSCcInputLine: BSBaseInputControl {
         UIView.animate(withDuration: 0.4, animations: {
             self.ccnIsOpen = false
             self.resizeElements()
+            self.layoutIfNeeded()
         }, completion: { animate in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.delegate?.didCheckCreditCard()
@@ -454,6 +455,7 @@ class BSCcInputLine: BSBaseInputControl {
             UIView.animate(withDuration: 0.4, animations: {
                 self.ccnIsOpen = true
                 self.resizeElements()
+                self.layoutIfNeeded()
             }, completion: { animate in
                 self.delegate?.startEditCreditCard()
                 self.focusOnCcnField()
