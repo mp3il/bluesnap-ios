@@ -12,10 +12,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
 
     // MARK: - Public properties
     
-    internal var paymentDetails : BSPaymentDetails!
+    internal var checkoutDetails : BSCheckoutDetails!
     internal var fullBilling = false
-    internal var purchaseFunc: (BSPaymentDetails!)->Void = {
-        paymentDetails in
+    internal var purchaseFunc: (BSCheckoutDetails!)->Void = {
+        checkoutDetails in
         print("purchaseFunc should be overridden")
     }
     internal var countryManager = BSCountryManager()
@@ -190,19 +190,19 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         self.navigationController!.isNavigationBarHidden = false
         
-        self.withShipping = paymentDetails.getShippingDetails() != nil
+        self.withShipping = checkoutDetails.getShippingDetails() != nil
         
         shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
         // set the "shipping same as billing" to be true if no shipping name is supplied
-        shippingSameAsBillingSwitch.isOn = self.paymentDetails.getShippingDetails()?.name ?? "" == ""
+        shippingSameAsBillingSwitch.isOn = self.checkoutDetails.getShippingDetails()?.name ?? "" == ""
         
         updateTexts()
         
-        taxDetailsView.isHidden = self.paymentDetails.getTaxAmount() == 0
+        taxDetailsView.isHidden = self.checkoutDetails.getTaxAmount() == 0
          
         if self.firstTime == true {
             self.firstTime = false
-            if let billingDetails = paymentDetails.getBillingDetails() {
+            if let billingDetails = self.checkoutDetails.getBillingDetails() {
                 self.nameInputLine.setValue(billingDetails.name)
                 if fullBilling {
                     self.emailInputLine.setValue(billingDetails.email)
@@ -250,13 +250,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             let hideFields = !self.fullBilling
             emailInputLine.isHidden = hideFields
             streetInputLine.isHidden = hideFields
-            let countryCode = self.paymentDetails.getBillingDetails().country ?? ""
+            let countryCode = self.checkoutDetails.getBillingDetails().country ?? ""
             updateZipByCountry(countryCode: countryCode)
             updateFlagImage(countryCode: countryCode)
             cityInputLine.isHidden = hideFields
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-            taxDetailsView.isHidden = self.paymentDetails.taxAmount == 0
+            taxDetailsView.isHidden = self.checkoutDetails.taxAmount == 0
             if hideFields == false {
                 zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
             } else {
@@ -268,7 +268,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func updateState() {
         
         if (fullBilling) {
-            BSValidator.updateState(addressDetails: paymentDetails.getBillingDetails(), countryManager: countryManager, stateInputLine: stateInputLine)
+            BSValidator.updateState(addressDetails: checkoutDetails.getBillingDetails(), countryManager: countryManager, stateInputLine: stateInputLine)
         } else {
             stateInputLine.isHidden = true
         }
@@ -276,9 +276,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateTexts() {
         
-        let toCurrency = paymentDetails.getCurrency() ?? ""
-        let subtotalAmount = paymentDetails.getAmount() ?? 0.0
-        let taxAmount = (paymentDetails.getTaxAmount() ?? 0.0)
+        let toCurrency = checkoutDetails.getCurrency() ?? ""
+        let subtotalAmount = checkoutDetails.getAmount() ?? 0.0
+        let taxAmount = (checkoutDetails.getTaxAmount() ?? 0.0)
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
         payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
@@ -326,7 +326,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             
             // Check for result
             if let result = result {
-                self.paymentDetails.setResultPaymentDetails(resultPaymentDetails: result)
+                self.checkoutDetails.setResultPaymentDetails(resultPaymentDetails: result)
                 // return to merchant screen
                 if let navigationController = self.navigationController {
                     let viewControllers = navigationController.viewControllers
@@ -334,7 +334,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                     _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
                 }
                 // execute callback
-                self.purchaseFunc(self.paymentDetails)
+                self.purchaseFunc(self.checkoutDetails)
             }
         })
     }
@@ -350,7 +350,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if (self.shippingScreen == nil) {
             if let storyboard = storyboard {
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
-                self.shippingScreen.paymentDetails = self.paymentDetails
+                self.shippingScreen.checkoutDetails = self.checkoutDetails
                 self.shippingScreen.submitPaymentFields = submitPaymentFields
                 self.shippingScreen.countryManager = self.countryManager
             }
@@ -362,7 +362,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
-        paymentDetails.getBillingDetails().country = countryCode
+        checkoutDetails.getBillingDetails().country = countryCode
         updateZipByCountry(countryCode: countryCode)
         updateState()
         
@@ -387,7 +387,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateWithNewState(stateCode : String, stateName : String) {
         
-        paymentDetails.getBillingDetails().state = stateCode
+        checkoutDetails.getBillingDetails().state = stateCode
         self.stateInputLine.setValue(stateName)
     }
     
@@ -404,12 +404,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateCurrencyFunc(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        paymentDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
+        checkoutDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
     }
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
-        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentDetails: paymentDetails, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc)
+        let menu : UIAlertController = BSViewsManager.openPopupMenu(checkoutDetails: checkoutDetails, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc)
         present(menu, animated: true, completion: nil)
     }
     
@@ -458,7 +458,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         if result && shippingSameAsBillingSwitch.isOn && !shippingSameAsBillingSwitch.isHidden {
             // copy billing details to shipping
-            if let shippingDetails = self.paymentDetails.getShippingDetails(), let billingDetails = self.paymentDetails.getBillingDetails() {
+            if let shippingDetails = self.checkoutDetails.getShippingDetails(), let billingDetails = self.checkoutDetails.getBillingDetails() {
                 shippingDetails.address = billingDetails.address
                 shippingDetails.city = billingDetails.city
                 shippingDetails.country = billingDetails.country
@@ -474,32 +474,32 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentDetails.getBillingDetails())
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: checkoutDetails.getBillingDetails())
         return result
     }
     
     func validateEmail(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: paymentDetails.getBillingDetails())
+        let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: checkoutDetails.getBillingDetails())
         return result
     }
     
     func validateAddress(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentDetails.getBillingDetails())
+        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: checkoutDetails.getBillingDetails())
         return result
     }
     
     func validateCity(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: paymentDetails.getBillingDetails())
+        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: checkoutDetails.getBillingDetails())
         return result
     }
 
     func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         if (zipInputLine.isHidden) {
-            paymentDetails.getBillingDetails().zip = ""
+            checkoutDetails.getBillingDetails().zip = ""
             zipInputLine.setValue("")
             return true
         }
@@ -511,13 +511,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             ignoreEmptyZip = true
         }
         
-        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreEmptyZip, input: zipInputLine, addressDetails: paymentDetails.getBillingDetails())
+        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreEmptyZip, input: zipInputLine, addressDetails: checkoutDetails.getBillingDetails())
         return result
     }
     
     func validateState(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: paymentDetails.getBillingDetails())
+        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: checkoutDetails.getBillingDetails())
         return result
     }
 
@@ -551,7 +551,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     @IBAction func countryFlagClick(_ sender: BSInputLine) {
         
         // open the country screen
-        let selectedCountryCode = paymentDetails.getBillingDetails().country ?? ""
+        let selectedCountryCode = checkoutDetails.getBillingDetails().country ?? ""
         BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
@@ -599,7 +599,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             inNavigationController: self.navigationController,
             animated: true,
             countryManager: countryManager,
-            addressDetails: paymentDetails.getBillingDetails(),
+            addressDetails: checkoutDetails.getBillingDetails(),
             updateFunc: updateWithNewState)
     }
 

@@ -13,7 +13,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     // MARK: shipping data as input and output
     //internal var storyboard : UIStoryboard?
     
-    internal var paymentDetails : BSPaymentDetails!
+    internal var checkoutDetails : BSCheckoutDetails!
     internal var payText : String!
     internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
@@ -108,7 +108,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        if let shippingDetails = self.paymentDetails.getShippingDetails() {
+        if let shippingDetails = self.checkoutDetails.getShippingDetails() {
             nameInputLine.setValue(shippingDetails.name)
             emailInputLine.setValue(shippingDetails.email)
             streetInputLine.setValue(shippingDetails.address)
@@ -117,7 +117,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
-            let countryCode = paymentDetails.getShippingDetails()?.country ?? ""
+            let countryCode = checkoutDetails.getShippingDetails()?.country ?? ""
             updateZipByCountry(countryCode: countryCode)
             updateFlagImage(countryCode: countryCode)
             updateState()
@@ -161,45 +161,45 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentDetails.getShippingDetails())
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: checkoutDetails.getShippingDetails())
         return result
     }
 
     func validateEmail(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: paymentDetails.getShippingDetails())
+        let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: checkoutDetails.getShippingDetails())
         return result
     }
     
     func validateAddress(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentDetails.getShippingDetails())
+        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: checkoutDetails.getShippingDetails())
         return result
     }
     
     func validateCity(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: paymentDetails.getShippingDetails())
+        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: checkoutDetails.getShippingDetails())
         return result
     }
     
     func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         if (zipInputLine.isHidden) {
-            if let shippingDetails = paymentDetails.getShippingDetails() {
+            if let shippingDetails = checkoutDetails.getShippingDetails() {
                 shippingDetails.zip = ""
             }
             zipInputLine.setValue("")
             return true
         }
         
-        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: paymentDetails.getShippingDetails())
+        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: checkoutDetails.getShippingDetails())
         return result
     }
     
     func validateState(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: paymentDetails.getShippingDetails())
+        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: checkoutDetails.getShippingDetails())
         return result
     }
     
@@ -253,13 +253,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             inNavigationController: self.navigationController,
             animated: true,
             countryManager: countryManager,
-            addressDetails: paymentDetails.getShippingDetails()!,
+            addressDetails: checkoutDetails.getShippingDetails()!,
             updateFunc: updateWithNewState)
     }
 
     @IBAction func flagTouchUpInside(_ sender: BSInputLine) {
         
-        let selectedCountryCode = paymentDetails.getShippingDetails()?.country ?? ""
+        let selectedCountryCode = checkoutDetails.getShippingDetails()?.country ?? ""
         BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
@@ -274,7 +274,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
-        if let shippingDetails = paymentDetails.getShippingDetails() {
+        if let shippingDetails = checkoutDetails.getShippingDetails() {
             shippingDetails.country = countryCode
             updateZipByCountry(countryCode: countryCode)
         }
@@ -305,12 +305,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func updateState() {
         
-        BSValidator.updateState(addressDetails: paymentDetails.getShippingDetails()!, countryManager: countryManager, stateInputLine: stateInputLine)
+        BSValidator.updateState(addressDetails: checkoutDetails.getShippingDetails()!, countryManager: countryManager, stateInputLine: stateInputLine)
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
         
-        if let shippingDetails = paymentDetails.getShippingDetails() {
+        if let shippingDetails = checkoutDetails.getShippingDetails() {
             shippingDetails.state = stateCode
         }
         self.stateInputLine.setValue(stateName)

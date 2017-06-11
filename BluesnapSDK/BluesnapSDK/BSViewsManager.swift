@@ -33,7 +33,7 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - paymentDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
+     - checkoutDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
@@ -41,17 +41,17 @@ class BSViewsManager {
     open class func showStartScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        paymentDetails : BSPaymentDetails!,
+        checkoutDetails : BSCheckoutDetails!,
         withShipping: Bool,
         fullBilling : Bool,
-        purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
+        purchaseFunc: @escaping (BSCheckoutDetails!)->Void) {
         
         if startScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
         }
         
-        startScreen.paymentDetails = paymentDetails
+        startScreen.checkoutDetails = checkoutDetails
         startScreen.purchaseFunc = purchaseFunc
         startScreen.fullBilling = fullBilling
         
@@ -70,23 +70,23 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - paymentDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
+     - checkoutDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
     open class func showCCDetailsScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        paymentDetails : BSPaymentDetails!,
+        checkoutDetails : BSCheckoutDetails!,
         fullBilling : Bool,
-        purchaseFunc: @escaping (BSPaymentDetails!)->Void) {
+        purchaseFunc: @escaping (BSCheckoutDetails!)->Void) {
         
         if purchaseScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController //BSSummaryScreen
         }
         
-        purchaseScreen.paymentDetails = paymentDetails
+        purchaseScreen.checkoutDetails = checkoutDetails
         purchaseScreen.purchaseFunc = purchaseFunc
         purchaseScreen.fullBilling = fullBilling
         
@@ -258,18 +258,18 @@ class BSViewsManager {
     static internal let privacyPolicyURL = "https://home.bluesnap.com/privacy-policy/"
     static internal let refundPolicyURL = "https://home.bluesnap.com/privacy-policy/refund-policy/"
     static internal let termsURL = "https://home.bluesnap.com/terms-and-conditions/"
-    open class func openPopupMenu(paymentDetails: BSPaymentDetails?,
+    open class func openPopupMenu(checkoutDetails: BSCheckoutDetails?,
             inNavigationController : UINavigationController,
             updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void) -> UIAlertController {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
         let currencyMenuOption = UIAlertAction(title: "Currency", style: UIAlertActionStyle.default) { _ in
-            if let paymentDetails = paymentDetails {
+            if let checkoutDetails = checkoutDetails {
                 BSViewsManager.showCurrencyList(
                     inNavigationController: inNavigationController,
                     animated: true,
-                    selectedCurrencyCode: paymentDetails.getCurrency(),
+                    selectedCurrencyCode: checkoutDetails.getCurrency(),
                     updateFunc: updateCurrencyFunc)
             }
         }

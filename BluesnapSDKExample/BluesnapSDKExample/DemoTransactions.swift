@@ -22,16 +22,16 @@ class DemoTreansactions {
     static let BS_SANDBOX_DOMAIN : String = "https://sandbox.bluesnap.com/"
 
     func createCreditCardTransaction(
-        paymentDetails: BSPaymentDetails!,
+        checkoutDetails: BSCheckoutDetails!,
         bsToken: BSToken!) -> (success:Bool, data: String?) {
         
-        let name = paymentDetails.getBillingDetails().getSplitName()!
+        let name = checkoutDetails.getBillingDetails().getSplitName()!
         let bodyStart: String = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
             "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
             "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
             "<soft-descriptor>MobileSDK</soft-descriptor>" +
-            "<amount>\(paymentDetails.getAmount()!)</amount>" +
-        "<currency>\(paymentDetails.getCurrency()!)</currency>"
+            "<amount>\(checkoutDetails.getAmount()!)</amount>" +
+        "<currency>\(checkoutDetails.getCurrency()!)</currency>"
         let bodyMiddle: String = "<card-holder-info>" +
             "<first-name>\(name.firstName)</first-name>" +
             "<last-name>\(name.lastName)</last-name>" +
