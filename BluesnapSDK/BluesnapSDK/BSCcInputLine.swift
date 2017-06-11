@@ -51,6 +51,7 @@ class BSCcInputLine: BSBaseInputControl {
     private let errorWidth : CGFloat = 150
     
     internal var ccn : String! = ""
+    internal var lastValidateCcn : String! = ""
     internal var ccnIsOpen : Bool = true {
         didSet {
             self.fieldIsEditable = ccnIsOpen ? nil : "NO"
@@ -299,15 +300,18 @@ class BSCcInputLine: BSBaseInputControl {
         var ok : Bool = false
         if sender == self.textField {
             if ccnIsOpen {
-                if ccn == self.textField.text {
+                ccn = self.textField.text
+                if lastValidateCcn == self.textField.text {
                     self.closeCcn()
                 } else {
-                    ccn = self.textField.text
+                    self.lastValidateCcn = self.ccn
                     if validateCCN() {
                         self.delegate?.willCheckCreditCard()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
                             self.delegate?.checkCreditCard(ccn: self.textField.text ?? "", completion: { (result) in
-                                self.closeCcn()
+                                if result {
+                                    self.closeCcn()
+                                }
                             })
                         })
                     }
