@@ -264,9 +264,9 @@ class BSViewsManager {
     /*
      Create the popup menu for payment screen
     */
-    static internal let privacyPolicyURL = "http://home.bluesnap.com/ecommerce/legal/privacy-policy/"
-    static internal let refundPolicyURL = "http://home.bluesnap.com/ecommerce/legal/refund-policy/"
-    static internal let termsURL = "http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/"
+    static internal let privacyPolicyURL = "https://home.bluesnap.com/privacy-policy/"
+    static internal let refundPolicyURL = "https://home.bluesnap.com/privacy-policy/refund-policy/"
+    static internal let termsURL = "https://home.bluesnap.com/terms-and-conditions/"
     open class func openPopupMenu(paymentDetails: BSPaymentDetails?, bsToken: BSToken?,
             inNavigationController : UINavigationController,
             updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void) -> UIAlertController {
