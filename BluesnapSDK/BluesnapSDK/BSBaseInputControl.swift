@@ -227,7 +227,7 @@ class BSBaseInputControl: UIControl, UITextFieldDelegate {
         vRatio = self.frame.height / totalHeight
         //NSLog("width=\(self.frame.width), hRatio=\(hRatio), height=\(self.frame.height), vRatio=\(vRatio)")
         
-        if let fieldFont : UIFont = UIFont(name: self.fontName, size: fieldFontSize*vRatio) {
+        if let fieldFont : UIFont = UIFont(name: self.fontName, size: (fieldFontSize*vRatio).rounded()) {
             textField.font = fieldFont
         }
         
@@ -316,7 +316,7 @@ class BSBaseInputControl: UIControl, UITextFieldDelegate {
     internal func resizeError() {
         if let errorLabel = errorLabel {
             if !errorLabel.isHidden {
-                if let labelFont : UIFont = UIFont(name: self.fontName, size: errorFontSize*vRatio) {
+                if let labelFont : UIFont = UIFont(name: self.fontName, size: (errorFontSize*vRatio).rounded()) {
                     errorLabel.font = labelFont
                 }
                 errorLabel.frame = CGRect(x: textField.frame.minX, y: (self.totalHeight-self.errorHeight)*vRatio, width: textField.frame.width, height: errorHeight*vRatio)

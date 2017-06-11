@@ -251,7 +251,7 @@ class BSCcInputLine: BSBaseInputControl {
     override func resizeError() {
         
         if let errorLabel = errorLabel {
-            if let labelFont : UIFont = UIFont(name: self.fontName, size: errorFontSize*vRatio) {
+            if let labelFont : UIFont = UIFont(name: self.fontName, size: (errorFontSize*vRatio).rounded()) {
                 errorLabel.font = labelFont
             }
             // position the label according the chosen field
@@ -278,7 +278,7 @@ class BSCcInputLine: BSBaseInputControl {
     
     func resizeError(field: UITextField) {
         if let errorLabel = errorLabel {
-            if let labelFont : UIFont = UIFont(name: self.fontName, size: errorFontSize*vRatio) {
+            if let labelFont : UIFont = UIFont(name: self.fontName, size: (errorFontSize*vRatio).rounded()) {
                 errorLabel.font = labelFont
             }
             errorLabel.frame = CGRect(x: field.frame.minX, y: (totalHeight-errorHeight)*vRatio, width: errorWidth*hRatio, height: errorHeight*vRatio)

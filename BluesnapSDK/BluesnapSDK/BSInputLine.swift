@@ -55,7 +55,7 @@ class BSInputLine: BSBaseInputControl {
         
         super.resizeElements()
         
-        if let labelFont : UIFont = UIFont(name: self.fontName, size: labelFontSize*vRatio) {
+        if let labelFont : UIFont = UIFont(name: self.fontName, size: (labelFontSize*vRatio).rounded()) {
             label.font = labelFont
         }
         
