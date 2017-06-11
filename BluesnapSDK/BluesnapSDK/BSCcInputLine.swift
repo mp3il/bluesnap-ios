@@ -171,7 +171,7 @@ class BSCcInputLine: BSBaseInputControl {
             nextButton.setImage(img, for: .normal)
             nextButton.contentVerticalAlignment = .fill
             nextButton.contentHorizontalAlignment = .center
-            nextButton.addTarget(self, action: #selector(BSCcInputLine.nextArrowTouchUpInside(_:)), for: .touchUpInside)
+            nextButton.addTarget(self, action: #selector(self.doneBtnfromKeyboardClicked), for: .touchUpInside)
             self.addSubview(nextButton)
         }
     }
