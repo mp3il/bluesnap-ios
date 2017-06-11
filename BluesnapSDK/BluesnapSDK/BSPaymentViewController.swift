@@ -326,7 +326,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             
             // Check for result
             if let result = result {
-                self.paymentDetails.setCcDetails(ccDetails: result)
+                self.paymentDetails.setResultPaymentDetails(resultPaymentDetails: result)
                 // return to merchant screen
                 if let navigationController = self.navigationController {
                     let viewControllers = navigationController.viewControllers
