@@ -135,38 +135,40 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         startActivityIndicator()
     }
     
-    func checkCreditCard(ccn: String, completion: @escaping (Bool) -> Void) {
-        
-        // get issuing country and card type from server
-        
-        BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
+    func didCheckCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?) {
+     
+        self.stopActivityIndicator()
 
-            self.stopActivityIndicator()
-
-            //Check for error
-            if let error = error{
-                if (error == BSCcDetailErrors.invalidCcNumber) {
-                    self.ccInputLine.showError(BSValidator.ccnInvalidMessage)
-                } else {
-                    self.showAlert("An error occurred")
-                }
-                completion(false)
+        if let result = result {
+            if let issuingCountry = result.ccIssuingCountry {
+                self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             }
-            
-            // Check for result
-            guard let result = result,
-                let issuingCountry = result.ccIssuingCountry,
-                let cardType = result.ccType
-            else {
-                completion(false)
-                return
-            }
-            
-            self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
-            self.ccInputLine.cardType = cardType
-            completion(true)
-        })
+        }
     }
+    
+    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?) {
+
+        self.stopActivityIndicator()
+        
+        if let result = result {
+            self.checkoutDetails.setResultPaymentDetails(resultPaymentDetails: result)
+            // return to merchant screen
+            if let navigationController = self.navigationController {
+                let viewControllers = navigationController.viewControllers
+                let merchantControllerIndex = viewControllers.count-3
+                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+            }
+            // execute callback
+            self.purchaseFunc(self.checkoutDetails)
+        }
+    }
+    
+    
+    func showAlert(_ message : String) {
+        let alert = BSViewsManager.createErrorAlert(title: "Oops", message: message)
+        present(alert, animated: true, completion: nil)
+    }
+
     
     // MARK: - UIViewController's methods
     
@@ -296,53 +298,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    private func submitPaymentFields() {
-        
+    func submitPaymentFields() {
         startActivityIndicator()
-        
-        let ccn = self.ccInputLine.getValue() ?? ""
-        let cvv = self.ccInputLine.getCvv() ?? ""
-        let exp = self.ccInputLine.getExpDateAsMMYYYY() ?? ""
-
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
-            
-            self.stopActivityIndicator()
-            
-            //Check for error
-            if let error = error{
-                if (error == BSCcDetailErrors.invalidCcNumber) {
-                    self.ccInputLine.showError(field: self.ccInputLine.textField, errorText: BSValidator.ccnInvalidMessage)
-                } else if (error == BSCcDetailErrors.invalidExpDate) {
-                    self.ccInputLine.showError(field: self.ccInputLine.expTextField, errorText: BSValidator.expInvalidMessage)
-                } else if (error == BSCcDetailErrors.invalidCvv) {
-                    self.ccInputLine.showError(field: self.ccInputLine.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
-                } else if (error == BSCcDetailErrors.expiredToken) {
-                    self.showAlert("Your session has expired, please go back and try again")
-                } else {
-                    NSLog("Unexpected error submitting Payment Fields to BS")
-                    self.showAlert("An error occurred, please try again")
-                }
-            }
-            
-            // Check for result
-            if let result = result {
-                self.checkoutDetails.setResultPaymentDetails(resultPaymentDetails: result)
-                // return to merchant screen
-                if let navigationController = self.navigationController {
-                    let viewControllers = navigationController.viewControllers
-                    let merchantControllerIndex = viewControllers.count-3
-                    _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
-                }
-                // execute callback
-                self.purchaseFunc(self.checkoutDetails)
-            }
-        })
-    }
-    
-    
-    private func showAlert(_ message : String) {
-        let alert = BSViewsManager.createErrorAlert(title: "Oops", message: message)
-        present(alert, animated: true, completion: nil)
+        self.ccInputLine.submitPaymentFields()
     }
     
     private func gotoShippingScreen() {

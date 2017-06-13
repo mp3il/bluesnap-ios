@@ -12,7 +12,9 @@ protocol BSCcInputLineDelegate : class {
     func startEditCreditCard()
     func endEditCreditCard()
     func willCheckCreditCard()
-    func checkCreditCard(ccn: String, completion : @escaping (Bool)->Void)
+    func showAlert(_ message : String)
+    func didCheckCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
+    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
 }
 
 class BSCcInputLine: BSBaseInputControl {
@@ -135,6 +137,66 @@ class BSCcInputLine: BSBaseInputControl {
         return result
     }
     
+    // get issuing country and card type from server, while vsalidating the CCN
+    func checkCreditCard(ccn: String) {
+        
+        if validateCCN() {
+            self.delegate?.willCheckCreditCard()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
+                BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
+                    
+                    //Check for error
+                    if let error = error{
+                        if (error == BSCcDetailErrors.invalidCcNumber) {
+                            self.showError(BSValidator.ccnInvalidMessage)
+                        } else {
+                            self.delegate?.showAlert("An error occurred")
+                        }
+                    }
+                    
+                    // Check for result
+                    if let result = result {
+                        if let cardType = result.ccType {
+                            self.cardType = cardType
+                        }
+                        self.closeCcn()
+                    }
+                    
+                    self.delegate?.didCheckCreditCard(result: result, error: error)
+                })
+            })
+        }
+    }
+
+    func submitPaymentFields() {
+        
+        let ccn = self.getValue() ?? ""
+        let cvv = self.getCvv() ?? ""
+        let exp = self.getExpDateAsMMYYYY() ?? ""
+        
+        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
+            
+            
+            //Check for error
+            if let error = error{
+                if (error == BSCcDetailErrors.invalidCcNumber) {
+                    self.showError(field: self.textField, errorText: BSValidator.ccnInvalidMessage)
+                } else if (error == BSCcDetailErrors.invalidExpDate) {
+                    self.showError(field: self.expTextField, errorText: BSValidator.expInvalidMessage)
+                } else if (error == BSCcDetailErrors.invalidCvv) {
+                    self.showError(field: self.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
+                } else if (error == BSCcDetailErrors.expiredToken) {
+                    self.delegate?.showAlert("Your session has expired, please go back and try again")
+                } else {
+                    NSLog("Unexpected error submitting Payment Fields to BS")
+                    self.delegate?.showAlert("An error occurred, please try again")
+                }
+            }
+            
+            self.delegate?.didSubmitCreditCard(result: result, error: error)
+        })
+    }
+
     
     // MARK: BSBaseInputControl Override functions
 
@@ -304,16 +366,7 @@ class BSCcInputLine: BSBaseInputControl {
                     self.closeCcn()
                 } else {
                     self.lastValidateCcn = self.ccn
-                    if validateCCN() {
-                        self.delegate?.willCheckCreditCard()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
-                            self.delegate?.checkCreditCard(ccn: self.textField.text ?? "", completion: { (result) in
-                                if result {
-                                    self.closeCcn()
-                                }
-                            })
-                        })
-                    }
+                    self.checkCreditCard(ccn: ccn)
                 }
             } else {
                 ok = true
