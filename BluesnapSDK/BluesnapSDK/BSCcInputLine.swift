@@ -26,34 +26,13 @@ class BSCcInputLine: BSBaseInputControl {
 
     var delegate : BSCcInputLineDelegate?
     
-    internal var cardType : String! = "" {
+    var cardType : String! = "" {
         didSet {
             updateCcIcon(ccType: cardType)
         }
     }
-
-
-    // MARK: Additional UI elements
     
-    internal var expTextField : UITextField! = UITextField()
-    internal var expErrorLabel : UILabel?
-    internal var cvvTextField : UITextField! = UITextField()
-    internal var cvvErrorLabel : UILabel?
-    internal var nextButton : UIButton = UIButton()
-
-    // MARK: private properties
-    
-    private let ccnWidth : CGFloat = 180
-    private let last4Width : CGFloat = 46
-    private let expLeftMargin : CGFloat = 120
-    private let expWidth : CGFloat = 70
-    private let cvvLeftMargin : CGFloat = 250
-    private let cvvWidth : CGFloat = 50
-    private let errorWidth : CGFloat = 150
-    
-    internal var ccn : String! = ""
-    internal var lastValidateCcn : String! = ""
-    internal var ccnIsOpen : Bool = true {
+    var ccnIsOpen : Bool = true {
         didSet {
             self.fieldIsEditable = ccnIsOpen ? nil : "NO"
             if ccnIsOpen {
@@ -64,13 +43,32 @@ class BSCcInputLine: BSBaseInputControl {
             }
         }
     }
-    internal var closing = false
+
+
+    // MARK: private properties
+    
+    internal var expTextField : UITextField! = UITextField()
+    internal var cvvTextField : UITextField! = UITextField()
+    private var expErrorLabel : UILabel?
+    private var cvvErrorLabel : UILabel?
+    private var nextButton : UIButton = UIButton()
+    
+    private let ccnWidth : CGFloat = 180
+    private let last4Width : CGFloat = 46
+    private let expLeftMargin : CGFloat = 120
+    private let expWidth : CGFloat = 70
+    private let cvvLeftMargin : CGFloat = 250
+    private let cvvWidth : CGFloat = 50
+    private let errorWidth : CGFloat = 150
+    
+    private var ccn : String! = ""
+    private var lastValidateCcn : String! = ""
+    private var closing = false
     
     // MARK: Constants
 
     fileprivate let ccImages = [
         "amex": "amex",
-        //"cartebleue": "visa",
         "cirrus": "cirrus",
         "diners": "dinersclub",
         "discover": "discover",
@@ -82,7 +80,7 @@ class BSCcInputLine: BSBaseInputControl {
 
     // MARK: Public functions
     
-    internal func reset() {
+    public func reset() {
         hideError(textField)
         hideError(expTextField)
         hideError(cvvTextField)
@@ -94,11 +92,11 @@ class BSCcInputLine: BSBaseInputControl {
         openCcn()
     }
 
-    internal func closeOnLeave() {
+    public func closeOnLeave() {
         closing = true
     }
     
-    func getExpDateAsMMYYYY() -> String! {
+    public func getExpDateAsMMYYYY() -> String! {
         
         let newValue = self.expTextField.text ?? ""
         if let p = newValue.characters.index(of: "/") {
@@ -113,7 +111,11 @@ class BSCcInputLine: BSBaseInputControl {
     }
     
     override func getValue() -> String! {
-        return ccn
+        if self.ccnIsOpen {
+            return self.textField.text
+        } else {
+            return ccn
+        }
     }
     
     override func setValue(_ newValue: String!) {
@@ -123,22 +125,22 @@ class BSCcInputLine: BSBaseInputControl {
         }
     }
     
-    func getCvv() -> String! {
+    public func getCvv() -> String! {
         return self.cvvTextField.text ?? ""
     }
     
-    func getCardType() -> String! {
+    public func getCardType() -> String! {
         return cardType
     }
     
-    func validate() -> Bool {
+    public func validate() -> Bool {
         
         let result = validateCCN() && validateExp() && validateCvv()
         return result
     }
     
     // get issuing country and card type from server, while vsalidating the CCN
-    func checkCreditCard(ccn: String) {
+    public func checkCreditCard(ccn: String) {
         
         if validateCCN() {
             self.delegate?.willCheckCreditCard()
@@ -168,7 +170,7 @@ class BSCcInputLine: BSBaseInputControl {
         }
     }
 
-    func submitPaymentFields() {
+    public func submitPaymentFields() {
         
         let ccn = self.getValue() ?? ""
         let cvv = self.getCvv() ?? ""
@@ -597,7 +599,7 @@ class BSCcInputLine: BSBaseInputControl {
         }
     }
     
-    func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {
+    private func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {
         if (textField.text!.removeNoneDigits.characters.count > maxLength) {
             textField.deleteBackward()
             return false
