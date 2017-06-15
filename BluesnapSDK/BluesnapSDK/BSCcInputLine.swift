@@ -477,7 +477,7 @@ class BSCcInputLine: BSBaseTextInput {
     // MARK: focus on fields
     
     func focusOnCcnField() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 if self.ccnIsOpen == true {
                     self.textField.becomeFirstResponder()
@@ -487,7 +487,7 @@ class BSCcInputLine: BSBaseTextInput {
     }
     
     func focusOnExpField() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 if self.ccnIsOpen == false {
                     self.expTextField.becomeFirstResponder()
@@ -497,7 +497,7 @@ class BSCcInputLine: BSBaseTextInput {
     }
     
     func focusOnCvvField() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 if self.ccnIsOpen == false {
                     self.cvvTextField.becomeFirstResponder()
@@ -507,7 +507,7 @@ class BSCcInputLine: BSBaseTextInput {
     }
     
     func focusOnNextField() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 let nextTage = self.tag+1;
                 let nextResponder = self.superview?.viewWithTag(nextTage) as? BSInputLine

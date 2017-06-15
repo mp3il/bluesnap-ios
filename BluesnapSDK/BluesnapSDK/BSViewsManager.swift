@@ -216,7 +216,7 @@ class BSViewsManager {
     open class func startActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
         
         UIApplication.shared.beginIgnoringInteractionEvents()
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 activityIndicator.startAnimating()
             }
@@ -226,7 +226,7 @@ class BSViewsManager {
     open class func stopActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
         
         UIApplication.shared.endIgnoringInteractionEvents()
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .default).async {
             DispatchQueue.main.async {
                 activityIndicator.stopAnimating()
             }
