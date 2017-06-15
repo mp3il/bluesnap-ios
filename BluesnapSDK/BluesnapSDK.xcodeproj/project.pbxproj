@@ -129,6 +129,7 @@
 		2D374F221E880E7200AE2A81 /* BluesnapSDK */ = {
 			isa = PBXGroup;
 			children = (
+				FD4750B61EF2A0AE00E5DFBC /* CustomControls */,
 				FD17062F1E93727D00552A35 /* Screens */,
 				FD17062E1E93724000552A35 /* Handlers */,
 				FD17062D1E9371FD00552A35 /* Model */,
@@ -194,12 +195,19 @@
 				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
 				FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */,
 				FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */,
-				FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */,
-				FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */,
-				FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */,
 				FD3BD9CF1EE6966700486576 /* BSTransitionManager.swift */,
 			);
 			name = Screens;
+			sourceTree = "<group>";
+		};
+		FD4750B61EF2A0AE00E5DFBC /* CustomControls */ = {
+			isa = PBXGroup;
+			children = (
+				FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */,
+				FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */,
+				FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */,
+			);
+			name = CustomControls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
