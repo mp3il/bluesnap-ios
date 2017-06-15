@@ -16,7 +16,7 @@
 		2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */; };
 		2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
-		FD0D34321ED2A62A005F03CB /* BSBaseInputControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34311ED2A629005F03CB /* BSBaseInputControl.swift */; };
+		FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */; };
 		FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */; };
 		FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */; };
 		FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */; };
@@ -64,7 +64,7 @@
 		2DADB9D81EC31F4200C1A2D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BlueSnap.storyboard; sourceTree = "<group>"; };
 		2DADB9DA1EC31F5400C1A2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BlueSnap.strings; sourceTree = "<group>"; };
 		2DADB9DB1EC3201A00C1A2D2 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/BlueSnap.strings; sourceTree = "<group>"; };
-		FD0D34311ED2A629005F03CB /* BSBaseInputControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseInputControl.swift; sourceTree = "<group>"; };
+		FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseTextInput.swift; sourceTree = "<group>"; };
 		FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcInputLine.swift; sourceTree = "<group>"; };
 		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController.swift; sourceTree = "<group>"; };
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
@@ -194,8 +194,8 @@
 				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
 				FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */,
 				FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */,
+				FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */,
 				FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */,
-				FD0D34311ED2A629005F03CB /* BSBaseInputControl.swift */,
 				FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */,
 				FD3BD9CF1EE6966700486576 /* BSTransitionManager.swift */,
 			);
@@ -324,7 +324,7 @@
 				FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */,
 				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
 				FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */,
-				FD0D34321ED2A62A005F03CB /* BSBaseInputControl.swift in Sources */,
+				FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */,
 				FD3BD9D01EE6966700486576 /* BSTransitionManager.swift in Sources */,
 				2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */,
 				FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */,

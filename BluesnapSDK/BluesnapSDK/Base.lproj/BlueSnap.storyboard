@@ -42,7 +42,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
@@ -133,15 +133,15 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BiT-2P-8ND">
                                 <rect key="frame" x="0.0" y="64" width="375" height="549"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xjb-2n-SG7" userLabel="Fields View">
-                                        <rect key="frame" x="0.0" y="-64" width="371" height="549"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xjb-2n-SG7" userLabel="Fields View">
+                                        <rect key="frame" x="0.0" y="0.0" width="371" height="549"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Tf-NL-jP3" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="20" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="John Doe"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="John Doe"/>
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="IL"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient name"/>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
@@ -213,7 +213,7 @@
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldIsEditable" value="No"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="isEditable" value="No"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="xuB-Xr-C5G"/>
@@ -407,14 +407,14 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="evC-6K-ko8">
                                 <rect key="frame" x="0.0" y="72" width="375" height="435"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TbD-vW-amX" userLabel="Fields View">
-                                        <rect key="frame" x="0.0" y="-64" width="375" height="435"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TbD-vW-amX" userLabel="Fields View">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="435"/>
                                         <subviews>
                                             <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="okv-vf-cV8" customClass="BSCcInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="16" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="1234 5678 9012 3456"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="1234 5678 9012 3456"/>
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="cc_default"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
@@ -426,7 +426,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldPlaceHolder" value="John Doe"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="John Doe"/>
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="IL"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient name"/>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
@@ -498,7 +498,7 @@
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="fieldIsEditable" value="No"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="isEditable" value="No"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="stateClick:" destination="W0G-M6-3dM" eventType="touchUpInside" id="vOq-lV-QCq"/>
@@ -720,7 +720,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -828,7 +828,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">

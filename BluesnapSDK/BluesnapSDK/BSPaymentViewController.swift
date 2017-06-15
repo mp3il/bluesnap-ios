@@ -26,7 +26,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
-    fileprivate var firstTime : Bool! = true
+    fileprivate var firstTime : Bool = true
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     
@@ -78,7 +78,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         scrollView.contentInset = scrollViewInsets
     }
     
-    @IBAction func editingDidBegin(_ sender: BSBaseInputControl) {
+    @IBAction func editingDidBegin(_ sender: BSBaseTextInput) {
         
         fieldBottom = Int(sender.frame.origin.y + sender.frame.height)
     }

@@ -17,16 +17,64 @@ protocol BSCcInputLineDelegate : class {
     func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
 }
 
-class BSCcInputLine: BSBaseInputControl {
+@IBDesignable
+class BSCcInputLine: BSBaseTextInput {
 
-    // We use the BSBaseInputControl for the CCN field and image,
+    // We use the BSBaseTextInput for the CCN field and image,
     // and add fields for EXP and CVV
 
+    // MARK: Configurable properties
+    
+    @IBInspectable var showOpenInDesign: Bool = false {
+        didSet {
+            if designMode {
+                ccnIsOpen = showOpenInDesign
+            }
+        }
+    }
+    @IBInspectable var ccnWidth: CGFloat = 220 {
+        didSet {
+            resizeElements()
+        }
+    }
+    @IBInspectable var last4Width: CGFloat = 70 {
+        didSet {
+            resizeElements()
+        }
+    }
+    @IBInspectable var expWidth: CGFloat = 70 {
+        didSet {
+            self.actualExpWidth = expWidth
+        }
+    }
+    @IBInspectable var cvvWidth: CGFloat = 70 {
+        didSet {
+            resizeElements()
+        }
+    }
+    @IBInspectable var errorWidth: CGFloat = 150 {
+        didSet {
+            resizeElements()
+        }
+    }
+    @IBInspectable var nextBtnWidth: CGFloat = 22 {
+        didSet {
+            resizeElements()
+        }
+    }
+    @IBInspectable var nextBtnHeight: CGFloat = 22 {
+        didSet {
+            resizeElements()
+        }
+    }
+    @IBInspectable var nextBtnImage: UIImage?
+    
+    
     // MARK: public properties
 
     var delegate : BSCcInputLineDelegate?
     
-    var cardType : String! = "" {
+    var cardType : String = "" {
         didSet {
             updateCcIcon(ccType: cardType)
         }
@@ -34,7 +82,7 @@ class BSCcInputLine: BSBaseInputControl {
     
     var ccnIsOpen : Bool = true {
         didSet {
-            self.fieldIsEditable = ccnIsOpen ? nil : "NO"
+            self.isEditable = ccnIsOpen ? nil : "NO"
             if ccnIsOpen {
                 self.textField.text = ccn
             } else {
@@ -47,23 +95,24 @@ class BSCcInputLine: BSBaseInputControl {
 
     // MARK: private properties
     
-    internal var expTextField : UITextField! = UITextField()
-    internal var cvvTextField : UITextField! = UITextField()
+    internal var expTextField : UITextField = UITextField()
+    internal var cvvTextField : UITextField = UITextField()
     private var expErrorLabel : UILabel?
     private var cvvErrorLabel : UILabel?
     private var nextButton : UIButton = UIButton()
-    
-    private let ccnWidth : CGFloat = 180
-    private let last4Width : CGFloat = 46
-    private let expLeftMargin : CGFloat = 120
-    private let expWidth : CGFloat = 70
-    private let cvvLeftMargin : CGFloat = 250
-    private let cvvWidth : CGFloat = 50
-    private let errorWidth : CGFloat = 150
-    
-    private var ccn : String! = ""
-    private var lastValidateCcn : String! = ""
+
+    private var ccn : String = ""
+    private var lastValidateCcn : String = ""
     private var closing = false
+    
+    var actualCcnWidth: CGFloat = 220
+    var actualLast4Width: CGFloat = 70
+    var actualExpWidth: CGFloat = 70
+    var actualCvvWidth: CGFloat = 70
+    var actualErrorWidth: CGFloat = 150
+    var actualNextBtnWidth: CGFloat = 22
+    var actualNextBtnHeight: CGFloat = 22
+
     
     // MARK: Constants
 
@@ -200,12 +249,25 @@ class BSCcInputLine: BSBaseInputControl {
     }
 
     
-    // MARK: BSBaseInputControl Override functions
+    // MARK: BSBaseTextInput Override functions
 
+    override func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {
+        let ratios = super.initRatios()
+        
+        actualNextBtnWidth = (nextBtnWidth * ratios.hRatio).rounded()
+        actualNextBtnHeight = (nextBtnHeight * ratios.vRatio).rounded()
+        
+        actualCcnWidth = (ccnWidth * ratios.hRatio).rounded()
+        actualLast4Width = (last4Width * ratios.hRatio).rounded()
+        actualExpWidth = (expWidth * ratios.hRatio).rounded()
+        actualCvvWidth = (cvvWidth * ratios.hRatio).rounded()
+        actualErrorWidth = (errorWidth * ratios.hRatio).rounded()
+        
+        return ratios
+    }
+    
     override func buildElements() {
         
-        //self.fieldIsEditable = ccnIsOpen ? nil : "NO"
-
         super.buildElements()
         
         self.textField.delegate = self
@@ -230,7 +292,18 @@ class BSCcInputLine: BSBaseInputControl {
         buildErrorLabel()
         errorLabel?.isHidden = true
         
-        if let img = BSViewsManager.getImage(imageName: "forward_arrow") {
+        setButtonImage()
+    }
+    
+    private func setButtonImage() {
+        
+        var btnImage : UIImage?
+        if let img = self.nextBtnImage {
+            btnImage = img
+        } else {
+            btnImage = BSViewsManager.getImage(imageName: "forward_arrow")
+        }
+        if let img = btnImage {
             nextButton.setImage(img, for: .normal)
             nextButton.contentVerticalAlignment = .fill
             nextButton.contentHorizontalAlignment = .center
@@ -243,27 +316,40 @@ class BSCcInputLine: BSBaseInputControl {
         
         super.setElementAttributes()
         
+        NSLog("********** In ccn setElement attributes ********")
+        
         expTextField.keyboardType = .numberPad
         expTextField.backgroundColor = self.fieldBkdColor
-        expTextField.textColor = self.fieldTextColor
+        expTextField.textColor = self.textColor
         expTextField.returnKeyType = UIReturnKeyType.done
         expTextField.borderStyle = .none
         expTextField.placeholder = "MM/YY"
 
         cvvTextField.keyboardType = .numberPad
         cvvTextField.backgroundColor = self.fieldBkdColor
-        cvvTextField.textColor = self.fieldTextColor
+        cvvTextField.textColor = self.textColor
         cvvTextField.returnKeyType = UIReturnKeyType.done
         cvvTextField.borderStyle = .none
         cvvTextField.placeholder = "CVV"
+        
+        cvvTextField.borderStyle = textField.borderStyle
+        expTextField.borderStyle = textField.borderStyle
+        cvvTextField.layer.borderWidth = fieldBorderWidth
+        expTextField.layer.borderWidth = fieldBorderWidth
+        
+        if let fieldBorderColor = self.fieldBorderColor {
+            cvvTextField.layer.borderColor = fieldBorderColor.cgColor
+            expTextField.layer.borderColor = fieldBorderColor.cgColor
+        }
     }
+
 
     override func resizeElements() {
         
         super.resizeElements()
         
         expTextField.font = textField.font
-        cvvTextField.font = cvvTextField.font
+        cvvTextField.font = textField.font
         
         if ccnIsOpen == true {
             expTextField.isHidden = true
@@ -271,55 +357,55 @@ class BSCcInputLine: BSBaseInputControl {
         } else {
             expTextField.isHidden = false
             cvvTextField.isHidden = false
-            let actualExpFieldWidth : CGFloat = expWidth*hRatio
-            let actualCvvFieldWidth : CGFloat = cvvWidth*hRatio
-            let expFieldX = expLeftMargin*hRatio
-            let cvvFieldX = cvvLeftMargin*hRatio
-            let fieldY = (totalHeight-fieldHeight)/2*vRatio
-            let actualFieldHeight = textField.bounds.height
-            expTextField.frame = CGRect(x: expFieldX, y: fieldY, width: actualExpFieldWidth, height: actualFieldHeight)
-            cvvTextField.frame = CGRect(x: cvvFieldX, y: fieldY, width: actualCvvFieldWidth, height: actualFieldHeight)
+            let fieldEndX = getFieldX() + textField.frame.width
+            let cvvFieldX = self.frame.width - actualCvvWidth - self.actualRightMargin
+            let expFieldX = (fieldEndX + cvvFieldX - actualExpWidth) / 2.0
+            let fieldY = (self.frame.height-actualFieldHeight)/2
+            expTextField.frame = CGRect(x: expFieldX, y: fieldY, width: actualExpWidth, height: actualFieldHeight)
+            cvvTextField.frame = CGRect(x: cvvFieldX, y: fieldY, width: actualCvvWidth, height: actualFieldHeight)
         }
 
-        if self.ccnIsOpen && textField.text != "" {
-            let nextButtonWidth : CGFloat = 22
-            let nextButtonHeight : CGFloat = 22
-            let x : CGFloat = (totalWidth - rightMargin - nextButtonWidth)*hRatio
-            let y : CGFloat = (totalHeight-nextButtonHeight) * vRatio / 2.0
-            nextButton.frame = CGRect(x: x, y: y, width: nextButtonWidth*hRatio, height: nextButtonHeight*vRatio)
+        if self.ccnIsOpen && (textField.text != "" || designMode) {
+            let x : CGFloat = self.frame.width - actualRightMargin - actualNextBtnWidth
+            let y : CGFloat = (self.frame.height-actualNextBtnHeight) / 2.0
+            nextButton.frame = CGRect(x: x, y: y, width: actualNextBtnWidth, height: actualNextBtnHeight)
             nextButton.isHidden = false
         } else {
             nextButton.isHidden = true
         }
 
+        if fieldCornerRadius != 0 {
+            cvvTextField.layer.cornerRadius = fieldCornerRadius
+            expTextField.layer.cornerRadius = fieldCornerRadius
+        }
     }
     
     override func getImageRect() -> CGRect {
-        return CGRect(x: rightMargin*hRatio, y: (totalHeight-imageHeight)/2*vRatio, width: imageWidth*hRatio, height: imageHeight*vRatio)
+        return CGRect(x: actualRightMargin, y: (self.frame.height-actualImageHeight)/2, width: actualImageWidth, height: actualImageHeight)
     }
 
     override func getFieldWidth() -> CGFloat {
         if ccnIsOpen == true {
-            return ccnWidth
+            return actualCcnWidth
         } else {
-            return last4Width
+            return actualLast4Width
         }
     }
     
     override func getFieldX() -> CGFloat {
-        let fieldX = (leftMargin + imageWidth + middleMargin) * hRatio
+        let fieldX = actualLeftMargin + actualImageWidth + actualMiddleMargin
         return fieldX
     }
 
     override func resizeError() {
         
         if let errorLabel = errorLabel {
-            if let labelFont : UIFont = UIFont(name: self.fontName, size: (errorFontSize*vRatio).rounded()) {
+            if let labelFont : UIFont = UIFont(name: self.fontName, size: actualErrorFontSize) {
                 errorLabel.font = labelFont
             }
             // position the label according the chosen field
             
-            var x: CGFloat = leftMargin
+            var x: CGFloat = actualLeftMargin
             errorLabel.textAlignment = .left
             if let errorField = self.errorField {
                 x = errorField.frame.minX
@@ -327,24 +413,20 @@ class BSCcInputLine: BSBaseInputControl {
                 if errorField == self.expTextField || errorField == self.cvvTextField {
                     // center error around the field
                     let fieldCenter : CGFloat! = errorField.frame.minX + errorField.frame.width/2.0
-                    x = fieldCenter - errorWidth*hRatio/2.0
+                    x = fieldCenter - actualErrorWidth/2.0
                     errorLabel.textAlignment = .center
-                }/* else if errorField == self.cvvTextField {
-                    // right - justify
-                    x = (totalWidth - rightMargin - errorWidth)*hRatio
-                    errorLabel.textAlignment = .right
-                }*/
+                }
             }
-            errorLabel.frame = CGRect(x: x, y: (totalHeight-errorHeight)*vRatio, width: self.errorWidth, height: errorHeight*vRatio)
+            errorLabel.frame = CGRect(x: x, y: self.frame.height-actualErrorHeight, width: actualErrorWidth, height: actualErrorHeight)
         }
     }
     
     func resizeError(field: UITextField) {
         if let errorLabel = errorLabel {
-            if let labelFont : UIFont = UIFont(name: self.fontName, size: (errorFontSize*vRatio).rounded()) {
+            if let labelFont : UIFont = UIFont(name: self.fontName, size: actualErrorFontSize) {
                 errorLabel.font = labelFont
             }
-            errorLabel.frame = CGRect(x: field.frame.minX, y: (totalHeight-errorHeight)*vRatio, width: errorWidth*hRatio, height: errorHeight*vRatio)
+            errorLabel.frame = CGRect(x: field.frame.minX, y: self.frame.height-actualErrorHeight, width: actualErrorWidth, height: actualErrorHeight)
         }
     }
     
@@ -363,7 +445,7 @@ class BSCcInputLine: BSBaseInputControl {
         var ok : Bool = false
         if sender == self.textField {
             if ccnIsOpen {
-                ccn = self.textField.text
+                ccn = self.textField.text!
                 if lastValidateCcn == self.textField.text {
                     self.closeCcn()
                 } else {
@@ -456,7 +538,7 @@ class BSCcInputLine: BSBaseInputControl {
     
     override func textFieldEditingChanged(_ sender: UITextField) {
         
-        self.ccn = self.textField.text
+        self.ccn = self.textField.text!
         BSValidator.ccnEditingChanged(textField)
         
         let ccn = textField.text?.removeNoneDigits ?? ""
