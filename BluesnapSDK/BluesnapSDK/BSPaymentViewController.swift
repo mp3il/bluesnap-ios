@@ -182,6 +182,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if let zipTopConstraint = self.zipTopConstraint {
             zipTopConstraintOriginalConstant = zipTopConstraint.constant
         }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector:  #selector(deviceDidRotate),
+            name: .UIDeviceOrientationDidChange,
+            object: nil
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -259,14 +266,23 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.checkoutDetails.taxAmount == 0
-            if hideFields == false {
-                zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
-            } else {
-                zipTopConstraint.constant = -1 * emailInputLine.frame.height
-            }
+            updateZipFieldLocation()
         }
     }
     
+    private func updateZipFieldLocation() {
+        
+        if self.fullBilling {
+            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+        } else {
+            zipTopConstraint.constant = -1 * emailInputLine.frame.height
+        }
+    }
+    
+    func deviceDidRotate() {
+        updateZipFieldLocation()
+    }
+
     private func updateState() {
         
         if (fullBilling) {
