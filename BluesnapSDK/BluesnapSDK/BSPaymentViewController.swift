@@ -26,7 +26,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
-    fileprivate var firstTime : Bool! = true
+    fileprivate var firstTime : Bool = true
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     
@@ -78,7 +78,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         scrollView.contentInset = scrollViewInsets
     }
     
-    @IBAction func editingDidBegin(_ sender: BSBaseInputControl) {
+    @IBAction func editingDidBegin(_ sender: BSBaseTextInput) {
         
         fieldBottom = Int(sender.frame.origin.y + sender.frame.height)
     }
@@ -135,38 +135,40 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         startActivityIndicator()
     }
     
-    func checkCreditCard(ccn: String, completion: @escaping (Bool) -> Void) {
-        
-        // get issuing country and card type from server
-        
-        BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
+    func didCheckCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?) {
+     
+        self.stopActivityIndicator()
 
-            self.stopActivityIndicator()
-
-            //Check for error
-            if let error = error{
-                if (error == BSCcDetailErrors.invalidCcNumber) {
-                    self.ccInputLine.showError(BSValidator.ccnInvalidMessage)
-                } else {
-                    self.showAlert("An error occurred")
-                }
-                completion(false)
+        if let result = result {
+            if let issuingCountry = result.ccIssuingCountry {
+                self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             }
-            
-            // Check for result
-            guard let result = result,
-                let issuingCountry = result.ccIssuingCountry,
-                let cardType = result.ccType
-            else {
-                completion(false)
-                return
-            }
-            
-            self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
-            self.ccInputLine.cardType = cardType
-            completion(true)
-        })
+        }
     }
+    
+    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?) {
+
+        self.stopActivityIndicator()
+        
+        if let result = result {
+            self.checkoutDetails.setResultPaymentDetails(resultPaymentDetails: result)
+            // return to merchant screen
+            if let navigationController = self.navigationController {
+                let viewControllers = navigationController.viewControllers
+                let merchantControllerIndex = viewControllers.count-3
+                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+            }
+            // execute callback
+            self.purchaseFunc(self.checkoutDetails)
+        }
+    }
+    
+    
+    func showAlert(_ message : String) {
+        let alert = BSViewsManager.createErrorAlert(title: "Oops", message: message)
+        present(alert, animated: true, completion: nil)
+    }
+
     
     // MARK: - UIViewController's methods
     
@@ -180,6 +182,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if let zipTopConstraint = self.zipTopConstraint {
             zipTopConstraintOriginalConstant = zipTopConstraint.constant
         }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector:  #selector(deviceDidRotate),
+            name: .UIDeviceOrientationDidChange,
+            object: nil
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -257,14 +266,23 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.checkoutDetails.taxAmount == 0
-            if hideFields == false {
-                zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
-            } else {
-                zipTopConstraint.constant = -1 * emailInputLine.frame.height
-            }
+            updateZipFieldLocation()
         }
     }
     
+    private func updateZipFieldLocation() {
+        
+        if self.fullBilling {
+            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+        } else {
+            zipTopConstraint.constant = -1 * emailInputLine.frame.height
+        }
+    }
+    
+    func deviceDidRotate() {
+        updateZipFieldLocation()
+    }
+
     private func updateState() {
         
         if (fullBilling) {
@@ -296,53 +314,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    private func submitPaymentFields() {
-        
+    func submitPaymentFields() {
         startActivityIndicator()
-        
-        let ccn = self.ccInputLine.getValue() ?? ""
-        let cvv = self.ccInputLine.getCvv() ?? ""
-        let exp = self.ccInputLine.getExpDateAsMMYYYY() ?? ""
-
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
-            
-            self.stopActivityIndicator()
-            
-            //Check for error
-            if let error = error{
-                if (error == BSCcDetailErrors.invalidCcNumber) {
-                    self.ccInputLine.showError(field: self.ccInputLine.textField, errorText: BSValidator.ccnInvalidMessage)
-                } else if (error == BSCcDetailErrors.invalidExpDate) {
-                    self.ccInputLine.showError(field: self.ccInputLine.expTextField, errorText: BSValidator.expInvalidMessage)
-                } else if (error == BSCcDetailErrors.invalidCvv) {
-                    self.ccInputLine.showError(field: self.ccInputLine.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
-                } else if (error == BSCcDetailErrors.expiredToken) {
-                    self.showAlert("Your session has expired, please go back and try again")
-                } else {
-                    NSLog("Unexpected error submitting Payment Fields to BS")
-                    self.showAlert("An error occurred, please try again")
-                }
-            }
-            
-            // Check for result
-            if let result = result {
-                self.checkoutDetails.setResultPaymentDetails(resultPaymentDetails: result)
-                // return to merchant screen
-                if let navigationController = self.navigationController {
-                    let viewControllers = navigationController.viewControllers
-                    let merchantControllerIndex = viewControllers.count-3
-                    _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
-                }
-                // execute callback
-                self.purchaseFunc(self.checkoutDetails)
-            }
-        })
-    }
-    
-    
-    private func showAlert(_ message : String) {
-        let alert = BSViewsManager.createErrorAlert(title: "Oops", message: message)
-        present(alert, animated: true, completion: nil)
+        self.ccInputLine.submitPaymentFields()
     }
     
     private func gotoShippingScreen() {

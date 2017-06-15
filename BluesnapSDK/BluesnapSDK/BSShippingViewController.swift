@@ -54,7 +54,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         scrollView.contentInset = scrollViewInsets
     }
     
-    @IBAction func editingDidBegin(_ sender: BSBaseInputControl) {
+    @IBAction func editingDidBegin(_ sender: BSBaseTextInput) {
         
         fieldBottom = Int(sender.frame.origin.y + sender.frame.height)
     }

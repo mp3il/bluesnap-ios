@@ -9,11 +9,11 @@
 import UIKit
 
 @IBDesignable
-class BSInputLine: BSBaseInputControl {
+class BSInputLine: BSBaseTextInput {
 
     // MARK: Additional Configurable properties
 
-    @IBInspectable var labelText: String! = "Label" {
+    @IBInspectable var labelText: String = "Label" {
         didSet {
             label.text = labelText
         }
@@ -21,22 +21,33 @@ class BSInputLine: BSBaseInputControl {
 
     @IBInspectable var labelTextColor: UIColor = UIColor.darkGray
     @IBInspectable var labelBkdColor: UIColor = UIColor.white
+    @IBInspectable var labelWidth : CGFloat = 104
+    @IBInspectable var labelHeight : CGFloat = 17
+    @IBInspectable var labelFontSize : CGFloat = 14
 
-    // MARK: Additional UI elements
-    
-    internal var label : UILabel! = UILabel()
-    
     // MARK: private properties
-
-    internal let labelWidth : CGFloat = 104
-    internal let labelHeight : CGFloat = 17
-    internal let labelFontSize : CGFloat = 14
+    
+    internal var label : UILabel = UILabel()
+    var actualLabelWidth : CGFloat = 104
+    var actualLabelHeight : CGFloat = 17
+    var actualLabelFontSize : CGFloat = 14
     
     // Override functions
     
     override func buildElements() {
         super.buildElements()
         self.addSubview(label)
+    }
+    
+    override func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {
+        
+        let ratios = super.initRatios()
+        
+        actualLabelFontSize = (labelFontSize * ratios.vRatio).rounded()
+        actualLabelWidth = (labelWidth * ratios.hRatio).rounded()
+        actualLabelHeight = (labelHeight * ratios.vRatio).rounded()
+        
+        return ratios
     }
     
     override func setElementAttributes() {
@@ -55,22 +66,22 @@ class BSInputLine: BSBaseInputControl {
         
         super.resizeElements()
         
-        if let labelFont : UIFont = UIFont(name: self.fontName, size: (labelFontSize*vRatio).rounded()) {
+        if let labelFont : UIFont = UIFont(name: self.fontName, size: actualLabelFontSize) {
             label.font = labelFont
         }
         
-        label.frame = CGRect(x: leftMargin*hRatio, y: (totalHeight-labelHeight)/2*vRatio, width: (labelWidth*hRatio).rounded(), height: labelHeight)
+        label.frame = CGRect(x: actualLeftMargin, y: (self.frame.height-actualLabelHeight)/2, width: actualLabelWidth, height: actualLabelHeight)
     }
     
     override func getFieldWidth() -> CGFloat {
         
-        let actualFieldWidth : CGFloat = (totalWidth - labelWidth - (image != nil ? imageWidth : 0) - leftMargin - rightMargin - middleMargin*2) * hRatio
+        let actualFieldWidth : CGFloat = self.frame.width - actualLabelWidth - (image != nil ? actualImageWidth : 0) - actualLeftMargin - actualRightMargin - actualMiddleMargin*2
         return actualFieldWidth
     }
     
     override func getFieldX() -> CGFloat {
         
-        let fieldX = (leftMargin + labelWidth + middleMargin) * hRatio
+        let fieldX = actualLeftMargin + actualLabelWidth + actualMiddleMargin
         return fieldX
     }
 

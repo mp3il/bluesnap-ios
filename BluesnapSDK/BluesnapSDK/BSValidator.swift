@@ -216,18 +216,18 @@ class BSValidator {
     
     // MARK: Constants
     
-    internal static let ccnInvalidMessage = "Invalid card number"
-    internal static let cvvInvalidMessage = "Invalid CVV"
-    internal static let expMonthInvalidMessage = "Invalid expiration month"
-    internal static let expPastInvalidMessage = "Expiration date is in the past"
-    internal static let expInvalidMessage = "Invalid expiration date"
-    internal static let nameInvalidMessage = "Enter a first and last name"
-    internal static let emailInvalidMessage = "Invalid email"
-    internal static let streetInvalidMessage = "Invalid street"
-    internal static let cityInvalidMessage = "Invalid city"
-    internal static let countryInvalidMessage = "Invalid country"
-    internal static let stateInvalidMessage = "Invalid state"
-    internal static let zipInvalidMessage = "Invalid code"
+    static let ccnInvalidMessage = "Invalid card number"
+    static let cvvInvalidMessage = "Invalid CVV"
+    static let expMonthInvalidMessage = "Invalid expiration month"
+    static let expPastInvalidMessage = "Expiration date is in the past"
+    static let expInvalidMessage = "Invalid expiration date"
+    static let nameInvalidMessage = "Enter a first and last name"
+    static let emailInvalidMessage = "Invalid email"
+    static let streetInvalidMessage = "Invalid street"
+    static let cityInvalidMessage = "Invalid city"
+    static let countryInvalidMessage = "Invalid country"
+    static let stateInvalidMessage = "Invalid state"
+    static let zipInvalidMessage = "Invalid code"
 
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
@@ -435,8 +435,8 @@ class BSValidator {
     class func validateCvv(input: BSCcInputLine) -> Bool {
         
         var result : Bool = true;
-        let newValue = input.cvvTextField.text ?? ""
-        if newValue.characters.count < 3 {
+        let newValue = input.getCvv() ?? ""
+        if newValue.characters.count < 3 || newValue.characters.count > 4 {
             result = false
         }
         if result {
@@ -450,7 +450,7 @@ class BSValidator {
     class func validateCCN(input: BSCcInputLine) -> Bool {
         
         var result : Bool = true;
-        let newValue : String! = input.ccnIsOpen ? (input.textField.text ?? "") : (input.ccn ?? "")
+        let newValue : String! = input.getValue()
         if !newValue.isValidCCN {
             result = false
         }
