@@ -33,9 +33,10 @@ class BSStartViewController: UIViewController {
     // MARK: button functions
     
     @IBAction func applePayClick(_ sender: Any) {
-        
-        let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not yet implemented")
-        present(alert, animated: true, completion: nil)
+        let bsapplepay = BSApplePayViewController()
+                bsapplepay.payPressed(sender);
+      //  let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not yet implemented")
+       // present(alert, animated: true, completion: nil)
     }
     
     @IBAction func ccDetailsClick(_ sender: Any) {

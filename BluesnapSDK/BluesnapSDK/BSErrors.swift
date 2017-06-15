@@ -22,3 +22,17 @@ public enum BSApiErrors : Error {
     case unknown
 }
 
+public struct ApplepayErrors {
+
+    static let domain = "com.bluesnap.applepay.error";
+
+    static let undefinedError = NSError(domain: ApplepayErrors.domain, code: 0,
+            userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("UNDEFINED_ERROR_KEY", comment: "")]);
+
+    static let cantMakePaymentError = NSError(domain: ApplepayErrors.domain, code: 1,
+            userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("CANT_MAKE_PAYMENTS_ERROR_KEY", comment: "")]);
+
+    static let failed = NSError(domain: ApplepayErrors.domain, code: 2,
+            userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("FAILED_PAYMENT_ERROR_KEY", comment: "")]);
+}
+
