@@ -114,6 +114,7 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
     public func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController,
                                                    didAuthorizePayment payment: PKPayment,
                                                    completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
+        NSLog("Calling delegate")
         delegate.validate(payment: payment) {
             switch $0 {
             case .valid:

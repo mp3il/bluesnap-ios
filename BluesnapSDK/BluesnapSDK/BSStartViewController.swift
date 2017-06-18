@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PassKit
 
 class BSStartViewController: UIViewController {
 
@@ -18,12 +19,11 @@ class BSStartViewController: UIViewController {
         checkoutDetails in
         print("purchaseFunc should be overridden")
     }
-    
+
+    var paymentSummaryItems:[PKPaymentSummaryItem] = [];
+
     // MARK: UIViewController functions
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,10 +33,7 @@ class BSStartViewController: UIViewController {
     // MARK: button functions
     
     @IBAction func applePayClick(_ sender: Any) {
-        let bsapplepay = BSApplePayViewController()
-                bsapplepay.payPressed(sender);
-      //  let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not yet implemented")
-       // present(alert, animated: true, completion: nil)
+        payPressed(sender)
     }
     
     @IBAction func ccDetailsClick(_ sender: Any) {
