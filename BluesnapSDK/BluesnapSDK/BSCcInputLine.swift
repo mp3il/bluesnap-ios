@@ -316,8 +316,6 @@ class BSCcInputLine: BSBaseTextInput {
         
         super.setElementAttributes()
         
-        NSLog("********** In ccn setElement attributes ********")
-        
         expTextField.keyboardType = .numberPad
         expTextField.backgroundColor = self.fieldBkdColor
         expTextField.textColor = self.textColor

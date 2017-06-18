@@ -125,6 +125,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        adjustToPageRotate()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
@@ -271,6 +277,22 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     
     // MARK: private functions
+    
+    private func adjustToPageRotate() {
+        
+        DispatchQueue.main.async{
+            
+            self.nameInputLine.deviceDidRotate()
+            self.emailInputLine.deviceDidRotate()
+            self.streetInputLine.deviceDidRotate()
+            self.zipInputLine.deviceDidRotate()
+            self.cityInputLine.deviceDidRotate()
+            self.stateInputLine.deviceDidRotate()
+            
+            self.viewDidLayoutSubviews()
+        }
+    }
+    
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
