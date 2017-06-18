@@ -227,13 +227,16 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     override func viewDidAppear(_ animated: Bool) {
 
+        super.viewDidAppear(animated)
         if ccInputLine.ccnIsOpen == true {
             self.ccInputLine.focusOnCcnField()
         }
+        adjustToPageRotate()
     }
         
     override func viewWillDisappear(_ animated: Bool) {
         
+        super.viewWillDisappear(animated)
         ccInputLine.closeOnLeave()
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
@@ -241,6 +244,24 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
     
     // MARK: private methods
+    
+    private func adjustToPageRotate() {
+        
+        DispatchQueue.main.async{
+            
+            self.ccInputLine.deviceDidRotate()
+            self.nameInputLine.deviceDidRotate()
+            self.emailInputLine.deviceDidRotate()
+            self.streetInputLine.deviceDidRotate()
+            self.zipInputLine.deviceDidRotate()
+            self.cityInputLine.deviceDidRotate()
+            self.stateInputLine.deviceDidRotate()
+            
+            self.deviceDidRotate()
+            
+            self.viewDidLayoutSubviews()
+        }
+    }
     
     private func hideShowFields() {
         

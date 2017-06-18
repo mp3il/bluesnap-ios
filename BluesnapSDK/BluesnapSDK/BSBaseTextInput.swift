@@ -291,8 +291,6 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     
     private func drawBoundsAndShadow() {
         
-        NSLog("********** In drawBoundsAndShadow ********")
-        
         // set rounded corners
         
         customBackgroundColor.setFill()
