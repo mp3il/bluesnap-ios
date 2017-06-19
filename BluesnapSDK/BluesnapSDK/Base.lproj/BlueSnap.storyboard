@@ -212,7 +212,7 @@
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="isEditable" value="No"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEditable" value="NO"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="xuB-Xr-C5G"/>
@@ -497,7 +497,7 @@
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="isEditable" value="No"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEditable" value="NO"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="stateClick:" destination="W0G-M6-3dM" eventType="touchUpInside" id="vOq-lV-QCq"/>

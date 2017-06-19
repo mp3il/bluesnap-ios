@@ -82,7 +82,7 @@ class BSCcInputLine: BSBaseTextInput {
     
     var ccnIsOpen : Bool = true {
         didSet {
-            self.isEditable = ccnIsOpen ? nil : "NO"
+            self.isEditable = ccnIsOpen ? true : false
             if ccnIsOpen {
                 self.textField.text = ccn
             } else {

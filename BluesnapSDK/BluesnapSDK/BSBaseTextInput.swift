@@ -19,7 +19,8 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
 
     // Text input configurable properties
     
-    @IBInspectable var isEditable: String? // because of xCode bug, bool doesn't work. So if there is no value - the field is editable, if you put ANYHTING in it - it will be disabled.
+    @IBInspectable var isEditable: Bool = true
+    
     @IBInspectable var placeHolder: String = "" {
         didSet {
             textField.placeholder = placeHolder
@@ -308,7 +309,7 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     }
     
     private func shouldCoverTextField()-> Bool {
-        return self.isEditable != nil
+        return !self.isEditable
     }
     
     internal func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {
