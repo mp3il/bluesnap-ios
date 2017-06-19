@@ -20,7 +20,24 @@ class BSStartViewController: UIViewController {
         print("purchaseFunc should be overridden")
     }
 
+    static let supportedNetworks: [PKPaymentNetwork] = [
+            .amex,
+            .discover,
+            .masterCard,
+            .visa
+    ]
+    
     var paymentSummaryItems:[PKPaymentSummaryItem] = [];
+    
+    class func applePaySupported() -> (canMakePayments: Bool, canSetupCards: Bool) {
+        if #available(iOS 10, *) {
+            
+        return (PKPaymentAuthorizationController.canMakePayments(),
+                PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
+        } else {
+            return (canMakePayments: false, canSetupCards: false)
+        }
+    }
 
     // MARK: UIViewController functions
 
@@ -33,7 +50,19 @@ class BSStartViewController: UIViewController {
     // MARK: button functions
     
     @IBAction func applePayClick(_ sender: Any) {
+        if (!BSStartViewController.applePaySupported().canMakePayments) {
+            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not available on this device")
+            present(alert, animated: true, completion: nil)
+            return;
+        }
+
+        if (!BSStartViewController.applePaySupported().canSetupCards) {
+            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "No cards set")
+            present(alert, animated: true, completion: nil)
+            return;
+        }
         payPressed(sender)
+
     }
     
     @IBAction func ccDetailsClick(_ sender: Any) {

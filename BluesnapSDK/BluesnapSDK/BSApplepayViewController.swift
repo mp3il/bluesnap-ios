@@ -10,64 +10,8 @@ import PassKit
 
 
 
-
-////TODO: move this extention to a BS file
-//extension BSApplePayViewController: PaymentOperationDelegate
-//{
-//    func validate(payment: PKPayment, completion: @escaping (PaymentValidationResult) -> Void) {
-//        completion(.valid);
-//    }
-//
-//    func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void) {
-//        NSLog("Send to server");
-////        let url = URL(string: "https://com/post")!;
-////        var request = URLRequest(url: url);
-////        //request.addValue("Bearer SomeToken", forHTTPHeaderField: "Authorization");
-////        print(paymentInformation.toDictionary());
-////        request.httpBody = paymentInformation.toJSON();
-////        request.httpMethod = "POST";
-//        //let task  = URLSession.shared.dataTask(with: request, completionHandler: { data, response , error in
-//        //completion(nil); // or with some Error;
-//        //});
-//        //task.resume();
-//
-//
-//
-//    }
-//
-//
-//    func didSelectPaymentMethod(method: PKPaymentMethod, completion: @escaping ([PKPaymentSummaryItem]) -> Void) {
-//        completion(self.paymentSummaryItems);
-//    }
-//
-//    func didSelectShippingContact(contact: PKContact, completion: @escaping (PKPaymentAuthorizationStatus, [PKShippingMethod], [PKPaymentSummaryItem]) -> Void) {
-//        NSLog("Shipping")
-//        completion(.success, [], self.paymentSummaryItems);
-//    }
-//
-//}
-
-
-
-
 extension BSStartViewController : PaymentOperationDelegate {
 
-//    @IBOutlet weak var applePayView: UIView!
-//
-//    var paymentSummaryItems:[PKPaymentSummaryItem] = [];
-
-
-//    override func viewDidLoad() {
-//        var button: UIButton?
-//        button = PKPaymentButton(type: .buy, style: .black)
-//        button?.addTarget(self, action: #selector(BSStartViewController.payPressed), for: .touchUpInside)
-//
-//        if button != nil {
-//            button!.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-//            applePayView.addSubview(button!)
-//        }
-//
-//    }
 
     //TODO, read payment from BSCheckoutDetails (paymentRequest)
     func payPressed(_ sender: Any) {
@@ -103,8 +47,7 @@ extension BSStartViewController : PaymentOperationDelegate {
         paymentOperation.delegate = self;
 
         paymentOperation.completionBlock = {[weak op = paymentOperation] in
-//            NSLog("PK payment completion \(op?.error)")
-         print(op?.error);
+            NSLog("PK payment completion \(op?.error)")
         };
 
 
@@ -132,10 +75,10 @@ extension BSStartViewController : PaymentOperationDelegate {
         print(paymentInformation.toDictionary());
         request.httpBody = paymentInformation.toJSON();
         request.httpMethod = "POST";
-//        let task  = URLSession.shared.dataTask(with: request, completionHandler: { data, response , error in
-//            //HEre you choose something
+        //        let task  = URLSession.shared.dataTask(with: request, completionHandler: { data, response , error in
+        //            //HEre you choose something
             completion(nil); // or with some Error;
-//        });
+        //        });
         //task.resume();
 
     }
@@ -144,7 +87,6 @@ extension BSStartViewController : PaymentOperationDelegate {
         completion(self.paymentSummaryItems);
     }
     func didSelectShippingContact(contact: PKContact, completion: @escaping (PKPaymentAuthorizationStatus, [PKShippingMethod], [PKPaymentSummaryItem]) -> Void) {
-        NSLog("Shipping")
         completion(.success, [], self.paymentSummaryItems);
     }
 }
