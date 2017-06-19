@@ -9,7 +9,7 @@
 import UIKit
 
 /**
- This protocol should be implemented by the view which owns this component; Although the component's functionality is sort-of self-sufficient, we still have some calls to the parent
+ This protocol should be implemented by the view which owns the BSCcInputLine control; Although the component's functionality is sort-of self-sufficient, we still have some calls to the parent
  */
 protocol BSCcInputLineDelegate : class {
     /**
@@ -40,8 +40,8 @@ protocol BSCcInputLineDelegate : class {
 
 /**
  BSCcInputLine is a Custom control for CC details input (Credit Card number, expiration date and CVV).
- It inherits configurable properties from BSBaseTextInput and adds some.
- We use the BSBaseTextInput for the CCN field and image,and add fields for EXP and CVV.
+ It inherits configurable properties from BSBaseTextInput that let you adjust the look&feel and adds some.
+ [We use BSBaseTextInput for the CCN field and image,and add fields for EXP and CVV.]
 
  The control has 2 states:
  * Open: when we edit the CC number, the field gets longer, EXP and CVV fields are hidden; a "next" button is shown if the field already has a value
@@ -62,6 +62,24 @@ class BSCcInputLine: BSBaseTextInput {
             }
         }
     }
+    
+    /**
+     expPlaceholder (default = "MM/YY") determines the placeholder text for the EXP field
+     */
+    @IBInspectable var expPlaceholder: String = "MM/YY" {
+        didSet {
+            self.expTextField.placeholder = expPlaceholder
+        }
+    }
+    /**
+     cvcPlaceholder (default = "CVV") determines the placeholder text for the CVV field
+     */
+    @IBInspectable var cvcPlaceholder: String = "CVV" {
+        didSet {
+            self.cvvTextField.placeholder = cvcPlaceholder
+        }
+    }
+    
     /**
      ccnWidth (default = 220) determines the CCN text field width in the "open" state (value will change at runtime according to the device)
      */
@@ -412,14 +430,14 @@ class BSCcInputLine: BSBaseTextInput {
         expTextField.textColor = self.textColor
         expTextField.returnKeyType = UIReturnKeyType.done
         expTextField.borderStyle = .none
-        expTextField.placeholder = "MM/YY"
+        expTextField.placeholder = expPlaceholder
 
         cvvTextField.keyboardType = .numberPad
         cvvTextField.backgroundColor = self.fieldBkdColor
         cvvTextField.textColor = self.textColor
         cvvTextField.returnKeyType = UIReturnKeyType.done
         cvvTextField.borderStyle = .none
-        cvvTextField.placeholder = "CVV"
+        cvvTextField.placeholder = cvcPlaceholder
         
         cvvTextField.borderStyle = textField.borderStyle
         expTextField.borderStyle = textField.borderStyle
@@ -752,11 +770,22 @@ class BSCcInputLine: BSBaseTextInput {
         return result
     }
 
-    // private functions
+    // private/internal functions
     
-    private func updateCcIcon(ccType : String?) {
+    func updateCcIcon(ccType : String?) {
         
         // change the image in ccIconImage
+        if let image = getCcIconByCardType(ccType: ccType) {
+            self.image = image
+        }
+    }
+    
+    /**
+     This function updates the image that holds the card-type icon according to the chosen card type.
+     Override this if necessary.
+     */
+    func getCcIconByCardType(ccType : String?) -> UIImage? {
+        
         var imageName : String?
         if let ccType = ccType?.lowercased() {
             imageName = ccImages[ccType]
@@ -765,9 +794,7 @@ class BSCcInputLine: BSBaseTextInput {
             imageName = "default"
             NSLog("ccTypew \(ccType) does not have an icon")
         }
-        if let image = BSViewsManager.getImage(imageName: "cc_\(imageName!)") {
-            self.image = image
-        }
+        return BSViewsManager.getImage(imageName: "cc_\(imageName!)")
     }
     
     private func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {
