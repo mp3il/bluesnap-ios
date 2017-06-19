@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BSCountryManager {
+public class BSCountryManager {
     
     fileprivate var countryCodes : [String] = []
     fileprivate let COUNTRY_STATES : [String : [String : String]] = [

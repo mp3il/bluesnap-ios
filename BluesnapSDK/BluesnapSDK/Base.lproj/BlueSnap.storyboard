@@ -142,7 +142,6 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="John Doe"/>
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="IL"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient name"/>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
                                                         <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </userDefinedRuntimeAttribute>
@@ -159,7 +158,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="2sS-wR-i8X"/>
@@ -172,7 +170,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill address"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="jdY-ii-VKc"/>
@@ -185,7 +182,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill code"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="yza-e3-oxC"/>
@@ -198,7 +194,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill city"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="cityEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="vNS-gh-mJI"/>
@@ -211,8 +206,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="isEditable" value="No"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEditable" value="NO"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="xuB-Xr-C5G"/>
@@ -427,7 +421,6 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="John Doe"/>
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="IL"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient name"/>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
                                                         <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </userDefinedRuntimeAttribute>
@@ -444,7 +437,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill recipient Email"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="fJw-47-23H"/>
@@ -457,7 +449,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill code"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="AHR-lP-oYN"/>
@@ -470,7 +461,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill address"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="addressEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="9eT-pS-hme"/>
@@ -483,7 +473,6 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill city"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="cityEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="Jnn-5Y-xfU"/>
@@ -496,8 +485,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="errorText" value="Please fill State"/>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="isEditable" value="No"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEditable" value="NO"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="stateClick:" destination="W0G-M6-3dM" eventType="touchUpInside" id="vOq-lV-QCq"/>

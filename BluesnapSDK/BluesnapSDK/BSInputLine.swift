@@ -2,6 +2,9 @@
 //  BSInputLine.swift
 //  BluesnapSDK
 //
+//  Custom control with one label, one text field, one image button showing on a white
+//  strip with a shadow. Inherits all the configurable properties from BSBaseTextInput.
+//
 //  Created by Shevie Chen on 17/05/2017.
 //  Copyright © 2017 Bluesnap. All rights reserved.
 //
@@ -13,18 +16,61 @@ class BSInputLine: BSBaseTextInput {
 
     // MARK: Additional Configurable properties
 
+    /**
+     labelText (default = "Label") determines the label text
+     */
     @IBInspectable var labelText: String = "Label" {
         didSet {
             label.text = labelText
         }
     }
+    /**
+     labelTextColor (default = darkGray) determines the label text color
+     */
+    @IBInspectable var labelTextColor: UIColor = UIColor.darkGray {
+        didSet {
+            label.textColor = labelTextColor
+        }
+    }
+    /**
+     labelBkdColor (default = clear) determines the label background color
+     */
+    @IBInspectable var labelBkdColor: UIColor = UIColor.clear {
+        didSet {
+            label.backgroundColor = labelBkdColor
+        }
+    }
+    /**
+     labelWidth (default = 104) determines the label width (value will change at runtime according to the device)
+     */
+    @IBInspectable var labelWidth : CGFloat = 104 {
+        didSet {
+            _ = initRatios()
+            resizeElements()
+        }
+    }
 
-    @IBInspectable var labelTextColor: UIColor = UIColor.darkGray
-    @IBInspectable var labelBkdColor: UIColor = UIColor.white
-    @IBInspectable var labelWidth : CGFloat = 104
-    @IBInspectable var labelHeight : CGFloat = 17
-    @IBInspectable var labelFontSize : CGFloat = 14
+    /**
+     labelHeight (default = 17) determines the label height (value will change at runtime according to the device)
+     */
+    @IBInspectable var labelHeight : CGFloat = 17 {
+        didSet {
+            _ = initRatios()
+            resizeElements()
+        }
+    }
 
+    /**
+     labelFontSize (default = 14) determines the label font size (value will change at runtime according to the device)
+     */
+    @IBInspectable var labelFontSize : CGFloat = 14 {
+        didSet {
+            _ = initRatios()
+            resizeElements()
+        }
+    }
+
+    
     // MARK: private properties
     
     internal var label : UILabel = UILabel()
@@ -32,7 +78,8 @@ class BSInputLine: BSBaseTextInput {
     var actualLabelHeight : CGFloat = 17
     var actualLabelFontSize : CGFloat = 14
     
-    // Override functions
+    
+    // MARK: Override functions
     
     override func buildElements() {
         super.buildElements()
@@ -84,6 +131,5 @@ class BSInputLine: BSBaseTextInput {
         let fieldX = actualLeftMargin + actualLabelWidth + actualMiddleMargin
         return fieldX
     }
-
 
 }
