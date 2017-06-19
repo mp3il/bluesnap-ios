@@ -146,7 +146,7 @@ class BSApiManager  {
     */
     static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void) {
         
-        let requestBody = ["ccNumber": ccNumber.removeWhitespaces(), "cvv":cvv, "expDate": expDate]
+        let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber), "cvv":cvv, "expDate": expDate]
         submitPaymentDetails(requestBody: requestBody, completion: { (result, error) in
             if let error = error{
                 completion(nil,error)
@@ -165,7 +165,7 @@ class BSApiManager  {
      */
     static func submitCcn(ccNumber: String, completion : @escaping (BSResultCcDetails?,BSCcDetailErrors?)->Void){
         
-        let requestBody = ["ccNumber": ccNumber.removeWhitespaces()]
+        let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber)]
         
         submitPaymentDetails(requestBody: requestBody, completion: { (result, error) in
             if let error = error{

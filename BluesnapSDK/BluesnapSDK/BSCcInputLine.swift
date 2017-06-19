@@ -164,8 +164,7 @@ class BSCcInputLine: BSBaseTextInput {
             if ccnIsOpen {
                 self.textField.text = ccn
             } else {
-                //ccn = self.textField.text
-                self.textField.text = ccn.last4
+                self.textField.text = BSStringUtils.last4(ccn)
             }
         }
     }
@@ -237,7 +236,7 @@ class BSCcInputLine: BSBaseTextInput {
         let newValue = self.expTextField.text ?? ""
         if let p = newValue.characters.index(of: "/") {
             let mm = newValue.substring(with: newValue.startIndex..<p)
-            let yy = newValue.substring(with: p ..< newValue.endIndex).removeNoneDigits
+            let yy = BSStringUtils.removeNoneDigits(newValue.substring(with: p ..< newValue.endIndex))
             let currentYearStr = String(BSValidator.getCurrentYear())
             let p1 = currentYearStr.index(currentYearStr.startIndex, offsetBy: 2)
             let first2Digits = currentYearStr.substring(with: currentYearStr.startIndex..<p1)
@@ -648,18 +647,13 @@ class BSCcInputLine: BSBaseTextInput {
         self.ccn = self.textField.text!
         BSValidator.ccnEditingChanged(textField)
         
-        let ccn = textField.text?.removeNoneDigits ?? ""
+        let ccn = BSStringUtils.removeNoneDigits(textField.text ?? "")
         let ccnLength = ccn.characters.count
         
         if ccnLength >= 6 {
-            cardType = textField.text?.getCCTypeByRegex()?.lowercased() ?? ""
+            cardType = BSValidator.getCCTypeByRegex(textField.text ?? "")?.lowercased() ?? ""
         }
-        var maxLength : Int = 16
-        if cardType == "amex" {
-            maxLength = 15
-        } else if cardType == "dinersclub" {
-            maxLength = 14
-        }
+        let maxLength : Int = BSValidator.getCcLengthByCardType(cardType)
         if checkMaxLength(textField: sender, maxLength: maxLength) == true {
             if ccnLength == maxLength {
                 if self.textField.canResignFirstResponder {
@@ -798,7 +792,7 @@ class BSCcInputLine: BSBaseTextInput {
     }
     
     private func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {
-        if (textField.text!.removeNoneDigits.characters.count > maxLength) {
+        if (BSStringUtils.removeNoneDigits(textField.text!).characters.count > maxLength) {
             textField.deleteBackward()
             return false
         } else {

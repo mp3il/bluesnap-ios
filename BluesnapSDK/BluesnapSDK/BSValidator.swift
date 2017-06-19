@@ -8,210 +8,7 @@
 
 import Foundation
 
-extension String {
-    
-    func removeWhitespaces() -> String {
-        return components(separatedBy: .whitespaces).joined()
-    }
-    
-    var isValidMonth : Bool {
-        
-        let validMonths = ["01","02","03","04","05","06","07","08","09","10","11","12"]
-        return validMonths.contains(self)
-    }
-
-    var isValidEmail : Bool {
-        let regex = try? NSRegularExpression(pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", options: .caseInsensitive)
-        return regex?.firstMatch(in: self, options: [], range: NSMakeRange(0, self.characters.count)) != nil
-    }
-
-    var isValidCCN : Bool {
-        
-        if characters.count < 6 {
-            return false
-        }
-        
-        var isOdd : Bool! = true
-        var sum : Int! = 0;
-        
-        for character in characters.reversed() {
-            if (character == " ") {
-                // ignore
-            } else if (character >= "0" && character <= "9") {
-                var digit : Int! = Int(String(character))!
-                isOdd = !isOdd
-                if (isOdd == true) {
-                    digit = digit * 2
-                }
-                if digit > 9 {
-                    digit = digit - 9
-                }
-                sum = sum + digit
-            } else {
-                return false
-            }
-        }
-        return sum % 10 == 0
-    }
-    
-    var isValidName : Bool {
-        
-        if let p = self.characters.index(of: " ") {
-            let firstName = substring(with: startIndex..<p).trimmingCharacters(in: .whitespaces)
-            let lastName = substring(with: p..<endIndex).trimmingCharacters(in: .whitespaces)
-            if firstName.characters.count < 2 || lastName.characters.count < 2 {
-                return false
-            }
-        } else {
-            return false
-        }
-        return true
-    }
-    
-    var splitName : (firstName: String, lastName: String)? {
-        
-        if let p = self.characters.index(of: " ") {
-            let firstName = substring(with: startIndex..<p).trimmingCharacters(in: .whitespaces)
-            let lastName = substring(with: p..<endIndex).trimmingCharacters(in: .whitespaces)
-            return (firstName, lastName)
-        } else {
-            return nil
-        }
-    }
-    
-    var last4 : String {
-        
-        let digits = self.removeNoneDigits
-        if digits.characters.count >= 4 {
-            let p = digits.characters.index(digits.endIndex, offsetBy: -4)
-            return digits.substring(with: p..<digits.endIndex)
-        } else {
-            return ""
-        }
-    }
-    
-    var removeNoneAlphaCharacters : String {
-        
-        var result : String = "";
-        for character in characters {
-            if (character == " ") || (character >= "a" && character <= "z") || (character >= "A" && character <= "Z") {
-                result.append(character)
-            }
-        }
-        return result
-    }
-    
-    var removeNoneEmailCharacters : String {
-        
-        var result : String = "";
-        for character in characters {
-            if (character == "-") ||
-                (character == "_") ||
-                (character == ".") ||
-                (character == "@") ||
-                (character >= "0" && character <= "9") ||
-                (character >= "a" && character <= "z") ||
-                (character >= "A" && character <= "Z") {
-                result.append(character)
-            }
-        }
-        return result
-    }
-    
-    var removeNoneDigits : String {
-        
-        var result : String = "";
-        for character in characters {
-            if (character >= "0" && character <= "9") {
-                result.append(character)
-            }
-        }
-        return result
-    }
-    
-    func cutToMaxLength(maxLength: Int) -> String {
-        if (characters.count < maxLength) {
-            return self
-        } else {
-            let idx = index(startIndex, offsetBy: maxLength)
-            return substring(with: startIndex..<idx)
-        }
-    }
-
-    var formatCCN : String {
-        
-        var result: String
-        let myLength = characters.count
-        if (myLength > 4) {
-            let idx1 = index(startIndex, offsetBy: 4)
-            result = substring(to: idx1) + " "
-            if (myLength > 8) {
-                let idx2 = index(idx1, offsetBy: 4)
-                result += substring(with: idx1..<idx2) + " "
-                if (myLength > 12) {
-                    let idx3 = index(idx2, offsetBy: 4)
-                    result += substring(with: idx2..<idx3) + " " + substring(from: idx3)
-                } else {
-                    result += substring(from:idx2)
-                }
-            } else {
-                result += substring(from: idx1)
-            }
-        } else {
-            result = self
-        }
-        return result;
-    }
-    
-    var formatExp : String {
-        
-        var result: String
-        let myLength = characters.count
-        if (myLength > 2) {
-            let idx1 = index(startIndex, offsetBy: 2)
-            result = substring(to: idx1) + "/" + substring(from: idx1)
-        } else {
-            result = self
-        }
-        return result;
-    }
-    
-    func getCCTypeByRegex() -> String? {
-        
-        // remove blanks
-        let ccn = self.removeWhitespaces()
-        
-        // Display the card type for the card Regex
-        let cardTypesRegex = [
-            //"elo": "^(40117[8-9]|431274|438935|451416|457393|45763[1-2]|504175|506699|5067[0-6][0-9]|50677[0-8]|509[0-9][0-9][0-9]|636368|636369|636297|627780).*",
-            //"HiperCard": "^(606282|637095).*",
-            //"Cencosud": "^603493.*",
-            //"Naranja": "^589562.*",
-            //"TarjetaShopping": "^(603488|(27995[0-9])).*",
-            //"ArgenCard": "^(501105).*",
-            //"Cabal": "^((627170)|(589657)|(603522)|(604((20[1-9])|(2[1-9][0-9])|(3[0-9]{2})|(400)))).*",
-            //"Solo": "^(6334|6767).*",
-            "visa": "^4.+",
-            "mastercard": "^(5(([1-5])|(0[1-5]))|2(([2-6])|(7(1|20)))|6((0(0[2-9]|1[2-9]|2[6-9]|[3-5]))|(2((1(0|2|3|[5-9]))|20|7[0-9]|80))|(60|3(0|[3-9]))|(4[0-2]|[6-8]))).+",
-            "amex": "^3(24|4[0-9]|7|56904|379(41|12|13)).+",
-            "discover": "^(3[8-9]|(6((01(1|300))|4[4-9]|5))).+",
-            "maestro": "^6759.+|560000227571480302|5200000000000049|560000841211092515|6331101234567892|560000000000000193|560000000000000193|6331101250353227|6331100610194313|6331100266977839|560000511607577094",
-            "dinersclub": "^(3(0([0-5]|9|55)|6)).*",
-            "jcb": "^(2131|1800|35).*",
-            "unionpay": "(^62(([4-6]|8)[0-9]{13,16}|2[2-9][0-9]{12,15}))$"
-            //,"CarteBleue": "^((3(6[1-4]|77451))|(4(059(?!34)|150|201|561|562|533|556|97))|(5(0[1-4]|13|30066|341[0-1]|587[0-2]|6|8))|(6(27244|390|75[1-6]|799999998))).*"
-        ];
-        for (cardType, regexp) in cardTypesRegex {
-            if let _ = ccn.range(of:regexp, options: .regularExpression) {
-                return cardType
-            }
-        }
-        return nil
-    }
-
-}
-
-class BSValidator {
+public class BSValidator {
     
     
     // MARK: Constants
@@ -232,6 +29,8 @@ class BSValidator {
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
     
+    // MARK: validation functions (check UI field and hide/show errors as necessary)
+    
     class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
         
         var result : Bool = true
@@ -242,7 +41,7 @@ class BSValidator {
         }
         if newValue.characters.count == 0 && ignoreIfEmpty {
             // ignore
-        } else if !newValue.isValidName {
+        } else if !isValidName(newValue) {
             result = false
         }
         if result {
@@ -262,7 +61,7 @@ class BSValidator {
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
-        } else if (!newValue.isValidEmail) {
+        } else if (!isValidEmail(newValue)) {
             result = false
         } else {
             result = true
@@ -389,10 +188,10 @@ class BSValidator {
         let newValue = input.expTextField.text ?? ""
         if let p = newValue.characters.index(of: "/") {
             let mm = newValue.substring(with: newValue.startIndex..<p)
-            let yy = newValue.substring(with: p ..< newValue.endIndex).removeNoneDigits
+            let yy = BSStringUtils.removeNoneDigits(newValue.substring(with: p ..< newValue.endIndex))
             if (mm.characters.count < 2) {
                 ok = false
-            } else if !mm.isValidMonth {
+            } else if !isValidMonth(mm) {
                 ok = false
                 msg = expMonthInvalidMessage
             } else if (yy.characters.count < 2) {
@@ -425,13 +224,6 @@ class BSValidator {
         return ok
     }
     
-    class func getCurrentYear() -> Int! {
-        let date = Date()
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: date)
-        return year
-    }
-    
     class func validateCvv(input: BSCcInputLine) -> Bool {
         
         var result : Bool = true;
@@ -451,7 +243,7 @@ class BSValidator {
         
         var result : Bool = true;
         let newValue : String! = input.getValue()
-        if !newValue.isValidCCN {
+        if !isValidCCN(newValue) {
             result = false
         }
         if result {
@@ -462,66 +254,77 @@ class BSValidator {
         return result
     }
     
+    // MARK: field editing changed methods (to limit characters and sizes)
+    
     class func nameEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 100)
+        input = BSStringUtils.removeNoneAlphaCharacters(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 100)
         sender.setValue(input)
     }
     
     class func emailEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        input = input.removeNoneEmailCharacters.cutToMaxLength(maxLength: 1200)
+        input = BSStringUtils.removeNoneEmailCharacters(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 120)
         sender.text = input
     }
     
     class func emailEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = input.removeNoneEmailCharacters.cutToMaxLength(maxLength: 1200)
+        input = BSStringUtils.removeNoneEmailCharacters(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 120)
         sender.setValue(input)
     }
     
     class func addressEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = input.cutToMaxLength(maxLength: 100)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 100)
         sender.setValue(input)
     }
     
     class func cityEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 50)
+        input = BSStringUtils.removeNoneAlphaCharacters(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 50)
         sender.setValue(input)
     }
     
     class func zipEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = input.cutToMaxLength(maxLength: 20)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 20)
         sender.setValue(input)
     }
     
     class func ccnEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 21).formatCCN
+        input = BSStringUtils.removeNoneDigits(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 21)
+        input = formatCCN(input)
         sender.text = input
     }
     
     class func expEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4).formatExp
+        input = BSStringUtils.removeNoneDigits(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 4)
+        input = formatExp(input)
         sender.text = input
     }
     
     class func cvvEditingChanged(_ sender: UITextField) {
         
         var input : String = sender.text ?? ""
-        input = input.removeNoneDigits.cutToMaxLength(maxLength: 4)
+        input = BSStringUtils.removeNoneDigits(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 4)
         sender.text = input
     }
     
@@ -541,6 +344,157 @@ class BSValidator {
         }
         stateInputLine.isHidden = hideState
         stateInputLine.hideError(nil)
+    }
+
+    // MARK: Basic validation functions
+    
+    
+    open class func isValidMonth(_ str: String) -> Bool {
+        
+        let validMonths = ["01","02","03","04","05","06","07","08","09","10","11","12"]
+        return validMonths.contains(str)
+    }
+    
+    open class func isValidEmail(_ str: String) -> Bool {
+        let regex = try? NSRegularExpression(pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", options: .caseInsensitive)
+        return regex?.firstMatch(in: str, options: [], range: NSMakeRange(0, str.characters.count)) != nil
+    }
+    
+    open class func isValidCCN(_ str: String) -> Bool {
+        
+        if str.characters.count < 6 {
+            return false
+        }
+        
+        var isOdd : Bool! = true
+        var sum : Int! = 0;
+        
+        for character in str.characters.reversed() {
+            if (character == " ") {
+                // ignore
+            } else if (character >= "0" && character <= "9") {
+                var digit : Int! = Int(String(character))!
+                isOdd = !isOdd
+                if (isOdd == true) {
+                    digit = digit * 2
+                }
+                if digit > 9 {
+                    digit = digit - 9
+                }
+                sum = sum + digit
+            } else {
+                return false
+            }
+        }
+        return sum % 10 == 0
+    }
+    
+    open class func isValidName(_ str: String) -> Bool {
+        
+        if let p = str.characters.index(of: " ") {
+            let firstName = str.substring(with: str.startIndex..<p).trimmingCharacters(in: .whitespaces)
+            let lastName = str.substring(with: p..<str.endIndex).trimmingCharacters(in: .whitespaces)
+            if firstName.characters.count < 2 || lastName.characters.count < 2 {
+                return false
+            }
+        } else {
+            return false
+        }
+        return true
+    }
+    
+    // MARK: formatting functions
+    
+    class func getCurrentYear() -> Int! {
+        let date = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        return year
+    }
+    
+    class func getCcLengthByCardType(_ cardType: String) -> Int! {
+        
+        var maxLength : Int = 16
+        if cardType == "amex" {
+            maxLength = 15
+        } else if cardType == "dinersclub" {
+            maxLength = 14
+        }
+        return maxLength
+    }
+    
+    
+    // MARK:
+    
+    open class func formatCCN(_ str: String) -> String {
+        
+        var result: String
+        let myLength = str.characters.count
+        if (myLength > 4) {
+            let idx1 = str.index(str.startIndex, offsetBy: 4)
+            result = str.substring(to: idx1) + " "
+            if (myLength > 8) {
+                let idx2 = str.index(idx1, offsetBy: 4)
+                result += str.substring(with: idx1..<idx2) + " "
+                if (myLength > 12) {
+                    let idx3 = str.index(idx2, offsetBy: 4)
+                    result += str.substring(with: idx2..<idx3) + " " + str.substring(from: idx3)
+                } else {
+                    result += str.substring(from:idx2)
+                }
+            } else {
+                result += str.substring(from: idx1)
+            }
+        } else {
+            result = str
+        }
+        return result
+    }
+    
+    open class func formatExp(_ str: String) -> String {
+        
+        var result: String
+        let myLength = str.characters.count
+        if (myLength > 2) {
+            let idx1 = str.index(str.startIndex, offsetBy: 2)
+            result = str.substring(to: idx1) + "/" + str.substring(from: idx1)
+        } else {
+            result = str
+        }
+        return result
+    }
+    
+    open class func getCCTypeByRegex(_ str: String) -> String? {
+        
+        // remove blanks
+        let ccn = BSStringUtils.removeWhitespaces(str)
+        
+        // Display the card type for the card Regex
+        let cardTypesRegex = [
+            //"elo": "^(40117[8-9]|431274|438935|451416|457393|45763[1-2]|504175|506699|5067[0-6][0-9]|50677[0-8]|509[0-9][0-9][0-9]|636368|636369|636297|627780).*",
+            //"HiperCard": "^(606282|637095).*",
+            //"Cencosud": "^603493.*",
+            //"Naranja": "^589562.*",
+            //"TarjetaShopping": "^(603488|(27995[0-9])).*",
+            //"ArgenCard": "^(501105).*",
+            //"Cabal": "^((627170)|(589657)|(603522)|(604((20[1-9])|(2[1-9][0-9])|(3[0-9]{2})|(400)))).*",
+            //"Solo": "^(6334|6767).*",
+            "visa": "^4.+",
+            "mastercard": "^(5(([1-5])|(0[1-5]))|2(([2-6])|(7(1|20)))|6((0(0[2-9]|1[2-9]|2[6-9]|[3-5]))|(2((1(0|2|3|[5-9]))|20|7[0-9]|80))|(60|3(0|[3-9]))|(4[0-2]|[6-8]))).+",
+            "amex": "^3(24|4[0-9]|7|56904|379(41|12|13)).+",
+            "discover": "^(3[8-9]|(6((01(1|300))|4[4-9]|5))).+",
+            "maestro": "^6759.+|560000227571480302|5200000000000049|560000841211092515|6331101234567892|560000000000000193|560000000000000193|6331101250353227|6331100610194313|6331100266977839|560000511607577094",
+            "dinersclub": "^(3(0([0-5]|9|55)|6)).*",
+            "jcb": "^(2131|1800|35).*",
+            "unionpay": "(^62(([4-6]|8)[0-9]{13,16}|2[2-9][0-9]{12,15}))$"
+            //,"CarteBleue": "^((3(6[1-4]|77451))|(4(059(?!34)|150|201|561|562|533|556|97))|(5(0[1-4]|13|30066|341[0-1]|587[0-2]|6|8))|(6(27244|390|75[1-6]|799999998))).*"
+        ];
+        for (cardType, regexp) in cardTypesRegex {
+            if let _ = ccn.range(of:regexp, options: .regularExpression) {
+                return cardType
+            }
+        }
+        return nil
     }
 
 }

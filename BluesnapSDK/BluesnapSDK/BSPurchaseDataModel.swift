@@ -116,7 +116,7 @@ public class BSAddressDetails {
     public var state : String?
     
     public func getSplitName() -> (firstName: String, lastName: String)? {
-        return name.splitName
+        return BSStringUtils.splitName(name)
     }
 }
 
