@@ -8,23 +8,53 @@
 
 import UIKit
 
+/**
+ This protocol should be implemented by the view which owns this component; Although the component's functionality is sort-of self-sufficient, we still have some calls to the parent
+ */
 protocol BSCcInputLineDelegate : class {
+    /**
+     startEditCreditCard is called when we switch to the "open" state of the component
+    */
     func startEditCreditCard()
+    /**
+     startEditCreditCard is called when we switch to the "closed" state of the component
+     */
     func endEditCreditCard()
+    /**
+     willCheckCreditCard is called just before calling the BlueSnap server to validate the CCN; since this is a longish action, you may want to show an activity indicator
+     */
     func willCheckCreditCard()
-    func showAlert(_ message : String)
+    /**
+     didCheckCreditCard is called just after getting the BlueSnap server result; this is where you hide the activity indicator
+     */
     func didCheckCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
+    /**
+     didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; either result or error parameters will be full, so check the error first.
+     */
     func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
+    /**
+     showAlert is called in case of unexpected errors from the BlueSnap server.
+     */
+    func showAlert(_ message : String)
 }
 
+/**
+ BSCcInputLine is a Custom control for CC details input (Credit Card number, expiration date and CVV).
+ It inherits configurable properties from BSBaseTextInput and adds some.
+ We use the BSBaseTextInput for the CCN field and image,and add fields for EXP and CVV.
+
+ The control has 2 states:
+ * Open: when we edit the CC number, the field gets longer, EXP and CVV fields are hidden; a "next" button is shown if the field already has a value
+ * Closed: after CCN is entered and validated, the field gets shorter and displays only the last 4 digits; EXP and CVV fields are shown and ediatble; "next" button is hidden.
+*/
 @IBDesignable
 class BSCcInputLine: BSBaseTextInput {
 
-    // We use the BSBaseTextInput for the CCN field and image,
-    // and add fields for EXP and CVV
-
     // MARK: Configurable properties
     
+    /**
+     showOpenInDesign (default = false) helps you to see the component on the storyboard in both states, open (when you edit the CCN field) or closed (CCn shows only last 4 digits and is not editable, you can edit EXP and CVV fields).
+     */
     @IBInspectable var showOpenInDesign: Bool = false {
         didSet {
             if designMode {
@@ -32,46 +62,73 @@ class BSCcInputLine: BSBaseTextInput {
             }
         }
     }
+    /**
+     ccnWidth (default = 220) determines the CCN text field width in the "open" state (value will change at runtime according to the device)
+     */
     @IBInspectable var ccnWidth: CGFloat = 220 {
         didSet {
             resizeElements()
         }
     }
+    /**
+     last4Width (default = 70) determines the CCN text field width in the "closed" state, when we show only last 4 digits of the CCN (value will change at runtime according to the device)
+     */
     @IBInspectable var last4Width: CGFloat = 70 {
         didSet {
             resizeElements()
         }
     }
+    /**
+     expWidth (default = 70) determines the EXP field width (value will change at runtime according to the device)
+     */
     @IBInspectable var expWidth: CGFloat = 70 {
         didSet {
             self.actualExpWidth = expWidth
         }
     }
+    /**
+     cvvWidth (default = 70) determines the CVV field width (value will change at runtime according to the device)
+     */
     @IBInspectable var cvvWidth: CGFloat = 70 {
         didSet {
             resizeElements()
         }
     }
+    /**
+     errorWidth (default = 150) determines the error width (value will change at runtime according to the device)
+     */
     @IBInspectable var errorWidth: CGFloat = 150 {
         didSet {
             resizeElements()
         }
     }
+    /**
+     nextBtnWidth (default = 20) determines the width of the next button, which shows in the open state when we already have a value in the CCN field (value will change at runtime according to the device)
+     */
     @IBInspectable var nextBtnWidth: CGFloat = 22 {
         didSet {
             resizeElements()
         }
     }
+    /**
+     nextBtnHeight (default = 22) determines the height of the next button, which shows in the open state when we already have a value in the CCN field (value will change at runtime according to the device)
+     */
     @IBInspectable var nextBtnHeight: CGFloat = 22 {
         didSet {
             resizeElements()
         }
     }
+    /**
+     nextBtnHeight (default = internal image, looks like >) determines the image for the next button, which shows in the open state when we already have a value in the CCN field (value will change at runtime according to the device)
+     */
     @IBInspectable var nextBtnImage: UIImage?
     
     
     // MARK: public properties
 
+    /**
+     When using this control, you need to implement the BSCcInputLineDelegate protocol, and set the control's delegate to be that class
+    */
     var delegate : BSCcInputLineDelegate?
     
     var cardType : String = "" {
@@ -80,6 +137,9 @@ class BSCcInputLine: BSBaseTextInput {
         }
     }
     
+    /**
+    ccnIsOpen indicated the state of the control (open or closed)
+    */
     var ccnIsOpen : Bool = true {
         didSet {
             self.isEditable = ccnIsOpen ? true : false
@@ -127,8 +187,12 @@ class BSCcInputLine: BSBaseTextInput {
         "china_union_pay": "unionpay",
         "visa": "visa"]
 
+    
     // MARK: Public functions
     
+    /**
+     reset sets the component to its initial state, where the fields are emnpty and we are in the "open" state
+    */
     public func reset() {
         hideError(textField)
         hideError(expTextField)
@@ -137,14 +201,19 @@ class BSCcInputLine: BSBaseTextInput {
         expTextField.text = ""
         cvvTextField.text = ""
         ccn = ""
-        //ccnIsOpen = true
         openCcn()
     }
 
+    /**
+     This should be called when you try to navigate away from the current view; it bypasses validations so that the fields will resign first responder
+    */
     public func closeOnLeave() {
         closing = true
     }
     
+    /**
+     The EXP field contains the expiration date in format MM/YY. This function returns the expiration date in format MMYYYY
+    */
     public func getExpDateAsMMYYYY() -> String! {
         
         let newValue = self.expTextField.text ?? ""
@@ -159,6 +228,9 @@ class BSCcInputLine: BSBaseTextInput {
         return ""
     }
     
+    /**
+     Returns the CCN value
+    */
     override func getValue() -> String! {
         if self.ccnIsOpen {
             return self.textField.text
@@ -167,6 +239,9 @@ class BSCcInputLine: BSBaseTextInput {
         }
     }
     
+    /**
+     Sets the CCN value
+     */
     override func setValue(_ newValue: String!) {
         ccn = newValue
         if self.ccnIsOpen {
@@ -174,21 +249,32 @@ class BSCcInputLine: BSBaseTextInput {
         }
     }
     
+    /**
+     Returns the CVV value
+     */
     public func getCvv() -> String! {
         return self.cvvTextField.text ?? ""
     }
     
+    /**
+     Returns the CC Type
+     */
     public func getCardType() -> String! {
         return cardType
     }
     
+    /**
+     Validated the 3 fields; returns true if all are OK; displays errors under the fields if not.
+     */
     public func validate() -> Bool {
         
         let result = validateCCN() && validateExp() && validateCvv()
         return result
     }
     
-    // get issuing country and card type from server, while vsalidating the CCN
+    /**
+     Submits the CCN to BlueSnap server; This lets us get the CC issuing country and card type from server, while validating the CCN
+     */
     public func checkCreditCard(ccn: String) {
         
         if validateCCN() {
@@ -219,6 +305,11 @@ class BSCcInputLine: BSBaseTextInput {
         }
     }
 
+    /**
+     This should be called by the "Pay" button - it submits all the CC details to BlueSnap server, so that later purchase requests to BlueSnap will not need gto contain these values (they will be automatically identified by the token).
+     In case of errors from the server (there may be validations we did not catch before), we show the errors under the matching fields.
+     After getting the result, we call the delegate's didSubmitCreditCard function.
+    */
     public func submitPaymentFields() {
         
         let ccn = self.getValue() ?? ""
