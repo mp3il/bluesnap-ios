@@ -126,6 +126,10 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xkv-uS-lPt" userLabel="Full Billing Switch">
                                         <rect key="frame" x="139" y="47" width="51" height="31"/>
                                     </switch>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pO-TR-qlz">
+                                        <rect key="frame" x="291" y="14" width="21" height="15"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -183,6 +187,7 @@
                     <connections>
                         <outlet property="convertButton" destination="TAo-mM-qRo" id="fgb-9J-9ff"/>
                         <outlet property="currencyButton" destination="dMR-1J-U5n" id="565-Jx-enD"/>
+                        <outlet property="flagImage" destination="6pO-TR-qlz" id="ncW-hr-9jQ"/>
                         <outlet property="fullBillingSwitch" destination="xkv-uS-lPt" id="ufh-bw-LTe"/>
                         <outlet property="resultTextView" destination="TT4-Lq-e8Y" id="feq-X1-fla"/>
                         <outlet property="taxPercentTextField" destination="XlM-ly-8de" id="abK-Fv-0mB"/>

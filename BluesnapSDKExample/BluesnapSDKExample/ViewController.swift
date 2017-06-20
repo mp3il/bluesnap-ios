@@ -20,6 +20,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var fullBillingSwitch: UISwitch!
     
+    @IBOutlet weak var flagImage: UIImageView!
+    
     // MARK: private properties
     
     fileprivate var bsToken : BSToken?
@@ -41,11 +43,16 @@ class ViewController: UIViewController {
         listenForBsTokenExpiration()
 
         resultTextView.text = ""
+        
+        // Example of using BSImageLibrary
+        if let img = BSImageLibrary.getFlag(countryCode: "US") {
+            self.flagImage.image = img
+        }
  	}
 	
 	override func viewWillAppear(_ animated: Bool) {
+        
 		super.viewWillAppear(animated)
-		
 		self.navigationController?.isNavigationBarHidden = true
 	}
 	
@@ -88,7 +95,7 @@ class ViewController: UIViewController {
         }
         
         // open the purchase screen
-        fillPaymentDetails()
+        fillCheckoutDetails()
         BlueSnapSDK.showCheckoutScreen(
             inNavigationController: self.navigationController,
             animated: true,
@@ -100,7 +107,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func currencyButtonAction(_ sender: UIButton) {
         
-        fillPaymentDetails()
+        fillCheckoutDetails()
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
@@ -115,7 +122,11 @@ class ViewController: UIViewController {
 	}
     
     // MARK: private methods
-    private func fillPaymentDetails() {
+    
+    /**
+     Here we adjust the checkout details with the latest amounts from the fields on our view.
+    */
+    private func fillCheckoutDetails() {
         
         let amount = (valueTextField.text! as NSString).doubleValue
         let taxPercent = (taxPercentTextField.text! as NSString).doubleValue
@@ -124,18 +135,26 @@ class ViewController: UIViewController {
         checkoutDetails.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: checkoutDetails.getCurrency())
     }
     
+    /**
+     This function is called by the change currency screen when the user changes the currency.
+     Here we update yhje checkout details and the fields in our view according tp the new currency.
+    */
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        print("before change currency: currency=\(checkoutDetails.getCurrency()), amount = \(checkoutDetails.getAmount())")
         checkoutDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
-        print("after change currency: currency=\(checkoutDetails.getCurrency()), amount = \(checkoutDetails.getAmount())")
         valueTextField.text = String(checkoutDetails.getAmount())
         taxTextField.text = String(checkoutDetails.getTaxAmount())
         currencyButton.titleLabel?.text = checkoutDetails.getCurrency()
     }
     
+    /**
+     This is the callback we pass to BlueSnap SDK; it will be called when all the shopper details have been
+     enetered, and the secured payment details have been successfully submitted to BlueSnap server.
+     In a real app, you would send the checkout details to your app server, which then would call BlueSnap API
+     to execute the purchase.
+     In this sample app we do it client-to-server, but this is not the way to do it in a real app.
+    */
     private func completePurchase(checkoutDetails: BSCheckoutDetails!) {
-        print("Here we should call the server to complete the transaction with BlueSnap")
         
         let demo = DemoTreansactions()
         let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
@@ -181,7 +200,10 @@ class ViewController: UIViewController {
     
     // MARK: BS Token functions
     
-    // create a test BS token and set it in BlueSnapSDK
+    /**
+     Create a test BS token and set it in BlueSnapSDK.
+     In a real app, you would get the token from your app server.
+     */
     func generateAndSetBsToken() {
         
         do {
@@ -194,11 +216,18 @@ class ViewController: UIViewController {
         NSLog("Got BS token= \(bsToken!.getTokenStr())")
     }
     
+    /**
+     Add observer to the token expired event sent by BlueSnap SDK.
+    */
     func listenForBsTokenExpiration() {
         
         NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
     }
     
+    /**
+     Called by the observer to the token expired event sent by BlueSnap SDK.
+     Here we generate and set a new token, so that when the user tries again, the action will succeed.
+     */
     func bsTokenExpired() {
         
         NSLog("Got BS token expiration notification!")
