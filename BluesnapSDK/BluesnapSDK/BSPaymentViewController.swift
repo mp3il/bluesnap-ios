@@ -53,7 +53,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
     
-    // MARK: for scrolling to prevent keyboard hiding
+    // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
     
@@ -120,6 +120,21 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
+    func registerTapToHideKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        
+        self.ccInputLine.dismissKeyboard()
+        self.nameInputLine.dismissKeyboard()
+        self.emailInputLine.dismissKeyboard()
+        self.zipInputLine.dismissKeyboard()
+        self.streetInputLine.dismissKeyboard()
+        self.cityInputLine.dismissKeyboard()
+    }
+
     // MARK: BSCcInputLineDelegate methods
     
     
@@ -189,6 +204,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             name: .UIDeviceOrientationDidChange,
             object: nil
         )
+        registerTapToHideKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {

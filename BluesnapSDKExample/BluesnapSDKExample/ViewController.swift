@@ -32,8 +32,7 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
-		self.view.addGestureRecognizer(tap)
+		registerTapToHideKeyboard()
         
         //Init Kount
         //NSLog("Kount Init");
@@ -58,9 +57,20 @@ class ViewController: UIViewController {
 	
 	// MARK: - Dismiss keyboard
 	
-	func dismissKeyboard() {
-		valueTextField.resignFirstResponder()
-	}
+    func registerTapToHideKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
+
+    func dismissKeyboard() {
+        if valueTextField.isFirstResponder {
+            valueTextField.resignFirstResponder()
+        } else if taxTextField.isFirstResponder {
+            taxTextField.resignFirstResponder()
+        } else if taxPercentTextField.isFirstResponder {
+            taxPercentTextField.resignFirstResponder()
+        }
+    }
 
 	// MARK: - Actions
 	

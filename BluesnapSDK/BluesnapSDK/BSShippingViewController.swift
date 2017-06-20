@@ -30,7 +30,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    // MARK: for scrolling to prevent keyboard hiding
+    // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
     var movedUp = false
@@ -95,11 +95,25 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func registerTapToHideKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
     
+    func dismissKeyboard() {
+        
+        self.nameInputLine.dismissKeyboard()
+        self.emailInputLine.dismissKeyboard()
+        self.zipInputLine.dismissKeyboard()
+        self.streetInputLine.dismissKeyboard()
+        self.cityInputLine.dismissKeyboard()
+    }
+
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerTapToHideKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {

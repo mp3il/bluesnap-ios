@@ -356,6 +356,17 @@ class BSCcInputLine: BSBaseTextInput {
         })
     }
 
+    override func dismissKeyboard() {
+        
+        if self.textField.isFirstResponder {
+            self.textField.resignFirstResponder()
+        } else if self.expTextField.isFirstResponder {
+            self.expTextField.resignFirstResponder()
+        } else if self.cvvTextField.isFirstResponder {
+            self.cvvTextField.resignFirstResponder()
+        }
+    }
+
     
     // MARK: BSBaseTextInput Override functions
 
