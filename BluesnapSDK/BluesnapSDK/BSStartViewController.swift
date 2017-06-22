@@ -15,6 +15,7 @@ class BSStartViewController: UIViewController {
     
     internal var paymentRequest : BSPaymentRequest!
     internal var fullBilling = false
+    internal var withShipping = false
     internal var purchaseFunc: (BSPaymentRequest!)->Void = {
         paymentRequest in
         print("purchaseFunc should be overridden")
@@ -61,6 +62,7 @@ class BSStartViewController: UIViewController {
             present(alert, animated: true, completion: nil)
             return;
         }
+
         payPressed(sender)
 
     }

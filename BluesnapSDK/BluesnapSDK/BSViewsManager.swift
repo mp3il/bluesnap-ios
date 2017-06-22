@@ -54,6 +54,7 @@ class BSViewsManager {
         startScreen.paymentRequest = paymentRequest
         startScreen.purchaseFunc = purchaseFunc
         startScreen.fullBilling = fullBilling
+        startScreen.withShipping = withShipping
         
         if purchaseScreen != nil {
             purchaseScreen.resetCC()

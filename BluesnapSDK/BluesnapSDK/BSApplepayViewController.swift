@@ -9,39 +9,41 @@ import UIKit
 import PassKit
 
 
-
+//TODO: we can split the delagate from the controller
 extension BSStartViewController : PaymentOperationDelegate {
 
 
     func payPressed(_ sender: Any) {
 
+        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: paymentRequest.getTaxAmount()), type: .final)
+        let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: paymentRequest.getAmount()), type: .final)
 
-        let fare = PKPaymentSummaryItem(label: "Minimum Fare", amount: NSDecimalNumber(string: "9.99"), type: .final)
-        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(string: "1.00"), type: .final)
-        let total = PKPaymentSummaryItem(label: "Emporium", amount: NSDecimalNumber(string: "10.99"), type: .pending)
+        paymentSummaryItems = [tax, total];
 
-        paymentSummaryItems = [fare, tax, total];
+        let pkPaymentRequest = PKPaymentRequest()
+        pkPaymentRequest.paymentSummaryItems = paymentSummaryItems;
+        pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.Merchant.identifier
+        pkPaymentRequest.merchantCapabilities = .capability3DS
+        pkPaymentRequest.countryCode = "US"
+        pkPaymentRequest.currencyCode = paymentRequest.getCurrency()
 
+        if self.withShipping {
+            pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
+        }
+        if self.fullBilling {
+            pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
+        }
 
-        let paymentRequest = PKPaymentRequest()
-        paymentRequest.paymentSummaryItems = paymentSummaryItems;
-        paymentRequest.merchantIdentifier = BSApplePayConfiguration.Merchant.identifier
-        paymentRequest.merchantCapabilities = .capability3DS
-        paymentRequest.countryCode = "US"
-        paymentRequest.currencyCode = "USD"
-        paymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress];
-        paymentRequest.requiredBillingAddressFields = [.postalAddress];
-        paymentRequest.supportedNetworks = [
+        pkPaymentRequest.supportedNetworks = [
                 .amex,
                 .discover,
                 .masterCard,
                 .visa
-        ];
-
+        ]
 
 
         // set up the operation with the paymaket request
-        let paymentOperation = PaymentOperation(request: paymentRequest);
+        let paymentOperation = PaymentOperation(request: pkPaymentRequest);
 
         paymentOperation.delegate = self;
 

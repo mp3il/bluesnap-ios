@@ -417,6 +417,30 @@ class BSApiManager  {
             NotificationCenter.default.post(name: Notification.Name.bsTokenExpirationNotification, object: nil)
         }
     }
-    
+
+
+    /**
+     Submit CC details to BlueSnap server
+     - parameters:
+     - ccNumber: Credit card number
+     - expDate: CC expiration date in format MM/YYYY
+     - cvv: CC security code (CVV)
+     - completion: callback with either result details if OK, or error details if not OK
+    */
+    static func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+
+        let requestBody = [
+                "applepayInfo": "BASE64" //TODO:
+        ]
+        submitPaymentDetails(requestBody: requestBody, completion: { (result, error) in
+            if let error = error {
+                completion(nil, error)
+                debugPrint(error.localizedDescription)
+                return
+            }
+            completion(result, nil)
+        })
+    }
+
 
 }
