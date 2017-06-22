@@ -205,10 +205,10 @@ class BSApiManager  {
             var resultError : BSCcDetailErrors?
             //self.simulateTokenExpired = !self.simulateTokenExpired
             
-            let semaphore = DispatchSemaphore(value: 0)
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
                 if let error = error {
-                    print("error")
+                    NSLog("error: \(error)")
+                    completion(nil, .unknown)
                     return
                 }
                 let httpResponse = response as? HTTPURLResponse
@@ -241,20 +241,15 @@ class BSApiManager  {
                     NSLog("Error getting response from BS on submitting Payment details")
                 }
                 defer {
-                    semaphore.signal()
+                    if (result == nil && resultError == nil) {
+                        resultError = .unknown
+                    }
+                    DispatchQueue.main.async {
+                        completion(result, resultError)
+                    }
                 }
             }
             task.resume()
-            semaphore.wait()
-            if let resultError = resultError {
-                DispatchQueue.main.async {
-                    completion(nil, resultError)
-                }
-                return
-            }
-            DispatchQueue.main.async {
-                completion(result,nil)
-            }
         }
     }
     
