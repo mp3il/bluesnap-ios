@@ -68,19 +68,25 @@ extension BSStartViewController : PaymentOperationDelegate {
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void) {
         NSLog("Send to server");
-        let url = URL(string: "https://api.bluesnap.com/services/2")!;
-        var request = URLRequest(url: url);
-        //TODO: set API token
-        request.addValue("Bearer APITOOKEN", forHTTPHeaderField: "Authorization");
-        //TODO: remove this log
-        print(paymentInformation.toDictionary());
-        request.httpBody = paymentInformation.toJSON();
-        request.httpMethod = "POST";
-        //        let task  = URLSession.shared.dataTask(with: request, completionHandler: { data, response , error in
-        //            //HEre you choose something
-            completion(nil); // or with some Error;
-        //        });
-        //task.resume();
+        print(paymentInformation.toJSON());
+        let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
+
+        BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
+            if let error = error {
+                completion(error)
+                debugPrint(error.localizedDescription)
+                return
+            }
+            completion(nil) // Need to fix this completion to accept result
+        }
+        )
+
+//        //TODO: remove this log
+//        //        let task  = URLSession.shared.dataTask(with: request, completionHandler: { data, response , error in
+//        //            //HEre you choose something
+//            completion(nil); // or with some Error;
+//        //        });
+//        //task.resume();
 
     }
 

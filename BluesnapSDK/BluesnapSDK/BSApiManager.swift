@@ -430,7 +430,7 @@ class BSApiManager  {
     static func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
 
         let requestBody = [
-                "applepayInfo": "BASE64" //TODO:
+                "applepayInfo": data!
         ]
         submitPaymentDetails(requestBody: requestBody, completion: { (result, error) in
             if let error = error {
