@@ -349,6 +349,13 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
         }
     }    
     
+    public func dismissKeyboard() {
+        
+        if self.textField.isFirstResponder {
+            self.textField.resignFirstResponder()
+        }
+    }
+    
     // MARK: TextFieldDelegate functions
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

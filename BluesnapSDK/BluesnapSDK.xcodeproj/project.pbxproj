@@ -32,6 +32,7 @@
 		FD3BD9D21EE7F7DD00486576 /* BSErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */; };
 		FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */; };
 		FD4750B81EF7C50000E5DFBC /* BSStringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */; };
+		FD4750BB1EF8EECE00E5DFBC /* BSImageLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4750BA1EF8EECE00E5DFBC /* BSImageLibrary.swift */; };
 		FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */; };
 		FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */; };
 		FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */; };
@@ -86,6 +87,7 @@
 		FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSErrors.swift; sourceTree = "<group>"; };
 		FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStartViewController.swift; sourceTree = "<group>"; };
 		FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStringUtils.swift; sourceTree = "<group>"; };
+		FD4750BA1EF8EECE00E5DFBC /* BSImageLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSImageLibrary.swift; sourceTree = "<group>"; };
 		FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiManager.swift; sourceTree = "<group>"; };
 		FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStatesViewController.swift; sourceTree = "<group>"; };
 		FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStateTableViewCell.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */,
 				FDA6BE301E938B63006C3359 /* BSValidator.swift */,
 				FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */,
+				FD4750BA1EF8EECE00E5DFBC /* BSImageLibrary.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */,
 				FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */,
 				FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */,
+				FD4750BB1EF8EECE00E5DFBC /* BSImageLibrary.swift in Sources */,
 				FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */,
 				FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */,
 				FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */,
