@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSCheckoutDetails : NSObject {
+public class BSPaymentRequest : NSObject {
     
     // These 3 fields are input + output (they may change if shopper changes currency)
     var amount : Double! = 0.0

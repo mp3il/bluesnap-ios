@@ -29,7 +29,7 @@ import Foundation
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - checkoutDetails: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
+     - paymentRequest: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
@@ -37,17 +37,17 @@ import Foundation
     open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        checkoutDetails : BSCheckoutDetails!,
+        paymentRequest : BSPaymentRequest!,
         withShipping: Bool,
         fullBilling : Bool,
-        purchaseFunc: @escaping (BSCheckoutDetails!)->Void) {
+        purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
         
-        adjustCheckoutDetails(checkoutDetails: checkoutDetails,
+        adjustPaymentRequest(paymentRequest: paymentRequest,
                              withShipping: withShipping)
         
         BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
                                           animated: animated,
-                                          checkoutDetails: checkoutDetails,
+                                          paymentRequest: paymentRequest,
                                           withShipping: withShipping,
                                           fullBilling: fullBilling,
                                           purchaseFunc: purchaseFunc)
@@ -135,18 +135,18 @@ import Foundation
     
     // MARK: Private functions
     
-    private class func adjustCheckoutDetails(checkoutDetails: BSCheckoutDetails!,
+    private class func adjustPaymentRequest(paymentRequest: BSPaymentRequest!,
                                             withShipping: Bool) {
         
         let defaultCountry = NSLocale.current.regionCode ?? "US"
-        if (withShipping && checkoutDetails.shippingDetails == nil) {
-            checkoutDetails.setShippingDetails(shippingDetails: BSAddressDetails())
-            checkoutDetails.getShippingDetails()!.country = defaultCountry
-        } else if (!withShipping && checkoutDetails.shippingDetails != nil) {
-            checkoutDetails.setShippingDetails(shippingDetails: nil)
+        if (withShipping && paymentRequest.shippingDetails == nil) {
+            paymentRequest.setShippingDetails(shippingDetails: BSAddressDetails())
+            paymentRequest.getShippingDetails()!.country = defaultCountry
+        } else if (!withShipping && paymentRequest.shippingDetails != nil) {
+            paymentRequest.setShippingDetails(shippingDetails: nil)
         }
-        if checkoutDetails.getBillingDetails().country ?? "" == "" {
-            checkoutDetails.getBillingDetails().country = defaultCountry
+        if paymentRequest.getBillingDetails().country ?? "" == "" {
+            paymentRequest.getBillingDetails().country = defaultCountry
         }
 
     }

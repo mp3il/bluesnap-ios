@@ -13,10 +13,10 @@ class BSStartViewController: UIViewController {
 
     // MARK: - Public properties
     
-    internal var checkoutDetails : BSCheckoutDetails!
+    internal var paymentRequest : BSPaymentRequest!
     internal var fullBilling = false
-    internal var purchaseFunc: (BSCheckoutDetails!)->Void = {
-        checkoutDetails in
+    internal var purchaseFunc: (BSPaymentRequest!)->Void = {
+        paymentRequest in
         print("purchaseFunc should be overridden")
     }
 
@@ -68,7 +68,7 @@ class BSStartViewController: UIViewController {
     @IBAction func ccDetailsClick(_ sender: Any) {
         
         animateToPaymentScreen(completion: { animate in
-        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, checkoutDetails: self.checkoutDetails, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
+        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
         })
     }
     

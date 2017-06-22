@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     // MARK: private properties
     
     fileprivate var bsToken : BSToken?
-    fileprivate var checkoutDetails = BSCheckoutDetails()
+    fileprivate var paymentRequest = BSPaymentRequest()
  
 	// MARK: - UIViewController's methods
 	
@@ -80,7 +80,7 @@ class ViewController: UIViewController {
         
         // for debug - supply initial values:
         if fullBillingSwitch.isOn == true {
-            if let billingDetails = checkoutDetails.getBillingDetails() {
+            if let billingDetails = paymentRequest.getBillingDetails() {
                 billingDetails.name = "John Doe"
                 billingDetails.address = "333 elm st"
                 billingDetails.city = "New York"
@@ -91,10 +91,10 @@ class ViewController: UIViewController {
             }
         }
         if withShippingSwitch.isOn {
-            if checkoutDetails.getShippingDetails() == nil {
-                checkoutDetails.setShippingDetails(shippingDetails: BSAddressDetails())
+            if paymentRequest.getShippingDetails() == nil {
+                paymentRequest.setShippingDetails(shippingDetails: BSAddressDetails())
             }
-            if let shippingDetails = checkoutDetails.getShippingDetails() {
+            if let shippingDetails = paymentRequest.getShippingDetails() {
                 shippingDetails.name = "Mary Doe"
                 shippingDetails.address = "333 elm st"
                 shippingDetails.city = "New York"
@@ -105,11 +105,11 @@ class ViewController: UIViewController {
         }
         
         // open the purchase screen
-        fillCheckoutDetails()
+        fillPaymentRequest()
         BlueSnapSDK.showCheckoutScreen(
             inNavigationController: self.navigationController,
             animated: true,
-            checkoutDetails: checkoutDetails,
+            paymentRequest: paymentRequest,
             withShipping: withShippingSwitch.isOn,
             fullBilling: fullBillingSwitch.isOn,
             purchaseFunc: completePurchase)
@@ -117,11 +117,11 @@ class ViewController: UIViewController {
 	
 	@IBAction func currencyButtonAction(_ sender: UIButton) {
         
-        fillCheckoutDetails()
+        fillPaymentRequest()
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
-            selectedCurrencyCode: checkoutDetails.getCurrency(),
+            selectedCurrencyCode: paymentRequest.getCurrency(),
             updateFunc: updateViewWithNewCurrency)
 	}
 	
@@ -136,13 +136,13 @@ class ViewController: UIViewController {
     /**
      Here we adjust the checkout details with the latest amounts from the fields on our view.
     */
-    private func fillCheckoutDetails() {
+    private func fillPaymentRequest() {
         
         let amount = (valueTextField.text! as NSString).doubleValue
         let taxPercent = (taxPercentTextField.text! as NSString).doubleValue
         let taxAmount = (taxTextField.text! as NSString).doubleValue + (taxPercent * amount / 100.0)
         
-        checkoutDetails.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: checkoutDetails.getCurrency())
+        paymentRequest.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: paymentRequest.getCurrency())
     }
     
     /**
@@ -151,10 +151,10 @@ class ViewController: UIViewController {
     */
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        checkoutDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
-        valueTextField.text = String(checkoutDetails.getAmount())
-        taxTextField.text = String(checkoutDetails.getTaxAmount())
-        currencyButton.titleLabel?.text = checkoutDetails.getCurrency()
+        paymentRequest.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
+        valueTextField.text = String(paymentRequest.getAmount())
+        taxTextField.text = String(paymentRequest.getTaxAmount())
+        currencyButton.titleLabel?.text = paymentRequest.getCurrency()
     }
     
     /**
@@ -164,11 +164,11 @@ class ViewController: UIViewController {
      to execute the purchase.
      In this sample app we do it client-to-server, but this is not the way to do it in a real app.
     */
-    private func completePurchase(checkoutDetails: BSCheckoutDetails!) {
+    private func completePurchase(paymentRequest: BSPaymentRequest!) {
         
         let demo = DemoTreansactions()
         let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
-            checkoutDetails: checkoutDetails,
+            paymentRequest: paymentRequest,
             bsToken: bsToken!)
         logResultDetails(result)
         if (result.success == true) {
@@ -183,7 +183,7 @@ class ViewController: UIViewController {
         
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
-        if let billingDetails = checkoutDetails.getBillingDetails() {
+        if let billingDetails = paymentRequest.getBillingDetails() {
             NSLog("Result Data: Name:\(billingDetails.name)")
             if let zip = billingDetails.zip {
                 NSLog(" Zip code:\(zip)")
@@ -196,7 +196,7 @@ class ViewController: UIViewController {
                 NSLog(" State code:\(billingDetails.state ?? "")")
             }
         }
-        if let shippingDetails = checkoutDetails.getShippingDetails() {
+        if let shippingDetails = paymentRequest.getShippingDetails() {
             NSLog("Shipping Data: Name:\(shippingDetails.name)")
             NSLog(" Zip code:\(shippingDetails.zip ?? "")")
             NSLog(" Email:\(shippingDetails.email ?? "")")

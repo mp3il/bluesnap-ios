@@ -13,7 +13,6 @@ import PassKit
 extension BSStartViewController : PaymentOperationDelegate {
 
 
-    //TODO, read payment from BSCheckoutDetails (paymentRequest)
     func payPressed(_ sender: Any) {
 
 
