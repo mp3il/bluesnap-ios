@@ -72,11 +72,11 @@ class BSCcInputLine: BSBaseTextInput {
         }
     }
     /**
-     cvcPlaceholder (default = "CVV") determines the placeholder text for the CVV field
+     cvvPlaceholder (default = "CVV") determines the placeholder text for the CVV field
      */
-    @IBInspectable var cvcPlaceholder: String = "CVV" {
+    @IBInspectable var cvvPlaceholder: String = "CVV" {
         didSet {
-            self.cvvTextField.placeholder = cvcPlaceholder
+            self.cvvTextField.placeholder = cvvPlaceholder
         }
     }
     
@@ -447,7 +447,7 @@ class BSCcInputLine: BSBaseTextInput {
         cvvTextField.textColor = self.textColor
         cvvTextField.returnKeyType = UIReturnKeyType.done
         cvvTextField.borderStyle = .none
-        cvvTextField.placeholder = cvcPlaceholder
+        cvvTextField.placeholder = cvvPlaceholder
         
         cvvTextField.borderStyle = textField.borderStyle
         expTextField.borderStyle = textField.borderStyle
