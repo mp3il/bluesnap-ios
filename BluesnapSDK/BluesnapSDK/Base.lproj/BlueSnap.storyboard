@@ -404,7 +404,7 @@
                                         <rect key="frame" x="0.0" y="-64" width="375" height="370"/>
                                         <subviews>
                                             <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="okv-vf-cV8" customClass="BSCcInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="16" width="335" height="43.5"/>
+                                                <rect key="frame" x="20" y="16" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="1234 5678 9012 3456"/>
@@ -415,7 +415,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcs-xh-zfv" userLabel="Name Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="75.5" width="335" height="44"/>
+                                                <rect key="frame" x="20" y="72" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
@@ -433,7 +433,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAV-CU-OEK" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="120.5" width="335" height="44"/>
+                                                <rect key="frame" x="20" y="113" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
@@ -445,7 +445,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yRx-IZ-fub" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="165.5" width="335" height="44"/>
+                                                <rect key="frame" x="20" y="154" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
@@ -457,7 +457,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Vk-vx-UOS" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="210.5" width="335" height="44"/>
+                                                <rect key="frame" x="20" y="195" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
@@ -469,7 +469,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="6" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sW-jJ-zDD" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="255.5" width="335" height="43.5"/>
+                                                <rect key="frame" x="20" y="236" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
@@ -481,7 +481,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EKc-lR-XxG" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="300" width="335" height="44"/>
+                                                <rect key="frame" x="20" y="277" width="335" height="40"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
@@ -495,12 +495,12 @@
                                         <constraints>
                                             <constraint firstItem="8Vk-vx-UOS" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="1vw-L3-VA2"/>
                                             <constraint firstItem="gcs-xh-zfv" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="2BD-XM-XSy"/>
-                                            <constraint firstItem="yRx-IZ-fub" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/435" constant="9.9770114942528707" id="52E-kg-EYP"/>
-                                            <constraint firstItem="3sW-jJ-zDD" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/435" constant="9.4770114942528707" id="6hE-UN-Ed0"/>
+                                            <constraint firstItem="yRx-IZ-fub" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="52E-kg-EYP"/>
+                                            <constraint firstItem="3sW-jJ-zDD" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="6hE-UN-Ed0"/>
                                             <constraint firstItem="zAV-CU-OEK" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="83r-IH-GnO"/>
                                             <constraint firstItem="EKc-lR-XxG" firstAttribute="top" secondItem="3sW-jJ-zDD" secondAttribute="bottom" constant="1" id="Ct2-S7-Mpe"/>
                                             <constraint firstItem="yRx-IZ-fub" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="IgX-gD-TEE"/>
-                                            <constraint firstItem="8Vk-vx-UOS" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/435" constant="9.9770114942528707" id="J6D-2M-mqh"/>
+                                            <constraint firstItem="8Vk-vx-UOS" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="J6D-2M-mqh"/>
                                             <constraint firstAttribute="trailing" secondItem="8Vk-vx-UOS" secondAttribute="trailing" constant="20" symbolic="YES" id="NWv-go-LuA"/>
                                             <constraint firstAttribute="trailing" secondItem="EKc-lR-XxG" secondAttribute="trailing" constant="20" symbolic="YES" id="RCO-Yr-zQK"/>
                                             <constraint firstItem="gcs-xh-zfv" firstAttribute="top" secondItem="okv-vf-cV8" secondAttribute="bottom" constant="16" id="S4j-Qh-6EP"/>
@@ -511,13 +511,13 @@
                                             <constraint firstAttribute="trailing" secondItem="zAV-CU-OEK" secondAttribute="trailing" constant="20" symbolic="YES" id="Wpr-w5-OQM"/>
                                             <constraint firstItem="okv-vf-cV8" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="Z6c-bF-mxX"/>
                                             <constraint firstItem="yRx-IZ-fub" firstAttribute="top" secondItem="zAV-CU-OEK" secondAttribute="bottom" constant="1" id="Zch-dH-6RJ"/>
-                                            <constraint firstItem="gcs-xh-zfv" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/435" constant="9.9770114942528707" id="aXH-s5-E7I"/>
+                                            <constraint firstItem="gcs-xh-zfv" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="aXH-s5-E7I"/>
                                             <constraint firstItem="8Vk-vx-UOS" firstAttribute="top" secondItem="yRx-IZ-fub" secondAttribute="bottom" constant="1" id="amR-Xt-kac"/>
                                             <constraint firstItem="zAV-CU-OEK" firstAttribute="top" secondItem="gcs-xh-zfv" secondAttribute="bottom" constant="1" id="c1s-mR-pCC"/>
                                             <constraint firstAttribute="trailing" secondItem="yRx-IZ-fub" secondAttribute="trailing" constant="20" symbolic="YES" id="lfv-rV-inw"/>
-                                            <constraint firstItem="EKc-lR-XxG" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/435" constant="9.9770114942528707" id="lvZ-cV-lb1"/>
-                                            <constraint firstItem="zAV-CU-OEK" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/435" constant="9.9770114942528707" id="mqt-D2-hc3"/>
-                                            <constraint firstItem="okv-vf-cV8" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/667" constant="21.311094452773613" id="tnp-lm-P2C"/>
+                                            <constraint firstItem="EKc-lR-XxG" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="lvZ-cV-lb1"/>
+                                            <constraint firstItem="zAV-CU-OEK" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="mqt-D2-hc3"/>
+                                            <constraint firstItem="okv-vf-cV8" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="40/370" id="tnp-lm-P2C"/>
                                             <constraint firstItem="EKc-lR-XxG" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="wpd-Dm-1tJ"/>
                                             <constraint firstItem="3sW-jJ-zDD" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="xfI-U0-Lsl"/>
                                             <constraint firstAttribute="trailing" secondItem="okv-vf-cV8" secondAttribute="trailing" constant="20" symbolic="YES" id="yOo-HG-S0u"/>
