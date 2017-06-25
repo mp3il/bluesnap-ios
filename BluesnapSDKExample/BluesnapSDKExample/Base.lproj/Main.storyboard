@@ -27,7 +27,7 @@
             </objects>
             <point key="canvasLocation" x="-486" y="193"/>
         </scene>
-        <!--View Controller-->
+        <!--BlueSnap IOS SDK Example App-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BluesnapSDKExample" customModuleProvider="target" sceneMemberID="viewController">
@@ -107,8 +107,8 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="hg7-UI-ey7"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                        <state key="normal" title="Buy Now"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                        <state key="normal" title="BlueSnap Checkout"/>
                                         <connections>
                                             <action selector="convertButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Th1-YS-TgR"/>
                                         </connections>
@@ -183,7 +183,7 @@
                             <constraint firstItem="gtG-Zk-3aB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="oDj-Ev-mYX"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Wrn-am-caX"/>
+                    <navigationItem key="navigationItem" title="BlueSnap IOS SDK Example App" id="Wrn-am-caX"/>
                     <connections>
                         <outlet property="convertButton" destination="TAo-mM-qRo" id="fgb-9J-9ff"/>
                         <outlet property="currencyButton" destination="dMR-1J-U5n" id="565-Jx-enD"/>
