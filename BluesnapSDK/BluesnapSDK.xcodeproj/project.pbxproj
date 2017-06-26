@@ -28,7 +28,6 @@
 		FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */; };
 		FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */; };
 		FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */; };
-		FD3BD9D01EE6966700486576 /* BSTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BD9CF1EE6966700486576 /* BSTransitionManager.swift */; };
 		FD3BD9D21EE7F7DD00486576 /* BSErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */; };
 		FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */; };
 		FD4750B81EF7C50000E5DFBC /* BSStringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */; };
@@ -83,7 +82,6 @@
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
 		FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSInputLine.swift; sourceTree = "<group>"; };
 		FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
-		FD3BD9CF1EE6966700486576 /* BSTransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSTransitionManager.swift; sourceTree = "<group>"; };
 		FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSErrors.swift; sourceTree = "<group>"; };
 		FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStartViewController.swift; sourceTree = "<group>"; };
 		FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStringUtils.swift; sourceTree = "<group>"; };
@@ -212,7 +210,6 @@
 				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
 				FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */,
 				FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */,
-				FD3BD9CF1EE6966700486576 /* BSTransitionManager.swift */,
 				DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */,
 			);
 			name = Screens;

@@ -96,10 +96,9 @@ class BSApiManager {
             if let error = error {
                 NSLog("Error getting BS currencies: \(error.localizedDescription)")
                 resultError = .unknown
-                return
-            }
+                } else {
             let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode: Int = (httpResponse?.statusCode) {
+            if let httpStatusCode:Int = (httpResponse?.statusCode) {
                 if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                     let tmp = parseCurrenciesJSON(data: data)
                     if tmp != nil {
@@ -122,9 +121,9 @@ class BSApiManager {
                     resultError = .unknown
                     NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
                 }
-            } else {
+           } else {
                 resultError = .unknown
-                NSLog("Http error getting BS currencies response")
+                NSLog("Http error getting BS currencies response")}
             }
             defer {
                 semaphore.signal()
@@ -205,14 +204,12 @@ class BSApiManager {
             var result: BSResultCcDetails?
             var resultError: BSCcDetailErrors?
             //self.simulateTokenExpired = !self.simulateTokenExpired
+            
 
-            let semaphore = DispatchSemaphore(value: 0)
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
                 if let error = error {
-                    NSLog("API error \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        completion(nil, .unknown)
-                    }
+                    NSLog("error: \(error)")
+                    completion(nil, .unknown)
                     return
                 }
                 let httpResponse = response as? HTTPURLResponse
@@ -371,30 +368,30 @@ class BSApiManager {
         var resultError: BSApiErrors?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            defer {
-                semaphore.signal()
-            }
             if let error = error {
                 NSLog("error getting BSToken: \(error.localizedDescription)")
                 resultError = .unknown
-                return
-            }
-            let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode: Int = (httpResponse?.statusCode) {
-                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    result = extractTokenFromResponse(httpResponse: httpResponse, domain: domain)
-                    if result == nil {
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode: Int = (httpResponse?.statusCode) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        result = extractTokenFromResponse(httpResponse: httpResponse, domain: domain)
+                        if result == nil {
+                            resultError = .unknown
+                        }
+                    } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                        resultError = .invalidInput
+                    } else {
                         resultError = .unknown
+                        NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
                     }
-                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-                    resultError = .invalidInput
                 } else {
                     resultError = .unknown
-                    NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                    NSLog("Http error getting response for BSToken")
                 }
-            } else {
-                resultError = .unknown
-                NSLog("Http error getting response for BSToken")
+            }
+            defer {
+                semaphore.signal()
             }
         }
         task.resume()
