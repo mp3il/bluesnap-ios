@@ -151,3 +151,13 @@ public class BSResultCcDetails : BSResultPaymentDetails {
     var ccIssuingCountry : String?
 }
 
+public class BSResultApplePayDetails: BSResultPaymentDetails {
+
+    override init() {
+        super.init()
+        self.paymentType = .ApplePay
+    }
+
+
+}
+
