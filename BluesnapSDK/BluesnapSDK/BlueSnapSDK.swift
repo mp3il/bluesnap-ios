@@ -132,6 +132,10 @@ import Foundation
             throw error
         }
     }
+
+    open class func setApplePayMerchantIdentifier(merchantId: String!) {
+        BSApplePayConfiguration.setIdentifier(merchantId: merchantId)
+    }
     
     // MARK: Private functions
     
@@ -152,3 +156,19 @@ import Foundation
     }
     
 }
+
+public class BSApplePayConfiguration {
+
+    internal static var identifier: String? = nil
+
+    public static func setIdentifier(merchantId: String!) {
+        identifier = merchantId;
+    }
+
+    public static func getIdentifier() -> String! {
+        return identifier
+    }
+
+}
+
+let InternalQueue = OperationQueue();

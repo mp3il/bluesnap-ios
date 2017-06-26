@@ -39,6 +39,7 @@ class ViewController: UIViewController {
         //BlueSnapSDK.KountInit();
         
         generateAndSetBsToken()
+        setApplePayIdentifier()
         listenForBsTokenExpiration()
 
         resultTextView.text = ""
@@ -237,7 +238,10 @@ class ViewController: UIViewController {
         }
         NSLog("Got BS token= \(bsToken!.getTokenStr())")
     }
-    
+
+    func setApplePayIdentifier() {
+        BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
+    }
     /**
      Add observer to the token expired event sent by BlueSnap SDK.
     */

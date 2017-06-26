@@ -65,12 +65,21 @@ class BSStartViewController: UIViewController {
             return;
         }
 
+        if BSApplePayConfiguration.getIdentifier() == nil {
+            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Setup error")
+            NSLog("Missing merchant identifier for apple pay")
+            present(alert, animated: true, completion: nil)
+            return;
+        }
 
-        payPressed(sender, completion: { (error) in
-            if let error = error {
 
+        applePayPressed(sender, completion: { (error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "General error")
+                    self.present(alert, animated: true, completion: nil)
+                    return
             } else {
-                DispatchQueue.main.async {
                     let result: BSResultPaymentDetails = BSResultApplePayDetails()
                     self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
                     _ = self.navigationController?.popViewController(animated: false)

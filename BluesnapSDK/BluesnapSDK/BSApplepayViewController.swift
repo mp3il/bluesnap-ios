@@ -13,7 +13,7 @@ import PassKit
 extension BSStartViewController : PaymentOperationDelegate {
 
 
-    func payPressed(_ sender: Any, completion: @escaping (Error?) -> Void) {
+    func applePayPressed(_ sender: Any, completion: @escaping (Error?) -> Void) {
 
         let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: paymentRequest.getTaxAmount()), type: .final)
         let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: paymentRequest.getAmount()), type: .final)
@@ -22,7 +22,7 @@ extension BSStartViewController : PaymentOperationDelegate {
 
         let pkPaymentRequest = PKPaymentRequest()
         pkPaymentRequest.paymentSummaryItems = paymentSummaryItems;
-        pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.Merchant.identifier
+        pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.getIdentifier()
         pkPaymentRequest.merchantCapabilities = .capability3DS
         pkPaymentRequest.countryCode = "US"
         pkPaymentRequest.currencyCode = paymentRequest.getCurrency()
