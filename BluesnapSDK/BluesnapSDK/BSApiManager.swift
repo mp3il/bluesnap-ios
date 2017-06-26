@@ -430,9 +430,7 @@ class BSApiManager {
         var resultError: BSCcDetailErrors?
 
         if (httpStatusCode >= 200 && httpStatusCode <= 299 && !self.simulateTokenExpired) {
-//            if (result == nil) {
-//                resultError = .unknown
-//            }
+            NSLog("ApplePay data submitted successfully ")
         } else if (httpStatusCode == 400 || self.simulateTokenExpired) {
             resultError = .unknown
             if let data = data {
@@ -440,7 +438,14 @@ class BSApiManager {
                 if (errStr == "\"EXPIRED_TOKEN\"" || self.simulateTokenExpired) {
                     resultError = .expiredToken
                     notifyTokenExpired()
+                } else if (errStr == "\"TOKEN_WAS_ALREADY_USED_FOR_APPLEֹֹֹֹ_PAY\"") {
+                    resultError = .usedTokenApplePay
+                } else if (errStr == "\"TOKEN_WAS_ALREADY_USED_FOR_CC\"") {
+                    resultError = .usedTokenForCC
+                } else if (errStr == "\"TOKEN_NOT_FOUND\"") {
+                    resultError = .expiredToken //TODO: merge
                 }
+
             }
         } else {
             NSLog("Http error submitting ApplePay details to BS; HTTP status = \(httpStatusCode)")

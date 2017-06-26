@@ -51,7 +51,6 @@ extension BSStartViewController : PaymentOperationDelegate {
             NSLog("PK payment completion \(op?.error)")
         };
 
-
         //Send the payment operation via queue
         InternalQueue.addOperation(paymentOperation);
 
@@ -68,7 +67,6 @@ extension BSStartViewController : PaymentOperationDelegate {
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void) {
         NSLog("Send to server");
-        print(paymentInformation.toJSON());
         let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
 
         BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
@@ -80,13 +78,6 @@ extension BSStartViewController : PaymentOperationDelegate {
             completion(nil) // Need to fix this completion to accept result
         }
         )
-
-//        //TODO: remove this log
-//        //        let task  = URLSession.shared.dataTask(with: request, completionHandler: { data, response , error in
-//        //            //HEre you choose something
-//            completion(nil); // or with some Error;
-//        //        });
-//        //task.resume();
 
     }
 

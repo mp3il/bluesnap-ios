@@ -153,7 +153,7 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
             if case .success = self.status {
                 self.finish();
             } else {
-                self.finish(with: ApplepayErrors.failed);
+                self.finish(with: BSCcDetailErrors.unknown);
             }
         };
     }
@@ -164,13 +164,13 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
 
     override public func execute() {
         if !PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: self.request.supportedNetworks) {
-            self.finish(with: ApplepayErrors.cantMakePaymentError);
+            self.finish(with: BSApplePayErrors.cantMakePaymentError);
         }
         self.requestController = PKPaymentAuthorizationViewController(paymentRequest: self.request);
         self.requestController.delegate = self;
         DispatchQueue.main.async {
             UIApplication.shared.keyWindow?.rootViewController?.present(self.requestController, animated: true, completion: nil) ?? {
-                self.finish(with: ApplepayErrors.undefinedError);
+                self.finish(with: BSApplePayErrors.unknown);
             }()
         }
 
