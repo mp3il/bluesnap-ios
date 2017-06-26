@@ -95,35 +95,35 @@ class BSApiManager  {
             if let error = error {
                 NSLog("Error getting BS currencies: \(error.localizedDescription)")
                 resultError = .unknown
-                return
-            }
-            let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode:Int = (httpResponse?.statusCode) {
-                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    let tmp = parseCurrenciesJSON(data: data)
-                    if tmp != nil {
-                        bsCurrencies = tmp
-                        self.lastCurrencyFetchDate = Date()
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        let tmp = parseCurrenciesJSON(data: data)
+                        if tmp != nil {
+                            bsCurrencies = tmp
+                            self.lastCurrencyFetchDate = Date()
+                        } else {
+                            resultError = .unknown
+                        }
+                    } else if (httpStatusCode == 400) {
+                        resultError = .unknown
+                        if let data = data {
+                            let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+                            NSLog("Http error 400 getting BS currencies; error = \(errStr)")
+                            if (errStr == "\"EXPIRED_TOKEN\"") {
+                                resultError = .expiredToken
+                                notifyTokenExpired()
+                            }
+                        }
                     } else {
                         resultError = .unknown
-                    }
-                } else if (httpStatusCode == 400) {
-                    resultError = .unknown
-                    if let data = data {
-                        let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                        NSLog("Http error 400 getting BS currencies; error = \(errStr)")
-                        if (errStr == "\"EXPIRED_TOKEN\"") {
-                            resultError = .expiredToken
-                            notifyTokenExpired()
-                        }
+                        NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
                     }
                 } else {
                     resultError = .unknown
-                    NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
+                    NSLog("Http error getting BS currencies response")
                 }
-           } else {
-                resultError = .unknown
-                NSLog("Http error getting BS currencies response")
             }
             defer {
                 semaphore.signal()
@@ -359,30 +359,30 @@ class BSApiManager  {
         var resultError : BSApiErrors?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            defer {
-                semaphore.signal()
-            }
             if let error = error {
                 NSLog("error getting BSToken: \(error.localizedDescription)")
                 resultError = .unknown
-                return
-            }
-            let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode:Int = (httpResponse?.statusCode) {
-                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    result = extractTokenFromResponse(httpResponse : httpResponse, domain : domain)
-                    if result == nil {
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        result = extractTokenFromResponse(httpResponse : httpResponse, domain : domain)
+                        if result == nil {
+                            resultError = .unknown
+                        }
+                    } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                        resultError = .invalidInput
+                    } else {
                         resultError = .unknown
+                        NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
                     }
-                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-                    resultError = .invalidInput
                 } else {
                     resultError = .unknown
-                    NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                    NSLog("Http error getting response for BSToken")
                 }
-            } else {
-                resultError = .unknown
-                NSLog("Http error getting response for BSToken")
+            }
+            defer {
+                semaphore.signal()
             }
         }
         task.resume()
