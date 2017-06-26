@@ -20,6 +20,8 @@ class BSStartViewController: UIViewController {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
+    fileprivate var activityIndicator: UIActivityIndicatorView?
+
 
     static let supportedNetworks: [PKPaymentNetwork] = [
             .amex,
@@ -63,7 +65,20 @@ class BSStartViewController: UIViewController {
             return;
         }
 
-        payPressed(sender)
+
+        payPressed(sender, completion: { (error) in
+            if let error = error {
+
+            } else {
+                DispatchQueue.main.async {
+                    let result: BSResultPaymentDetails = BSResultApplePayDetails()
+                    self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+                    _ = self.navigationController?.popViewController(animated: false)
+                    // execute callback
+                    self.purchaseFunc(self.paymentRequest)
+                }
+            }
+        })
 
     }
     

@@ -258,9 +258,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
-    
-    // MARK: private methods
-    
+
+
     private func adjustToPageRotate() {
         
         DispatchQueue.main.async{

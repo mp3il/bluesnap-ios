@@ -13,7 +13,7 @@ import PassKit
 extension BSStartViewController : PaymentOperationDelegate {
 
 
-    func payPressed(_ sender: Any) {
+    func payPressed(_ sender: Any, completion: @escaping (Error?) -> Void) {
 
         let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: paymentRequest.getTaxAmount()), type: .final)
         let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: paymentRequest.getAmount()), type: .final)
@@ -49,6 +49,7 @@ extension BSStartViewController : PaymentOperationDelegate {
 
         paymentOperation.completionBlock = {[weak op = paymentOperation] in
             NSLog("PK payment completion \(op?.error)")
+            completion(nil)
         };
 
         //Send the payment operation via queue
@@ -75,7 +76,7 @@ extension BSStartViewController : PaymentOperationDelegate {
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(nil) // Need to fix this completion to accept result
+            completion(nil) // no result from BS on 200
         }
         )
 
