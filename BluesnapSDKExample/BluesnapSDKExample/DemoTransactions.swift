@@ -20,6 +20,69 @@ class DemoTreansactions {
     static let BS_SANDBOX_TEST_USER : String  = "sdkuser"
     static let BS_SANDBOX_TEST_PASS : String  = "SDKuser123"
     static let BS_SANDBOX_DOMAIN : String = "https://sandbox.bluesnap.com/"
+    static let BS_QA_DOMAIN: String = "https://us-qa-fct02.bluesnap.com/"
+
+
+    func createApplePayTransaction(
+            bsToken: BSToken!) -> (success: Bool, data: String?) {
+
+        // let name = paymentRequest.getBillingDetails().getSplitName()!
+        //"card-transaction" : [
+        let requestBody = [
+                "recurringTransaction": "ECOMMERCE",
+                "softDescriptor": "MobileSDKtest",
+                "cardTransactionType": "AUTH_CAPTURE",
+                "pfToken": "\(bsToken.getTokenStr()!)"
+        ] as [String: Any]
+        // ]
+        print("requestBody= \(requestBody)")
+        let authorization = getBasicAuth()
+
+        let urlStr = DemoTreansactions.BS_QA_DOMAIN + "services/2/transactions";
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
+        } catch let error {
+            NSLog("Error serializing CC details: \(error.localizedDescription)")
+        }
+
+
+        // fire request
+
+        var result: (success: Bool, data: String?) = (success: false, data: nil)
+
+        let semaphore = DispatchSemaphore(value: 0)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            if let error = error {
+                NSLog("error calling create transaction: \(error.localizedDescription)")
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode: Int = (httpResponse?.statusCode) {
+
+                    if let data = data {
+                        result.data = String(data: data, encoding: .utf8)
+                        NSLog("Response body = \(result.data)")
+                    }
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        result.success = true
+                    } else {
+                        NSLog("Http error Creating BS Transaction; HTTP status = \(httpStatusCode)")
+                    }
+                }
+            }
+            defer {
+                semaphore.signal()
+            }
+        }
+        task.resume()
+        semaphore.wait()
+        return result
+    }
+
 
     func createCreditCardTransaction(
         paymentRequest: BSPaymentRequest!,
