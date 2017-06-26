@@ -380,6 +380,7 @@ class BSApiManager {
                             resultError = .unknown
                         }
                     } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                        NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
                         resultError = .invalidInput
                     } else {
                         resultError = .unknown
@@ -464,7 +465,7 @@ class BSApiManager {
     static func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
 
         let requestBody = [
-                "applepayInfo": data!
+                "applePayToken": data!
         ]
         submitPaymentDetails(requestBody: requestBody, parseFunction: parseApplePayResponse, completion: { (result, error) in
             if let error = error {

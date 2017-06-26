@@ -67,9 +67,8 @@ extension BSStartViewController : PaymentOperationDelegate {
     }
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void) {
-        NSLog("Send to server");
         let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
-
+        print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
         BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
             if let error = error {
                 completion(error)

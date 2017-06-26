@@ -9,7 +9,7 @@ import PassKit
 
 
 public protocol DictionaryConvertible {
-    func toDictionary() -> [String: Any]
+    func toDictionary() throws -> [String: Any]
 }
 
 
