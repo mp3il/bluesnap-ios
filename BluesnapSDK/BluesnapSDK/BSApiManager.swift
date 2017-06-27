@@ -455,14 +455,13 @@ class BSApiManager {
 
 
     /**
-     Submit CC details to BlueSnap server
+     Submit Apple pay data to BlueSnap server
      - parameters:
-     - ccNumber: Credit card number
-     - expDate: CC expiration date in format MM/YYYY
-     - cvv: CC security code (CVV)
+     - data: The apple pay encoded data
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+    //TODO: this should not use BSResultCcDetails
+    static internal func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
 
         let requestBody = [
                 "applePayToken": data!
