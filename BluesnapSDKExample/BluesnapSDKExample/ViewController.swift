@@ -39,6 +39,7 @@ class ViewController: UIViewController {
         //BlueSnapSDK.KountInit();
         
         generateAndSetBsToken()
+        setApplePayIdentifier()
         listenForBsTokenExpiration()
 
         resultTextView.text = ""
@@ -176,11 +177,23 @@ class ViewController: UIViewController {
             }
         }
         let demo = DemoTreansactions()
-        let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
-            paymentRequest: paymentRequest,
-            bsToken: bsToken!)
-        logResultDetails(result)
-        if (result.success == true) {
+        var result: (success: Bool, data: String?) = (false, nil)
+
+
+        if paymentRequest.getResultPaymentDetails() is BSResultCcDetails {
+            result = demo.createCreditCardTransaction(
+                    paymentRequest: paymentRequest,
+                    bsToken: bsToken!)
+            logResultDetails(result)
+
+        } else if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
+
+            result = demo.createApplePayTransaction(paymentRequest: paymentRequest,
+                    bsToken: bsToken!)
+            logResultDetails(result)
+        }
+
+        if result.success == true {
             resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
         } else {
             let errorDesc = result.data ?? ""
@@ -234,7 +247,10 @@ class ViewController: UIViewController {
         }
         NSLog("Got BS token= \(bsToken!.getTokenStr())")
     }
-    
+
+    func setApplePayIdentifier() {
+        BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
+    }
     /**
      Add observer to the token expired event sent by BlueSnap SDK.
     */

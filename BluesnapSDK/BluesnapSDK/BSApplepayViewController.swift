@@ -13,7 +13,7 @@ import PassKit
 extension BSStartViewController : PaymentOperationDelegate {
 
 
-    func payPressed(_ sender: Any) {
+    func applePayPressed(_ sender: Any, completion: @escaping (Error?) -> Void) {
 
         let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: paymentRequest.getTaxAmount()), type: .final)
         let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: paymentRequest.getAmount()), type: .final)
@@ -22,7 +22,7 @@ extension BSStartViewController : PaymentOperationDelegate {
 
         let pkPaymentRequest = PKPaymentRequest()
         pkPaymentRequest.paymentSummaryItems = paymentSummaryItems;
-        pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.Merchant.identifier
+        pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.getIdentifier()
         pkPaymentRequest.merchantCapabilities = .capability3DS
         pkPaymentRequest.countryCode = "US"
         pkPaymentRequest.currencyCode = paymentRequest.getCurrency()
@@ -30,9 +30,9 @@ extension BSStartViewController : PaymentOperationDelegate {
         if self.withShipping {
             pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
         }
-        if self.fullBilling {
+        //if self.fullBilling {
             pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
-        }
+        //}
 
         pkPaymentRequest.supportedNetworks = [
                 .amex,
@@ -49,6 +49,7 @@ extension BSStartViewController : PaymentOperationDelegate {
 
         paymentOperation.completionBlock = {[weak op = paymentOperation] in
             NSLog("PK payment completion \(op?.error)")
+            completion(nil)
         };
 
         //Send the payment operation via queue
@@ -66,16 +67,15 @@ extension BSStartViewController : PaymentOperationDelegate {
     }
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void) {
-        NSLog("Send to server");
         let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
-
+        print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
         BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
             if let error = error {
                 completion(error)
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(nil) // Need to fix this completion to accept result
+            completion(nil) // no result from BS on 200
         }
         )
 

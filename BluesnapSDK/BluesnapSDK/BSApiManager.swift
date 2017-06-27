@@ -15,7 +15,7 @@ class BSApiManager {
     // MARK: Constants
 
     internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
-    internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
+    internal static let BS_SANDBOX_DOMAIN = "https://us-qa-fct02.bluesnap.com/"
     internal static let BS_SANDBOX_TEST_USER = "sdkuser"
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
@@ -380,6 +380,7 @@ class BSApiManager {
                             resultError = .unknown
                         }
                     } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                        NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
                         resultError = .invalidInput
                     } else {
                         resultError = .unknown
@@ -454,17 +455,16 @@ class BSApiManager {
 
 
     /**
-     Submit CC details to BlueSnap server
+     Submit Apple pay data to BlueSnap server
      - parameters:
-     - ccNumber: Credit card number
-     - expDate: CC expiration date in format MM/YYYY
-     - cvv: CC security code (CVV)
+     - data: The apple pay encoded data
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+    //TODO: this should not use BSResultCcDetails
+    static internal func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
 
         let requestBody = [
-                "applepayInfo": data!
+                "applePayToken": data!
         ]
         submitPaymentDetails(requestBody: requestBody, parseFunction: parseApplePayResponse, completion: { (result, error) in
             if let error = error {

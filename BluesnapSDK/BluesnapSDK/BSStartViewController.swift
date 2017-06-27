@@ -20,6 +20,8 @@ class BSStartViewController: UIViewController {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
+    fileprivate var activityIndicator: UIActivityIndicatorView?
+
 
     static let supportedNetworks: [PKPaymentNetwork] = [
             .amex,
@@ -63,7 +65,29 @@ class BSStartViewController: UIViewController {
             return;
         }
 
-        payPressed(sender)
+        if BSApplePayConfiguration.getIdentifier() == nil {
+            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Setup error")
+            NSLog("Missing merchant identifier for apple pay")
+            present(alert, animated: true, completion: nil)
+            return;
+        }
+
+
+        applePayPressed(sender, completion: { (error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "General error")
+                    self.present(alert, animated: true, completion: nil)
+                    return
+            } else {
+                    let result: BSResultPaymentDetails = BSResultApplePayDetails()
+                    self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+                    _ = self.navigationController?.popViewController(animated: false)
+                    // execute callback
+                    self.purchaseFunc(self.paymentRequest)
+                }
+            }
+        })
 
     }
     
