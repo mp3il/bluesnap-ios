@@ -269,7 +269,6 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     
     var shouldSetupConstraints = true
     var designMode = false
-    internal var errorField : UITextField?
     
     var actualFieldFontSize : CGFloat = 17
     var actualLeftMargin : CGFloat = 16
@@ -305,7 +304,11 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     */
     public func showError(_ errorText : String?) {
         
-        showError(field: self.textField, errorText: errorText)
+        if errorLabel == nil {
+            self.errorLabel = UILabel()
+            initErrorLabel(errorLabel: errorLabel)
+        }
+        showErrorByField(field: self.textField, errorLabel: errorLabel, errorText: errorText)
     }
     
     /*
@@ -313,19 +316,16 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     public func hideError() {
         
-        hideError(textField)
+        hideErrorByField(field: textField, errorLabel: errorLabel)
     }
     
     /*
      Shows the given text as an error below the given text field
      [For inheriting components that may have mnore than one text field, this specifies the field under which we display the error, as well as the error text.]
     */
-    public func showError(field: UITextField!, errorText : String?) {
+    public func showErrorByField(field: UITextField!, errorLabel: UILabel?, errorText: String?) {
         
-         self.errorField = field
         field.textColor = self.errorColor
-        
-        buildErrorLabel()
         if let errorLabel = errorLabel {
             if let errorText = errorText {
                 errorLabel.text = errorText
@@ -339,15 +339,15 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
      Hide the error below the given text field
      [For inheriting components that may have mnore than one text field, this specifies the field]
      */
-    public func hideError(_ field: UITextField?) {
+    public func hideErrorByField(field: UITextField?, errorLabel: UILabel?) {
         
-        if field == nil || errorField == field {
-            if let errorLabel = errorLabel {
-                errorLabel.isHidden = true
-                errorField?.textColor = self.textColor
-            }
+        if let errorLabel = errorLabel {
+            errorLabel.isHidden = true
         }
-    }    
+        if let field = field {
+            field.textColor = self.textColor
+        }
+    }
     
     public func dismissKeyboard() {
         
@@ -628,15 +628,12 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     }
     
     /**
-     Create the label for the error
+     Init the label for the error
      */
-    internal func buildErrorLabel() {
+    internal func initErrorLabel(errorLabel: UILabel!) {
         
-        if errorLabel == nil {
-            errorLabel = UILabel()
-            self.addSubview(errorLabel!)
-        }
         if let errorLabel = errorLabel {
+            self.addSubview(errorLabel)
             errorLabel.backgroundColor = UIColor.clear
             errorLabel.textColor = self.errorColor
             errorLabel.isHidden = true
@@ -663,7 +660,7 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
-        hideError(textField)
+        hideError()
         sendActions(for: UIControlEvents.editingDidBegin)
     }
     

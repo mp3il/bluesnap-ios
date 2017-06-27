@@ -113,14 +113,6 @@ class BSCcInputLine: BSBaseTextInput {
         }
     }
     /**
-     errorWidth (default = 150) determines the error width (value will change at runtime according to the device)
-     */
-    @IBInspectable var errorWidth: CGFloat = 150 {
-        didSet {
-            resizeElements()
-        }
-    }
-    /**
      nextBtnWidth (default = 20) determines the width of the next button, which shows in the open state when we already have a value in the CCN field (value will change at runtime according to the device)
      */
     @IBInspectable var nextBtnWidth: CGFloat = 22 {
@@ -211,9 +203,9 @@ class BSCcInputLine: BSBaseTextInput {
      reset sets the component to its initial state, where the fields are emnpty and we are in the "open" state
     */
     public func reset() {
-        hideError(textField)
-        hideError(expTextField)
-        hideError(cvvTextField)
+        hideError()
+        hideExpError()
+        hideCvvError()
         textField.text = ""
         expTextField.text = ""
         cvvTextField.text = ""
@@ -285,7 +277,7 @@ class BSCcInputLine: BSBaseTextInput {
      */
     public func validate() -> Bool {
         
-        let result = validateCCN() && validateExp() && validateCvv()
+        let result = validateCCN() && validateExp(ignoreIfEmpty: false) && validateCvv(ignoreIfEmpty: false)
         return result
     }
     
@@ -339,11 +331,11 @@ class BSCcInputLine: BSBaseTextInput {
             //Check for error
             if let error = error{
                 if (error == BSCcDetailErrors.invalidCcNumber) {
-                    self.showError(field: self.textField, errorText: BSValidator.ccnInvalidMessage)
+                    self.showError(BSValidator.ccnInvalidMessage)
                 } else if (error == BSCcDetailErrors.invalidExpDate) {
-                    self.showError(field: self.expTextField, errorText: BSValidator.expInvalidMessage)
+                    self.showExpError(BSValidator.expInvalidMessage)
                 } else if (error == BSCcDetailErrors.invalidCvv) {
-                    self.showError(field: self.cvvTextField, errorText: BSValidator.cvvInvalidMessage)
+                    self.showCvvError(BSValidator.cvvInvalidMessage)
                 } else if (error == BSCcDetailErrors.expiredToken) {
                     self.delegate?.showAlert("Your session has expired, please go back and try again")
                 } else {
@@ -380,8 +372,7 @@ class BSCcInputLine: BSBaseTextInput {
         actualLast4Width = (last4Width * ratios.hRatio).rounded()
         actualExpWidth = (expWidth * ratios.hRatio).rounded()
         actualCvvWidth = (cvvWidth * ratios.hRatio).rounded()
-        actualErrorWidth = (errorWidth * ratios.hRatio).rounded()
-        
+        actualErrorWidth = self.frame.width / 3         
         return ratios
     }
     
@@ -407,9 +398,6 @@ class BSCcInputLine: BSBaseTextInput {
         cvvTextField.textAlignment = .center
         
         setNumericKeyboard()
-        
-        buildErrorLabel()
-        errorLabel?.isHidden = true
         
         setButtonImage()
     }
@@ -516,50 +504,54 @@ class BSCcInputLine: BSBaseTextInput {
 
     override func resizeError() {
         
+        let labelFont = UIFont(name: self.fontName, size: actualErrorFontSize)
+        
         if let errorLabel = errorLabel {
-            if let labelFont : UIFont = UIFont(name: self.fontName, size: actualErrorFontSize) {
+            if labelFont != nil {
                 errorLabel.font = labelFont
             }
-            // position the label according the chosen field
-            
-            var x: CGFloat = actualLeftMargin
             errorLabel.textAlignment = .left
-            if let errorField = self.errorField {
-                x = errorField.frame.minX
-                errorLabel.textAlignment = .left
-                if errorField == self.expTextField || errorField == self.cvvTextField {
-                    // center error around the field
-                    let fieldCenter : CGFloat! = errorField.frame.minX + errorField.frame.width/2.0
-                    x = fieldCenter - actualErrorWidth/2.0
-                    errorLabel.textAlignment = .center
-                }
-            }
+            let x: CGFloat = actualLeftMargin
             errorLabel.frame = CGRect(x: x, y: self.frame.height-actualErrorHeight, width: actualErrorWidth, height: actualErrorHeight)
         }
-    }
-    
-    func resizeError(field: UITextField) {
-        if let errorLabel = errorLabel {
-            if let labelFont : UIFont = UIFont(name: self.fontName, size: actualErrorFontSize) {
-                errorLabel.font = labelFont
+        if let expErrorLabel = expErrorLabel {
+            if labelFont != nil {
+                expErrorLabel.font = labelFont
             }
-            errorLabel.frame = CGRect(x: field.frame.minX, y: self.frame.height-actualErrorHeight, width: actualErrorWidth, height: actualErrorHeight)
+            expErrorLabel.textAlignment = .center
+            let fieldCenter : CGFloat! = expTextField.frame.minX + expTextField.frame.width/2.0
+            let x = fieldCenter - actualErrorWidth/2.0
+            expErrorLabel.textAlignment = .center
+            expErrorLabel.frame = CGRect(x: x, y: self.frame.height-actualErrorHeight, width: actualErrorWidth, height: actualErrorHeight)
         }
+        if let cvvErrorLabel = cvvErrorLabel {
+            if labelFont != nil {
+                cvvErrorLabel.font = labelFont
+            }
+            cvvErrorLabel.textAlignment = .right
+            let x = self.frame.width - rightMargin - actualErrorWidth
+            cvvErrorLabel.textAlignment = .right
+            cvvErrorLabel.frame = CGRect(x: x, y: self.frame.height-actualErrorHeight, width: actualErrorWidth, height: actualErrorHeight)
+        }
+
     }
-    
+
     // MARK: TextFieldDelegate functions
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return true
     }
 
+    /**
+     This handler is called when one of the text fields is about to end editing; we perform validation,
+     ignoring empty values, but allow exiting the field even if there is an error.
+    */
     func textFieldShouldEndEditing(_ sender: UITextField) -> Bool {
         
         if closing {
             closing = false
             return true
         }
-        var ok : Bool = false
         if sender == self.textField {
             if ccnIsOpen {
                 ccn = self.textField.text!
@@ -569,15 +561,13 @@ class BSCcInputLine: BSBaseTextInput {
                     self.lastValidateCcn = self.ccn
                     self.checkCreditCard(ccn: ccn)
                 }
-            } else {
-                ok = true
             }
         } else if sender == self.expTextField {
-            ok = validateExp()
+            _ = validateExp(ignoreIfEmpty: true)
         } else if sender == self.cvvTextField {
-            ok = validateCvv()
+            _ = validateCvv(ignoreIfEmpty: true)
         }
-        return ok
+        return true
     }
     
     // MARK: Numeric Keyboard "done" button enhancement
@@ -591,6 +581,42 @@ class BSCcInputLine: BSBaseTextInput {
     }
     
 
+    // MARK: extra error handling
+    
+    /*
+     Shows the given text as an error below the exp text field
+     */
+    public func showExpError(_ errorText : String?) {
+        
+        if expErrorLabel == nil {
+            expErrorLabel = UILabel()
+            initErrorLabel(errorLabel: expErrorLabel)
+        }
+        showErrorByField(field: self.expTextField, errorLabel: expErrorLabel, errorText: errorText)
+    }
+    /*
+     Shows the given text as an error below the exp text field
+     */
+    public func showCvvError(_ errorText : String?) {
+        
+        if cvvErrorLabel == nil {
+            cvvErrorLabel = UILabel()
+            initErrorLabel(errorLabel: cvvErrorLabel)
+        }
+        showErrorByField(field: self.cvvTextField, errorLabel: cvvErrorLabel, errorText: errorText)
+    }
+
+    func hideExpError() {
+
+        hideErrorByField(field: expTextField, errorLabel: expErrorLabel)
+    }
+    
+    func hideCvvError() {
+        
+        hideErrorByField(field: cvvTextField, errorLabel: cvvErrorLabel)
+    }
+    
+    
     // MARK: focus on fields
     
     func focusOnCcnField() {
@@ -640,9 +666,7 @@ class BSCcInputLine: BSBaseTextInput {
     
     override func fieldCoverButtonTouchUpInside(_ sender: Any) {
         
-        if errorLabel?.isHidden == true {
-            openCcn()
-        }
+        openCcn()
     }
     
     override func textFieldDidBeginEditing(_ sender: UITextField) {
@@ -683,6 +707,8 @@ class BSCcInputLine: BSBaseTextInput {
         }, completion: { animate in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.focusOnExpField()
+                _ = self.validateExp(ignoreIfEmpty: true)
+                _ = self.validateCvv(ignoreIfEmpty: true)
             }
         })
     }
@@ -692,13 +718,19 @@ class BSCcInputLine: BSBaseTextInput {
         if cvvTextField.isFirstResponder {
             if !cvvTextField.canResignFirstResponder {
                 canOpen = false
+            } else {
+                cvvTextField.resignFirstResponder()
             }
         } else if expTextField.isFirstResponder {
             if !expTextField.canResignFirstResponder {
                 canOpen = false
+            } else {
+                expTextField.resignFirstResponder()
             }
         }
         if canOpen {
+            self.hideExpError()
+            self.hideCvvError()
             UIView.animate(withDuration: 0.4, animations: {
                 self.ccnIsOpen = true
                 self.resizeElements()
@@ -763,15 +795,21 @@ class BSCcInputLine: BSBaseTextInput {
         return result
     }
     
-    func validateExp() -> Bool {
+    func validateExp(ignoreIfEmpty : Bool) -> Bool {
         
-        let result = BSValidator.validateExp(input: self)
+        var result = true
+        if !ignoreIfEmpty || (expTextField.text?.characters.count)! > 0 {
+            result = BSValidator.validateExp(input: self)
+        }
         return result
     }
     
-    func validateCvv() -> Bool {
+    func validateCvv(ignoreIfEmpty : Bool) -> Bool {
         
-        let result = BSValidator.validateCvv(input: self)
+        var result = true
+        if !ignoreIfEmpty || (cvvTextField.text?.characters.count)! > 0 {
+            result = BSValidator.validateCvv(input: self)
+        }
         return result
     }
 

@@ -23,7 +23,7 @@
 		DEBB1FD893E6CC8FA16D5F60 /* BSApplepayPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */; };
 		FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */; };
 		FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */; };
-		FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */; };
+		FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */; };
 		FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */; };
 		FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */; };
 		FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */; };
@@ -77,7 +77,7 @@
 		DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPKContactExtention.swift; sourceTree = "<group>"; };
 		FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseTextInput.swift; sourceTree = "<group>"; };
 		FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcInputLine.swift; sourceTree = "<group>"; };
-		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController.swift; sourceTree = "<group>"; };
+		FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrenciesViewController.swift; sourceTree = "<group>"; };
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
 		FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSInputLine.swift; sourceTree = "<group>"; };
@@ -203,7 +203,7 @@
 				FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */,
 				FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
-				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
+				FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
 				FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */,
 				FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */,
@@ -365,7 +365,7 @@
 				FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */,
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
 				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
-				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */,
+				FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */,
 				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
 				FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */,
