@@ -30,9 +30,9 @@ extension BSStartViewController : PaymentOperationDelegate {
         if self.withShipping {
             pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
         }
-        if self.fullBilling {
+        //if self.fullBilling {
             pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
-        }
+        //}
 
         pkPaymentRequest.supportedNetworks = [
                 .amex,

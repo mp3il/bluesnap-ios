@@ -47,23 +47,43 @@ extension BSApplePayInfo: DictionaryConvertible
     public func toDictionary() -> [String: Any] {
         let desrilaziedToken = try! JSONSerialization.jsonObject(with: payment.token.paymentData, options: JSONSerialization.ReadingOptions())
 
+        let shippingContactDict = [
+                //"addressLines": shippingContact?.postalAddress?.description,
+                //"country": shippingContact?.postalAddress?.country,
+                //"countryCode": shippingContact?.postalAddress?.isoCountryCode,
+                "familyName": shippingContact?.name?.familyName,
+                "givenName": shippingContact?.name?.givenName,
+                //"locality": shippingContact?.postalAddress?.street,
+                //"emailAddress": shippingContact?.emailAddress,
+                //"phoneNumber": shippingContact?.phoneNumber?.stringValue,
+                //"postalCode": shippingContact?.postalAddress?.postalCode,
+        ] as [String: Any]!
+
+        var billingAddresLines = [String]()
+        billingAddresLines.append("")
+        if (billingContact?.postalAddress?.street != nil) {
+            billingAddresLines.append(billingContact!.postalAddress!.street)
+        }
+
+        var locality: String? = nil
+        if #available(iOS 10.3, *) {
+            locality = billingContact?.postalAddress?.subLocality
+        }
+        let billingContactDict = [
+                //"emailAddress": billingContact?.emailAddress,
+                //"phoneNumber": billingContact?.phoneNumber?.stringValue,
+                "addressLines": billingAddresLines,
+                "country": billingContact?.postalAddress?.country,
+                "countryCode": billingContact?.postalAddress?.isoCountryCode,
+                "familyName": billingContact?.name?.familyName,
+                "givenName": billingContact?.name?.givenName,
+                "locality": locality,
+                "postalCode": billingContact?.postalAddress?.postalCode,
+        ] as [String: Any]!
+
         let ordered = [
-                "billingContact": [
-                        "emailAddress": payment.billingContact?.emailAddress,
-                        "phoneNumber": payment.billingContact?.phoneNumber?.stringValue,
-                        "addressLines": payment.billingContact?.postalAddress?.description,
-                        "administrativeArea": "NY",
-                        "country": "United States",
-                        "countryCode": "US",
-                        "familyName": "cohen",
-                        "givenName": "Zohar",
-                        "locality": "City test",
-                        "postalCode": "12345"
-                ],
-                "shippingContact": [
-                        "emailAddress": payment.shippingContact?.emailAddress,
-                        "phoneNumber": payment.shippingContact?.phoneNumber?.stringValue,
-                ],
+                "billingContact": billingContactDict!,
+                "shippingContact": shippingContactDict!,
                 "token": [
                         "transactionIdentifier": token.transactionIdentifier,
                         "paymentData": desrilaziedToken,
