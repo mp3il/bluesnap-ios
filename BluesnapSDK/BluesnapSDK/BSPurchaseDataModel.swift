@@ -132,7 +132,7 @@ public enum BSPaymentType {
  */
 public class BSResultPaymentDetails {
     
-    var paymentType : BSPaymentType!
+    public var paymentType : BSPaymentType!
 }
 
 /**
@@ -146,8 +146,8 @@ public class BSResultCcDetails : BSResultPaymentDetails {
     }
     
     // these fields are output - result of submitting the CC details to BlueSnap server
-    var ccType : String?
-    var last4Digits : String?
-    var ccIssuingCountry : String?
+    public var ccType : String?
+    public var last4Digits : String?
+    public var ccIssuingCountry : String?
 }
 

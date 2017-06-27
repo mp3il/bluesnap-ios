@@ -166,6 +166,15 @@ class ViewController: UIViewController {
     */
     private func completePurchase(paymentRequest: BSPaymentRequest!) {
         
+        if let resultPaymentDetails = paymentRequest.getResultPaymentDetails() {
+            if resultPaymentDetails.paymentType == BSPaymentType.CreditCard {
+                if let ccDetails = resultPaymentDetails as? BSResultCcDetails {
+                    print("CC Issuing country: \(ccDetails.ccIssuingCountry)")
+                    print("CC type: \(ccDetails.ccType)")
+                    print("CC last 4 digits: \(ccDetails.last4Digits)")
+                }
+            }
+        }
         let demo = DemoTreansactions()
         let result : (success:Bool, data: String?) = demo.createCreditCardTransaction(
             paymentRequest: paymentRequest,
