@@ -279,6 +279,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
+    private func isShippingSameAsBilling() -> Bool {
+        return !shippingSameAsBillingView.isHidden && self.shippingSameAsBillingSwitch.isOn
+    }
+    
     private func hideShowFields() {
         
         if self.ccInputLine.ccnIsOpen {
@@ -344,7 +348,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
 
     private func updatePayButtonText() {
         
-        if (self.withShipping && !self.shippingSameAsBillingSwitch.isOn) {
+        if (self.withShipping && !isShippingSameAsBilling()) {
             payButton.setTitle("Shipping >", for: UIControlState())
         } else {
             payButton.setTitle(payButtonText, for: UIControlState())
@@ -435,7 +439,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         if (validateForm()) {
             
-            if (withShipping && (!shippingSameAsBillingSwitch.isOn || shippingSameAsBillingSwitch.isHidden)) {
+            if (withShipping && !isShippingSameAsBilling()) {
                 gotoShippingScreen()
             } else {
                 submitPaymentFields()
@@ -467,7 +471,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             result = result && ok
         }
         
-        if result && shippingSameAsBillingSwitch.isOn && !shippingSameAsBillingSwitch.isHidden {
+        if result && isShippingSameAsBilling() {
             // copy billing details to shipping
             if let shippingDetails = self.paymentRequest.getShippingDetails(), let billingDetails = self.paymentRequest.getBillingDetails() {
                 shippingDetails.address = billingDetails.address
