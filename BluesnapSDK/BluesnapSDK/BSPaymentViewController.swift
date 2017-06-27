@@ -397,7 +397,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             self.zipInputLine.fieldKeyboardType = .numbersAndPunctuation
         }
         self.zipInputLine.isHidden = hideZip
-        self.zipInputLine.hideError(nil)
+        self.zipInputLine.hideError()
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {

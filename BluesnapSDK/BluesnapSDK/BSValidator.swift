@@ -15,9 +15,9 @@ public class BSValidator {
     
     static let ccnInvalidMessage = "Invalid card number"
     static let cvvInvalidMessage = "Invalid CVV"
-    static let expMonthInvalidMessage = "Invalid expiration month"
-    static let expPastInvalidMessage = "Expiration date is in the past"
-    static let expInvalidMessage = "Invalid expiration date"
+    static let expMonthInvalidMessage = "Invalid month"
+    static let expPastInvalidMessage = "Date is in the past"
+    static let expInvalidMessage = "Invalid date"
     static let nameInvalidMessage = "Enter a first and last name"
     static let emailInvalidMessage = "Invalid email"
     static let streetInvalidMessage = "Invalid street"
@@ -45,7 +45,7 @@ public class BSValidator {
             result = false
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(nameInvalidMessage)
         }
@@ -67,7 +67,7 @@ public class BSValidator {
             result = true
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(emailInvalidMessage)
         }
@@ -89,7 +89,7 @@ public class BSValidator {
             result = true
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(streetInvalidMessage)
         }
@@ -112,7 +112,7 @@ public class BSValidator {
             result = true
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(cityInvalidMessage)
         }
@@ -131,7 +131,7 @@ public class BSValidator {
             result = true
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(countryInvalidMessage)
         }
@@ -154,7 +154,7 @@ public class BSValidator {
             result = true
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(zipInvalidMessage)
         }
@@ -173,7 +173,7 @@ public class BSValidator {
             result = true
         }
         if result {
-            input.hideError(nil)
+            input.hideError()
         } else {
             input.showError(stateInvalidMessage)
         }
@@ -217,9 +217,9 @@ public class BSValidator {
         }
 
         if (ok) {
-            input.hideError(input.expTextField)
+            input.hideExpError()
         } else {
-            input.showError(field: input.expTextField, errorText: msg)
+            input.showExpError(msg)
         }
         return ok
     }
@@ -232,9 +232,9 @@ public class BSValidator {
             result = false
         }
         if result {
-            input.hideError(input.cvvTextField)
+            input.hideCvvError()
         } else {
-            input.showError(field: input.cvvTextField, errorText: cvvInvalidMessage)
+            input.showCvvError(cvvInvalidMessage)
         }
         return result
     }
@@ -247,9 +247,9 @@ public class BSValidator {
             result = false
         }
         if result {
-            input.hideError(input.textField)
+            input.hideError()
         } else {
-            input.showError(field: input.textField, errorText: ccnInvalidMessage)
+            input.showError(ccnInvalidMessage)
         }
         return result
     }
@@ -343,7 +343,7 @@ public class BSValidator {
             addressDetails.state = nil
         }
         stateInputLine.isHidden = hideState
-        stateInputLine.hideError(nil)
+        stateInputLine.hideError()
     }
 
     // MARK: Basic validation functions

@@ -336,7 +336,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             zipInputLine.fieldKeyboardType = .numbersAndPunctuation
         }
         zipInputLine.isHidden = hideZip
-        zipInputLine.hideError(nil)
+        zipInputLine.hideError()
     }
     
     private func updateState() {
