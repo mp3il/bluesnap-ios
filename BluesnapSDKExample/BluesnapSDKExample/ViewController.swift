@@ -179,7 +179,7 @@ class ViewController: UIViewController {
 
         } else if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
 
-            result = demo.createApplePayTransaction(
+            result = demo.createApplePayTransaction(paymentRequest: paymentRequest,
                     bsToken: bsToken!)
             logResultDetails(result)
         }

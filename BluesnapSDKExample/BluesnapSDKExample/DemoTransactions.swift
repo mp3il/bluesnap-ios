@@ -23,8 +23,8 @@ class DemoTreansactions {
     static let BS_QA_DOMAIN: String = "https://us-qa-fct02.bluesnap.com/"
 
 
-    func createApplePayTransaction(
-            bsToken: BSToken!) -> (success: Bool, data: String?) {
+    func createApplePayTransaction(paymentRequest: BSPaymentRequest!,
+                                   bsToken: BSToken!) -> (success: Bool, data: String?) {
 
         // let name = paymentRequest.getBillingDetails().getSplitName()!
         //"card-transaction" : [
@@ -32,6 +32,8 @@ class DemoTreansactions {
                 "recurringTransaction": "ECOMMERCE",
                 "softDescriptor": "MobileSDKtest",
                 "cardTransactionType": "AUTH_CAPTURE",
+                "amount": "\(paymentRequest.getAmount()!)",
+                "currency": "\(paymentRequest.getCurrency()!)",
                 "pfToken": "\(bsToken.getTokenStr()!)"
         ] as [String: Any]
         // ]
