@@ -105,7 +105,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var image: UIImage? {
         didSet {
-            imageButton.imageView?.image = image
+            self.imageButton.setImage(image, for: .normal)
         }
     }
     
