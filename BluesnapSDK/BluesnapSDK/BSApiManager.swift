@@ -93,7 +93,8 @@ class BSApiManager  {
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data : Data?, response, error) in
             if let error = error {
-                NSLog("Error getting BS currencies: \(error.localizedDescription)")
+                let errorType = type(of: error)
+                NSLog("error getting BS currencies - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
                 resultError = .unknown
             } else {
                 let httpResponse = response as? HTTPURLResponse
@@ -207,7 +208,8 @@ class BSApiManager  {
             
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
                 if let error = error {
-                    NSLog("error: \(error)")
+                    let errorType = type(of: error)
+                    NSLog("error submitting BS Payment details - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
                     completion(nil, .unknown)
                     return
                 }
@@ -360,7 +362,8 @@ class BSApiManager  {
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             if let error = error {
-                NSLog("error getting BSToken: \(error.localizedDescription)")
+                let errorType = type(of: error)
+                NSLog("error getting BSToken - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
                 resultError = .unknown
             } else {
                 let httpResponse = response as? HTTPURLResponse

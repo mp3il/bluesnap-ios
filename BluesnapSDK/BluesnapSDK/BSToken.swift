@@ -6,6 +6,8 @@ import Foundation
 
 /**
  This class holds the basic data for a BlueShap token: the server URL and the token we got from it.
+ The token is the String you get from BlueSnap API when generating a new token (/services/2/payment-fields-tokens).
+ The serverURL should look liker this: https://api.bluesnap.com/ meaning: it should include the https, the domain, and end with a /
  */
 public class BSToken {
     internal var tokenStr: String! = ""
