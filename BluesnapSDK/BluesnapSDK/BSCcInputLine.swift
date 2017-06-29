@@ -209,6 +209,7 @@ public class BSCcInputLine: BSBaseTextInput {
         textField.text = ""
         expTextField.text = ""
         cvvTextField.text = ""
+        updateCcIcon(ccType: "")
         ccn = ""
         openCcn()
     }
