@@ -11,7 +11,7 @@ import UIKit
 /**
  This protocol should be implemented by the view which owns the BSCcInputLine control; Although the component's functionality is sort-of self-sufficient, we still have some calls to the parent
  */
-protocol BSCcInputLineDelegate : class {
+public protocol BSCcInputLineDelegate : class {
     /**
      startEditCreditCard is called when we switch to the "open" state of the component
     */
@@ -48,7 +48,7 @@ protocol BSCcInputLineDelegate : class {
  * Closed: after CCN is entered and validated, the field gets shorter and displays only the last 4 digits; EXP and CVV fields are shown and ediatble; "next" button is hidden.
 */
 @IBDesignable
-class BSCcInputLine: BSBaseTextInput {
+public class BSCcInputLine: BSBaseTextInput {
 
     // MARK: Configurable properties
     
@@ -209,6 +209,7 @@ class BSCcInputLine: BSBaseTextInput {
         textField.text = ""
         expTextField.text = ""
         cvvTextField.text = ""
+        updateCcIcon(ccType: "")
         ccn = ""
         openCcn()
     }
@@ -240,7 +241,7 @@ class BSCcInputLine: BSBaseTextInput {
     /**
      Returns the CCN value
     */
-    override func getValue() -> String! {
+    override public func getValue() -> String! {
         if self.ccnIsOpen {
             return self.textField.text
         } else {
@@ -251,7 +252,7 @@ class BSCcInputLine: BSBaseTextInput {
     /**
      Sets the CCN value
      */
-    override func setValue(_ newValue: String!) {
+    override public func setValue(_ newValue: String!) {
         ccn = newValue
         if self.ccnIsOpen {
             self.textField.text = ccn
@@ -348,7 +349,7 @@ class BSCcInputLine: BSBaseTextInput {
         })
     }
 
-    override func dismissKeyboard() {
+    override public func dismissKeyboard() {
         
         if self.textField.isFirstResponder {
             self.textField.resignFirstResponder()
@@ -669,11 +670,11 @@ class BSCcInputLine: BSBaseTextInput {
         openCcn()
     }
     
-    override func textFieldDidBeginEditing(_ sender: UITextField) {
+    override public func textFieldDidBeginEditing(_ sender: UITextField) {
         //hideError(textField)
     }
     
-    override func textFieldDidEndEditing(_ sender: UITextField) {
+    override public func textFieldDidEndEditing(_ sender: UITextField) {
         delegate?.endEditCreditCard()
     }
     

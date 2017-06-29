@@ -356,8 +356,8 @@ public class BSValidator {
     }
     
     open class func isValidEmail(_ str: String) -> Bool {
-        let regex = try? NSRegularExpression(pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", options: .caseInsensitive)
-        return regex?.firstMatch(in: str, options: [], range: NSMakeRange(0, str.characters.count)) != nil
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: str)
     }
     
     open class func isValidCCN(_ str: String) -> Bool {

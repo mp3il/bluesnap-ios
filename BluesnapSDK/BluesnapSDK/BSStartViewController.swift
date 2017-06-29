@@ -11,7 +11,7 @@ import PassKit
 
 class BSStartViewController: UIViewController {
 
-    // MARK: - Public properties
+    // MARK: - internal properties
     
     internal var paymentRequest : BSPaymentRequest!
     internal var fullBilling = false
@@ -20,9 +20,6 @@ class BSStartViewController: UIViewController {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
-    fileprivate var activityIndicator: UIActivityIndicatorView?
-
-
     static let supportedNetworks: [PKPaymentNetwork] = [
             .amex,
             .discover,
@@ -32,15 +29,10 @@ class BSStartViewController: UIViewController {
     
     var paymentSummaryItems:[PKPaymentSummaryItem] = [];
     
-    class func applePaySupported() -> (canMakePayments: Bool, canSetupCards: Bool) {
-        if #available(iOS 10, *) {
-            
-        return (PKPaymentAuthorizationController.canMakePayments(),
-                PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
-        } else {
-            return (canMakePayments: false, canSetupCards: false)
-        }
-    }
+    // MARK: Outlets
+
+    @IBOutlet weak var centeredView: UIView!
+    @IBOutlet weak var ccnButton: UIButton!
 
     // MARK: UIViewController functions
 
@@ -102,13 +94,24 @@ class BSStartViewController: UIViewController {
     
     private func animateToPaymentScreen(completion: ((Bool) -> Void)!) {
         
-        let transition = CATransition()
-        transition.duration = 0.25
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromTop
-        self.view.window!.layer.add(transition, forKey: kCATransition)
-        
-        completion(false)
+        let moveUpBy = self.centeredView.frame.minY + self.ccnButton.frame.minY - 48
+        UIView.animate(withDuration: 0.3, animations: {
+            self.centeredView.center.y = self.centeredView.center.y - moveUpBy
+        }, completion: { animate in
+            completion(false)
+            self.centeredView.center.y = self.centeredView.center.y + moveUpBy
+        })
     }
+
+    class func applePaySupported() -> (canMakePayments: Bool, canSetupCards: Bool) {
+        if #available(iOS 10, *) {
+
+            return (PKPaymentAuthorizationController.canMakePayments(),
+                    PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
+        } else {
+            return (canMakePayments: false, canSetupCards: false)
+        }
+    }
+
 
 }
