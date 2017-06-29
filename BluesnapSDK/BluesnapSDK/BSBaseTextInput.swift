@@ -12,7 +12,7 @@
 import UIKit
 
 @IBDesignable
-class BSBaseTextInput: UIControl, UITextFieldDelegate {
+public class BSBaseTextInput: UIControl, UITextFieldDelegate {
 
     // MARK: Configurable properties
     
@@ -219,7 +219,7 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
      backgroundColor (default = white) determines the background color for the inside of the component
      */
     private var customBackgroundColor = UIColor.white
-    @IBInspectable override var backgroundColor: UIColor? {
+    @IBInspectable override public var backgroundColor: UIColor? {
         didSet {
             customBackgroundColor = backgroundColor!
             super.backgroundColor = UIColor.clear
@@ -358,7 +358,7 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     
     // MARK: TextFieldDelegate functions
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
@@ -375,7 +375,7 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     }
     
     // called at runtime to init the component
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
         designMode = false
@@ -388,21 +388,21 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
         )
     }
 
-    override func draw(_ rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         
         _ = initRatios()
         resizeElements()
         drawBoundsAndShadow()
     }
     
-    override func prepareForInterfaceBuilder() {
+    override public func prepareForInterfaceBuilder() {
         
         super.prepareForInterfaceBuilder()
         setElementAttributes()
         resizeElements()
     }
     
-    override func updateConstraints() {
+    override public func updateConstraints() {
         
         if (shouldSetupConstraints) {
             // AutoLayout constraints
@@ -658,13 +658,13 @@ class BSBaseTextInput: UIControl, UITextFieldDelegate {
     
     // MARK:- ---> Action methods
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
         
         hideError()
         sendActions(for: UIControlEvents.editingDidBegin)
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
         
         sendActions(for: UIControlEvents.editingDidEnd)
     }

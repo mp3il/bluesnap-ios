@@ -12,7 +12,7 @@
 import UIKit
 
 @IBDesignable
-class BSInputLine: BSBaseTextInput {
+public class BSInputLine: BSBaseTextInput {
 
     // MARK: Additional Configurable properties
 
