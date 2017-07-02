@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -360,8 +360,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="Py8-S0-Quf"/>
                     <connections>
+                        <outlet property="applePayButton" destination="y0h-By-eMw" id="mc0-kk-JjP"/>
                         <outlet property="ccnButton" destination="M1a-n9-LUQ" id="bfm-K8-KKo"/>
                         <outlet property="centeredView" destination="FkL-LM-R7b" id="Wre-WY-Jla"/>
+                        <outlet property="orLabel" destination="Xk8-02-9HE" id="LWy-9d-G0w"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>

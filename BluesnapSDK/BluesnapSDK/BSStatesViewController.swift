@@ -81,8 +81,6 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    
-    
     // MARK: UITableViewDataSource & UITableViewDelegate functions
     
     // Create a cell

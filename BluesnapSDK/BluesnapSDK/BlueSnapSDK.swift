@@ -5,9 +5,19 @@
 //
 
 import Foundation
+import PassKit
 
 @objc open class BlueSnapSDK: NSObject {
 	
+    // MARK: Supported networks for ApplePay
+    
+    static let applePaySupportedNetworks: [PKPaymentNetwork] = [
+        .amex,
+        .discover,
+        .masterCard,
+        .visa
+    ]
+
     // MARK: SDK functions
     
     /**
@@ -118,6 +128,19 @@ import Foundation
         KDataCollector.shared().environment = KEnvironment.test
     }
     
+    /**
+    Check if ApplePay is available
+    */
+    open class func applePaySupported(supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
+        
+        if #available(iOS 10, *) {
+            return (PKPaymentAuthorizationController.canMakePayments(),
+                    PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
+        } else {
+            return (canMakePayments: false, canSetupCards: false)
+        }
+    }
+
     
     // MARK: Utility functions for quick testing
     

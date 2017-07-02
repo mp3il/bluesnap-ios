@@ -20,12 +20,6 @@ class BSStartViewController: UIViewController {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
-    static let supportedNetworks: [PKPaymentNetwork] = [
-            .amex,
-            .discover,
-            .masterCard,
-            .visa
-    ]
     
     var paymentSummaryItems:[PKPaymentSummaryItem] = [];
     
@@ -33,25 +27,48 @@ class BSStartViewController: UIViewController {
 
     @IBOutlet weak var centeredView: UIView!
     @IBOutlet weak var ccnButton: UIButton!
-
+    @IBOutlet weak var orLabel: UILabel!
+    @IBOutlet weak var applePayButton: UIButton!
+    
+    // MARK: private variables
+    
+    fileprivate var ccnButtonCenter : CGPoint!;
+    
+    
     // MARK: UIViewController functions
-
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
+        ccnButtonCenter = ccnButton.center
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if !showApplePayButton() {
+            orLabel.isHidden = false
+            applePayButton.isHidden = false
+            ccnButton.center = ccnButtonCenter
+        } else {
+            orLabel.isHidden = true
+            applePayButton.isHidden = true
+            ccnButton.center.y = centeredView.center.y
+        }
+    }
+
     // MARK: button functions
     
     @IBAction func applePayClick(_ sender: Any) {
-        if (!BSStartViewController.applePaySupported().canMakePayments) {
+        
+        let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
+        
+        if (!applePaySupported.canMakePayments) {
             let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not available on this device")
             present(alert, animated: true, completion: nil)
             return;
         }
 
-        if (!BSStartViewController.applePaySupported().canSetupCards) {
+        if (!applePaySupported.canSetupCards) {
             let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "No cards set")
             present(alert, animated: true, completion: nil)
             return;
@@ -67,7 +84,7 @@ class BSStartViewController: UIViewController {
 
         applePayPressed(sender, completion: { (error) in
             DispatchQueue.main.async {
-                if let error = error {
+                if error != nil {
                     let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "General error")
                     self.present(alert, animated: true, completion: nil)
                     return
@@ -103,15 +120,9 @@ class BSStartViewController: UIViewController {
         })
     }
 
-    class func applePaySupported() -> (canMakePayments: Bool, canSetupCards: Bool) {
-        if #available(iOS 10, *) {
+    private func showApplePayButton() -> Bool {
 
-            return (PKPaymentAuthorizationController.canMakePayments(),
-                    PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
-        } else {
-            return (canMakePayments: false, canSetupCards: false)
-        }
+        let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
+        return applePaySupported.canMakePayments
     }
-
-
 }
