@@ -38,7 +38,7 @@ class BSStartViewController: UIViewController {
         
         // Hide/show the applepay 
         let tmpY = self.view.center.y
-        if !showApplePayButton() {
+        if showApplePayButton() {
             orLabel.isHidden = false
             applePayButton.isHidden = false
             centeredView.center.y = tmpY
