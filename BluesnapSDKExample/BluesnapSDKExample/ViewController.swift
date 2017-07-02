@@ -170,9 +170,9 @@ class ViewController: UIViewController {
         if let resultPaymentDetails = paymentRequest.getResultPaymentDetails() {
             if resultPaymentDetails.paymentType == BSPaymentType.CreditCard {
                 if let ccDetails = resultPaymentDetails as? BSResultCcDetails {
-                    print("CC Issuing country: \(ccDetails.ccIssuingCountry)")
-                    print("CC type: \(ccDetails.ccType)")
-                    print("CC last 4 digits: \(ccDetails.last4Digits)")
+                    print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
+                    print("CC type: \(ccDetails.ccType ?? "")")
+                    print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
                 }
             }
         }

@@ -18,7 +18,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     // this ids just a default
     internal var updateFunc : (BSCurrency?, BSCurrency?)->Void = {
         oldCurrency, newCurrency in
-        NSLog("Currency \(newCurrency?.getCode()) was selected")
+        NSLog("Currency \(newCurrency?.getCode() ?? "None") was selected")
     }
     
     

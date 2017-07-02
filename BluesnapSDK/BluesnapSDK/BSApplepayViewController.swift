@@ -48,7 +48,7 @@ extension BSStartViewController : PaymentOperationDelegate {
         paymentOperation.delegate = self;
 
         paymentOperation.completionBlock = {[weak op = paymentOperation] in
-            NSLog("PK payment completion \(op?.error)")
+            NSLog("PK payment completion \(op?.error.debugDescription ?? "No op")")
             completion(nil)
         };
 

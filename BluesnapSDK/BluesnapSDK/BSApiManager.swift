@@ -112,7 +112,7 @@ class BSApiManager {
                     resultError = .unknown
                     if let data = data {
                         let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                        NSLog("Http error 400 getting BS currencies; error = \(errStr)")
+                        NSLog("Http error 400 getting BS currencies; error = \(errStr ?? "")")
                         if (errStr == "\"EXPIRED_TOKEN\"") {
                             resultError = .expiredToken
                             notifyTokenExpired()
@@ -426,6 +426,9 @@ class BSApiManager {
         }
     }
 
+    // TODO: create value for result, 
+    // change BSCcDetailErrors to BSApiErrors(BSApplePayErrors), 
+    // change BSResultCcDetails to BSResultPaymentDetails (BSResultApplePayDetails)
     private static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> (BSResultCcDetails?, BSCcDetailErrors?) {
         var result: BSResultCcDetails?
         var resultError: BSCcDetailErrors?

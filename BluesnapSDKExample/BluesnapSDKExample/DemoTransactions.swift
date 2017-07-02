@@ -67,7 +67,7 @@ class DemoTreansactions {
 
                     if let data = data {
                         result.data = String(data: data, encoding: .utf8)
-                        NSLog("Response body = \(result.data)")
+                        NSLog("Response body = \(result.data ?? "Empty")")
                     }
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         result.success = true
@@ -136,7 +136,7 @@ class DemoTreansactions {
                     
                     if let data = data {
                         result.data = String(data: data, encoding: .utf8)
-                        NSLog("Response body = \(result.data)")
+                        NSLog("Response body = \(result.data ?? "")")
                     }
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         result.success = true
@@ -197,7 +197,7 @@ class DemoTreansactions {
                     
                     if let data = data {
                         result.data = String(data: data, encoding: .utf8)
-                        NSLog("Response body = \(result.data)")
+                        NSLog("Response body = \(result.data ?? "Empty")")
                     }
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         result.success = true
