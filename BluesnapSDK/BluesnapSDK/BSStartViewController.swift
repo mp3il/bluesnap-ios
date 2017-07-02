@@ -30,29 +30,22 @@ class BSStartViewController: UIViewController {
     @IBOutlet weak var orLabel: UILabel!
     @IBOutlet weak var applePayButton: UIButton!
     
-    // MARK: private variables
-    
-    fileprivate var ccnButtonCenter : CGPoint!;
-    
-    
     // MARK: UIViewController functions
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
-        ccnButtonCenter = ccnButton.center
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
         
+        // Hide/show the applepay 
+        let tmpY = self.view.center.y
         if !showApplePayButton() {
             orLabel.isHidden = false
             applePayButton.isHidden = false
-            ccnButton.center = ccnButtonCenter
+            centeredView.center.y = tmpY
         } else {
             orLabel.isHidden = true
             applePayButton.isHidden = true
-            ccnButton.center.y = centeredView.center.y
+            centeredView.center.y = tmpY - (ccnButton.center.y - centeredView.frame.height/2)
         }
     }
 
