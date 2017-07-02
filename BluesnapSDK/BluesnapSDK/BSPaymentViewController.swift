@@ -150,7 +150,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         startActivityIndicator()
     }
     
-    func didCheckCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?) {
+    func didCheckCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
      
         self.stopActivityIndicator()
 
@@ -161,7 +161,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?) {
+    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
 
         self.stopActivityIndicator()
         

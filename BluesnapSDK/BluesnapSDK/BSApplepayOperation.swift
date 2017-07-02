@@ -90,7 +90,7 @@ public enum PaymentValidationResult {
 public protocol PaymentOperationDelegate: class {
     func validate(payment: PKPayment, completion: @escaping(PaymentValidationResult) -> Void)
 
-    func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void)
+    func send(paymentInformation: BSApplePayInfo, completion: @escaping (BSErrors?) -> Void)
 
     func didSelectPaymentMethod(method: PKPaymentMethod, completion: @escaping ([PKPaymentSummaryItem]) -> Void)
 
@@ -152,7 +152,7 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
             if case .success = self.status {
                 self.finish();
             } else {
-                self.finish(with: BSCcDetailErrors.unknown);
+                self.finish(with: BSErrors.unknown);
             }
         };
     }
@@ -163,13 +163,13 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
 
     override public func execute() {
         if !PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: self.request.supportedNetworks) {
-            self.finish(with: BSApplePayErrors.cantMakePaymentError);
+            self.finish(with: BSErrors.cantMakePaymentError);
         }
         self.requestController = PKPaymentAuthorizationViewController(paymentRequest: self.request);
         self.requestController.delegate = self;
         DispatchQueue.main.async {
             UIApplication.shared.keyWindow?.rootViewController?.present(self.requestController, animated: true, completion: nil) ?? {
-                self.finish(with: BSApplePayErrors.unknown);
+                self.finish(with: BSErrors.unknown);
             }()
         }
 

@@ -90,7 +90,7 @@ class BSApiManager {
 
         // fire request
 
-        var resultError: BSApiErrors?
+        var resultError: BSErrors?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response, error) in
             if let error = error {
@@ -145,7 +145,7 @@ class BSApiManager {
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSResultCcDetails?, BSErrors?) -> Void) {
 
         let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber), "cvv": cvv, "expDate": expDate]
         submitPaymentDetails(requestBody: requestBody, parseFunction: parseCCResponse, completion: { (result, error) in
@@ -154,7 +154,7 @@ class BSApiManager {
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(result, nil)
+            completion(result as? BSResultCcDetails, nil)
         })
     }
 
@@ -164,7 +164,7 @@ class BSApiManager {
      - ccNumber: Credit card number
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitCcn(ccNumber: String, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+    static func submitCcn(ccNumber: String, completion: @escaping (BSResultCcDetails?, BSErrors?) -> Void) {
 
         let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber)]
 
@@ -174,14 +174,14 @@ class BSApiManager {
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(result, nil)
+            completion(result as? BSResultCcDetails, nil)
         })
     }
 
 
     // MARK: Private functions
 
-    private static func submitPaymentDetails(requestBody: [String: String], parseFunction: @escaping (Int, Data?) -> (BSResultCcDetails?, BSCcDetailErrors?), completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+    private static func submitPaymentDetails(requestBody: [String: String], parseFunction: @escaping (Int, Data?) -> (BSResultPaymentDetails?, BSErrors?), completion: @escaping (BSResultPaymentDetails?, BSErrors?) -> Void) {
 
         DispatchQueue.global().async {
 
@@ -202,8 +202,8 @@ class BSApiManager {
 
             // fire request
 
-            var result: BSResultCcDetails?
-            var resultError: BSCcDetailErrors?
+            var result: BSResultPaymentDetails?
+            var resultError: BSErrors?
             //self.simulateTokenExpired = !self.simulateTokenExpired
             
 
@@ -231,9 +231,9 @@ class BSApiManager {
         }
     }
 
-    private static func parseCCResponse(httpStatusCode: Int, data: Data?) -> (BSResultCcDetails?, BSCcDetailErrors?) {
+    private static func parseCCResponse(httpStatusCode: Int, data: Data?) -> (BSResultCcDetails?, BSErrors?) {
         var result: BSResultCcDetails?
-        var resultError: BSCcDetailErrors?
+        var resultError: BSErrors?
 
         if (httpStatusCode >= 200 && httpStatusCode <= 299 && !self.simulateTokenExpired) {
             result = parseResultCCDetailsFromResponse(data: data)
@@ -367,7 +367,7 @@ class BSApiManager {
         // fire request
 
         var result: BSToken?
-        var resultError: BSApiErrors?
+        var resultError: BSErrors?
         let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             if let error = error {
@@ -426,15 +426,16 @@ class BSApiManager {
         }
     }
 
-    // TODO: create value for result, 
-    // change BSCcDetailErrors to BSApiErrors(BSApplePayErrors), 
-    // change BSResultCcDetails to BSResultPaymentDetails (BSResultApplePayDetails)
-    private static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> (BSResultCcDetails?, BSCcDetailErrors?) {
-        var result: BSResultCcDetails?
-        var resultError: BSCcDetailErrors?
+    private static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> (BSResultApplePayDetails?, BSErrors?) {
+        var result: BSResultApplePayDetails?
+        var resultError: BSErrors?
 
         if (httpStatusCode >= 200 && httpStatusCode <= 299 && !self.simulateTokenExpired) {
             NSLog("ApplePay data submitted successfully ")
+            result = BSResultApplePayDetails()
+            // TODO: fill result
+            
+        
         } else if (httpStatusCode == 400 || self.simulateTokenExpired) {
             resultError = .unknown
             if let data = data {
@@ -449,7 +450,6 @@ class BSApiManager {
                 } else if (errStr == "\"TOKEN_NOT_FOUND\"") {
                     resultError = .expiredToken //TODO: merge
                 }
-
             }
         } else {
             NSLog("Http error submitting ApplePay details to BS; HTTP status = \(httpStatusCode)")
@@ -466,8 +466,7 @@ class BSApiManager {
      - data: The apple pay encoded data
      - completion: callback with either result details if OK, or error details if not OK
     */
-    //TODO: this should not use BSResultCcDetails
-    static internal func submitApplepayData(data: String!, completion: @escaping (BSResultCcDetails?, BSCcDetailErrors?) -> Void) {
+    static internal func submitApplepayData(data: String!, completion: @escaping (BSResultApplePayDetails?, BSErrors?) -> Void) {
 
         let requestBody = [
                 "applePayToken": data!
@@ -478,7 +477,7 @@ class BSApiManager {
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(result, nil)
+            completion(result as? BSResultApplePayDetails, nil)
         })
     }
 

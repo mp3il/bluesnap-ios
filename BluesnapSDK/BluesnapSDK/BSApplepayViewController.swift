@@ -13,7 +13,7 @@ import PassKit
 extension BSStartViewController : PaymentOperationDelegate {
 
 
-    func applePayPressed(_ sender: Any, completion: @escaping (Error?) -> Void) {
+    func applePayPressed(_ sender: Any, completion: @escaping (BSErrors?) -> Void) {
 
         let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: paymentRequest.getTaxAmount()), type: .final)
         let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: paymentRequest.getAmount()), type: .final)
@@ -66,7 +66,7 @@ extension BSStartViewController : PaymentOperationDelegate {
         completion(.valid);
     }
 
-    func send(paymentInformation: BSApplePayInfo, completion: @escaping (Error?) -> Void) {
+    func send(paymentInformation: BSApplePayInfo, completion: @escaping (BSErrors?) -> Void) {
         let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
         print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
         BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in

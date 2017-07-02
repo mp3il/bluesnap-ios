@@ -21,6 +21,10 @@ public class BSToken {
     public func getTokenStr() -> String! {
         return self.tokenStr
     }
+    
+    public func getServerUrl() -> String! {
+        return self.serverUrl
+    }
 }
 
 /**

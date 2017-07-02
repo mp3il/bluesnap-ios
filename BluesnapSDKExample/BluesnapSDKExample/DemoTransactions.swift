@@ -19,8 +19,6 @@ class DemoTreansactions {
     
     static let BS_SANDBOX_TEST_USER : String  = "sdkuser"
     static let BS_SANDBOX_TEST_PASS : String  = "SDKuser123"
-    static let BS_SANDBOX_DOMAIN : String = "https://sandbox.bluesnap.com/"
-    static let BS_QA_DOMAIN: String = "https://us-qa-fct02.bluesnap.com/"
 
 
     func createApplePayTransaction(paymentRequest: BSPaymentRequest!,
@@ -40,7 +38,7 @@ class DemoTreansactions {
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
 
-        let urlStr = DemoTreansactions.BS_QA_DOMAIN + "services/2/transactions";
+        let urlStr = bsToken.getServerUrl() + "services/2/transactions";
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -109,7 +107,7 @@ class DemoTreansactions {
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
         
-        let urlStr = DemoTreansactions.BS_SANDBOX_DOMAIN + "services/2/transactions";
+        let urlStr = bsToken.getServerUrl() + "services/2/transactions";
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -175,7 +173,7 @@ class DemoTreansactions {
         let authorization = getBasicAuth()
         
         
-        let urlStr = DemoTreansactions.BS_SANDBOX_DOMAIN + "services/2/transactions";
+        let urlStr = bsToken.getServerUrl() + "services/2/transactions";
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/xml", forHTTPHeaderField: "Content-Type")

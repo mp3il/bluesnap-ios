@@ -8,24 +8,21 @@
 
 import Foundation
 
-public enum BSCcDetailErrors : Error {
-    case usedTokenApplePay
-    case usedTokenForCC
+public enum BSErrors : Error {
+    
+    // CC
     case invalidCcNumber
     case invalidCvv
     case invalidExpDate
-    case expiredToken
-    case unknown
-}
 
-public enum BSApiErrors : Error {
+    // ApplePay
+    case cantMakePaymentError
+    case usedTokenForCC
+    case usedTokenApplePay
+
+    // generic
     case invalidInput
     case expiredToken
-    case unknown
-}
-
-public enum BSApplePayErrors: Error {
-    case cantMakePaymentError
     case unknown
 }
 

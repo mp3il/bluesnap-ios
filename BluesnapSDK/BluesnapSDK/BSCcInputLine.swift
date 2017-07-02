@@ -27,11 +27,11 @@ public protocol BSCcInputLineDelegate : class {
     /**
      didCheckCreditCard is called just after getting the BlueSnap server result; this is where you hide the activity indicator
      */
-    func didCheckCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
+    func didCheckCreditCard(result: BSResultCcDetails?, error: BSErrors?)
     /**
      didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; either result or error parameters will be full, so check the error first.
      */
-    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSCcDetailErrors?)
+    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSErrors?)
     /**
      showAlert is called in case of unexpected errors from the BlueSnap server.
      */
@@ -294,17 +294,14 @@ public class BSCcInputLine: BSBaseTextInput {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
                 BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
                     
-                    //Check for error
-                    if let error = error{
-                        if (error == BSCcDetailErrors.invalidCcNumber) {
+                    // Check for error
+                    if let error = error {
+                        if (error == .invalidCcNumber) {
                             self.showError(BSValidator.ccnInvalidMessage)
                         } else {
                             self.delegate?.showAlert("An error occurred")
                         }
-                    }
-                    
-                    // Check for result
-                    if let result = result {
+                    } else if let result = result {
                         if let cardType = result.ccType {
                             self.cardType = cardType
                         }
@@ -332,14 +329,14 @@ public class BSCcInputLine: BSBaseTextInput {
             
             
             //Check for error
-            if let error = error{
-                if (error == BSCcDetailErrors.invalidCcNumber) {
+            if let error = error {
+                if (error == .invalidCcNumber) {
                     self.showError(BSValidator.ccnInvalidMessage)
-                } else if (error == BSCcDetailErrors.invalidExpDate) {
+                } else if (error == .invalidExpDate) {
                     self.showExpError(BSValidator.expInvalidMessage)
-                } else if (error == BSCcDetailErrors.invalidCvv) {
+                } else if (error == .invalidCvv) {
                     self.showCvvError(BSValidator.cvvInvalidMessage)
-                } else if (error == BSCcDetailErrors.expiredToken) {
+                } else if (error == .expiredToken) {
                     self.delegate?.showAlert("Your session has expired, please go back and try again")
                 } else {
                     NSLog("Unexpected error submitting Payment Fields to BS")
@@ -839,7 +836,7 @@ public class BSCcInputLine: BSBaseTextInput {
         }
         if imageName == nil {
             imageName = "default"
-            NSLog("ccTypew \(ccType) does not have an icon")
+            NSLog("ccTypew \(ccType ?? "Empty") does not have an icon")
         }
         return BSViewsManager.getImage(imageName: "cc_\(imageName!)")
     }
