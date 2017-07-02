@@ -12,30 +12,30 @@ import PassKit
 class BSStartViewController: UIViewController {
 
     // MARK: - internal properties
-    
-    internal var paymentRequest : BSPaymentRequest!
+
+    internal var paymentRequest: BSPaymentRequest!
     internal var fullBilling = false
     internal var withShipping = false
-    internal var purchaseFunc: (BSPaymentRequest!)->Void = {
+    internal var purchaseFunc: (BSPaymentRequest!) -> Void = {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
-    
-    var paymentSummaryItems:[PKPaymentSummaryItem] = [];
-    
+
+    var paymentSummaryItems: [PKPaymentSummaryItem] = [];
+
     // MARK: Outlets
 
     @IBOutlet weak var centeredView: UIView!
     @IBOutlet weak var ccnButton: UIButton!
     @IBOutlet weak var orLabel: UILabel!
     @IBOutlet weak var applePayButton: UIButton!
-    
+
     // MARK: UIViewController functions
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
-        
+
         // Hide/show the applepay 
         let tmpY = self.view.center.y
         if showApplePayButton() {
@@ -45,16 +45,16 @@ class BSStartViewController: UIViewController {
         } else {
             orLabel.isHidden = true
             applePayButton.isHidden = true
-            centeredView.center.y = tmpY - (ccnButton.center.y - centeredView.frame.height/2)
+            centeredView.center.y = tmpY - (ccnButton.center.y - centeredView.frame.height / 2)
         }
     }
 
     // MARK: button functions
-    
+
     @IBAction func applePayClick(_ sender: Any) {
-        
+
         let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
-        
+
         if (!applePaySupported.canMakePayments) {
             let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not available on this device")
             present(alert, animated: true, completion: nil)
@@ -77,11 +77,14 @@ class BSStartViewController: UIViewController {
 
         applePayPressed(sender, completion: { (error) in
             DispatchQueue.main.async {
-                if error != nil {
+                if error == BSErrors.applePayCanceled {
+                    NSLog("Apple Pay operation canceled")
+                    return
+                } else if error != nil {
                     let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "General error")
                     self.present(alert, animated: true, completion: nil)
                     return
-            } else {
+                } else {
                     let result: BSResultPaymentDetails = BSResultApplePayDetails()
                     self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
                     _ = self.navigationController?.popViewController(animated: false)
@@ -92,18 +95,18 @@ class BSStartViewController: UIViewController {
         })
 
     }
-    
+
     @IBAction func ccDetailsClick(_ sender: Any) {
-        
+
         animateToPaymentScreen(completion: { animate in
-        _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
+            _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
         })
     }
-    
+
     // Mark: private functions
-    
+
     private func animateToPaymentScreen(completion: ((Bool) -> Void)!) {
-        
+
         let moveUpBy = self.centeredView.frame.minY + self.ccnButton.frame.minY - 48
         UIView.animate(withDuration: 0.3, animations: {
             self.centeredView.center.y = self.centeredView.center.y - moveUpBy

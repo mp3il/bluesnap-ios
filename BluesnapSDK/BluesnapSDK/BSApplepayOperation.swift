@@ -103,7 +103,7 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
     public let request: PKPaymentRequest
     private var requestController: PKPaymentAuthorizationViewController!
     private var status: PKPaymentAuthorizationStatus = .failure;
-    public var error: Error?
+    public var error: BSErrors?
     public weak var delegate: PaymentOperationDelegate!
 
 
@@ -141,7 +141,7 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
         delegate.didSelectShippingContact(contact: contact, completion: completion);
     }
 
-    func finish(with error: Error? = nil) {
+    func finish(with error: BSErrors? = nil) {
         self.error = error;
         self.finish();
     }
@@ -151,8 +151,11 @@ public class PaymentOperation: BSApplepayOperation, PKPaymentAuthorizationViewCo
         controller.dismiss(animated: true) {
             if case .success = self.status {
                 self.finish();
+            } else if self.status.rawValue > 1 {
+                NSLog("Apple pay operation error \(self.status.rawValue)")
+                self.finish(with: BSErrors.applePayOperationError);
             } else {
-                self.finish(with: BSErrors.unknown);
+                self.finish(with: BSErrors.applePayCanceled);
             }
         };
     }

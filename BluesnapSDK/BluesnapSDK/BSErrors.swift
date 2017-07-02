@@ -19,6 +19,8 @@ public enum BSErrors : Error {
     case cantMakePaymentError
     case usedTokenForCC
     case usedTokenApplePay
+    case applePayOperationError
+    case applePayCanceled
 
     // generic
     case invalidInput

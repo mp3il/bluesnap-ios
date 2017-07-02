@@ -49,7 +49,7 @@ extension BSStartViewController : PaymentOperationDelegate {
 
         paymentOperation.completionBlock = {[weak op = paymentOperation] in
             NSLog("PK payment completion \(op?.error.debugDescription ?? "No op")")
-            completion(nil)
+            completion(op?.error)
         };
 
         //Send the payment operation via queue
@@ -68,7 +68,7 @@ extension BSStartViewController : PaymentOperationDelegate {
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (BSErrors?) -> Void) {
         let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
-        print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
+        //print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
         BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
             if let error = error {
                 completion(error)
