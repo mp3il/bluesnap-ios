@@ -22,12 +22,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
     @IBOutlet weak var payUIButton: UIButton!
     @IBOutlet weak var nameInputLine: BSInputLine!
-    @IBOutlet weak var emailInputLine: BSInputLine!
     @IBOutlet weak var streetInputLine: BSInputLine!
     @IBOutlet weak var zipInputLine: BSInputLine!
     @IBOutlet weak var cityInputLine: BSInputLine!
     @IBOutlet weak var stateInputLine: BSInputLine!
-    
     
     
     // MARK: Keyboard functions
@@ -103,7 +101,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     func dismissKeyboard() {
         
         self.nameInputLine.dismissKeyboard()
-        self.emailInputLine.dismissKeyboard()
         self.zipInputLine.dismissKeyboard()
         self.streetInputLine.dismissKeyboard()
         self.cityInputLine.dismissKeyboard()
@@ -124,7 +121,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         if let shippingDetails = self.paymentRequest.getShippingDetails() {
             nameInputLine.setValue(shippingDetails.name)
-            emailInputLine.setValue(shippingDetails.email)
             streetInputLine.setValue(shippingDetails.address)
             cityInputLine.setValue(shippingDetails.city)
             zipInputLine.setValue(shippingDetails.zip)
@@ -171,23 +167,16 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     func validateForm() -> Bool {
         
         let ok1 = validateName(ignoreIfEmpty: false)
-        let ok2 = validateEmail(ignoreIfEmpty: false)
-        let ok3 = validateAddress(ignoreIfEmpty: false)
-        let ok4 = validateCity(ignoreIfEmpty: false)
-        let ok5 = validateZip(ignoreIfEmpty: false)
-        let ok6 = validateState(ignoreIfEmpty: false)
-        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6
+        let ok2 = validateAddress(ignoreIfEmpty: false)
+        let ok3 = validateCity(ignoreIfEmpty: false)
+        let ok4 = validateZip(ignoreIfEmpty: false)
+        let ok5 = validateState(ignoreIfEmpty: false)
+        return ok1 && ok2 && ok3 && ok4 && ok5
     }
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
         let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentRequest.getShippingDetails())
-        return result
-    }
-
-    func validateEmail(ignoreIfEmpty : Bool) -> Bool {
-        
-        let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: paymentRequest.getShippingDetails())
         return result
     }
     
@@ -232,14 +221,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func nameEditingDidEnd(_ sender: BSInputLine) {
         _ = validateName(ignoreIfEmpty: true)
-    }
-    
-    @IBAction func emailEditingChanged(_ sender: BSInputLine) {
-        BSValidator.emailEditingChanged(sender)
-    }
-    
-    @IBAction func emailEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateEmail(ignoreIfEmpty: true)
     }
     
     @IBAction func streetEditingChanged(_ sender: BSInputLine) {
@@ -297,7 +278,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async{
             
             self.nameInputLine.deviceDidRotate()
-            self.emailInputLine.deviceDidRotate()
             self.streetInputLine.deviceDidRotate()
             self.zipInputLine.deviceDidRotate()
             self.cityInputLine.deviceDidRotate()

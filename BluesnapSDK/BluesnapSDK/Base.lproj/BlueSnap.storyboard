@@ -153,20 +153,8 @@
                                                     <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="y0Q-RU-Oq9"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dcv-01-70G" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="64" width="335" height="43"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="2sS-wR-i8X"/>
-                                                    <action selector="emailEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="Vb9-WE-GeG"/>
-                                                    <action selector="emailEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="b8D-bn-aa7"/>
-                                                </connections>
-                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="108" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="63" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
@@ -178,7 +166,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="152" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="107" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
@@ -190,7 +178,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="196" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="151" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
@@ -202,7 +190,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="240" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="195" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
@@ -222,20 +210,16 @@
                                             <constraint firstItem="M8Q-CA-XJP" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="73Y-B8-Ryk"/>
                                             <constraint firstItem="7GX-8o-fbs" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="860-Ng-qFM"/>
                                             <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="1" id="9AW-wa-22K"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="Dcv-01-70G" secondAttribute="bottom" constant="1" id="Co5-Vh-sGQ"/>
-                                            <constraint firstItem="Dcv-01-70G" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="Dg9-cc-Ule"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" id="Fnt-c0-WIv"/>
                                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="Ibg-bc-FdR"/>
                                             <constraint firstItem="Qye-kG-IzH" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="LWW-In-Bsf"/>
                                             <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="MHJ-0A-cQu"/>
                                             <constraint firstAttribute="trailing" secondItem="jMo-vo-Aht" secondAttribute="trailing" constant="16" id="NN1-g5-NZB"/>
                                             <constraint firstAttribute="trailing" secondItem="Qye-kG-IzH" secondAttribute="trailing" constant="16" id="QTa-CE-eWB"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="Dcv-01-70G" secondAttribute="bottom" constant="1" id="Sfm-Ry-xIa"/>
                                             <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="1" id="VEA-5X-lHf"/>
                                             <constraint firstAttribute="trailing" secondItem="5Tf-NL-jP3" secondAttribute="trailing" constant="16" id="VjE-Q7-7nw"/>
-                                            <constraint firstItem="Dcv-01-70G" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" constant="1" id="bou-Cp-MJ7"/>
                                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="20" symbolic="YES" id="j2I-GE-Xvx"/>
                                             <constraint firstAttribute="trailing" secondItem="7GX-8o-fbs" secondAttribute="trailing" constant="16" id="w4a-SO-IrB"/>
-                                            <constraint firstAttribute="trailing" secondItem="Dcv-01-70G" secondAttribute="trailing" constant="16" id="xbr-b4-gdE"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -266,7 +250,6 @@
                             <constraint firstItem="jMo-vo-Aht" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="1cb-ng-Cpb"/>
                             <constraint firstItem="7GX-8o-fbs" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="9qJ-I3-WbU"/>
                             <constraint firstItem="BiT-2P-8ND" firstAttribute="leading" secondItem="KnJ-zC-fwY" secondAttribute="leadingMargin" constant="-16" id="Anb-um-E8p"/>
-                            <constraint firstItem="Dcv-01-70G" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="GmB-yg-frd"/>
                             <constraint firstItem="Qye-kG-IzH" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="HCE-FK-CPW"/>
                             <constraint firstAttribute="trailing" secondItem="lFE-br-NNC" secondAttribute="trailing" id="KL5-f6-mhF"/>
                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="W24-M0-bea"/>
@@ -281,7 +264,6 @@
                     <navigationItem key="navigationItem" id="fu9-sO-bVo"/>
                     <connections>
                         <outlet property="cityInputLine" destination="M8Q-CA-XJP" id="gDI-cN-8tC"/>
-                        <outlet property="emailInputLine" destination="Dcv-01-70G" id="suc-ja-Fvj"/>
                         <outlet property="fieldsView" destination="Xjb-2n-SG7" id="Bd2-zq-zjH"/>
                         <outlet property="nameInputLine" destination="5Tf-NL-jP3" id="smj-ra-V3T"/>
                         <outlet property="payUIButton" destination="lFE-br-NNC" id="X1a-Qu-bCK"/>
