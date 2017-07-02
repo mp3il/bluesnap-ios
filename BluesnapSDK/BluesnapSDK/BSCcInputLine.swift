@@ -169,6 +169,7 @@ public class BSCcInputLine: BSBaseTextInput {
     private var expErrorLabel : UILabel?
     private var cvvErrorLabel : UILabel?
     private var nextButton : UIButton = UIButton()
+    private var showNextButton = false
 
     private var ccn : String = ""
     private var lastValidateCcn : String = ""
@@ -203,6 +204,7 @@ public class BSCcInputLine: BSBaseTextInput {
      reset sets the component to its initial state, where the fields are emnpty and we are in the "open" state
     */
     public func reset() {
+        showNextButton = false
         hideError()
         hideExpError()
         hideCvvError()
@@ -471,7 +473,7 @@ public class BSCcInputLine: BSBaseTextInput {
             cvvTextField.frame = CGRect(x: cvvFieldX, y: fieldY, width: actualCvvWidth, height: actualFieldHeight)
         }
 
-        if self.ccnIsOpen && (textField.text != "" || designMode) {
+        if self.ccnIsOpen && (showNextButton || designMode) {
             let x : CGFloat = self.frame.width - actualRightMargin - actualNextBtnWidth
             let y : CGFloat = (self.frame.height-actualNextBtnHeight) / 2.0
             nextButton.frame = CGRect(x: x, y: y, width: actualNextBtnWidth, height: actualNextBtnHeight)
@@ -711,6 +713,7 @@ public class BSCcInputLine: BSBaseTextInput {
                 _ = self.validateExp(ignoreIfEmpty: true)
                 _ = self.validateCvv(ignoreIfEmpty: true)
             }
+            self.showNextButton = true
         })
     }
 
