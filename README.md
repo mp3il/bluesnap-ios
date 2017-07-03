@@ -44,6 +44,9 @@ BSToken is the simplest one. It contains the token you got from BlueSnap, and th
 	    public func getTokenStr() -> String! {
 	        return self.tokenStr
 	    }
+	    public func getServerUrl() -> String! {
+        	return self.serverUrl
+    	    }
 	}
 
 The SDK holds a function for obtaining a token from our Sandbox environment for quick testing purposes.
@@ -69,7 +72,7 @@ This class holds the shopper details for either billing or shipping. if you choo
 
 ##BSResultPaymentDetails (in BSPurchaseDataModel.swift)
 
-This is a base class for the payment-specific details.
+This is a base class for the payment-specific details like BSResultApplePayDetails and BSResultCcDetails.
 
     public class BSResultPaymentDetails {
 	    var paymentType : BSPaymentType!
@@ -249,7 +252,7 @@ This function navigates to the currency list, allow changing current selection.
 Parameters:
  - inNavigationController: your viewController's navigationController (to be able to navigate back)
  - animated: how to navigate to the new screen
- - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
+ - selectedCurrencyCode: 3 characters of the current language code (uppercase)
  - updateFunc: callback; will be called each time a new value is selected
  - 
 Signature:
