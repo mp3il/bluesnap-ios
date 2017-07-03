@@ -338,6 +338,8 @@ public class BSCcInputLine: BSBaseTextInput {
                     self.showCvvError(BSValidator.cvvInvalidMessage)
                 } else if (error == .expiredToken) {
                     self.delegate?.showAlert("Your session has expired, please go back and try again")
+                } else if (error == .tokenNotFound) {
+                    self.delegate?.showAlert("Your session is invalid, please go back and try again")
                 } else {
                     NSLog("Unexpected error submitting Payment Fields to BS")
                     self.delegate?.showAlert("An error occurred, please try again")

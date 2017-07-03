@@ -25,6 +25,7 @@ public enum BSErrors : Error {
     // generic
     case invalidInput
     case expiredToken
+    case tokenNotFound
     case unknown
 }
 
