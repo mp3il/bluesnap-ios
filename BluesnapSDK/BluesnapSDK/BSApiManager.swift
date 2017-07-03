@@ -26,8 +26,6 @@ class BSApiManager {
     internal static var lastCurrencyFetchDate: Date?
     internal static var apiToken: BSToken?
 
-    internal static var simulateTokenExpired = false
-
     // MARK: bsToken setter/getter
 
     /**
@@ -108,16 +106,8 @@ class BSApiManager {
                     } else {
                         resultError = .unknown
                     }
-                } else if (httpStatusCode == 400) {
-                    resultError = .unknown
-                    if let data = data {
-                        let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                        NSLog("Http error 400 getting BS currencies; error = \(errStr ?? "")")
-                        if (errStr == "\"EXPIRED_TOKEN\"") {
-                            resultError = .expiredToken
-                            notifyTokenExpired()
-                        }
-                    }
+                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                    resultError = parseError(data: data)
                 } else {
                     resultError = .unknown
                     NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
@@ -188,7 +178,9 @@ class BSApiManager {
             let bsToken = getBsToken()
 
             let domain: String! = bsToken!.serverUrl
-            let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken!.getTokenStr();
+            // If you want to test expired token, use this:
+            //let urlStr = domain + "services/2/payment-fields-tokens/" + "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
+            let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken!.getTokenStr()
             let url = NSURL(string: urlStr)!
             var request = NSMutableURLRequest(url: url as URL)
             request.httpMethod = "PUT"
@@ -204,8 +196,6 @@ class BSApiManager {
 
             var result: BSResultPaymentDetails?
             var resultError: BSErrors?
-            //self.simulateTokenExpired = !self.simulateTokenExpired
-            
 
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
                 if let error = error {
@@ -235,26 +225,13 @@ class BSApiManager {
         var result: BSResultCcDetails?
         var resultError: BSErrors?
 
-        if (httpStatusCode >= 200 && httpStatusCode <= 299 && !self.simulateTokenExpired) {
+        if (httpStatusCode >= 200 && httpStatusCode <= 299) {
             result = parseResultCCDetailsFromResponse(data: data)
             if (result == nil) {
                 resultError = .unknown
             }
-        } else if (httpStatusCode == 400 || self.simulateTokenExpired) {
-            resultError = .unknown
-            if let data = data {
-                let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                if (errStr == "\"EXPIRED_TOKEN\"" || self.simulateTokenExpired) {
-                    resultError = .expiredToken
-                    notifyTokenExpired()
-                } else if (errStr == "\"INVALID_CC_NUMBER\"") {
-                    resultError = .invalidCcNumber
-                } else if (errStr == "\"INVALID_CVV\"") {
-                    resultError = .invalidCvv
-                } else if (errStr == "\"INVALID_EXP_DATE\"") {
-                    resultError = .invalidExpDate
-                }
-            }
+        } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+            resultError = parseError(data: data)
         } else {
             NSLog("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
             resultError = .unknown
@@ -430,27 +407,13 @@ class BSApiManager {
         var result: BSResultApplePayDetails?
         var resultError: BSErrors?
 
-        if (httpStatusCode >= 200 && httpStatusCode <= 299 && !self.simulateTokenExpired) {
+        if (httpStatusCode >= 200 && httpStatusCode <= 299) {
             NSLog("ApplePay data submitted successfully ")
             result = BSResultApplePayDetails()
             // TODO: fill result
             
-        
-        } else if (httpStatusCode == 400 || self.simulateTokenExpired) {
-            resultError = .unknown
-            if let data = data {
-                let errStr = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                if (errStr == "\"EXPIRED_TOKEN\"" || self.simulateTokenExpired) {
-                    resultError = .expiredToken
-                    notifyTokenExpired()
-                } else if (errStr == "\"TOKEN_WAS_ALREADY_USED_FOR_APPLEֹֹֹֹ_PAY\"") {
-                    resultError = .usedTokenApplePay
-                } else if (errStr == "\"TOKEN_WAS_ALREADY_USED_FOR_CC\"") {
-                    resultError = .usedTokenForCC
-                } else if (errStr == "\"TOKEN_NOT_FOUND\"") {
-                    resultError = .expiredToken //TODO: merge
-                }
-            }
+        } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+            resultError = parseError(data: data)
         } else {
             NSLog("Http error submitting ApplePay details to BS; HTTP status = \(httpStatusCode)")
             resultError = .unknown
@@ -458,7 +421,50 @@ class BSApiManager {
         return (result, resultError)
     }
 
-
+    private static func parseError(data: Data?) -> BSErrors {
+        
+        var resultError : BSErrors = .invalidInput
+        
+        var errStr : String?
+        if let data = data {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
+                if let messages = json["message"] as? [[String: AnyObject]] {
+                    if let message = messages[0] as? [String: String] {
+                        errStr = message["errorName"]
+                    } else {
+                        NSLog("Error - result messages does not contain message")
+                    }
+                } else {
+                    NSLog("Error - result data does not contain messages")
+                }
+            } catch let error {
+                NSLog("Error parsing result data: \(data) ; error: \(error.localizedDescription)")
+            }
+        } else {
+            NSLog("Error - result data is empty")
+            return .unknown
+        }
+        if (errStr == "EXPIRED_TOKEN") {
+            resultError = .expiredToken
+            notifyTokenExpired()
+        } else if (errStr == "INVALID_CC_NUMBER") {
+            resultError = .invalidCcNumber
+        } else if (errStr == "INVALID_CVV") {
+            resultError = .invalidCvv
+        } else if (errStr == "INVALID_EXP_DATE") {
+            resultError = .invalidExpDate
+        } else if (errStr == "TOKEN_WAS_ALREADY_USED_FOR_APPLEֹֹֹֹ_PAY") {
+            resultError = .usedTokenApplePay
+        } else if (errStr == "TOKEN_WAS_ALREADY_USED_FOR_CC") {
+            resultError = .usedTokenForCC
+        } else if (errStr == "TOKEN_NOT_FOUND") {
+            resultError = .tokenNotFound
+            notifyTokenExpired()
+        }
+        
+        return resultError
+    }
 
     /**
      Submit Apple pay data to BlueSnap server
