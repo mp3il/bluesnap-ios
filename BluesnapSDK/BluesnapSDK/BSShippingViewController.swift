@@ -8,244 +8,328 @@
 
 import UIKit
 
-class BSShippingViewController: UIViewController {
+class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: shipping data as input and output
     //internal var storyboard : UIStoryboard?
-
-    internal var purchaseData : PurchaseData?
-    internal var payText : String?
+    
+    internal var paymentRequest : BSPaymentRequest!
+    internal var payText : String!
+    internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
+    internal var countryManager : BSCountryManager!
     
     // MARK: outlets
-    
-    @IBOutlet weak var nameUITextField: UITextField!
-    @IBOutlet weak var emailUITextField: UITextField!
-    @IBOutlet weak var addressUITextField: UITextField!
-    @IBOutlet weak var cityUITextField: UITextField!
-    @IBOutlet weak var zipUITextField: UITextField!
-    @IBOutlet weak var countryUITextField: UITextField!
-    @IBOutlet weak var stateUITextField: UITextField!
-    
-    @IBOutlet weak var nameErrorUILabel: UILabel!
-    @IBOutlet weak var emailErrorUILabel: UILabel!
-    @IBOutlet weak var addressErrorUILabel: UILabel!
-    @IBOutlet weak var cityErrorUILabel: UILabel!
-    @IBOutlet weak var zipErrorUILabel: UILabel!
-    @IBOutlet weak var countryErrorUILabel: UILabel!
-    @IBOutlet weak var stateErrorUILabel: UILabel!
-    
+        
     @IBOutlet weak var payUIButton: UIButton!
+    @IBOutlet weak var nameInputLine: BSInputLine!
+    @IBOutlet weak var streetInputLine: BSInputLine!
+    @IBOutlet weak var zipInputLine: BSInputLine!
+    @IBOutlet weak var cityInputLine: BSInputLine!
+    @IBOutlet weak var stateInputLine: BSInputLine!
     
     
+    // MARK: Keyboard functions
+    
+    let scrollOffset : Int = -64 // this is the Y of scrollView
+    var movedUp = false
+    var fieldBottom : Int?
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var fieldsView: UIView!
+    
+    override func viewDidLayoutSubviews()
+    {
+        let scrollViewBounds = scrollView.bounds
+        //let containerViewBounds = fieldsView.bounds
+        
+        var scrollViewInsets = UIEdgeInsets.zero
+        scrollViewInsets.top = scrollViewBounds.size.height/2.0;
+        scrollViewInsets.top -= fieldsView.bounds.size.height/2.0;
+        
+        scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
+        scrollViewInsets.bottom -= fieldsView.bounds.size.height/2.0;
+        scrollViewInsets.bottom += 1
+        
+        scrollView.contentInset = scrollViewInsets
+    }
+    
+    @IBAction func editingDidBegin(_ sender: BSBaseTextInput) {
+        
+        fieldBottom = Int(sender.frame.origin.y + sender.frame.height)
+    }
+
+    private func scrollForKeyboard(direction: Int) {
+        
+        self.movedUp = (direction > 0)
+        let y = 200*direction
+        let point : CGPoint = CGPoint(x: 0, y: y)
+        self.scrollView.setContentOffset(point, animated: false)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+        var moveUp = false
+        if let fieldBottom = fieldBottom {
+            let userInfo = notification.userInfo as! [String: NSObject] as NSDictionary
+            let keyboardFrame = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! CGRect
+            let keyboardHeight = Int(keyboardFrame.height)
+            let viewHeight : Int = Int(self.view.frame.height)
+            let offset = fieldBottom + keyboardHeight - scrollOffset
+            if (offset > viewHeight) {
+                moveUp = true
+            }
+        }
+        
+        if !self.movedUp && moveUp {
+            scrollForKeyboard(direction: 1)
+        } else if self.movedUp && !moveUp {
+            scrollForKeyboard(direction: 0)
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        
+        if self.movedUp {
+            scrollForKeyboard(direction: 0)
+        }
+    }
+    
+    func registerTapToHideKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        
+        self.nameInputLine.dismissKeyboard()
+        self.zipInputLine.dismissKeyboard()
+        self.streetInputLine.dismissKeyboard()
+        self.cityInputLine.dismissKeyboard()
+    }
+
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerTapToHideKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let shippingDetails = self.purchaseData?.getShippingDetails()!
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        nameUITextField.text = shippingDetails!.name
-        emailUITextField.text = shippingDetails!.email
-        addressUITextField.text = shippingDetails!.address
-        cityUITextField.text = shippingDetails!.city
-        zipUITextField.text = shippingDetails!.zip
-        countryUITextField.text = shippingDetails!.country
-        stateUITextField.text = shippingDetails!.state
-        payUIButton.setTitle(payText, for: UIControlState())
+        if let shippingDetails = self.paymentRequest.getShippingDetails() {
+            nameInputLine.setValue(shippingDetails.name)
+            streetInputLine.setValue(shippingDetails.address)
+            cityInputLine.setValue(shippingDetails.city)
+            zipInputLine.setValue(shippingDetails.zip)
+            if (shippingDetails.country == "") {
+                shippingDetails.country = Locale.current.regionCode ?? ""
+            }
+            let countryCode = paymentRequest.getShippingDetails()?.country ?? ""
+            updateZipByCountry(countryCode: countryCode)
+            updateFlagImage(countryCode: countryCode)
+            updateState()
+            payUIButton.setTitle(payText, for: UIControlState())
+        }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        adjustToPageRotate()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+    }
+    
+    // MARK: Payment click
+    
+    @IBAction func SubmitClick(_ sender: Any) {        
+        if (validateForm()) {
+            
+            _ = navigationController?.popViewController(animated: false)
+            submitPaymentFields()
+            
+        } else {
+            //return false
+        }
+    }
+    
     
     // MARK: Validation methods
     
     func validateForm() -> Bool {
         
-        let ok1 = validateName()
-        let ok2 = validateEmail()
-        let ok3 = validateAddress()
-        let ok4 = validateCity()
-        let ok5 = validateZip()
-        let ok6 = validateCountry()
-        let ok7 = validateState()
-        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7
+        let ok1 = validateName(ignoreIfEmpty: false)
+        let ok2 = validateAddress(ignoreIfEmpty: false)
+        let ok3 = validateCity(ignoreIfEmpty: false)
+        let ok4 = validateZip(ignoreIfEmpty: false)
+        let ok5 = validateState(ignoreIfEmpty: false)
+        return ok1 && ok2 && ok3 && ok4 && ok5
     }
     
-    func validateName() -> Bool {
+    func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.name = nameUITextField.text!
-        if (nameUITextField.text!.characters.count < 4) {
-            nameErrorUILabel.text = "Please fill Card holder name"
-            nameErrorUILabel.isHidden = false
-            return false
-        } else {
-            nameErrorUILabel.isHidden = true
-            return true
-        }
-    }
-
-    func validateEmail() -> Bool {
-        
-        self.purchaseData!.getShippingDetails()!.email = emailUITextField.text!
-        if (!emailUITextField.text!.isValidEmail) {
-            emailErrorUILabel.text = "Please fill a valid email address"
-            emailErrorUILabel.isHidden = false
-            return false
-        } else {
-            emailErrorUILabel.isHidden = true
-            return true
-        }
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentRequest.getShippingDetails())
+        return result
     }
     
-    func validateAddress() -> Bool {
+    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.address = addressUITextField.text!
-        if (addressUITextField.text!.characters.count < 3) {
-            addressErrorUILabel.text = "Please fill a valid address"
-            addressErrorUILabel.isHidden = false
-            return false
-        } else {
-            addressErrorUILabel.isHidden = true
-            return true
-        }
+        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getShippingDetails())
+        return result
     }
     
-    func validateCity() -> Bool {
+    func validateCity(ignoreIfEmpty : Bool) -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.city = cityUITextField.text!
-        if (cityUITextField.text!.characters.count < 3) {
-            cityErrorUILabel.text = "Please fill a valid city"
-            cityErrorUILabel.isHidden = false
-            return false
-        } else {
-            cityErrorUILabel.isHidden = true
-            return true
-        }
+        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: paymentRequest.getShippingDetails())
+        return result
     }
     
-    func validateZip() -> Bool {
+    func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.zip = zipUITextField.text!
-        if (zipUITextField.text!.characters.count < 3) {
-            zipErrorUILabel.text = "Please fill a valid zip code"
-            zipErrorUILabel.isHidden = false
-            return false
-        } else {
-            zipErrorUILabel.isHidden = true
+        if (zipInputLine.isHidden) {
+            if let shippingDetails = paymentRequest.getShippingDetails() {
+                shippingDetails.zip = ""
+            }
+            zipInputLine.setValue("")
             return true
         }
+        
+        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: paymentRequest.getShippingDetails())
+        return result
     }
     
-    func validateCountry() -> Bool {
+    func validateState(ignoreIfEmpty : Bool) -> Bool {
         
-        self.purchaseData!.getShippingDetails()!.country = countryUITextField.text!
-        if (countryUITextField.text!.characters.count < 2) {
-            countryErrorUILabel.text = "Please fill a valid country"
-            countryErrorUILabel.isHidden = false
-            return false
-        } else {
-            countryErrorUILabel.isHidden = true
-            return true
-        }
-    }
-    
-    func validateState() -> Bool {
-        
-        self.purchaseData!.getShippingDetails()!.state = stateUITextField.text!
-        if (stateUITextField.isEnabled && stateUITextField.text!.characters.count < 2) {
-            stateErrorUILabel.text = "Please fill a valid state"
-            stateErrorUILabel.isHidden = false
-            return false
-        } else {
-            stateErrorUILabel.isHidden = true
-            return true
-        }
+        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: paymentRequest.getShippingDetails())
+        return result
     }
     
     
     // MARK: real-time formatting and Validations on text fields
     
-    @IBAction func nameEditingChanged(_ sender: UITextField) {
+    @IBAction func nameEditingChanged(_ sender: BSInputLine) {
+        BSValidator.nameEditingChanged(sender)
+    }
+    
+    @IBAction func nameEditingDidEnd(_ sender: BSInputLine) {
+        _ = validateName(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func streetEditingChanged(_ sender: BSInputLine) {
+        BSValidator.addressEditingChanged(sender)
+    }
+    
+    @IBAction func streetEditingDidEnd(_ sender: BSInputLine) {
+        _ = validateAddress(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func cityEditingChanged(_ sender: BSInputLine) {
+        BSValidator.cityEditingChanged(sender)
+    }
+    
+    @IBAction func cityEditingDidEnd(_ sender: BSInputLine) {
+        _ = validateCity(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func zipEditingChanged(_ sender: BSInputLine) {
+        BSValidator.zipEditingChanged(sender)
+    }
+    
+    @IBAction func zipEditingDidEnd(_ sender: BSInputLine) {
+        _ = validateZip(ignoreIfEmpty: true)
+    }
+    
+    // enter state field - open the state screen
+    @IBAction func stateTouchUpInside(_ sender: BSInputLine) {
         
-        var input : String = sender.text ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 100)
-        sender.text = input
+        BSViewsManager.showStateList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            countryManager: countryManager,
+            addressDetails: paymentRequest.getShippingDetails()!,
+            updateFunc: updateWithNewState)
     }
-    
-    @IBAction func emailEditingChanged(_ sender: UITextField) {
-        
-        var input : String = sender.text ?? ""
-        input = input.removeNoneEmailCharacters.cutToMaxLength(maxLength: 1200)
-        sender.text = input
-    }
-    
-    @IBAction func addressEditingChanged(_ sender: UITextField) {
-        
-        var input : String = sender.text ?? ""
-        input = input.cutToMaxLength(maxLength: 100)
-        sender.text = input
-    }
-    
-    @IBAction func cityEditingChanged(_ sender: UITextField) {
-        
-        var input : String = sender.text ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 50)
-        sender.text = input
-    }
-    
-    @IBAction func zipEditingChanged(_ sender: UITextField) {
-        
-        var input : String = sender.text ?? ""
-        input = input.cutToMaxLength(maxLength: 20)
-        sender.text = input
-    }
-    
-    @IBAction func countryEditingChanged(_ sender: UITextField) {
-        
-        var input : String = sender.text ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 2)
-        sender.text = input
-    }
-    
-    @IBAction func stateEditingChanged(_ sender: UITextField) {
-        
-        var input : String = sender.text ?? ""
-        input = input.removeNoneAlphaCharacters.cutToMaxLength(maxLength: 2)
-        sender.text = input
-    }
-    
-    @IBAction func nameEditingDidEnd(_ sender: UITextField) {
-        _ = validateName()
-    }
-    
-    @IBAction func emailEditingDidEnd(_ sender: UITextField) {
-        _ = validateEmail()
-    }
-    
-    @IBAction func addressEditingDidEnd(_ sender: UITextField) {
-        _ = validateAddress()
-    }
-    
-    @IBAction func cityEditingDidEnd(_ sender: UITextField) {
-        _ = validateCity()
-    }
-    
-    
-    @IBAction func zipEditingDidEnd(_ sender: UITextField) {
-        _ = validateZip()
-    }
-    
-    
-    @IBAction func countryEditingDidEnd(_ sender: UITextField) {
-        _ = validateCountry()
-    }
-    
-    
-    @IBAction func stateEditingDidEnd(_ sender: UITextField) {
-        _ = validateState()
-    }
-    
 
+    @IBAction func flagTouchUpInside(_ sender: BSInputLine) {
+        
+        let selectedCountryCode = paymentRequest.getShippingDetails()?.country ?? ""
+        BSViewsManager.showCountryList(
+            inNavigationController: self.navigationController,
+            animated: true,
+            countryManager: countryManager,
+            selectedCountryCode: selectedCountryCode,
+            updateFunc: updateWithNewCountry)
+    }
+    
+    
+    
+    // MARK: private functions
+    
+    private func adjustToPageRotate() {
+        
+        DispatchQueue.main.async{
+            
+            self.nameInputLine.deviceDidRotate()
+            self.streetInputLine.deviceDidRotate()
+            self.zipInputLine.deviceDidRotate()
+            self.cityInputLine.deviceDidRotate()
+            self.stateInputLine.deviceDidRotate()
+            
+            self.viewDidLayoutSubviews()
+        }
+    }
+    
+    
+    private func updateWithNewCountry(countryCode : String, countryName : String) {
+        
+        if let shippingDetails = paymentRequest.getShippingDetails() {
+            shippingDetails.country = countryCode
+            updateZipByCountry(countryCode: countryCode)
+        }
+        updateFlagImage(countryCode: countryCode)
+    }
+    
+    private func updateFlagImage(countryCode : String) {
+        
+        // load the flag image
+        if let image = BSViewsManager.getImage(imageName: countryCode.uppercased()) {
+            nameInputLine.image = image
+        }
+    }
+    
+    private func updateZipByCountry(countryCode: String) {
+        
+        let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
+        if countryCode.lowercased() == "us" {
+            zipInputLine.labelText = "Shipping Zip"
+            zipInputLine.fieldKeyboardType = .numberPad
+        } else {
+            zipInputLine.labelText = "Postal Code"
+            zipInputLine.fieldKeyboardType = .numbersAndPunctuation
+        }
+        zipInputLine.isHidden = hideZip
+        zipInputLine.hideError()
+    }
+    
+    private func updateState() {
+        
+        BSValidator.updateState(addressDetails: paymentRequest.getShippingDetails()!, countryManager: countryManager, stateInputLine: stateInputLine)
+    }
+    
+    private func updateWithNewState(stateCode : String, stateName : String) {
+        
+        if let shippingDetails = paymentRequest.getShippingDetails() {
+            shippingDetails.state = stateCode
+        }
+        self.stateInputLine.setValue(stateName)
+    }
     
 }

@@ -8,47 +8,60 @@
 
 import Foundation
 
-public class PurchaseData : NSObject {
+public class BSPaymentRequest : NSObject {
     
-    // These 4 fields are input + output (they may change if shopper changes currency)
+    // These 3 fields are input + output (they may change if shopper changes currency)
     var amount : Double! = 0.0
     var taxAmount : Double! = 0.0
-    var taxPercent : Double! = 0.0
     var currency : String! = "USD"
     
     // These fields are output, but may be supplied as input as well
-    var name : String! = ""
-    var shippingDetails : BSShippingDetails?
+    var billingDetails : BSAddressDetails! = BSAddressDetails()
+    var shippingDetails : BSAddressDetails?
 
-    // Output only - result of submitting the CC details to BlueSnap server
-    var ccDetails : BSResultCcDetails?
+    // Output only - result of submitting the payment details to BlueSnap server
+    var resultPaymentDetails : BSResultPaymentDetails?
     
     
-    // MARK: Change currency method
+    // These fields hold the original amounts in USD, to keep precision in case of currency change
+    internal var originalAmount : Double! = 0.0
+    internal var originalTaxAmount : Double! = 0.0
+    internal var originalRate : Double?
+    
+    // MARK: Change currency methods
     
     /*
-    Change currencvy will also change the amounts according to the change rates
+    Set amounts will reset the currency and amounts, including the original
+    amounts.
     */
-    public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?, bsCurrencies: BSCurrencies?) {
+    public func setAmountsAndCurrency(amount: Double!, taxAmount: Double?, currency: String) {
         
-        if (newCurrency == nil || bsCurrencies == nil) {
-            return
+        self.amount = amount
+        self.originalAmount = amount
+        self.taxAmount = taxAmount
+        self.originalTaxAmount = taxAmount ?? 0.0
+        self.currency = currency
+        self.originalRate = nil
+    }
+    
+    /*
+    Change currency will also change the amounts according to the change rates
+    */
+    public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?) {
+        
+        if originalRate == nil {
+            if let oldCurrency = oldCurrency {
+                originalRate = oldCurrency.getRate() ?? 1.0
+            } else {
+                originalRate = 1.0
+            }
         }
-        
-        currency = newCurrency!.code
-        
-        // calculate conversion rate
-        
-        var oldRate : Double = 1.0
-        if (oldCurrency != nil) {
-            // keep rate to convert amount and tax back to USD
-            oldRate = oldCurrency!.getRate()
+        if let newCurrency = newCurrency {
+            self.currency = newCurrency.code
+            let newRate = newCurrency.getRate() / originalRate!
+            self.amount = originalAmount * newRate
+            self.taxAmount = originalTaxAmount * newRate
         }
-        let newRate = newCurrency!.getRate() / oldRate
-        
-        // update amounts
-        amount = amount * newRate
-        taxAmount = taxAmount * newRate
     }
     
     
@@ -58,55 +71,31 @@ public class PurchaseData : NSObject {
         return amount
     }
     
-    public func setAmount(amount : Double!) {
-        self.amount = amount
-    }
-    
     public func getTaxAmount() -> Double! {
         return taxAmount
-    }
-    
-    public func setTaxAmount(taxAmount : Double!) {
-        self.taxAmount = taxAmount
-    }
-    
-    public func getTaxPercent() -> Double! {
-        return taxPercent
-    }
-    
-    public func setTaxPercent(taxPercent : Double!) {
-        self.taxPercent = taxPercent
     }
     
     public func getCurrency() -> String! {
         return currency
     }
     
-    public func setCurrency(currency : String!) {
-        self.currency = currency
+    public func getBillingDetails() -> BSAddressDetails! {
+        return billingDetails
     }
     
-    public func getName() -> String! {
-        return name
+    public func getResultPaymentDetails() -> BSResultPaymentDetails? {
+        return self.resultPaymentDetails
     }
     
-    public func setName(name : String!) {
-        self.name = name
+    public func setResultPaymentDetails(resultPaymentDetails : BSResultPaymentDetails?) {
+        self.resultPaymentDetails = resultPaymentDetails
     }
     
-    public func getCcDetails() -> BSResultCcDetails? {
-        return ccDetails
-    }
-    
-    public func setCcDetails(ccDetails : BSResultCcDetails?) {
-        self.ccDetails = ccDetails
-    }
-    
-    public func getShippingDetails() -> BSShippingDetails? {
+    public func getShippingDetails() -> BSAddressDetails? {
         return shippingDetails
     }
     
-    public func setShippingDetails(shippingDetails : BSShippingDetails?) {
+    public func setShippingDetails(shippingDetails : BSAddressDetails?) {
         self.shippingDetails = shippingDetails
     }
 }
@@ -114,25 +103,61 @@ public class PurchaseData : NSObject {
 /**
     Shopper shipping details for purchase
  */
-public class BSShippingDetails {
+public class BSAddressDetails {
     
-    var name : String = ""
-    var email : String = ""
-    var address : String = ""
-    var city : String = ""
-    var zip : String = ""
-    var country : String = ""
-    var state : String = ""
+    public init() {}
+    
+    public var name : String! = ""
+    public var email : String?
+    public var address : String?
+    public var city : String?
+    public var zip : String?
+    public var country : String?
+    public var state : String?
+    
+    public func getSplitName() -> (firstName: String, lastName: String)? {
+        return BSStringUtils.splitName(name)
+    }
+}
+
+// MARK: purchase flow output
+
+public enum BSPaymentType {
+    case CreditCard
+    case ApplePay
+}
+
+/*
+ Purchase output
+ */
+public class BSResultPaymentDetails {
+    
+    public var paymentType : BSPaymentType!
 }
 
 /**
- Output non-secured CC details for the purchase
+ Output (PCI-compliant) CC details for the purchase
 */
-public class BSResultCcDetails {
+public class BSResultCcDetails : BSResultPaymentDetails {
+    
+    override init() {
+        super.init()
+        self.paymentType = .CreditCard
+    }
     
     // these fields are output - result of submitting the CC details to BlueSnap server
-    var ccType : String?
-    var last4Digits : String?
-    var ccIssuingCountry : String?
+    public var ccType : String?
+    public var last4Digits : String?
+    public var ccIssuingCountry : String?
+}
+
+public class BSResultApplePayDetails: BSResultPaymentDetails {
+
+    override init() {
+        super.init()
+        self.paymentType = .ApplePay
+    }
+
+
 }
 

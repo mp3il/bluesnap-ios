@@ -3,27 +3,45 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2D374F2F1E880E7300AE2A81 /* BluesnapSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F2E1E880E7300AE2A81 /* BluesnapSDKTests.swift */; };
 		2D374F311E880E7300AE2A81 /* BluesnapSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D374F231E880E7200AE2A81 /* BluesnapSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */; };
 		2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */; };
 		2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F411E880EF100AE2A81 /* BSToken.swift */; };
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
-		2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */; };
 		2D89D53F1EA8ECD30076E219 /* KountDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */; };
+		2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
-		FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */; };
+		DEB2DD0B164B99C6E7DE417C /* BSApplepayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */; };
+		DEB3C8BC3806435452EEB052 /* BSApplepayOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */; };
+		DEBAC1114FFA55F1852DCB78 /* BSPKContactExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */; };
+		DEBB1FD893E6CC8FA16D5F60 /* BSApplepayPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */; };
+		FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */; };
+		FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */; };
+		FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */; };
 		FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */; };
 		FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */; };
+		FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */; };
 		FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */; };
+		FD3BD9D21EE7F7DD00486576 /* BSErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */; };
+		FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */; };
+		FD4750B81EF7C50000E5DFBC /* BSStringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */; };
+		FD4750BB1EF8EECE00E5DFBC /* BSImageLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4750BA1EF8EECE00E5DFBC /* BSImageLibrary.swift */; };
 		FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */; };
-		FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */; };
+		FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */; };
+		FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */; };
+		FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */; };
+		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
+		FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */; };
+		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
+		FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077321EACACD50045E920 /* BSViewsManager.swift */; };
 		FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BE301E938B63006C3359 /* BSValidator.swift */; };
+		FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */; };
+		FDF630881ED1AA2A00BE6F48 /* BSPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,21 +61,40 @@
 		2D374F291E880E7300AE2A81 /* BluesnapSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluesnapSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D374F2E1E880E7300AE2A81 /* BluesnapSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluesnapSDKTests.swift; sourceTree = "<group>"; };
 		2D374F301E880E7300AE2A81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSSummaryScreen.swift; sourceTree = "<group>"; };
 		2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyModel.swift; sourceTree = "<group>"; };
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
-		2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BlueSnap.storyboard; sourceTree = "<group>"; };
 		2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KountDataCollector.h; sourceTree = "<group>"; };
 		2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKountDataCollector.a; sourceTree = "<group>"; };
-		2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CheckoutExampleSwift-Bridging-Header.h.h"; sourceTree = "<group>"; };
-		FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencviesViewController.swift; sourceTree = "<group>"; };
+		2DADB9D81EC31F4200C1A2D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BlueSnap.storyboard; sourceTree = "<group>"; };
+		2DADB9DA1EC31F5400C1A2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BlueSnap.strings; sourceTree = "<group>"; };
+		2DADB9DB1EC3201A00C1A2D2 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/BlueSnap.strings; sourceTree = "<group>"; };
+		DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayPayment.swift; sourceTree = "<group>"; };
+		DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayViewController.swift; sourceTree = "<group>"; };
+		DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayOperation.swift; sourceTree = "<group>"; };
+		DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPKContactExtention.swift; sourceTree = "<group>"; };
+		FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseTextInput.swift; sourceTree = "<group>"; };
+		FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcInputLine.swift; sourceTree = "<group>"; };
+		FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrenciesViewController.swift; sourceTree = "<group>"; };
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
+		FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSInputLine.swift; sourceTree = "<group>"; };
 		FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
+		FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSErrors.swift; sourceTree = "<group>"; };
+		FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStartViewController.swift; sourceTree = "<group>"; };
+		FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStringUtils.swift; sourceTree = "<group>"; };
+		FD4750BA1EF8EECE00E5DFBC /* BSImageLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSImageLibrary.swift; sourceTree = "<group>"; };
 		FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiManager.swift; sourceTree = "<group>"; };
-		FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
+		FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStatesViewController.swift; sourceTree = "<group>"; };
+		FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStateTableViewCell.swift; sourceTree = "<group>"; };
+		FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
+		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
+		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
+		FDA077321EACACD50045E920 /* BSViewsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSViewsManager.swift; sourceTree = "<group>"; };
 		FDA6BE301E938B63006C3359 /* BSValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidator.swift; sourceTree = "<group>"; };
+		FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingViewController.swift; sourceTree = "<group>"; };
+		FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,14 +139,16 @@
 		2D374F221E880E7200AE2A81 /* BluesnapSDK */ = {
 			isa = PBXGroup;
 			children = (
+				FD4750B91EF7D62000E5DFBC /* Helpers */,
+				FD4750B61EF2A0AE00E5DFBC /* CustomControls */,
 				FD17062F1E93727D00552A35 /* Screens */,
 				FD17062E1E93724000552A35 /* Handlers */,
 				FD17062D1E9371FD00552A35 /* Model */,
 				2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */,
-				2D374F431E880EF100AE2A81 /* BlueSnap.storyboard */,
+				2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */,
 				2D374F231E880E7200AE2A81 /* BluesnapSDK.h */,
-				2D89D5411EA8ED830076E219 /* CheckoutExampleSwift-Bridging-Header.h.h */,
 				2D374F241E880E7200AE2A81 /* Info.plist */,
+				FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */,
 			);
 			path = BluesnapSDK;
 			sourceTree = "<group>";
@@ -138,6 +177,9 @@
 				2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */,
 				2D374F411E880EF100AE2A81 /* BSToken.swift */,
 				FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */,
+				FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */,
+				DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */,
+				DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -145,8 +187,9 @@
 		FD17062E1E93724000552A35 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
-				FDA6BE301E938B63006C3359 /* BSValidator.swift */,
 				FD4A14C61E96068300EDBFC0 /* BSApiManager.swift */,
+				FDA077321EACACD50045E920 /* BSViewsManager.swift */,
+				DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */,
 			);
 			name = Handlers;
 			sourceTree = "<group>";
@@ -154,13 +197,40 @@
 		FD17062F1E93727D00552A35 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				2D374F3A1E880EF100AE2A81 /* BSSummaryScreen.swift */,
-				FD7B0E181E9283F1006F4CBC /* BSShippingViewController.swift */,
+				FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */,
+				FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */,
 				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
-				FD1ACDEA1E9F59B40010C983 /* BSCurrencviesViewController.swift */,
+				FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
+				FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */,
+				FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */,
+				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
+				FD4D4D411EB1BBED00D40B2A /* BSStatesViewController.swift */,
+				FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */,
+				DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */,
 			);
 			name = Screens;
+			sourceTree = "<group>";
+		};
+		FD4750B61EF2A0AE00E5DFBC /* CustomControls */ = {
+			isa = PBXGroup;
+			children = (
+				FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */,
+				FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */,
+				FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */,
+			);
+			name = CustomControls;
+			sourceTree = "<group>";
+		};
+		FD4750B91EF7D62000E5DFBC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */,
+				FDA6BE301E938B63006C3359 /* BSValidator.swift */,
+				FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */,
+				FD4750BA1EF8EECE00E5DFBC /* BSImageLibrary.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,11 +308,12 @@
 				};
 			};
 			buildConfigurationList = 2D374F1A1E880E7200AE2A81 /* Build configuration list for PBXProject "BluesnapSDK" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 2D374F161E880E7200AE2A81;
 			productRefGroup = 2D374F211E880E7200AE2A81 /* Products */;
@@ -260,7 +331,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D374F571E8816B500AE2A81 /* BlueSnap.storyboard in Resources */,
+				FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */,
+				2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,17 +350,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD7B0E191E9283F1006F4CBC /* BSShippingViewController.swift in Sources */,
+				FDF630881ED1AA2A00BE6F48 /* BSPaymentViewController.swift in Sources */,
 				2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */,
+				FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */,
+				FD4750B81EF7C50000E5DFBC /* BSStringUtils.swift in Sources */,
 				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
+				FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */,
+				FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */,
 				2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */,
 				FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */,
 				FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */,
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
 				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
-				FD1ACDEB1E9F59B40010C983 /* BSCurrencviesViewController.swift in Sources */,
+				FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */,
+				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
-				2D374F451E880EF100AE2A81 /* BSSummaryScreen.swift in Sources */,
+				FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */,
+				FD3BD9D21EE7F7DD00486576 /* BSErrors.swift in Sources */,
+				FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */,
+				FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */,
+				FDA077331EACACD50045E920 /* BSViewsManager.swift in Sources */,
+				FD4750BB1EF8EECE00E5DFBC /* BSImageLibrary.swift in Sources */,
+				FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */,
+				FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */,
+				FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */,
+				DEB2DD0B164B99C6E7DE417C /* BSApplepayViewController.swift in Sources */,
+				DEBB1FD893E6CC8FA16D5F60 /* BSApplepayPayment.swift in Sources */,
+				DEBAC1114FFA55F1852DCB78 /* BSPKContactExtention.swift in Sources */,
+				DEB3C8BC3806435452EEB052 /* BSApplepayOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,11 +399,25 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2DADB9D81EC31F4200C1A2D2 /* Base */,
+				2DADB9DA1EC31F5400C1A2D2 /* en */,
+				2DADB9DB1EC3201A00C1A2D2 /* he */,
+			);
+			name = BlueSnap.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		2D374F321E880E7300AE2A81 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -368,6 +471,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

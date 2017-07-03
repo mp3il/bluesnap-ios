@@ -21,87 +21,108 @@ class BluesnapSDKTests: XCTestCase {
         super.tearDown()
     }
     
- /*   func testGetTokenAndCurrencies() {
+    func testGetTokenAndCurrencies() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        let token = getToken()
-        XCTAssertNotNil(token, "Failed to get token")
+        createToken()
         
-        let bsCurrencies = getCurrencies(token: token)
+        let bsCurrencies = getCurrencies()
         XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
         
         let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-        print("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+        NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
             
         let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-        print("EUR currency rate is: \(eurCurrencyRate)")
+        NSLog("EUR currency rate is: \(eurCurrencyRate)")
     }
-    
+
     func testSubmitCCDetailsSuccess() {
  
-        let token = getToken()
-        XCTAssertNotNil(token, "Failed to get token")
+        createToken()
 
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
-        do {
-            let result = try BSApiManager.submitCcDetails(bsToken: token, ccNumber: ccn, expDate: exp, cvv: cvv)
         
+        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            (result, error) in
+            
+            XCTAssert(error == nil, "error: \(error)")
             let ccType = result!.ccType
             let last4 = result!.last4Digits
             let country = result!.ccIssuingCountry
-            print("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
-        } catch {
-            XCTAssert(false, "Unexpected error")
-        }
-        
+            NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
+       })
     }
-    */
+    
     func testSubmitCCDetailsError() {
         
-        let token = getToken()
-        XCTAssertNotNil(token, "Failed to get token")
+        createToken()
         
-        submitCCDetailsExpectError(token: token!, ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSCcDetailErrors.invalidCcNumber)
-        submitCCDetailsExpectError(token: token!, ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSCcDetailErrors.invalidCvv)
-        submitCCDetailsExpectError(token: token!, ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSCcDetailErrors.invalidExpDate)
+        submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSCcDetailErrors.invalidCcNumber)
+        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSCcDetailErrors.invalidCvv)
+        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSCcDetailErrors.invalidExpDate)
     }
     
-    
-    private func submitCCDetailsExpectError(token : BSToken!, ccn: String!, cvv: String!, exp: String!, expectedError: BSCcDetailErrors) {
+    func testGetTokenWithBadCredentials() {
         
         do {
-            let result = try BSApiManager.submitCcDetails(bsToken: token, ccNumber: ccn, expDate: exp, cvv: cvv)
-            XCTAssert(false, "Should have thrown error")
-        } catch let error as BSCcDetailErrors {
-            XCTAssertEqual(error, expectedError)
-            print("Got the right error!")
-        } catch {
-            XCTAssert(false, "Unexpected error")
+            let _ = try BSApiManager.createBSToken(domain: BSApiManager.BS_SANDBOX_DOMAIN, user: "dummy", password: "dummypass")
+            print("We should have crashed here")
+            fatalError()
+        } catch let error as BSApiErrors {
+            if error == BSApiErrors.invalidInput {
+                print("Got the correct error")
+            } else {
+                print("Got wrong error \(error.localizedDescription)")
+                fatalError()
+            }
+        } catch let error {
+            print("Got wrong error \(error.localizedDescription)")
+            fatalError()
         }
     }
 
    
-    /*func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }*/
+    // MARK: proivate functions
     
-    private func getToken() -> BSToken! {
+    private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSCcDetailErrors) {
         
-        let token = BSApiManager.getSandboxBSToken()
-        print("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
-        return token!
+        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            (result, error) in
+            
+            if let error = error {
+                XCTAssertEqual(error, expectedError)
+                NSLog("Got the right error!")
+            } else {
+                XCTAssert(false, "Should have thrown error")
+            }
+        })
     }
     
-    private func getCurrencies(token : BSToken!) -> BSCurrencies! {
+
+    private func createToken() {
         
-        let bsCurrencies = BSApiManager.getCurrencyRates(bsToken: token!)
-        return bsCurrencies!
+        do {
+            let token = try BSApiManager.createSandboxBSToken()
+            NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
+            BSApiManager.setBsToken(bsToken: token)
+        } catch let error {
+            print("Got error \(error.localizedDescription)")
+            fatalError()
+        }
+    }
+    
+    private func getCurrencies() -> BSCurrencies! {
+        
+        do {
+            let bsCurrencies = try BSApiManager.getCurrencyRates()
+            return bsCurrencies!
+        } catch let error {
+            print("Got wrong error \(error.localizedDescription)")
+            fatalError()
+        }
     }
     
 }
