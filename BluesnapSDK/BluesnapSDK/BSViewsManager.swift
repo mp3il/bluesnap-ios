@@ -129,7 +129,7 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - selectedCurrencyCode: 3 characters of the curtrent language code (uppercase)
+     - selectedCurrencyCode: 3 characters of the current language code (uppercase)
      - updateFunc: callback; will be called each time a new value is selected
      */
     open class func showCurrencyList(

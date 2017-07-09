@@ -771,7 +771,7 @@ public class BSCcInputLine: BSBaseTextInput {
         
         BSValidator.cvvEditingChanged(sender)
         var cvvMaxLength = 3
-        if cardType == "amex" {
+        if cardType.lowercased() == "amex" {
             cvvMaxLength = 4
         }
         if checkMaxLength(textField: sender, maxLength: cvvMaxLength) == true {
