@@ -276,7 +276,27 @@ BSBaseTextInput is a UIView that holds a text field and optional image; you can 
 BSInputLine is a UIView that holds a label, text field and optional image; you can customize almost every part of it.
 ###BSCcInputLine
 BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data it BlueSnap server, so that your application does not have to handle it.
+
        
+# Apple Pay integration
+Accepting payments with apple pay using Bluesnap iOS SDK is easy, you don't need to deal with encrypted credit card details or any sensitive information in your server side. The SDK checkout screen includes an Apple Pay button that will be displayed if the device supports apple pay.
+In order to enable it in your app few steps has to be taken.
+
+1. Obtain an Apple Merchant ID using the Apple Developer Website, you'll find it under the Registering a Merchant ID page.
+2. Download a CSR from bluesnap
+3. Generate a certificate with that CSR and upload it to BlueSnap
+4. Enable apple pay Capabilities in Xcode project settings
+5. Select the Merchant ID that you created in Apple Dashboard
+6. Pass your Merchant ID to BlueSnap SDK by calling:
+    
+    `    BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example")`
+    
+After a user complete the checkout and pays with apple pay the SDK will call your completion callback, with the PaymentRequest containing the result of the purchase.
+
+Calling paymentRequest.getResultPaymentDetails() will return a BSResultApplePayDetails that can be used to complete the transaction in your server.
+You'll find a sample of this kind of HTTP call in DemoTransactions.swift, you should implement those calls in your server.
+ 
+
 #Sample App - explained
 
 The sample app shows the various stages you need to implement (everything is in class ViewController):
@@ -284,7 +304,7 @@ The sample app shows the various stages you need to implement (everything is in 
  1. Get a token from the BlueSnap server – normally, you need to do this in your server-side implementation (so as not to expose your BlueSnap username/pass in the app code). In the sample app we create a token from BlueSnap Sandbox environment, with dummy credentials. Call BLueSnapSDK.setToken() to set it.
  2. Initialize the input to the checkout flow: create an instance of BSPaymentRequest and fill the parts you may know already of the shopper.
  3. Call BlueSnapSDK.showCheckoutScreen() with callback for completion
- 4. In that callback you need to call your application server to complete the purchase using BlueSnap API. In the sample app we did it from the app, but that is not the recommended way.
+ 4. In that callback you need to call your application server to complete the purchase using BlueSnap API. In the sample app you'll find an implementation of those calls, those are demonstration purpose only and should be made in your server side.
 
 And that’s it!
  
