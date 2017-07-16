@@ -67,7 +67,7 @@ class BSApiManager {
         Return a list of currencies and their rates from BlueSnap server
      - throws BSApiErrors
     */
-    static func getCurrencyRates() throws -> BSCurrencies? {
+    static func getCurrencyRates() -> BSCurrencies? {
 
         let bsToken = getBsToken()
 
@@ -107,7 +107,7 @@ class BSApiManager {
                         resultError = .unknown
                     }
                 } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-                    resultError = parseError(data: data)
+                    resultError = parseError(data: data, httpStatusCode: httpStatusCode)
                 } else {
                     resultError = .unknown
                     NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
@@ -231,7 +231,7 @@ class BSApiManager {
                 resultError = .unknown
             }
         } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-            resultError = parseError(data: data)
+            resultError = parseError(data: data, httpStatusCode: httpStatusCode)
         } else {
             NSLog("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
             resultError = .unknown
@@ -413,7 +413,7 @@ class BSApiManager {
             // TODO: fill result
             
         } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-            resultError = parseError(data: data)
+            resultError = parseError(data: data, httpStatusCode: httpStatusCode)
         } else {
             NSLog("Http error submitting ApplePay details to BS; HTTP status = \(httpStatusCode)")
             resultError = .unknown
@@ -421,7 +421,7 @@ class BSApiManager {
         return (result, resultError)
     }
 
-    private static func parseError(data: Data?) -> BSErrors {
+    private static func parseError(data: Data?, httpStatusCode: Int) -> BSErrors {
         
         var resultError : BSErrors = .invalidInput
         
@@ -459,6 +459,10 @@ class BSApiManager {
         } else if (errStr == "TOKEN_WAS_ALREADY_USED_FOR_CC") {
             resultError = .usedTokenForCC
         } else if (errStr == "TOKEN_NOT_FOUND") {
+            resultError = .tokenNotFound
+            notifyTokenExpired()
+        } else if httpStatusCode == 401 {
+            // unauthorized - this happens in the getRates, where the result is ubreadable HTML
             resultError = .tokenNotFound
             notifyTokenExpired()
         }

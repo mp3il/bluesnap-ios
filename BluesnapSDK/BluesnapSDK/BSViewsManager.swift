@@ -131,22 +131,27 @@ class BSViewsManager {
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
      - updateFunc: callback; will be called each time a new value is selected
+     - errorFunc: callback; will be called if we fail to get the currencies
      */
     open class func showCurrencyList(
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+        errorFunc: @escaping ()->Void) {
         
         if currencyScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
         }
         
-        currencyScreen.selectedCurrencyCode = selectedCurrencyCode
-        currencyScreen.updateFunc = updateFunc
-        
-        inNavigationController.pushViewController(currencyScreen, animated: animated)
+        if currencyScreen.initCurrencies() {
+            currencyScreen.selectedCurrencyCode = selectedCurrencyCode
+            currencyScreen.updateFunc = updateFunc
+            inNavigationController.pushViewController(currencyScreen, animated: animated)
+        } else {
+            errorFunc()
+        }
     }
 
     
@@ -261,7 +266,8 @@ class BSViewsManager {
     static internal let termsURL = "https://home.bluesnap.com/terms-and-conditions/"
     open class func openPopupMenu(paymentRequest: BSPaymentRequest?,
             inNavigationController : UINavigationController,
-            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void) -> UIAlertController {
+            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+            errorFunc: @escaping ()->Void) -> UIAlertController {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
@@ -271,7 +277,8 @@ class BSViewsManager {
                     inNavigationController: inNavigationController,
                     animated: true,
                     selectedCurrencyCode: paymentRequest.getCurrency(),
-                    updateFunc: updateCurrencyFunc)
+                    updateFunc: updateCurrencyFunc,
+                    errorFunc: errorFunc)
             }
         }
         

@@ -28,6 +28,20 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     fileprivate var filteredCurrencies : BSCurrencies?
     @IBOutlet weak var tableView: UITableView!
     
+    // MARK: init currencies
+    
+    /**
+     Re-load currencies data if necessary; should be called before displaying the view
+     - throws BSApiErrors
+     */
+    func initCurrencies() -> Bool {
+        if let tmp = BSApiManager.getCurrencyRates() {
+            bsCurrencies = tmp
+            return true
+        } else {
+            return false
+        }
+    }
     
     // MARK: Search bar stuff
     
@@ -60,13 +74,6 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewWillAppear(_ animated: Bool) {
         
-        // Re-load currencies data if necessary
-        do {
-            let tmp = try BSApiManager.getCurrencyRates()
-            bsCurrencies = tmp
-        } catch {
-            NSLog("Failed to fetch currencies")
-        }
         filterCurrencies(searchBar?.text ?? "")
         
         super.viewWillAppear(animated)
