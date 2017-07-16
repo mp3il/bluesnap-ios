@@ -224,11 +224,11 @@ public class BSValidator {
         return ok
     }
     
-    class func validateCvv(input: BSCcInputLine) -> Bool {
+    class func validateCvv(input: BSCcInputLine, cardType: String) -> Bool {
         
         var result : Bool = true;
         let newValue = input.getCvv() ?? ""
-        if newValue.characters.count < 3 || newValue.characters.count > 4 {
+        if newValue.characters.count != getCvvLength(cardType: cardType) {
             result = false
         }
         if result {
@@ -402,6 +402,16 @@ public class BSValidator {
         }
         return true
     }
+    
+    
+    open class func getCvvLength(cardType: String) -> Int {
+        var cvvLength = 3
+        if cardType.lowercased() == "amex" {
+            cvvLength = 4
+        }
+        return cvvLength
+    }
+
     
     // MARK: formatting functions
     

@@ -770,12 +770,9 @@ public class BSCcInputLine: BSBaseTextInput {
     func cvvFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.cvvEditingChanged(sender)
-        var cvvMaxLength = 3
-        if cardType.lowercased() == "amex" {
-            cvvMaxLength = 4
-        }
-        if checkMaxLength(textField: sender, maxLength: cvvMaxLength) == true {
-            if sender.text?.characters.count == cvvMaxLength {
+        let cvvLength = BSValidator.getCvvLength(cardType: self.cardType)
+        if checkMaxLength(textField: sender, maxLength: cvvLength) == true {
+            if sender.text?.characters.count == cvvLength {
                 if cvvTextField.canResignFirstResponder == true {
                     focusOnNextField()
                 }
@@ -811,7 +808,7 @@ public class BSCcInputLine: BSBaseTextInput {
         
         var result = true
         if !ignoreIfEmpty || (cvvTextField.text?.characters.count)! > 0 {
-            result = BSValidator.validateCvv(input: self)
+            result = BSValidator.validateCvv(input: self, cardType: cardType)
         }
         return result
     }
