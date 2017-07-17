@@ -12,7 +12,7 @@ import Foundation
 class BSCountryTableViewCell : UITableViewCell {
     
     //MARK: items in cell UI
-    @IBOutlet weak var flagUIButton: UIButton!
+    @IBOutlet weak var flagImageView: UIImageView!
     @IBOutlet weak var itemNameUILabel: UILabel!
     @IBOutlet weak var checkMarkImageView: UIImageView!
 }

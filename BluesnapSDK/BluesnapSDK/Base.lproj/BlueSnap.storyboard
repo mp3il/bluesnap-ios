@@ -23,7 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="3Ep-JQ-pQu">
+                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="3Ep-JQ-pQu">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="vDQ-J8-b8o"/>
@@ -44,43 +44,29 @@
                                             <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
-                                                    <rect key="frame" x="0.0" y="8" width="28" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="28" id="fG6-2K-fiy"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Flag" image="US"/>
-                                                </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="320" y="13" width="16" height="13"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
-                                                    </accessibility>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="16" id="kGj-sM-og7"/>
-                                                    </constraints>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
+                                                    <rect key="frame" x="0.0" y="12" width="28" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="36" y="7" width="281" height="24"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
+                                                    <rect key="frame" x="36" y="10" width="281" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
+                                                    <rect key="frame" x="320" y="15" width="16" height="13"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                    </accessibility>
+                                                </imageView>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="F5T-K3-5cN" firstAttribute="centerY" secondItem="geS-dI-qMo" secondAttribute="centerY" id="2T2-S7-lQl"/>
-                                                <constraint firstItem="F5T-K3-5cN" firstAttribute="centerY" secondItem="wBQ-PP-rh2" secondAttribute="centerY" id="4un-pH-heW"/>
-                                                <constraint firstItem="F5T-K3-5cN" firstAttribute="leading" secondItem="geS-dI-qMo" secondAttribute="leading" id="OhZ-XI-6Hl"/>
-                                                <constraint firstItem="wBQ-PP-rh2" firstAttribute="leading" secondItem="F5T-K3-5cN" secondAttribute="trailing" constant="8" id="QeO-ut-DcS"/>
-                                                <constraint firstItem="wBQ-PP-rh2" firstAttribute="centerY" secondItem="Eic-Oi-nQ3" secondAttribute="centerY" id="VaC-ZR-4Qz"/>
-                                                <constraint firstItem="wBQ-PP-rh2" firstAttribute="bottom" secondItem="geS-dI-qMo" secondAttribute="bottomMargin" id="hip-yj-zYc"/>
-                                                <constraint firstAttribute="trailing" secondItem="Eic-Oi-nQ3" secondAttribute="trailing" id="vkL-S2-bkd"/>
-                                                <constraint firstItem="Eic-Oi-nQ3" firstAttribute="leading" secondItem="wBQ-PP-rh2" secondAttribute="trailing" constant="3" id="x3q-7w-2ie"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="checkMarkImageView" destination="Eic-Oi-nQ3" id="aX7-r0-FFB"/>
-                                            <outlet property="flagUIButton" destination="F5T-K3-5cN" id="3n2-ls-FR8"/>
+                                            <outlet property="flagImageView" destination="g0G-ax-3BT" id="lpo-9N-Vv7"/>
                                             <outlet property="itemNameUILabel" destination="wBQ-PP-rh2" id="goG-0Z-xmG"/>
                                         </connections>
                                     </tableViewCell>
@@ -115,7 +101,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h2d-uf-6vd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3598" y="1004"/>
+            <point key="canvasLocation" x="3597.5999999999999" y="1003.4482758620691"/>
         </scene>
         <!--Shipping-->
         <scene sceneID="rbP-bj-wQc">
@@ -978,7 +964,6 @@
     </scenes>
     <resources>
         <image name="IL" width="28" height="20"/>
-        <image name="US" width="28" height="20"/>
         <image name="apple_pay_button" width="375" height="143"/>
         <image name="blue_check_mark" width="16" height="13"/>
         <image name="card_number_box" width="375" height="143"/>
