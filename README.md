@@ -1,6 +1,6 @@
 
 
-#BlueSnap IOS SDK
+# BlueSnap IOS SDK
 
 The BlueSnap IOS SDK is intended to give IOS application developers an easy tool for managing the check-out payment details without having to be PCI compliant, and without having to create the billing/shipping UI and functionality.
 
@@ -12,7 +12,7 @@ Please note that this SDK is for obtaining the payment details from the shopper.
 
 The SDK is written in Swift 3, using xCode 8.
  
-##Checkout Flow Options
+## Checkout Flow Options
 
 The SDK offers you several types of purchase flows when you use our UI:
 
@@ -20,17 +20,17 @@ The SDK offers you several types of purchase flows when you use our UI:
  - **Full billing** - you can choose to ask the shopper only for minimal details (like name and CC details), or if you choose, get the full billing address and email as well.
  - **Do it yourself** - if you do not want to use our UI, you can use just the functionality that submits the PCI details to BlueSnap, and handle all the rest yourself. We also provide UI components for collecting the CC details and several helper classes.
 
-##Where to start
+## Where to start
 
 If you are a top-to-bottom person, skip ahead to the section that explains the sample app and look at the code. Look up functions as you go along.
 
 If you are a bottom-to-top person, read on about the data structures and classes we offer you.
  
-#Data Structures
+# Data Structures
 
 In the BlueSnap IOS SDK project you have a Model group which contains the data structures we use.
  
-##BSToken (in BSToken.swift)
+## BSToken (in BSToken.swift)
 
 BSToken is the simplest one. It contains the token you got from BlueSnap, and the domain (for example: "https://api.bluesnap.com/")
 
@@ -51,7 +51,7 @@ BSToken is the simplest one. It contains the token you got from BlueSnap, and th
 
 The SDK holds a function for obtaining a token from our Sandbox environment for quick testing purposes.
  
-##BSAddressDetails (in BSPurchaseDataModel.swift)
+## BSAddressDetails (in BSPurchaseDataModel.swift)
 
 This class holds the shopper details for either billing or shipping. if you choose not to use the full billing option - only some of the fields will be full in the billing address details (name and country).
 
@@ -69,32 +69,41 @@ This class holds the shopper details for either billing or shipping. if you choo
 	    }
 	}
 
+## BSPaymentType
 
-##BSResultPaymentDetails (in BSPurchaseDataModel.swift)
+This enum differentiates between the payment method the shopper chose. It will contain Credit-card, Apple-Pay, PayPal and more.
+
+    public enum BSPaymentType {
+    	case CreditCard
+    	case ApplePay
+	}
+
+## BSResultPaymentDetails (in BSPurchaseDataModel.swift)
 
 This is a base class for the payment-specific details like BSResultApplePayDetails and BSResultCcDetails.
 
     public class BSResultPaymentDetails {
 	    var paymentType : BSPaymentType!
     }
-    public enum BSPaymentType {
-	    case CreditCard
-	    case ApplePay
-    }
 
-
-##BSResultCcDetails (in BSPurchaseDataModel.swift)
+## BSResultCcDetails (in BSPurchaseDataModel.swift)
 
 This class inherits BSResultPaymentDetails, and holds the result of submitting Credit Card details to BlueSnap - this data is not secure.
 
-    public class BSResultCcDetails {
+    public class BSResultCcDetails : BSResultPaymentDetails {
 	    var ccType : String?
 	    var last4Digits : String?
 	    var ccIssuingCountry : String?
     }
 
+## BSResultApplePayDetails (in BSPurchaseDataModel.swift)
 
-##BSPaymentRequest (in BSPurchaseDataModel.swift)
+This class inherits BSResultPaymentDetails, and holds the result of submitting Apple-Pay details to BlueSnap.
+
+    public class BSResultApplePayDetails : BSResultPaymentDetails {
+    }
+
+## BSPaymentRequest (in BSPurchaseDataModel.swift)
 
 The central data structure is this class, which holds shopper data that is both input and output. You can provide any data you know about the shopper (like name or email), so we can pre-populate the input fields to make the purchase easier. This is an abbreviated version of the class:
 
@@ -133,18 +142,18 @@ The central data structure is this class, which holds shopper data that is both 
 }
 
 
-#Main Functionality - BlueSnapSDK class
+# Main Functionality - BlueSnapSDK class
 
 The class BlueSnapSDK is the one that holds the functions you want to call to use our custom check-out. Let's explain each one.
 
-##setBsToken
+## setBsToken
 This function sets the token we will use when calling BlueSnap server API. It must be set at the beginning of the flow with a valid token obtained from your server, by calling BlueSnap server to generate a token.
 Signature:
 > open class func setBsToken(bsToken: BSToken!)
  
 The token expires after 20 minutes, so be sure to generate a new one for each purchase, and also listen for the token expiration event to generate a new one if needed. More explanation below.
 
-##showCheckoutScreen
+## showCheckoutScreen
 This is the main function, and actually the only one you need to use normally (after setBsToken): once you call it, the SDK starts the check-out flow of choosing payment method and on to getting the shopper details.
 
 Parameters:
@@ -165,10 +174,10 @@ Signature:
         fullBilling : Bool,
         purchaseFunc: @escaping (BSPaymentDetails!)->Void)
  
-##submitCcDetails
+## submitCcDetails
 Submit Payment fields:
 If you do not want to use our check-out page, you can implement your own.
-You need to generate a token, and then call this function to submit the CC details to BlueSnap instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction.
+You need to generate a token, and then call this function to submit the CC details you collected from the shopper to BlueSnap [instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction]. Just pass the 3 CC fields to this function and you can forget about them :)
 
 Parameters:
 
@@ -178,9 +187,9 @@ Parameters:
  - completion: callback with either result details if OK, or error details if not OK
 
 Signature:
-> open class func submitCcDetails(ccNumber: String, expDate: String, cvv:  String) throws -> BSResultCcDetails?
+> open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSErrors?)->Void)
  
-##createSandboxTestToken
+## createSandboxTestToken
 Returns a token for BlueSnap Sandbox environment; useful for tests.
 In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
 
@@ -188,10 +197,10 @@ Signature:
 >open class func getSandboxTestToken() throws -> BSToken?
  
 
-#Handling Token Expiration
+# Handling Token Expiration
 
 Under the model file BSToken.swift you will find this extension, which holds the notification name we use for notifying a stale token:
-> public extension Notification.Name {
+public extension Notification.Name {
     static let bsTokenExpirationNotification = Notification.Name("bsTokenExpirationNotification")
 }
 
@@ -199,20 +208,20 @@ If you look at the example app ViewCiontroller.swift, you will see at the bottom
 listenForBsTokenExpiration() - this function is called to start listening to the event;
 bsTokenExpired() - this function handles the error by generating a new token.
  
-What will happen when the user gets an error, if you re-generate a token and he tries to submit again - the second submit (with the new token) will succeed. Otherwise your poor shopper will continue getting errors :)
+Whhen the user gets an error, if you re-generate a token and he tries to submit again - the second submit (with the new token) will succeed. Otherwise your poor shopper will continue getting errors :)
  
  
-#Helper Classes
+# Helper Classes
 We provide several classes that give some functionality you can use if you want to build your own checkout flow or re-use our code in any way.
  
-##String Utils and Validations
+## String Utils and Validations
 **BSStringUtils** supplies string helper functions like removeWhitespaces, removeNoneDigits, etc.
 **BSValidator** provides lots of validation functions like isValidEmail, getCcLengthByCardType, formatCCN, getCCTypeByRegex, etc.
 The code is self-explanatory and has comments where needed.
  
-##Handling currencies and rates
+## Handling currencies and rates
 In our UI we allow the shopper to change the used currency. In case you need this functionality in your app, we provide easy methods to do that.
-###Currency Data Structures
+### Currency Data Structures
 We have 2 data structures (see BSCurrencyModel.swift|): BSCurrency holds a single currency, and  BSCurrencies holds all the currencies.
 >public class BSCurrency {
     internal var name : String!
@@ -233,7 +242,7 @@ public class BSCurrencies {
     }
 }
  
-###Currency Functionality (in BlueSnapSDK class):
+### Currency Functionality (in BlueSnapSDK class):
 
 **getCurrencyRates**
 
@@ -254,31 +263,34 @@ Parameters:
  - animated: how to navigate to the new screen
  - selectedCurrencyCode: 3 characters of the current language code (uppercase)
  - updateFunc: callback; will be called each time a new value is selected
- - 
+ - errorFunc: callback; will be called if we fail to get the currencies
+
 Signature:
 >open class func showCurrencyList(
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void)
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+        errorFunc: @escaping()->Void)
  
  
-##Custom UI Controls
+## Custom UI Controls
 If you want to build your own UI, you may find our custom controls useful, in themselves or to inherit from them and adjust to your own functionality.
 
 There are a lot of comments inside the code, explaining how to use them and what each function does.
 
 All 3 are @IBDesignable UIViews, so you can easily check them out: simply drag a UIView into your Storyboard, change the class name to one of these below, and start playing with the inspectable properties.
 
-###BSBaseTextInput
+### BSBaseTextInput
 BSBaseTextInput is a UIView that holds a text field and optional image; you can customize almost every part of it. It is less useful in itself, seeing it’s a base class for the following 2 controls.
-###BSInputLine
+### BSInputLine
 BSInputLine is a UIView that holds a label, text field and optional image; you can customize almost every part of it.
-###BSCcInputLine
+### BSCcInputLine
 BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data it BlueSnap server, so that your application does not have to handle it.
 
        
 # Apple Pay integration
+
 Accepting payments with apple pay using Bluesnap iOS SDK is easy, you don't need to deal with encrypted credit card details or any sensitive information in your server side. The SDK checkout screen includes an Apple Pay button that will be displayed if the device supports apple pay.
 In order to enable it in your app few steps has to be taken.
 
@@ -297,7 +309,7 @@ Calling paymentRequest.getResultPaymentDetails() will return a BSResultApplePayD
 You'll find a sample of this kind of HTTP call in DemoTransactions.swift, you should implement those calls in your server.
  
 
-#Sample App - explained
+# Sample App - explained
 
 The sample app shows the various stages you need to implement (everything is in class ViewController):
 
