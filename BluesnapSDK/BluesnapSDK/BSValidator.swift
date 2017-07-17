@@ -24,7 +24,8 @@ public class BSValidator {
     static let cityInvalidMessage = "Invalid city"
     static let countryInvalidMessage = "Invalid country"
     static let stateInvalidMessage = "Invalid state"
-    static let zipInvalidMessage = "Invalid code"
+    static let zipCodeInvalidMessage = "Invalid zip code"
+    static let postalCodeInvalidMessage = "Invalid postal code"
 
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
@@ -156,7 +157,8 @@ public class BSValidator {
         if result {
             input.hideError()
         } else {
-            input.showError(zipInvalidMessage)
+            let errorText = getZipErrorText(countryCode: addressDetails?.country ?? "")
+            input.showError(errorText)
         }
         return result
     }
@@ -433,9 +435,6 @@ public class BSValidator {
         return maxLength
     }
     
-    
-    // MARK:
-    
     open class func formatCCN(_ str: String) -> String {
         
         var result: String
@@ -507,5 +506,33 @@ public class BSValidator {
         return nil
     }
 
+    // MARK: zip texts
+    
+    open class func getZipLabelText(countryCode: String) -> String {
+        
+        if countryCode.lowercased() == "us" {
+            return "Billing Zip"
+        } else {
+            return "Postal Code"
+        }
+    }
+    
+    open class func getZipErrorText(countryCode: String) -> String {
+        
+        if countryCode.lowercased() == "us" {
+            return zipCodeInvalidMessage
+        } else {
+            return postalCodeInvalidMessage
+        }
+    }
+    
+    open class func getZipKeyboardType(countryCode: String) -> UIKeyboardType {
+    
+        if countryCode.lowercased() == "us" {
+            return .numberPad
+        } else {
+            return .numbersAndPunctuation
+        }
+    }
 }
 
