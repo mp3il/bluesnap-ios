@@ -365,10 +365,16 @@ public class BSCcInputLine: BSBaseTextInput {
     // MARK: BSBaseTextInput Override functions
 
     override func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {
+        
+        imageWidth = 35
+        imageHeight = 21
+        
         let ratios = super.initRatios()
         
-        actualNextBtnWidth = (nextBtnWidth * ratios.hRatio).rounded()
-        actualNextBtnHeight = (nextBtnHeight * ratios.vRatio).rounded()
+        // keep proportion of image
+        let imageRatio = min(ratios.hRatio, ratios.vRatio)
+        actualNextBtnWidth = (nextBtnWidth * imageRatio).rounded()
+        actualNextBtnHeight = (nextBtnHeight * imageRatio).rounded()
         
         actualCcnWidth = (ccnWidth * ratios.hRatio).rounded()
         actualLast4Width = (last4Width * ratios.hRatio).rounded()
@@ -415,7 +421,7 @@ public class BSCcInputLine: BSBaseTextInput {
         if let img = btnImage {
             nextButton.setImage(img, for: .normal)
             nextButton.contentVerticalAlignment = .fill
-            nextButton.contentHorizontalAlignment = .center
+            nextButton.contentHorizontalAlignment = .fill
             nextButton.addTarget(self, action: #selector(self.doneBtnfromKeyboardClicked), for: .touchUpInside)
             self.addSubview(nextButton)
         }
