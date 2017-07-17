@@ -216,10 +216,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.navigationController!.isNavigationBarHidden = false
         
         self.withShipping = paymentRequest.getShippingDetails() != nil
-        
         shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
+        
         // set the "shipping same as billing" to be true if no shipping name is supplied
-        shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
+        if self.firstTime == true {
+            shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
+        }
         
         updateTexts()
         
