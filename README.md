@@ -286,7 +286,7 @@ BSBaseTextInput is a UIView that holds a text field and optional image; you can 
 ### BSInputLine
 BSInputLine is a UIView that holds a label, text field and optional image; you can customize almost every part of it.
 ### BSCcInputLine
-BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data it BlueSnap server, so that your application does not have to handle it.
+BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data to the BlueSnap server, so that your application does not have to handle it.
 
        
 # Apple Pay integration
