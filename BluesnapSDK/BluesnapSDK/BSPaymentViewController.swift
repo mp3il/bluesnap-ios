@@ -389,7 +389,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func updateZipByCountry(countryCode : String) {
         
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
-        self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode)
+        self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: true)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.zipInputLine.isHidden = hideZip
         self.zipInputLine.hideError()

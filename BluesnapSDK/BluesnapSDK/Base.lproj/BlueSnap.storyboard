@@ -49,14 +49,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="35" y="10" width="282" height="20"/>
+                                                    <rect key="frame" x="34" y="10" width="282" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="319" y="15" width="16" height="13"/>
+                                                    <rect key="frame" x="318" y="15" width="16" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -139,8 +139,23 @@
                                                     <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="y0Q-RU-Oq9"/>
                                                 </connections>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3n5-zz-YeP" userLabel="Phone Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="20" y="64" width="335" height="43"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Phone"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
+                                                        <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="1Ky-hk-Okw"/>
+                                                    <action selector="phoneEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="dua-54-uMb"/>
+                                                    <action selector="phoneEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="eqw-ms-D9e"/>
+                                                </connections>
+                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="63" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="108" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
@@ -152,7 +167,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="107" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="152" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
@@ -164,7 +179,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="151" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="196" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
@@ -176,7 +191,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="195" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="240" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
@@ -191,20 +206,23 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="jMo-vo-Aht" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="1kt-GN-hUH"/>
+                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="1" id="2HD-hh-Lx4"/>
                                             <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="4KO-NQ-Nne"/>
                                             <constraint firstAttribute="trailing" secondItem="M8Q-CA-XJP" secondAttribute="trailing" constant="16" id="4PM-5i-3aO"/>
                                             <constraint firstItem="M8Q-CA-XJP" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="73Y-B8-Ryk"/>
                                             <constraint firstItem="7GX-8o-fbs" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="860-Ng-qFM"/>
-                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="1" id="9AW-wa-22K"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" id="Fnt-c0-WIv"/>
                                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="Ibg-bc-FdR"/>
+                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="1" id="Kde-aM-at2"/>
                                             <constraint firstItem="Qye-kG-IzH" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="LWW-In-Bsf"/>
-                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="MHJ-0A-cQu"/>
                                             <constraint firstAttribute="trailing" secondItem="jMo-vo-Aht" secondAttribute="trailing" constant="16" id="NN1-g5-NZB"/>
                                             <constraint firstAttribute="trailing" secondItem="Qye-kG-IzH" secondAttribute="trailing" constant="16" id="QTa-CE-eWB"/>
-                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="1" id="VEA-5X-lHf"/>
+                                            <constraint firstItem="3n5-zz-YeP" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" constant="1" id="U1O-XE-eZn"/>
                                             <constraint firstAttribute="trailing" secondItem="5Tf-NL-jP3" secondAttribute="trailing" constant="16" id="VjE-Q7-7nw"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="3n5-zz-YeP" secondAttribute="bottom" constant="1" id="WwN-KD-oab"/>
+                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="hZc-6q-NlO"/>
                                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="20" symbolic="YES" id="j2I-GE-Xvx"/>
+                                            <constraint firstItem="3n5-zz-YeP" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="jnN-Rr-zTU"/>
+                                            <constraint firstAttribute="trailing" secondItem="3n5-zz-YeP" secondAttribute="trailing" constant="16" id="md0-S9-9Il"/>
                                             <constraint firstAttribute="trailing" secondItem="7GX-8o-fbs" secondAttribute="trailing" constant="16" id="w4a-SO-IrB"/>
                                         </constraints>
                                     </view>
@@ -234,6 +252,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="jMo-vo-Aht" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="1cb-ng-Cpb"/>
+                            <constraint firstItem="3n5-zz-YeP" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="704-gN-YTh"/>
                             <constraint firstItem="7GX-8o-fbs" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="9qJ-I3-WbU"/>
                             <constraint firstItem="BiT-2P-8ND" firstAttribute="leading" secondItem="KnJ-zC-fwY" secondAttribute="leadingMargin" constant="-16" id="Anb-um-E8p"/>
                             <constraint firstItem="Qye-kG-IzH" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="HCE-FK-CPW"/>
@@ -253,6 +272,7 @@
                         <outlet property="fieldsView" destination="Xjb-2n-SG7" id="Bd2-zq-zjH"/>
                         <outlet property="nameInputLine" destination="5Tf-NL-jP3" id="smj-ra-V3T"/>
                         <outlet property="payUIButton" destination="lFE-br-NNC" id="X1a-Qu-bCK"/>
+                        <outlet property="phoneInputLine" destination="3n5-zz-YeP" id="4Uy-u2-0lF"/>
                         <outlet property="scrollView" destination="BiT-2P-8ND" id="anU-3o-hb0"/>
                         <outlet property="stateInputLine" destination="Qye-kG-IzH" id="UsF-BN-FWV"/>
                         <outlet property="streetInputLine" destination="jMo-vo-Aht" id="3XO-UG-1RJ"/>

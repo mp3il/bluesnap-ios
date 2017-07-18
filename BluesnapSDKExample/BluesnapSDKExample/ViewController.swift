@@ -236,8 +236,8 @@ class ViewController: UIViewController {
         }
         if let shippingDetails = paymentRequest.getShippingDetails() {
             NSLog("Shipping Data: Name:\(shippingDetails.name)")
-            NSLog(" Zip code:\(shippingDetails.zip ?? "")")
             NSLog(" Phone:\(shippingDetails.phone ?? "")")
+            NSLog(" Zip code:\(shippingDetails.zip ?? "")")
             NSLog(" Street address:\(shippingDetails.address ?? "")")
             NSLog(" City:\(shippingDetails.city ?? "")")
             NSLog(" Country code:\(shippingDetails.country ?? "")")

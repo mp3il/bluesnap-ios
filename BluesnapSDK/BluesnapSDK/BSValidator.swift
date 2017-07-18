@@ -75,6 +75,16 @@ public class BSValidator {
         return result
     }
     
+    // no validation yet, tyhis is just a preparation
+    class func validatePhone(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSShippingAddressDetails?) -> Bool {
+        
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.phone = newValue
+        }
+        return true
+    }
+
     class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
@@ -266,14 +276,14 @@ public class BSValidator {
         sender.setValue(input)
     }
     
-    class func emailEditingChanged(_ sender: UITextField) {
+    class func phoneEditingChanged(_ sender: BSInputLine) {
         
-        var input : String = sender.text ?? ""
-        input = BSStringUtils.removeNoneEmailCharacters(input)
-        input = BSStringUtils.cutToMaxLength(input, maxLength: 120)
-        sender.text = input
+        var input : String = sender.getValue() ?? ""
+        input = BSStringUtils.removeNonePhoneCharacters(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 30)
+        sender.setValue(input)
     }
-    
+
     class func emailEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
@@ -508,10 +518,14 @@ public class BSValidator {
 
     // MARK: zip texts
     
-    open class func getZipLabelText(countryCode: String) -> String {
+    open class func getZipLabelText(countryCode: String, forBilling: Bool) -> String {
         
         if countryCode.lowercased() == "us" {
-            return "Billing Zip"
+            if forBilling {
+                return "Billing Zip"
+            } else {
+                return "Shipping Zip"
+            }
         } else {
             return "Postal Code"
         }
