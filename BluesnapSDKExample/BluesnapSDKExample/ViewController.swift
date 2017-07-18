@@ -222,12 +222,14 @@ class ViewController: UIViewController {
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
         if let billingDetails = paymentRequest.getBillingDetails() {
-            NSLog("Result Data: Name:\(billingDetails.name)")
+            NSLog("Result Data: Name:\(billingDetails.name ?? "")")
             if let zip = billingDetails.zip {
                 NSLog(" Zip code:\(zip)")
             }
+            if let email = billingDetails.email {
+                NSLog(" Email:\(email)")
+            }
             if self.fullBillingSwitch.isOn {
-                NSLog(" Email:\(billingDetails.email ?? "")")
                 NSLog(" Street address:\(billingDetails.address ?? "")")
                 NSLog(" City:\(billingDetails.city ?? "")")
                 NSLog(" Country code:\(billingDetails.country ?? "")")
