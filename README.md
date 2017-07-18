@@ -51,23 +51,43 @@ BSToken is the simplest one. It contains the token you got from BlueSnap, and th
 
 The SDK holds a function for obtaining a token from our Sandbox environment for quick testing purposes.
  
-## BSAddressDetails (in BSPurchaseDataModel.swift)
+## BSBaseAddressDetails, BSBillingAddressDetails, BSShippingAddressDetails (in BSPurchaseDataModel.swift)
 
-This class holds the shopper details for either billing or shipping. if you choose not to use the full billing option - only some of the fields will be full in the billing address details (name and country).
+These classes hold the shopper details for either billing or shipping. 
+Optional/Mandatory:
+State is mandfatopry only if the country has state (USA, Canada and Brazil).
+If you choose not to use the full billing option - only name, country and zip are filled, email is optional.
+For full billing details, everything is mandatory except email which is optional.
+For shipping details all field are mandatory except phone which is optional.
 
-    public class BSAddressDetails {
-	    public init() {}
-	    public var name : String! = ""
-	    public var email : String?
-	    public var address : String?
-	    public var city : String?
-	    public var zip : String?
-	    public var country : String?
-	    public var state : String?
-	    public func getSplitName() -> (firstName: String, lastName: String)? {
-	        return name.splitName
-	    }
-	}
+    public class BSBaseAddressDetails {
+    
+    	public init() {}
+    
+    	public var name : String! = ""
+    	public var address : String?
+    	public var city : String?
+    	public var zip : String?
+    	public var country : String?
+    	public var state : String?
+    
+    	public func getSplitName() -> (firstName: String, lastName: String)? {
+        	return BSStringUtils.splitName(name)
+    	}
+    }
+
+    public class BSBillingAddressDetails : BSBaseAddressDetails {
+    
+    	public override init() { super.init() }
+    	public var email : String?
+    }
+
+    public class BSShippingAddressDetails : BSBaseAddressDetails {
+    
+    	public override init() { super.init() }
+    	public var phone : String?
+    }
+
 
 ## BSPaymentType
 
@@ -115,8 +135,8 @@ The central data structure is this class, which holds shopper data that is both 
     var currency : String! = "USD"
     
     // These fields are output, but may be supplied as input as well
-    var billingDetails : BSAddressDetails! = BSAddressDetails()
-    var shippingDetails : BSAddressDetails?
+    var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
+    var shippingDetails : BSShippingAddressDetails?
     
     // Output only - result of submitting the payment details to BlueSnap server
     var resultPaymentDetails : BSResultPaymentDetails?
