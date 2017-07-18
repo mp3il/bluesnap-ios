@@ -17,6 +17,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     internal var payText : String!
     internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
+    internal var activityIndicator : UIActivityIndicatorView?
     
     // MARK: outlets
         
@@ -112,6 +113,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerTapToHideKeyboard()
+        activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,7 +157,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
             
-            _ = navigationController?.popViewController(animated: false)
+            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
             submitPaymentFields()
             
         } else {

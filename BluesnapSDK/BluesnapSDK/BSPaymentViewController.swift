@@ -163,18 +163,31 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     func didSubmitCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
 
-        self.stopActivityIndicator()
-        
-        if let result = result {
-            self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
-            // return to merchant screen
-            if let navigationController = self.navigationController {
-                let viewControllers = navigationController.viewControllers
-                let merchantControllerIndex = viewControllers.count-3
-                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+        if let navigationController = self.navigationController {
+            
+            let viewControllers = navigationController.viewControllers
+            let topController = viewControllers[viewControllers.count-1]
+            let inShippingScreen = shippingScreen != nil && topController == shippingScreen
+            
+            if inShippingScreen {
+                BSViewsManager.stopActivityIndicator(activityIndicator: shippingScreen.activityIndicator)
+            } else {
+                self.stopActivityIndicator()
             }
-            // execute callback
-            self.purchaseFunc(self.paymentRequest)
+            
+            if let result = result {
+                self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+                // return to merchant screen
+                let merchantControllerIndex = viewControllers.count - (inShippingScreen ? 4 : 3)
+                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+                // execute callback
+                self.purchaseFunc(self.paymentRequest)
+            } else {
+                // error
+                if inShippingScreen {
+                    _ = navigationController.popViewController(animated: false)
+                }
+            }
         }
     }
     
@@ -346,7 +359,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
     
     func submitPaymentFields() {
-        startActivityIndicator()
+        
         self.ccInputLine.submitPaymentFields()
     }
     
@@ -426,6 +439,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             if (withShipping && !isShippingSameAsBilling()) {
                 gotoShippingScreen()
             } else {
+                startActivityIndicator()
                 submitPaymentFields()
             }
         } else {

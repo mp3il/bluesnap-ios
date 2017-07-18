@@ -428,15 +428,22 @@ class BSApiManager {
         var errStr : String?
         if let data = data {
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-                if let messages = json["message"] as? [[String: AnyObject]] {
-                    if let message = messages[0] as? [String: String] {
-                        errStr = message["errorName"]
-                    } else {
-                        NSLog("Error - result messages does not contain message")
-                    }
+                // sometimes the data is not JSON :(
+                let str : String = String(data: data, encoding: .utf8) ?? ""
+                let p = str.characters.index(of: "{")
+                if p == nil {
+                    errStr = str.replacingOccurrences(of: "\"", with: "")
                 } else {
-                    NSLog("Error - result data does not contain messages")
+                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
+                    if let messages = json["message"] as? [[String: AnyObject]] {
+                        if let message = messages[0] as? [String: String] {
+                            errStr = message["errorName"]
+                        } else {
+                            NSLog("Error - result messages does not contain message")
+                        }
+                    } else {
+                        NSLog("Error - result data does not contain messages")
+                    }
                 }
             } catch let error {
                 NSLog("Error parsing result data: \(data) ; error: \(error.localizedDescription)")
