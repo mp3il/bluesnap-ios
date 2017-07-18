@@ -231,9 +231,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             self.firstTime = false
             if let billingDetails = self.paymentRequest.getBillingDetails() {
                 self.nameInputLine.setValue(billingDetails.name)
+                self.emailInputLine.setValue(billingDetails.email)
+                self.zipInputLine.setValue(billingDetails.zip)
                 if fullBilling {
-                    self.emailInputLine.setValue(billingDetails.email)
-                    self.zipInputLine.setValue(billingDetails.zip)
                     self.streetInputLine.setValue(billingDetails.address)
                     self.cityInputLine.setValue(billingDetails.city)
                 }
@@ -298,8 +298,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             taxDetailsView.isHidden = true
         } else {
             nameInputLine.isHidden = false
+            emailInputLine.isHidden = false
             let hideFields = !self.fullBilling
-            emailInputLine.isHidden = hideFields
             streetInputLine.isHidden = hideFields
             let countryCode = self.paymentRequest.getBillingDetails().country ?? ""
             updateZipByCountry(countryCode: countryCode)
@@ -308,21 +308,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.paymentRequest.taxAmount == 0
-            updateZipFieldLocation()
-        }
-    }
-    
-    private func updateZipFieldLocation() {
-        
-        if self.fullBilling {
-            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
-        } else {
-            zipTopConstraint.constant = -1 * emailInputLine.frame.height
         }
     }
     
     func deviceDidRotate() {
-        updateZipFieldLocation()
     }
 
     private func updateState() {
@@ -461,9 +450,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             let ok5 = validateZip(ignoreIfEmpty: false)
             let ok6 = validateState(ignoreIfEmpty: false)
             result = result && ok1 && ok2 && ok3 && ok4 && ok5 && ok6
-        } else if !zipInputLine.isHidden {
-            let ok = validateZip(ignoreIfEmpty: false)
-            result = result && ok
+        } else {
+            let ok1 = validateEmail(ignoreIfEmpty: true)
+            let ok2 = zipInputLine.isHidden ? true : validateZip(ignoreIfEmpty: false)
+            result = result && ok1 && ok2
         }
         
         if result && isShippingSameAsBilling() {
