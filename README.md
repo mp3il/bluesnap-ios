@@ -56,6 +56,7 @@ The SDK holds a function for obtaining a token from our Sandbox environment for 
 These classes hold the shopper details for either billing or shipping. 
 Optional/Mandatory:
 State is mandfatopry only if the country has state (USA, Canada and Brazil).
+Zip is mandatory except for countries that have no postal/zip code.
 If you choose not to use the full billing option - only name, country and zip are filled, email is optional.
 For full billing details, everything is mandatory except email which is optional.
 For shipping details all field are mandatory except phone which is optional.
