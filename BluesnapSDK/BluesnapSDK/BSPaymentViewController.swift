@@ -472,7 +472,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 shippingDetails.address = billingDetails.address
                 shippingDetails.city = billingDetails.city
                 shippingDetails.country = billingDetails.country
-                shippingDetails.email = billingDetails.email
                 shippingDetails.name = billingDetails.name
                 shippingDetails.state = billingDetails.state
                 shippingDetails.zip = billingDetails.zip

@@ -170,7 +170,7 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         countryManager : BSCountryManager,
-        addressDetails: BSAddressDetails,
+        addressDetails: BSBaseAddressDetails,
         updateFunc: @escaping (String, String)->Void) {
         
         let selectedCountryCode = addressDetails.country ?? ""

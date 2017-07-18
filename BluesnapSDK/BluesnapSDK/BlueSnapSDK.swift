@@ -165,7 +165,7 @@ import PassKit
         
         let defaultCountry = NSLocale.current.regionCode ?? "US"
         if (withShipping && paymentRequest.shippingDetails == nil) {
-            paymentRequest.setShippingDetails(shippingDetails: BSAddressDetails())
+            paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
             paymentRequest.getShippingDetails()!.country = defaultCountry
         } else if (!withShipping && paymentRequest.shippingDetails != nil) {
             paymentRequest.setShippingDetails(shippingDetails: nil)

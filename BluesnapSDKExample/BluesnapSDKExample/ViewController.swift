@@ -93,7 +93,7 @@ class ViewController: UIViewController {
         }
         if withShippingSwitch.isOn {
             if paymentRequest.getShippingDetails() == nil {
-                paymentRequest.setShippingDetails(shippingDetails: BSAddressDetails())
+                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
             }
             if let shippingDetails = paymentRequest.getShippingDetails() {
                 shippingDetails.name = "Mary Doe"
@@ -101,7 +101,6 @@ class ViewController: UIViewController {
                 shippingDetails.city = "New York"
                 shippingDetails.country = "US"
                 shippingDetails.state = "MA"
-                shippingDetails.email = "mary@gmail.com"
             }
         }
         
@@ -238,7 +237,7 @@ class ViewController: UIViewController {
         if let shippingDetails = paymentRequest.getShippingDetails() {
             NSLog("Shipping Data: Name:\(shippingDetails.name)")
             NSLog(" Zip code:\(shippingDetails.zip ?? "")")
-            NSLog(" Email:\(shippingDetails.email ?? "")")
+            NSLog(" Phone:\(shippingDetails.phone ?? "")")
             NSLog(" Street address:\(shippingDetails.address ?? "")")
             NSLog(" City:\(shippingDetails.city ?? "")")
             NSLog(" Country code:\(shippingDetails.country ?? "")")

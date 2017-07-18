@@ -32,7 +32,7 @@ public class BSValidator {
     
     // MARK: validation functions (check UI field and hide/show errors as necessary)
     
-    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         var result : Bool = true
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces).capitalized ?? ""
@@ -53,7 +53,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSBillingAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         if let addressDetails = addressDetails {
@@ -75,7 +75,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         if let addressDetails = addressDetails {
@@ -97,7 +97,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateCity(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateCity(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         input.setValue(newValue)
@@ -120,7 +120,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateCountry(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateCountry(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = addressDetails?.country ?? ""
         var result : Bool = true
@@ -139,7 +139,7 @@ public class BSValidator {
         return result
     }
 
-    class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         var result : Bool = true
         let newValue1 : String = input.getValue() ?? ""
@@ -163,7 +163,7 @@ public class BSValidator {
         return result
     }
 
-    class func validateState(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateState(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = addressDetails?.state ?? ""
         var result : Bool = true
@@ -330,7 +330,7 @@ public class BSValidator {
         sender.text = input
     }
     
-    class func updateState(addressDetails: BSAddressDetails!, countryManager: BSCountryManager, stateInputLine: BSInputLine) {
+    class func updateState(addressDetails: BSBaseAddressDetails!, countryManager: BSCountryManager, stateInputLine: BSInputLine) {
         
         let selectedCountryCode = addressDetails.country ?? ""
         let selectedStateCode = addressDetails.state ?? ""
