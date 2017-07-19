@@ -424,7 +424,7 @@ public class BSCcInputLine: BSBaseTextInput {
             nextButton.setImage(img, for: .normal)
             nextButton.contentVerticalAlignment = .fill
             nextButton.contentHorizontalAlignment = .fill
-            nextButton.addTarget(self, action: #selector(self.doneBtnfromKeyboardClicked), for: .touchUpInside)
+            nextButton.addTarget(self, action: #selector(self.nextArrowClick), for: .touchUpInside)
             self.addSubview(nextButton)
         }
     }
@@ -716,7 +716,6 @@ public class BSCcInputLine: BSBaseTextInput {
             self.layoutIfNeeded()
         }, completion: { animate in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.focusOnExpField()
                 _ = self.validateExp(ignoreIfEmpty: true)
                 _ = self.validateCvv(ignoreIfEmpty: true)
             }
@@ -788,7 +787,7 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
     
-    func nextArrowTouchUpInside(_ sender: Any) {
+    func nextArrowClick() {
         
         if textField.canResignFirstResponder {
             focusOnExpField()
