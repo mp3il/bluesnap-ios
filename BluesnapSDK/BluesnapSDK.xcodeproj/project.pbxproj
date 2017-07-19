@@ -12,8 +12,6 @@
 		2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */; };
 		2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F411E880EF100AE2A81 /* BSToken.swift */; };
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
-		2D89D53F1EA8ECD30076E219 /* KountDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */; };
 		2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
 		DEB2DD0B164B99C6E7DE417C /* BSApplepayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */; };
@@ -63,8 +61,6 @@
 		2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyModel.swift; sourceTree = "<group>"; };
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
-		2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KountDataCollector.h; sourceTree = "<group>"; };
-		2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKountDataCollector.a; sourceTree = "<group>"; };
 		2DADB9D81EC31F4200C1A2D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BlueSnap.storyboard; sourceTree = "<group>"; };
 		2DADB9DA1EC31F5400C1A2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BlueSnap.strings; sourceTree = "<group>"; };
 		2DADB9DB1EC3201A00C1A2D2 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/BlueSnap.strings; sourceTree = "<group>"; };
@@ -100,7 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D89D5401EA8ECD30076E219 /* libKountDataCollector.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +113,6 @@
 		2D374F161E880E7200AE2A81 = {
 			isa = PBXGroup;
 			children = (
-				2D89D53C1EA8ECD30076E219 /* Kount */,
 				2D374F221E880E7200AE2A81 /* BluesnapSDK */,
 				2D374F2D1E880E7300AE2A81 /* BluesnapSDKTests */,
 				2D374F211E880E7200AE2A81 /* Products */,
@@ -158,15 +152,6 @@
 				2D374F301E880E7300AE2A81 /* Info.plist */,
 			);
 			path = BluesnapSDKTests;
-			sourceTree = "<group>";
-		};
-		2D89D53C1EA8ECD30076E219 /* Kount */ = {
-			isa = PBXGroup;
-			children = (
-				2D89D53D1EA8ECD30076E219 /* KountDataCollector.h */,
-				2D89D53E1EA8ECD30076E219 /* libKountDataCollector.a */,
-			);
-			path = Kount;
 			sourceTree = "<group>";
 		};
 		FD17062D1E9371FD00552A35 /* Model */ = {
@@ -237,7 +222,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D89D53F1EA8ECD30076E219 /* KountDataCollector.h in Headers */,
 				2D374F311E880E7300AE2A81 /* BluesnapSDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -82,7 +82,7 @@ Pod::Spec.new do |s|
   #:tag => "#{s.version}"
   #
 
-  s.source       = { :git => "https://github.com/bluesnap/bluesnap-ios.git", :tag => "develop" }
+  s.source       = { :git => "https://github.com/bluesnap/bluesnap-ios.git", :tag => "0.0.1" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -93,10 +93,10 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "BluesnapSDK", "BluesnapSDK/**/*.{h,m}"
+  s.source_files  = "BluesnapSDK", "BluesnapSDK/BluesnapSDK/**/*.{h,m,swift}"
   #s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = "Classes/**/*.h"
+  s.public_header_files = "BluesnapSDK/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

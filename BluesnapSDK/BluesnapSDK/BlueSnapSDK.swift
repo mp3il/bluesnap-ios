@@ -117,13 +117,13 @@ import PassKit
     open class func KountInit(kountMid: Int?, fraudSessionID : String!) {
         //// Configure the Data Collector
         //
-        KDataCollector.shared().debug = true
+        //KDataCollector.shared().debug = true
         // TODO Set your Merchant ID
-        KDataCollector.shared().merchantID = kountMid ?? 700000
+        //KDataCollector.shared().merchantID = kountMid ?? 700000
         // TODO Set the location collection configuration
-        KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
+        //KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
         // For a released app, you'll want to set this to KEnvironment.Production
-        KDataCollector.shared().environment = KEnvironment.test
+        //KDataCollector.shared().environment = KEnvironment.test
     }
     
     /**
