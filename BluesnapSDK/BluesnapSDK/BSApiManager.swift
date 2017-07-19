@@ -15,7 +15,7 @@ class BSApiManager {
     // MARK: Constants
 
     internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
-    internal static let BS_SANDBOX_DOMAIN = "https://us-qa-fct02.bluesnap.com/"
+    internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
     internal static let BS_SANDBOX_TEST_USER = "sdkuser"
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
