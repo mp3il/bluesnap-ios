@@ -21,7 +21,7 @@ public protocol BSCcInputLineDelegate : class {
      */
     func endEditCreditCard()
     /**
-     willCheckCreditCard is called just before calling the BlueSnap server to validate the CCN; since this is a longish action, you may want to show an activity indicator
+     willCheckCreditCard is called just before calling the BlueSnap server to validate the CCN; since this is a longish asynchronous action, you may want to disable some functionality
      */
     func willCheckCreditCard()
     /**
@@ -290,7 +290,10 @@ public class BSCcInputLine: BSBaseTextInput {
     public func checkCreditCard(ccn: String) {
         
         if validateCCN() {
+            
+            self.closeCcn()
             self.delegate?.willCheckCreditCard()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
                 BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
                     
@@ -305,7 +308,6 @@ public class BSCcInputLine: BSBaseTextInput {
                         if let cardType = result.ccType {
                             self.cardType = cardType
                         }
-                        self.closeCcn()
                     }
                     
                     self.delegate?.didCheckCreditCard(result: result, error: error)
@@ -365,10 +367,16 @@ public class BSCcInputLine: BSBaseTextInput {
     // MARK: BSBaseTextInput Override functions
 
     override func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {
+        
+        imageWidth = 35
+        imageHeight = 21
+        
         let ratios = super.initRatios()
         
-        actualNextBtnWidth = (nextBtnWidth * ratios.hRatio).rounded()
-        actualNextBtnHeight = (nextBtnHeight * ratios.vRatio).rounded()
+        // keep proportion of image
+        let imageRatio = min(ratios.hRatio, ratios.vRatio)
+        actualNextBtnWidth = (nextBtnWidth * imageRatio).rounded()
+        actualNextBtnHeight = (nextBtnHeight * imageRatio).rounded()
         
         actualCcnWidth = (ccnWidth * ratios.hRatio).rounded()
         actualLast4Width = (last4Width * ratios.hRatio).rounded()
@@ -415,8 +423,8 @@ public class BSCcInputLine: BSBaseTextInput {
         if let img = btnImage {
             nextButton.setImage(img, for: .normal)
             nextButton.contentVerticalAlignment = .fill
-            nextButton.contentHorizontalAlignment = .center
-            nextButton.addTarget(self, action: #selector(self.doneBtnfromKeyboardClicked), for: .touchUpInside)
+            nextButton.contentHorizontalAlignment = .fill
+            nextButton.addTarget(self, action: #selector(self.nextArrowClick), for: .touchUpInside)
             self.addSubview(nextButton)
         }
     }
@@ -708,7 +716,6 @@ public class BSCcInputLine: BSBaseTextInput {
             self.layoutIfNeeded()
         }, completion: { animate in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.focusOnExpField()
                 _ = self.validateExp(ignoreIfEmpty: true)
                 _ = self.validateCvv(ignoreIfEmpty: true)
             }
@@ -770,12 +777,9 @@ public class BSCcInputLine: BSBaseTextInput {
     func cvvFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.cvvEditingChanged(sender)
-        var cvvMaxLength = 3
-        if cardType.lowercased() == "amex" {
-            cvvMaxLength = 4
-        }
-        if checkMaxLength(textField: sender, maxLength: cvvMaxLength) == true {
-            if sender.text?.characters.count == cvvMaxLength {
+        let cvvLength = BSValidator.getCvvLength(cardType: self.cardType)
+        if checkMaxLength(textField: sender, maxLength: cvvLength) == true {
+            if sender.text?.characters.count == cvvLength {
                 if cvvTextField.canResignFirstResponder == true {
                     focusOnNextField()
                 }
@@ -783,7 +787,7 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
     
-    func nextArrowTouchUpInside(_ sender: Any) {
+    func nextArrowClick() {
         
         if textField.canResignFirstResponder {
             focusOnExpField()
@@ -811,7 +815,7 @@ public class BSCcInputLine: BSBaseTextInput {
         
         var result = true
         if !ignoreIfEmpty || (cvvTextField.text?.characters.count)! > 0 {
-            result = BSValidator.validateCvv(input: self)
+            result = BSValidator.validateCvv(input: self, cardType: cardType)
         }
         return result
     }

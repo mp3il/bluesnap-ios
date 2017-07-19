@@ -43,7 +43,7 @@ public class BSCountryManager {
             "MS" : "Mississippi",
             "MT" : "Montana",
             "NC" : "North Carolina",
-            "ND" : " North Dakota",
+            "ND" : "North Dakota",
             "NE" : "Nebraska",
             "NH" : "New Hampshire",
             "NJ" : "New Jersey",
@@ -148,6 +148,9 @@ public class BSCountryManager {
             var result : [(name: String, code: String)] = []
             for (code, name) in states {
                 result.append((name: name, code: code))
+            }
+            result = result.sorted {
+                $0.name < $1.name
             }
             return result
         }

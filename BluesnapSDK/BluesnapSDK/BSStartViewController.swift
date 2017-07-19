@@ -33,8 +33,10 @@ class BSStartViewController: UIViewController {
     // MARK: UIViewController functions
 
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
+        self.navigationItem.prompt = "dgfsdaaa"
 
         // Hide/show the applepay 
         let tmpY = self.view.center.y

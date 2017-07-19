@@ -147,13 +147,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
 
     func willCheckCreditCard() {
-        startActivityIndicator()
     }
     
     func didCheckCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
-     
-        self.stopActivityIndicator()
-
         if let result = result {
             if let issuingCountry = result.ccIssuingCountry {
                 self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
@@ -163,18 +159,31 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     func didSubmitCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
 
-        self.stopActivityIndicator()
-        
-        if let result = result {
-            self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
-            // return to merchant screen
-            if let navigationController = self.navigationController {
-                let viewControllers = navigationController.viewControllers
-                let merchantControllerIndex = viewControllers.count-3
-                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+        if let navigationController = self.navigationController {
+            
+            let viewControllers = navigationController.viewControllers
+            let topController = viewControllers[viewControllers.count-1]
+            let inShippingScreen = shippingScreen != nil && topController == shippingScreen
+            
+            if inShippingScreen {
+                BSViewsManager.stopActivityIndicator(activityIndicator: shippingScreen.activityIndicator)
+            } else {
+                self.stopActivityIndicator()
             }
-            // execute callback
-            self.purchaseFunc(self.paymentRequest)
+            
+            if let result = result {
+                self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+                // return to merchant screen
+                let merchantControllerIndex = viewControllers.count - (inShippingScreen ? 4 : 3)
+                _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+                // execute callback
+                self.purchaseFunc(self.paymentRequest)
+            } else {
+                // error
+                if inShippingScreen {
+                    _ = navigationController.popViewController(animated: false)
+                }
+            }
         }
     }
     
@@ -216,10 +225,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.navigationController!.isNavigationBarHidden = false
         
         self.withShipping = paymentRequest.getShippingDetails() != nil
-        
         shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
+        
         // set the "shipping same as billing" to be true if no shipping name is supplied
-        shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
+        if self.firstTime == true {
+            shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
+        }
         
         updateTexts()
         
@@ -229,9 +240,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             self.firstTime = false
             if let billingDetails = self.paymentRequest.getBillingDetails() {
                 self.nameInputLine.setValue(billingDetails.name)
+                self.emailInputLine.setValue(billingDetails.email)
+                self.zipInputLine.setValue(billingDetails.zip)
                 if fullBilling {
-                    self.emailInputLine.setValue(billingDetails.email)
-                    self.zipInputLine.setValue(billingDetails.zip)
                     self.streetInputLine.setValue(billingDetails.address)
                     self.cityInputLine.setValue(billingDetails.city)
                 }
@@ -296,8 +307,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             taxDetailsView.isHidden = true
         } else {
             nameInputLine.isHidden = false
+            emailInputLine.isHidden = false
             let hideFields = !self.fullBilling
-            emailInputLine.isHidden = hideFields
             streetInputLine.isHidden = hideFields
             let countryCode = self.paymentRequest.getBillingDetails().country ?? ""
             updateZipByCountry(countryCode: countryCode)
@@ -306,21 +317,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.paymentRequest.taxAmount == 0
-            updateZipFieldLocation()
-        }
-    }
-    
-    private func updateZipFieldLocation() {
-        
-        if self.fullBilling {
-            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
-        } else {
-            zipTopConstraint.constant = -1 * emailInputLine.frame.height
         }
     }
     
     func deviceDidRotate() {
-        updateZipFieldLocation()
     }
 
     private func updateState() {
@@ -355,7 +355,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
     
     func submitPaymentFields() {
-        startActivityIndicator()
+        
         self.ccInputLine.submitPaymentFields()
     }
     
@@ -387,14 +387,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func updateZipByCountry(countryCode : String) {
         
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
-        if countryCode.lowercased() == "us" {
-            self.zipInputLine.labelText = "Billing Zip"
-            self.zipInputLine.fieldKeyboardType = .numberPad
-            
-        } else {
-            self.zipInputLine.labelText = "Postal Code"
-            self.zipInputLine.fieldKeyboardType = .numbersAndPunctuation
-        }
+        self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: true)
+        self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.zipInputLine.isHidden = hideZip
         self.zipInputLine.hideError()
     }
@@ -423,7 +417,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
-        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentRequest: paymentRequest, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc)
+        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentRequest: paymentRequest, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc, errorFunc: { self.showAlert("An error occurred; please try again") })
         present(menu, animated: true, completion: nil)
     }
     
@@ -441,6 +435,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             if (withShipping && !isShippingSameAsBilling()) {
                 gotoShippingScreen()
             } else {
+                startActivityIndicator()
                 submitPaymentFields()
             }
         } else {
@@ -465,9 +460,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             let ok5 = validateZip(ignoreIfEmpty: false)
             let ok6 = validateState(ignoreIfEmpty: false)
             result = result && ok1 && ok2 && ok3 && ok4 && ok5 && ok6
-        } else if !zipInputLine.isHidden {
-            let ok = validateZip(ignoreIfEmpty: false)
-            result = result && ok
+        } else {
+            let ok1 = validateEmail(ignoreIfEmpty: true)
+            let ok2 = zipInputLine.isHidden ? true : validateZip(ignoreIfEmpty: false)
+            result = result && ok1 && ok2
         }
         
         if result && isShippingSameAsBilling() {
@@ -476,7 +472,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 shippingDetails.address = billingDetails.address
                 shippingDetails.city = billingDetails.city
                 shippingDetails.country = billingDetails.country
-                shippingDetails.email = billingDetails.email
                 shippingDetails.name = billingDetails.name
                 shippingDetails.state = billingDetails.state
                 shippingDetails.zip = billingDetails.zip

@@ -83,13 +83,9 @@ import PassKit
      - parameters:
      - throws BSApiErrors
      */
-    open class func getCurrencyRates() throws -> BSCurrencies? {
-        do {
-            let result = try BSApiManager.getCurrencyRates()
-            return result
-        } catch let error {
-            throw error
-        }
+    open class func getCurrencyRates() -> BSCurrencies? {
+        let result = BSApiManager.getCurrencyRates()
+        return result
     }
 
     /**
@@ -100,14 +96,16 @@ import PassKit
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
      - updateFunc: callback; will be called each time a new value is selected
+     - errorFunc: callback; will be called if we fail to get the currencies
      */
     open class func showCurrencyList(
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+        errorFunc: @escaping()->Void) {
         
-        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc)
+        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc, errorFunc: errorFunc)
     }
     
     /**
@@ -167,7 +165,7 @@ import PassKit
         
         let defaultCountry = NSLocale.current.regionCode ?? "US"
         if (withShipping && paymentRequest.shippingDetails == nil) {
-            paymentRequest.setShippingDetails(shippingDetails: BSAddressDetails())
+            paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
             paymentRequest.getShippingDetails()!.country = defaultCountry
         } else if (!withShipping && paymentRequest.shippingDetails != nil) {
             paymentRequest.setShippingDetails(shippingDetails: nil)

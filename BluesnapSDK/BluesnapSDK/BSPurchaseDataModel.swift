@@ -16,8 +16,8 @@ public class BSPaymentRequest : NSObject {
     var currency : String! = "USD"
     
     // These fields are output, but may be supplied as input as well
-    var billingDetails : BSAddressDetails! = BSAddressDetails()
-    var shippingDetails : BSAddressDetails?
+    var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
+    var shippingDetails : BSShippingAddressDetails?
 
     // Output only - result of submitting the payment details to BlueSnap server
     var resultPaymentDetails : BSResultPaymentDetails?
@@ -79,7 +79,7 @@ public class BSPaymentRequest : NSObject {
         return currency
     }
     
-    public func getBillingDetails() -> BSAddressDetails! {
+    public func getBillingDetails() -> BSBillingAddressDetails! {
         return billingDetails
     }
     
@@ -91,24 +91,27 @@ public class BSPaymentRequest : NSObject {
         self.resultPaymentDetails = resultPaymentDetails
     }
     
-    public func getShippingDetails() -> BSAddressDetails? {
+    public func getShippingDetails() -> BSShippingAddressDetails? {
         return shippingDetails
     }
     
-    public func setShippingDetails(shippingDetails : BSAddressDetails?) {
+    public func setShippingDetails(shippingDetails : BSShippingAddressDetails?) {
         self.shippingDetails = shippingDetails
     }
 }
 
 /**
-    Shopper shipping details for purchase
+    Shopper address details for purchase. 
+    State is mandfatopry only if the country has state (USA, Canada and Brazil).
+    For not-full billing details, only name, country and zip are filled, email is optional
+    For full billing details, everything is mandatory except email which is optional.
+    For shipping details all field are mandatory except phone which is optional.
  */
-public class BSAddressDetails {
+public class BSBaseAddressDetails {
     
     public init() {}
     
     public var name : String! = ""
-    public var email : String?
     public var address : String?
     public var city : String?
     public var zip : String?
@@ -119,6 +122,21 @@ public class BSAddressDetails {
         return BSStringUtils.splitName(name)
     }
 }
+
+public class BSBillingAddressDetails : BSBaseAddressDetails {
+    
+    public override init() { super.init() }
+    
+    public var email : String?
+}
+
+public class BSShippingAddressDetails : BSBaseAddressDetails {
+    
+    public override init() { super.init() }
+    
+    public var phone : String?
+}
+
 
 // MARK: purchase flow output
 

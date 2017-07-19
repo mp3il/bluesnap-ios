@@ -131,22 +131,27 @@ class BSViewsManager {
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
      - updateFunc: callback; will be called each time a new value is selected
+     - errorFunc: callback; will be called if we fail to get the currencies
      */
     open class func showCurrencyList(
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void) {
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+        errorFunc: @escaping ()->Void) {
         
         if currencyScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
         }
         
-        currencyScreen.selectedCurrencyCode = selectedCurrencyCode
-        currencyScreen.updateFunc = updateFunc
-        
-        inNavigationController.pushViewController(currencyScreen, animated: animated)
+        if currencyScreen.initCurrencies() {
+            currencyScreen.selectedCurrencyCode = selectedCurrencyCode
+            currencyScreen.updateFunc = updateFunc
+            inNavigationController.pushViewController(currencyScreen, animated: animated)
+        } else {
+            errorFunc()
+        }
     }
 
     
@@ -165,7 +170,7 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         countryManager : BSCountryManager,
-        addressDetails: BSAddressDetails,
+        addressDetails: BSBaseAddressDetails,
         updateFunc: @escaping (String, String)->Void) {
         
         let selectedCountryCode = addressDetails.country ?? ""
@@ -233,35 +238,14 @@ class BSViewsManager {
             }
         }
     }
-    
-    
-    /**
-     Navigate to the web browser screen, showing the given URL.
-     
-     - parameters:
-     - inNavigationController: your viewController's navigationController (to be able to navigate back)
-     - url : URL for the browser
-     */
-    open class func showBrowserScreen(
-        inNavigationController: UINavigationController!,
-        url: String!) {
         
-        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
-        let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
-            
-        screen.url = url
-        inNavigationController.pushViewController(screen, animated: true)
-    }
-    
     /*
      Create the popup menu for payment screen
     */
-    static internal let privacyPolicyURL = "https://home.bluesnap.com/privacy-policy/"
-    static internal let refundPolicyURL = "https://home.bluesnap.com/privacy-policy/refund-policy/"
-    static internal let termsURL = "https://home.bluesnap.com/terms-and-conditions/"
     open class func openPopupMenu(paymentRequest: BSPaymentRequest?,
             inNavigationController : UINavigationController,
-            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void) -> UIAlertController {
+            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+            errorFunc: @escaping ()->Void) -> UIAlertController {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
@@ -271,29 +255,15 @@ class BSViewsManager {
                     inNavigationController: inNavigationController,
                     animated: true,
                     selectedCurrencyCode: paymentRequest.getCurrency(),
-                    updateFunc: updateCurrencyFunc)
+                    updateFunc: updateCurrencyFunc,
+                    errorFunc: errorFunc)
             }
-        }
-        
-        let refundPolicyMenuOption = UIAlertAction(title: "Refund Policy", style: .default) { _ in
-            showBrowserScreen(inNavigationController: inNavigationController, url: refundPolicyURL)
-        }
-        
-        let privacyPolicyMenuOption = UIAlertAction(title: "Privacy Policy", style: .default) { _ in
-            showBrowserScreen(inNavigationController: inNavigationController, url: privacyPolicyURL)
-        }
-        
-        let termsMenuOption = UIAlertAction(title: "Terms & Conditions", style: .default) { _ in
-            showBrowserScreen(inNavigationController: inNavigationController, url: termsURL)
         }
         
         let cancelMenuOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         
         // relate actions to controllers
         menu.addAction(currencyMenuOption)
-        menu.addAction(refundPolicyMenuOption)
-        menu.addAction(privacyPolicyMenuOption)
-        menu.addAction(termsMenuOption)
         menu.addAction(cancelMenuOption)
         
         //presentViewController(otherAlert, animated: true, completion: nil)

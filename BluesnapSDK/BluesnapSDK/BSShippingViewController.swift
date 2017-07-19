@@ -17,6 +17,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     internal var payText : String!
     internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
+    internal var activityIndicator : UIActivityIndicatorView?
     
     // MARK: outlets
         
@@ -26,6 +27,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var zipInputLine: BSInputLine!
     @IBOutlet weak var cityInputLine: BSInputLine!
     @IBOutlet weak var stateInputLine: BSInputLine!
+    @IBOutlet weak var phoneInputLine: BSInputLine!
     
     
     // MARK: Keyboard functions
@@ -111,6 +113,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerTapToHideKeyboard()
+        activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,6 +124,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         if let shippingDetails = self.paymentRequest.getShippingDetails() {
             nameInputLine.setValue(shippingDetails.name)
+            phoneInputLine.setValue(shippingDetails.phone)
             streetInputLine.setValue(shippingDetails.address)
             cityInputLine.setValue(shippingDetails.city)
             zipInputLine.setValue(shippingDetails.zip)
@@ -153,7 +157,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
             
-            _ = navigationController?.popViewController(animated: false)
+            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
             submitPaymentFields()
             
         } else {
@@ -171,7 +175,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         let ok3 = validateCity(ignoreIfEmpty: false)
         let ok4 = validateZip(ignoreIfEmpty: false)
         let ok5 = validateState(ignoreIfEmpty: false)
-        return ok1 && ok2 && ok3 && ok4 && ok5
+        let ok6 = validatePhone(ignoreIfEmpty: true)
+        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6
     }
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
@@ -212,6 +217,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         return result
     }
     
+    func validatePhone(ignoreIfEmpty : Bool) -> Bool {
+        
+        let result : Bool = BSValidator.validatePhone(ignoreIfEmpty: ignoreIfEmpty, input: phoneInputLine, addressDetails: paymentRequest.getShippingDetails())
+        return result
+    }
+
     
     // MARK: real-time formatting and Validations on text fields
     
@@ -269,7 +280,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             updateFunc: updateWithNewCountry)
     }
     
+    @IBAction func phoneEditingChanged(_ sender: BSInputLine) {
+        BSValidator.phoneEditingChanged(sender)
+    }
     
+    @IBAction func phoneEditingDidEnd(_ sender: BSInputLine) {
+        _ = validatePhone(ignoreIfEmpty: true)
+    }
     
     // MARK: private functions
     
@@ -308,13 +325,18 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     private func updateZipByCountry(countryCode: String) {
         
         let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
-        if countryCode.lowercased() == "us" {
+        
+        self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
+        self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
+        self.phoneInputLine.fieldKeyboardType = .numbersAndPunctuation
+
+        /*if countryCode.lowercased() == "us" {
             zipInputLine.labelText = "Shipping Zip"
             zipInputLine.fieldKeyboardType = .numberPad
         } else {
             zipInputLine.labelText = "Postal Code"
             zipInputLine.fieldKeyboardType = .numbersAndPunctuation
-        }
+        }*/
         zipInputLine.isHidden = hideZip
         zipInputLine.hideError()
     }
