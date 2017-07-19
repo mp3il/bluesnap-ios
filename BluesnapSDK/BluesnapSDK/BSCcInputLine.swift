@@ -21,7 +21,7 @@ public protocol BSCcInputLineDelegate : class {
      */
     func endEditCreditCard()
     /**
-     willCheckCreditCard is called just before calling the BlueSnap server to validate the CCN; since this is a longish action, you may want to show an activity indicator
+     willCheckCreditCard is called just before calling the BlueSnap server to validate the CCN; since this is a longish asynchronous action, you may want to disable some functionality
      */
     func willCheckCreditCard()
     /**
@@ -290,7 +290,10 @@ public class BSCcInputLine: BSBaseTextInput {
     public func checkCreditCard(ccn: String) {
         
         if validateCCN() {
+            
+            self.closeCcn()
             self.delegate?.willCheckCreditCard()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
                 BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
                     
@@ -305,7 +308,6 @@ public class BSCcInputLine: BSBaseTextInput {
                         if let cardType = result.ccType {
                             self.cardType = cardType
                         }
-                        self.closeCcn()
                     }
                     
                     self.delegate?.didCheckCreditCard(result: result, error: error)

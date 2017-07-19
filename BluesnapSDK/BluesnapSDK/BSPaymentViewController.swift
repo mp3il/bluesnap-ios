@@ -147,13 +147,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
 
     func willCheckCreditCard() {
-        startActivityIndicator()
     }
     
     func didCheckCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
-     
-        self.stopActivityIndicator()
-
         if let result = result {
             if let issuingCountry = result.ccIssuingCountry {
                 self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
