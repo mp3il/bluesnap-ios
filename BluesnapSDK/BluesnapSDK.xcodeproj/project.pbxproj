@@ -26,7 +26,6 @@
 		FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */; };
 		FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */; };
 		FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */; };
-		FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */; };
 		FD3BD9D21EE7F7DD00486576 /* BSErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */; };
 		FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */; };
 		FD4750B81EF7C50000E5DFBC /* BSStringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */; };
@@ -79,7 +78,6 @@
 		FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPurchaseDataModel.swift; sourceTree = "<group>"; };
 		FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSInputLine.swift; sourceTree = "<group>"; };
-		FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
 		FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSErrors.swift; sourceTree = "<group>"; };
 		FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStartViewController.swift; sourceTree = "<group>"; };
 		FD4750B71EF7C50000E5DFBC /* BSStringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStringUtils.swift; sourceTree = "<group>"; };
@@ -199,7 +197,6 @@
 			children = (
 				FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */,
 				FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */,
-				FD3431051E94EF2E006B6CD5 /* BSWebViewController.swift */,
 				FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */,
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
 				FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */,
@@ -361,7 +358,6 @@
 				FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */,
 				FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */,
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
-				FD3431061E94EF2E006B6CD5 /* BSWebViewController.swift in Sources */,
 				FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */,
 				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,

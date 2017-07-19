@@ -93,7 +93,7 @@ class ViewController: UIViewController {
         }
         if withShippingSwitch.isOn {
             if paymentRequest.getShippingDetails() == nil {
-                paymentRequest.setShippingDetails(shippingDetails: BSAddressDetails())
+                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
             }
             if let shippingDetails = paymentRequest.getShippingDetails() {
                 shippingDetails.name = "Mary Doe"
@@ -101,7 +101,6 @@ class ViewController: UIViewController {
                 shippingDetails.city = "New York"
                 shippingDetails.country = "US"
                 shippingDetails.state = "MA"
-                shippingDetails.email = "mary@gmail.com"
             }
         }
         
@@ -123,7 +122,8 @@ class ViewController: UIViewController {
             inNavigationController: self.navigationController,
             animated: true,
             selectedCurrencyCode: paymentRequest.getCurrency(),
-            updateFunc: updateViewWithNewCurrency)
+            updateFunc: updateViewWithNewCurrency,
+            errorFunc: { self.showErrorAlert(message: "Failed to display currency List, please try again") })
 	}
 	
 	// MARK: - UIPopoverPresentationControllerDelegate
@@ -134,6 +134,22 @@ class ViewController: UIViewController {
     
     // MARK: private methods
     
+    /**
+     Show error pop-up
+     */
+    private func showErrorAlert(message: String) {
+        let alert = createErrorAlert(title: "Oops", message: message)
+        present(alert, animated: true, completion: nil)
+    }
+
+    private func createErrorAlert(title: String, message: String) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+        alert.addAction(cancel)
+        return alert
+        //After you create alert, you show it like this: present(alert, animated: true, completion: nil)
+    }
+
     /**
      Here we adjust the checkout details with the latest amounts from the fields on our view.
     */
@@ -206,12 +222,14 @@ class ViewController: UIViewController {
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
         if let billingDetails = paymentRequest.getBillingDetails() {
-            NSLog("Result Data: Name:\(billingDetails.name)")
+            NSLog("Result Data: Name:\(billingDetails.name ?? "")")
             if let zip = billingDetails.zip {
                 NSLog(" Zip code:\(zip)")
             }
+            if let email = billingDetails.email {
+                NSLog(" Email:\(email)")
+            }
             if self.fullBillingSwitch.isOn {
-                NSLog(" Email:\(billingDetails.email ?? "")")
                 NSLog(" Street address:\(billingDetails.address ?? "")")
                 NSLog(" City:\(billingDetails.city ?? "")")
                 NSLog(" Country code:\(billingDetails.country ?? "")")
@@ -220,8 +238,8 @@ class ViewController: UIViewController {
         }
         if let shippingDetails = paymentRequest.getShippingDetails() {
             NSLog("Shipping Data: Name:\(shippingDetails.name)")
+            NSLog(" Phone:\(shippingDetails.phone ?? "")")
             NSLog(" Zip code:\(shippingDetails.zip ?? "")")
-            NSLog(" Email:\(shippingDetails.email ?? "")")
             NSLog(" Street address:\(shippingDetails.address ?? "")")
             NSLog(" City:\(shippingDetails.city ?? "")")
             NSLog(" Country code:\(shippingDetails.country ?? "")")
@@ -239,7 +257,12 @@ class ViewController: UIViewController {
     func generateAndSetBsToken() {
         
         do {
+            //// simulate expired token for first time
+            //let simulateTokenExpired = bsToken == nil
             bsToken = try BlueSnapSDK.createSandboxTestToken()
+            //if simulateTokenExpired {
+            //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
+            //}
             BlueSnapSDK.setBsToken(bsToken: bsToken)
         } catch {
             NSLog("Error: Failed to get BS token")
@@ -251,6 +274,7 @@ class ViewController: UIViewController {
     func setApplePayIdentifier() {
         BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
     }
+    
     /**
      Add observer to the token expired event sent by BlueSnap SDK.
     */

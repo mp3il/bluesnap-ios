@@ -109,9 +109,9 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
             }
         }
         // load the flag image
-        cell.flagUIButton.imageView?.image = nil
+        cell.flagImageView.image = nil
         if let image = BSViewsManager.getImage(imageName: country.code.uppercased()) {
-            cell.flagUIButton.imageView?.image = image
+            cell.flagImageView.image = image
         }
         return cell
     }

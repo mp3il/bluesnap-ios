@@ -23,7 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="3Ep-JQ-pQu">
+                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="3Ep-JQ-pQu">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="vDQ-J8-b8o"/>
@@ -44,43 +44,29 @@
                                             <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5T-K3-5cN">
-                                                    <rect key="frame" x="0.0" y="8" width="28" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="28" id="fG6-2K-fiy"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Flag" image="US"/>
-                                                </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="320" y="13" width="16" height="13"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
-                                                    </accessibility>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="16" id="kGj-sM-og7"/>
-                                                    </constraints>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
+                                                    <rect key="frame" x="0.0" y="12" width="28" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="36" y="7" width="281" height="24"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
+                                                    <rect key="frame" x="34" y="10" width="282" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
+                                                    <rect key="frame" x="318" y="15" width="16" height="13"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                    </accessibility>
+                                                </imageView>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="F5T-K3-5cN" firstAttribute="centerY" secondItem="geS-dI-qMo" secondAttribute="centerY" id="2T2-S7-lQl"/>
-                                                <constraint firstItem="F5T-K3-5cN" firstAttribute="centerY" secondItem="wBQ-PP-rh2" secondAttribute="centerY" id="4un-pH-heW"/>
-                                                <constraint firstItem="F5T-K3-5cN" firstAttribute="leading" secondItem="geS-dI-qMo" secondAttribute="leading" id="OhZ-XI-6Hl"/>
-                                                <constraint firstItem="wBQ-PP-rh2" firstAttribute="leading" secondItem="F5T-K3-5cN" secondAttribute="trailing" constant="8" id="QeO-ut-DcS"/>
-                                                <constraint firstItem="wBQ-PP-rh2" firstAttribute="centerY" secondItem="Eic-Oi-nQ3" secondAttribute="centerY" id="VaC-ZR-4Qz"/>
-                                                <constraint firstItem="wBQ-PP-rh2" firstAttribute="bottom" secondItem="geS-dI-qMo" secondAttribute="bottomMargin" id="hip-yj-zYc"/>
-                                                <constraint firstAttribute="trailing" secondItem="Eic-Oi-nQ3" secondAttribute="trailing" id="vkL-S2-bkd"/>
-                                                <constraint firstItem="Eic-Oi-nQ3" firstAttribute="leading" secondItem="wBQ-PP-rh2" secondAttribute="trailing" constant="3" id="x3q-7w-2ie"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="checkMarkImageView" destination="Eic-Oi-nQ3" id="aX7-r0-FFB"/>
-                                            <outlet property="flagUIButton" destination="F5T-K3-5cN" id="3n2-ls-FR8"/>
+                                            <outlet property="flagImageView" destination="g0G-ax-3BT" id="lpo-9N-Vv7"/>
                                             <outlet property="itemNameUILabel" destination="wBQ-PP-rh2" id="goG-0Z-xmG"/>
                                         </connections>
                                     </tableViewCell>
@@ -115,7 +101,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h2d-uf-6vd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3598" y="1004"/>
+            <point key="canvasLocation" x="3597.5999999999999" y="1003.4482758620691"/>
         </scene>
         <!--Shipping-->
         <scene sceneID="rbP-bj-wQc">
@@ -153,8 +139,23 @@
                                                     <action selector="nameEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="y0Q-RU-Oq9"/>
                                                 </connections>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3n5-zz-YeP" userLabel="Phone Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
+                                                <rect key="frame" x="20" y="64" width="335" height="43"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Phone"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
+                                                        <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="1Ky-hk-Okw"/>
+                                                    <action selector="phoneEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="dua-54-uMb"/>
+                                                    <action selector="phoneEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="eqw-ms-D9e"/>
+                                                </connections>
+                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="63" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="108" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
@@ -166,7 +167,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="107" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="152" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
@@ -178,7 +179,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="151" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="196" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
@@ -190,7 +191,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="195" width="335" height="43"/>
+                                                <rect key="frame" x="20" y="240" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
@@ -205,20 +206,23 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="jMo-vo-Aht" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="1kt-GN-hUH"/>
+                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="1" id="2HD-hh-Lx4"/>
                                             <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="4KO-NQ-Nne"/>
                                             <constraint firstAttribute="trailing" secondItem="M8Q-CA-XJP" secondAttribute="trailing" constant="16" id="4PM-5i-3aO"/>
                                             <constraint firstItem="M8Q-CA-XJP" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="73Y-B8-Ryk"/>
                                             <constraint firstItem="7GX-8o-fbs" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="860-Ng-qFM"/>
-                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="1" id="9AW-wa-22K"/>
-                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" id="Fnt-c0-WIv"/>
                                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="Ibg-bc-FdR"/>
+                                            <constraint firstItem="7GX-8o-fbs" firstAttribute="top" secondItem="jMo-vo-Aht" secondAttribute="bottom" constant="1" id="Kde-aM-at2"/>
                                             <constraint firstItem="Qye-kG-IzH" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="LWW-In-Bsf"/>
-                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="MHJ-0A-cQu"/>
                                             <constraint firstAttribute="trailing" secondItem="jMo-vo-Aht" secondAttribute="trailing" constant="16" id="NN1-g5-NZB"/>
                                             <constraint firstAttribute="trailing" secondItem="Qye-kG-IzH" secondAttribute="trailing" constant="16" id="QTa-CE-eWB"/>
-                                            <constraint firstItem="M8Q-CA-XJP" firstAttribute="top" secondItem="7GX-8o-fbs" secondAttribute="bottom" constant="1" id="VEA-5X-lHf"/>
+                                            <constraint firstItem="3n5-zz-YeP" firstAttribute="top" secondItem="5Tf-NL-jP3" secondAttribute="bottom" constant="1" id="U1O-XE-eZn"/>
                                             <constraint firstAttribute="trailing" secondItem="5Tf-NL-jP3" secondAttribute="trailing" constant="16" id="VjE-Q7-7nw"/>
+                                            <constraint firstItem="jMo-vo-Aht" firstAttribute="top" secondItem="3n5-zz-YeP" secondAttribute="bottom" constant="1" id="WwN-KD-oab"/>
+                                            <constraint firstItem="Qye-kG-IzH" firstAttribute="top" secondItem="M8Q-CA-XJP" secondAttribute="bottom" constant="1" id="hZc-6q-NlO"/>
                                             <constraint firstItem="5Tf-NL-jP3" firstAttribute="top" secondItem="Xjb-2n-SG7" secondAttribute="top" constant="20" symbolic="YES" id="j2I-GE-Xvx"/>
+                                            <constraint firstItem="3n5-zz-YeP" firstAttribute="leading" secondItem="Xjb-2n-SG7" secondAttribute="leading" constant="20" symbolic="YES" id="jnN-Rr-zTU"/>
+                                            <constraint firstAttribute="trailing" secondItem="3n5-zz-YeP" secondAttribute="trailing" constant="16" id="md0-S9-9Il"/>
                                             <constraint firstAttribute="trailing" secondItem="7GX-8o-fbs" secondAttribute="trailing" constant="16" id="w4a-SO-IrB"/>
                                         </constraints>
                                     </view>
@@ -248,6 +252,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="jMo-vo-Aht" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="1cb-ng-Cpb"/>
+                            <constraint firstItem="3n5-zz-YeP" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="704-gN-YTh"/>
                             <constraint firstItem="7GX-8o-fbs" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="9qJ-I3-WbU"/>
                             <constraint firstItem="BiT-2P-8ND" firstAttribute="leading" secondItem="KnJ-zC-fwY" secondAttribute="leadingMargin" constant="-16" id="Anb-um-E8p"/>
                             <constraint firstItem="Qye-kG-IzH" firstAttribute="height" secondItem="KnJ-zC-fwY" secondAttribute="height" multiplier="43/667" id="HCE-FK-CPW"/>
@@ -267,6 +272,7 @@
                         <outlet property="fieldsView" destination="Xjb-2n-SG7" id="Bd2-zq-zjH"/>
                         <outlet property="nameInputLine" destination="5Tf-NL-jP3" id="smj-ra-V3T"/>
                         <outlet property="payUIButton" destination="lFE-br-NNC" id="X1a-Qu-bCK"/>
+                        <outlet property="phoneInputLine" destination="3n5-zz-YeP" id="4Uy-u2-0lF"/>
                         <outlet property="scrollView" destination="BiT-2P-8ND" id="anU-3o-hb0"/>
                         <outlet property="stateInputLine" destination="Qye-kG-IzH" id="UsF-BN-FWV"/>
                         <outlet property="streetInputLine" destination="jMo-vo-Aht" id="3XO-UG-1RJ"/>
@@ -277,15 +283,15 @@
             </objects>
             <point key="canvasLocation" x="3598" y="304"/>
         </scene>
-        <!--Start-->
+        <!--Payment Type-->
         <scene sceneID="urS-zv-Kno">
             <objects>
-                <viewController storyboardIdentifier="BSStartScreenStoryboardId" id="f14-WO-daN" userLabel="Start" customClass="BSStartViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSStartScreenStoryboardId" id="f14-WO-daN" customClass="BSStartViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="gFH-Ws-TOv"/>
+                        <viewControllerLayoutGuide type="top" id="gFH-Ws-TOv" userLabel="Payment Type"/>
                         <viewControllerLayoutGuide type="bottom" id="eHe-8q-iEE"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="zLN-4V-elS">
+                    <view key="view" contentMode="scaleToFill" id="zLN-4V-elS" userLabel="Payment Type">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -327,7 +333,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Py8-S0-Quf"/>
+                    <navigationItem key="navigationItem" title="Payment Type" id="Py8-S0-Quf"/>
                     <connections>
                         <outlet property="applePayButton" destination="y0h-By-eMw" id="mc0-kk-JjP"/>
                         <outlet property="ccnButton" destination="M1a-n9-LUQ" id="bfm-K8-KKo"/>
@@ -338,39 +344,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2728.8000000000002" y="-380.05997001499253"/>
-        </scene>
-        <!--Web View Controller-->
-        <scene sceneID="3S2-G5-bad">
-            <objects>
-                <viewController storyboardIdentifier="BSWebViewController" id="jsJ-VA-rD0" customClass="BSWebViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="vtV-VR-Bao"/>
-                        <viewControllerLayoutGuide type="bottom" id="hIE-9k-5Qv"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="1CO-ql-uki">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ht8-MI-FiX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ht8-MI-FiX" secondAttribute="trailing" id="VHT-4h-iMU"/>
-                            <constraint firstItem="ht8-MI-FiX" firstAttribute="leading" secondItem="1CO-ql-uki" secondAttribute="leading" id="ZH5-Bb-frY"/>
-                            <constraint firstItem="ht8-MI-FiX" firstAttribute="bottom" secondItem="hIE-9k-5Qv" secondAttribute="top" id="fyZ-oc-bPp"/>
-                            <constraint firstItem="ht8-MI-FiX" firstAttribute="top" secondItem="1CO-ql-uki" secondAttribute="top" id="yRY-mk-ALs"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="webView" destination="ht8-MI-FiX" id="2lX-p5-qEi"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sFL-uH-6VE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4383" y="-380"/>
         </scene>
         <!--Payment-->
         <scene sceneID="7hI-Z7-7qB">
@@ -387,8 +360,8 @@
                             <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="evC-6K-ko8">
                                 <rect key="frame" x="0.0" y="72" width="375" height="390"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TbD-vW-amX" userLabel="Fields View">
-                                        <rect key="frame" x="0.0" y="-64" width="375" height="390"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TbD-vW-amX" userLabel="Fields View">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="390"/>
                                         <subviews>
                                             <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="okv-vf-cV8" customClass="BSCcInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="16" width="335" height="43"/>
@@ -529,10 +502,9 @@
                                             <action selector="shippingSameAsBillingValueChanged:" destination="W0G-M6-3dM" eventType="valueChanged" id="TrO-Bd-u8l"/>
                                         </connections>
                                     </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping same as billing" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0EE-XI-ScQ">
-                                        <rect key="frame" x="20" y="6.5" width="205" height="23"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping same as billing" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0EE-XI-ScQ">
+                                        <rect key="frame" x="20" y="9.5" width="205" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -815,19 +787,19 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="MdR-u1-48S" userLabel="checkMark">
-                                                    <rect key="frame" x="304" y="7" width="32" height="26"/>
+                                                    <rect key="frame" x="320" y="13" width="16" height="13"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                                     </accessibility>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="32" id="GyU-rd-Qsr"/>
+                                                        <constraint firstAttribute="width" constant="16" id="GyU-rd-Qsr"/>
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="U25-dp-1Tb" firstAttribute="leading" secondItem="CMm-xm-mVN" secondAttribute="leadingMargin" id="5B1-D1-nD6"/>
                                                 <constraint firstItem="U25-dp-1Tb" firstAttribute="centerY" secondItem="MdR-u1-48S" secondAttribute="centerY" id="a5Q-Rz-SNy"/>
-                                                <constraint firstItem="MdR-u1-48S" firstAttribute="top" secondItem="CMm-xm-mVN" secondAttribute="topMargin" constant="-1" id="amc-ij-08W"/>
+                                                <constraint firstItem="MdR-u1-48S" firstAttribute="top" secondItem="CMm-xm-mVN" secondAttribute="topMargin" constant="5" id="amc-ij-08W"/>
                                                 <constraint firstItem="U25-dp-1Tb" firstAttribute="top" secondItem="CMm-xm-mVN" secondAttribute="topMargin" id="gKj-NE-yN2"/>
                                                 <constraint firstItem="MdR-u1-48S" firstAttribute="trailing" secondItem="CMm-xm-mVN" secondAttribute="trailingMargin" id="wh7-1V-ogw"/>
                                             </constraints>
@@ -978,7 +950,6 @@
     </scenes>
     <resources>
         <image name="IL" width="28" height="20"/>
-        <image name="US" width="28" height="20"/>
         <image name="apple_pay_button" width="375" height="143"/>
         <image name="blue_check_mark" width="16" height="13"/>
         <image name="card_number_box" width="375" height="143"/>

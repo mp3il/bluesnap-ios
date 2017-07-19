@@ -24,14 +24,15 @@ public class BSValidator {
     static let cityInvalidMessage = "Invalid city"
     static let countryInvalidMessage = "Invalid country"
     static let stateInvalidMessage = "Invalid state"
-    static let zipInvalidMessage = "Invalid code"
+    static let zipCodeInvalidMessage = "Invalid zip code"
+    static let postalCodeInvalidMessage = "Invalid postal code"
 
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
     
     // MARK: validation functions (check UI field and hide/show errors as necessary)
     
-    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateName(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         var result : Bool = true
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces).capitalized ?? ""
@@ -52,7 +53,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSBillingAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         if let addressDetails = addressDetails {
@@ -74,7 +75,17 @@ public class BSValidator {
         return result
     }
     
-    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    // no validation yet, tyhis is just a preparation
+    class func validatePhone(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSShippingAddressDetails?) -> Bool {
+        
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let addressDetails = addressDetails {
+            addressDetails.phone = newValue
+        }
+        return true
+    }
+
+    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         if let addressDetails = addressDetails {
@@ -96,7 +107,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateCity(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateCity(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         input.setValue(newValue)
@@ -119,7 +130,7 @@ public class BSValidator {
         return result
     }
     
-    class func validateCountry(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateCountry(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = addressDetails?.country ?? ""
         var result : Bool = true
@@ -138,7 +149,7 @@ public class BSValidator {
         return result
     }
 
-    class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         var result : Bool = true
         let newValue1 : String = input.getValue() ?? ""
@@ -156,12 +167,13 @@ public class BSValidator {
         if result {
             input.hideError()
         } else {
-            input.showError(zipInvalidMessage)
+            let errorText = getZipErrorText(countryCode: addressDetails?.country ?? "")
+            input.showError(errorText)
         }
         return result
     }
 
-    class func validateState(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSAddressDetails?) -> Bool {
+    class func validateState(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = addressDetails?.state ?? ""
         var result : Bool = true
@@ -224,11 +236,11 @@ public class BSValidator {
         return ok
     }
     
-    class func validateCvv(input: BSCcInputLine) -> Bool {
+    class func validateCvv(input: BSCcInputLine, cardType: String) -> Bool {
         
         var result : Bool = true;
         let newValue = input.getCvv() ?? ""
-        if newValue.characters.count < 3 || newValue.characters.count > 4 {
+        if newValue.characters.count != getCvvLength(cardType: cardType) {
             result = false
         }
         if result {
@@ -264,14 +276,14 @@ public class BSValidator {
         sender.setValue(input)
     }
     
-    class func emailEditingChanged(_ sender: UITextField) {
+    class func phoneEditingChanged(_ sender: BSInputLine) {
         
-        var input : String = sender.text ?? ""
-        input = BSStringUtils.removeNoneEmailCharacters(input)
-        input = BSStringUtils.cutToMaxLength(input, maxLength: 120)
-        sender.text = input
+        var input : String = sender.getValue() ?? ""
+        input = BSStringUtils.removeNonePhoneCharacters(input)
+        input = BSStringUtils.cutToMaxLength(input, maxLength: 30)
+        sender.setValue(input)
     }
-    
+
     class func emailEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
@@ -328,7 +340,7 @@ public class BSValidator {
         sender.text = input
     }
     
-    class func updateState(addressDetails: BSAddressDetails!, countryManager: BSCountryManager, stateInputLine: BSInputLine) {
+    class func updateState(addressDetails: BSBaseAddressDetails!, countryManager: BSCountryManager, stateInputLine: BSInputLine) {
         
         let selectedCountryCode = addressDetails.country ?? ""
         let selectedStateCode = addressDetails.state ?? ""
@@ -403,6 +415,16 @@ public class BSValidator {
         return true
     }
     
+    
+    open class func getCvvLength(cardType: String) -> Int {
+        var cvvLength = 3
+        if cardType.lowercased() == "amex" {
+            cvvLength = 4
+        }
+        return cvvLength
+    }
+
+    
     // MARK: formatting functions
     
     class func getCurrentYear() -> Int! {
@@ -422,9 +444,6 @@ public class BSValidator {
         }
         return maxLength
     }
-    
-    
-    // MARK:
     
     open class func formatCCN(_ str: String) -> String {
         
@@ -497,5 +516,37 @@ public class BSValidator {
         return nil
     }
 
+    // MARK: zip texts
+    
+    open class func getZipLabelText(countryCode: String, forBilling: Bool) -> String {
+        
+        if countryCode.lowercased() == "us" {
+            if forBilling {
+                return "Billing Zip"
+            } else {
+                return "Shipping Zip"
+            }
+        } else {
+            return "Postal Code"
+        }
+    }
+    
+    open class func getZipErrorText(countryCode: String) -> String {
+        
+        if countryCode.lowercased() == "us" {
+            return zipCodeInvalidMessage
+        } else {
+            return postalCodeInvalidMessage
+        }
+    }
+    
+    open class func getZipKeyboardType(countryCode: String) -> UIKeyboardType {
+    
+        if countryCode.lowercased() == "us" {
+            return .numberPad
+        } else {
+            return .numbersAndPunctuation
+        }
+    }
 }
 

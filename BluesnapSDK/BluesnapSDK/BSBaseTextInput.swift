@@ -159,7 +159,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     /**
         imageWidth (default = 21) determines the width of the image button. Value will change according to the device at runtime.
      */
-    @IBInspectable var imageWidth : CGFloat = 21 {
+    @IBInspectable var imageWidth : CGFloat = 28 {
         didSet {
             resizeElements()
         }
@@ -167,7 +167,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     /**
      imageHeight (default = 15) determines the width of the image button. Value will change according to the device at runtime.
      */
-    @IBInspectable var imageHeight : CGFloat = 15 {
+    @IBInspectable var imageHeight : CGFloat = 20 {
         didSet {
             resizeElements()
         }
@@ -455,8 +455,12 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         actualRightMargin = (rightMargin * hRatio).rounded()
         actualLeftMargin = (leftMargin * hRatio).rounded()
         actualMiddleMargin = (middleMargin * hRatio).rounded()
-        actualImageWidth = (imageWidth * hRatio).rounded()
-        actualImageHeight = (imageHeight * vRatio).rounded()
+        
+        // image ratio should be kept within itself
+        let imageRatio = min(hRatio, vRatio)
+        actualImageWidth = (imageWidth * imageRatio).rounded()
+        actualImageHeight = (imageHeight * imageRatio).rounded()
+        
         actualFieldFontSize = (fieldFontSize * vRatio).rounded()
         actualFieldHeight = (fieldHeight * vRatio).rounded()
         actualErrorFontSize = (errorFontSize*vRatio).rounded()
@@ -484,7 +488,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         self.addSubview(imageButton)
         imageButton.addTarget(self, action: #selector(BSBaseTextInput.imageTouchUpInside(_:)), for: .touchUpInside)
         imageButton.contentVerticalAlignment = .fill
-        imageButton.contentHorizontalAlignment = .center
+        imageButton.contentHorizontalAlignment = .fill
         
         setElementAttributes()
     }
