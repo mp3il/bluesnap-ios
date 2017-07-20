@@ -625,7 +625,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
                 let actualFieldWidth = getCoverButtonWidth()
                 let fieldX = textField.frame.minX
                 let fieldY = textField.frame.minY
-                fieldCoverButton.frame = CGRect(x: fieldX, y: fieldY, width: actualFieldWidth, height: actualFieldHeight)
+                fieldCoverButton.frame = CGRect(x: fieldX - 5, y: fieldY - 5, width: actualFieldWidth + 10, height: actualFieldHeight + 10)
             }
             fieldCoverButton.alpha = self.isEditable ? 0 : 1
             textField.isUserInteractionEnabled = self.isEditable
