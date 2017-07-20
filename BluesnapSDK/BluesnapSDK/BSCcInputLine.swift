@@ -85,7 +85,9 @@ public class BSCcInputLine: BSBaseTextInput {
      */
     @IBInspectable var ccnWidth: CGFloat = 220 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -93,7 +95,9 @@ public class BSCcInputLine: BSBaseTextInput {
      */
     @IBInspectable var last4Width: CGFloat = 70 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -102,6 +106,9 @@ public class BSCcInputLine: BSBaseTextInput {
     @IBInspectable var expWidth: CGFloat = 70 {
         didSet {
             self.actualExpWidth = expWidth
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -109,7 +116,9 @@ public class BSCcInputLine: BSBaseTextInput {
      */
     @IBInspectable var cvvWidth: CGFloat = 70 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -117,7 +126,9 @@ public class BSCcInputLine: BSBaseTextInput {
      */
     @IBInspectable var nextBtnWidth: CGFloat = 22 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -125,7 +136,9 @@ public class BSCcInputLine: BSBaseTextInput {
      */
     @IBInspectable var nextBtnHeight: CGFloat = 22 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -152,11 +165,13 @@ public class BSCcInputLine: BSBaseTextInput {
     */
     var ccnIsOpen : Bool = true {
         didSet {
-            self.isEditable = ccnIsOpen ? true : false
-            if ccnIsOpen {
-                self.textField.text = ccn
-            } else {
-                self.textField.text = BSStringUtils.last4(ccn)
+            if designMode {
+                self.isEditable = ccnIsOpen ? true : false
+                if ccnIsOpen {
+                    self.textField.text = ccn
+                } else {
+                    self.textField.text = BSStringUtils.last4(ccn)
+                }
             }
         }
     }
@@ -166,6 +181,7 @@ public class BSCcInputLine: BSBaseTextInput {
     
     internal var expTextField : UITextField = UITextField()
     internal var cvvTextField : UITextField = UITextField()
+    private var ccnAnimationLabel : UILabel = UILabel()
     private var expErrorLabel : UILabel?
     private var cvvErrorLabel : UILabel?
     private var nextButton : UIButton = UIButton()
@@ -196,6 +212,7 @@ public class BSCcInputLine: BSBaseTextInput {
         "mastercard": "mastercard",
         "china_union_pay": "unionpay",
         "visa": "visa"]
+    fileprivate let animationDuration = TimeInterval(0.4)
 
     
     // MARK: Public functions
@@ -204,16 +221,15 @@ public class BSCcInputLine: BSBaseTextInput {
      reset sets the component to its initial state, where the fields are emnpty and we are in the "open" state
     */
     public func reset() {
+        closing = false
         showNextButton = false
         hideError()
-        hideExpError()
-        hideCvvError()
         textField.text = ""
         expTextField.text = ""
         cvvTextField.text = ""
         updateCcIcon(ccType: "")
         ccn = ""
-        openCcn()
+        openCcn(animated: false)
     }
 
     /**
@@ -291,7 +307,7 @@ public class BSCcInputLine: BSBaseTextInput {
         
         if validateCCN() {
             
-            self.closeCcn()
+            self.closeCcn(animated: true)
             self.delegate?.willCheckCreditCard()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
@@ -368,9 +384,6 @@ public class BSCcInputLine: BSBaseTextInput {
 
     override func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {
         
-        imageWidth = 35
-        imageHeight = 21
-        
         let ratios = super.initRatios()
         
         // keep proportion of image
@@ -395,6 +408,11 @@ public class BSCcInputLine: BSBaseTextInput {
         self.expTextField.delegate = self
         self.addSubview(cvvTextField)
         self.cvvTextField.delegate = self
+        if let fieldCoverButton = fieldCoverButton {
+            self.insertSubview(ccnAnimationLabel, belowSubview: fieldCoverButton)
+        } else {
+            self.addSubview(ccnAnimationLabel)
+        }
         
         fieldKeyboardType = .numberPad
         
@@ -412,23 +430,6 @@ public class BSCcInputLine: BSBaseTextInput {
         setButtonImage()
     }
     
-    private func setButtonImage() {
-        
-        var btnImage : UIImage?
-        if let img = self.nextBtnImage {
-            btnImage = img
-        } else {
-            btnImage = BSViewsManager.getImage(imageName: "forward_arrow")
-        }
-        if let img = btnImage {
-            nextButton.setImage(img, for: .normal)
-            nextButton.contentVerticalAlignment = .fill
-            nextButton.contentHorizontalAlignment = .fill
-            nextButton.addTarget(self, action: #selector(self.nextArrowClick), for: .touchUpInside)
-            self.addSubview(nextButton)
-        }
-    }
-
     override func setElementAttributes() {
         
         super.setElementAttributes()
@@ -458,7 +459,6 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
 
-
     override func resizeElements() {
         
         super.resizeElements()
@@ -467,32 +467,31 @@ public class BSCcInputLine: BSBaseTextInput {
         cvvTextField.font = textField.font
         
         if ccnIsOpen == true {
-            expTextField.isHidden = true
-            cvvTextField.isHidden = true
+            expTextField.alpha = 0
+            cvvTextField.alpha = 0
         } else {
-            expTextField.isHidden = false
-            cvvTextField.isHidden = false
-            let fieldEndX = getFieldX() + textField.frame.width
-            let cvvFieldX = self.frame.width - actualCvvWidth - self.actualRightMargin
-            let expFieldX = (fieldEndX + cvvFieldX - actualExpWidth) / 2.0
-            let fieldY = (self.frame.height-actualFieldHeight)/2
-            expTextField.frame = CGRect(x: expFieldX, y: fieldY, width: actualExpWidth, height: actualFieldHeight)
-            cvvTextField.frame = CGRect(x: cvvFieldX, y: fieldY, width: actualCvvWidth, height: actualFieldHeight)
+            expTextField.alpha = 1
+            cvvTextField.alpha = 1
         }
 
-        if self.ccnIsOpen && (showNextButton || designMode) {
-            let x : CGFloat = self.frame.width - actualRightMargin - actualNextBtnWidth
-            let y : CGFloat = (self.frame.height-actualNextBtnHeight) / 2.0
-            nextButton.frame = CGRect(x: x, y: y, width: actualNextBtnWidth, height: actualNextBtnHeight)
-            nextButton.isHidden = false
-        } else {
-            nextButton.isHidden = true
-        }
+        let fieldEndX = getFieldX() + self.actualLast4Width
+        let cvvFieldX = self.frame.width - actualCvvWidth - self.actualRightMargin
+        let expFieldX = (fieldEndX + cvvFieldX - actualExpWidth) / 2.0
+        let fieldY = (self.frame.height-actualFieldHeight)/2
+        expTextField.frame = CGRect(x: expFieldX, y: fieldY, width: actualExpWidth, height: actualFieldHeight)
+        cvvTextField.frame = CGRect(x: cvvFieldX, y: fieldY, width: actualCvvWidth, height: actualFieldHeight)
+
+        adjustNextButton()
 
         if fieldCornerRadius != 0 {
             cvvTextField.layer.cornerRadius = fieldCornerRadius
             expTextField.layer.cornerRadius = fieldCornerRadius
         }
+        
+        self.ccnAnimationLabel.font = self.textField.font
+        let labelWidth = self.ccnIsOpen ? actualCcnWidth : actualLast4Width
+        self.ccnAnimationLabel.frame = CGRect(x: self.textField.frame.minX, y: self.textField.frame.minY, width: labelWidth, height: self.textField.frame.height)
+        self.ccnAnimationLabel.alpha = self.ccnIsOpen ? 0 : 1
     }
     
     override func getImageRect() -> CGRect {
@@ -500,11 +499,7 @@ public class BSCcInputLine: BSBaseTextInput {
     }
 
     override func getFieldWidth() -> CGFloat {
-        if ccnIsOpen == true {
-            return actualCcnWidth
-        } else {
-            return actualLast4Width
-        }
+        return actualCcnWidth
     }
     
     override func getFieldX() -> CGFloat {
@@ -566,7 +561,7 @@ public class BSCcInputLine: BSBaseTextInput {
             if ccnIsOpen {
                 ccn = self.textField.text!
                 if lastValidateCcn == self.textField.text {
-                    self.closeCcn()
+                    self.closeCcn(animated: true)
                 } else {
                     self.lastValidateCcn = self.ccn
                     self.checkCreditCard(ccn: ccn)
@@ -676,7 +671,7 @@ public class BSCcInputLine: BSBaseTextInput {
     
     override func fieldCoverButtonTouchUpInside(_ sender: Any) {
         
-        openCcn()
+        openCcn(animated: true)
     }
     
     override public func textFieldDidBeginEditing(_ sender: UITextField) {
@@ -706,50 +701,6 @@ public class BSCcInputLine: BSBaseTextInput {
                 }
             }
         }
-    }
-
-    private func closeCcn() {
-        
-        UIView.animate(withDuration: 0.4, animations: {
-            self.ccnIsOpen = false
-            self.resizeElements()
-            self.layoutIfNeeded()
-        }, completion: { animate in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                _ = self.validateExp(ignoreIfEmpty: true)
-                _ = self.validateCvv(ignoreIfEmpty: true)
-            }
-            self.showNextButton = true
-        })
-    }
-
-    private func openCcn() {
-        var canOpen = true
-        if cvvTextField.isFirstResponder {
-            if !cvvTextField.canResignFirstResponder {
-                canOpen = false
-            } else {
-                cvvTextField.resignFirstResponder()
-            }
-        } else if expTextField.isFirstResponder {
-            if !expTextField.canResignFirstResponder {
-                canOpen = false
-            } else {
-                expTextField.resignFirstResponder()
-            }
-        }
-        if canOpen {
-            self.hideExpError()
-            self.hideCvvError()
-            UIView.animate(withDuration: 0.4, animations: {
-                self.ccnIsOpen = true
-                self.resizeElements()
-                self.layoutIfNeeded()
-            }, completion: { animate in
-                self.delegate?.startEditCreditCard()
-                self.focusOnCcnField()
-           })
-         }
     }
 
     func expFieldDidBeginEditing(_ sender: UITextField) {
@@ -822,6 +773,95 @@ public class BSCcInputLine: BSBaseTextInput {
 
     // private/internal functions
     
+    private func closeCcn(animated : Bool) {
+        
+        self.ccnIsOpen = false
+        
+        if animated {
+            DispatchQueue.main.async {
+                self.setClosedState(before: true, during: false, after: false)
+                //self.layoutIfNeeded()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UIView.animate(withDuration: self.animationDuration, animations: {
+                    self.setClosedState(before: false, during: true, after: false)
+                }, completion: { animate in
+                    self.setClosedState(before: false, during: false, after: true)
+                })
+            }
+        } else {
+            self.setClosedState(before: true, during: true, after: true)
+        }
+        self.showNextButton = true // after first close, this will always be true
+    }
+    
+    private func openCcn(animated: Bool) {
+        var canOpen = true
+        if cvvTextField.isFirstResponder {
+            if !cvvTextField.canResignFirstResponder {
+                canOpen = false
+            } else {
+                cvvTextField.resignFirstResponder()
+            }
+        } else if expTextField.isFirstResponder {
+            if !expTextField.canResignFirstResponder {
+                canOpen = false
+            } else {
+                expTextField.resignFirstResponder()
+            }
+        }
+        if canOpen {
+            self.hideExpError()
+            self.hideCvvError()
+            self.ccnIsOpen = true
+            
+            if animated {
+                DispatchQueue.main.async {
+                    self.setOpenState(before: true, during: false, after: false)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    UIView.animate(withDuration: self.animationDuration, animations: {
+                        self.setOpenState(before: false, during: true, after: false)
+                    }, completion: { animate in
+                        self.setOpenState(before: false, during: false, after: true)
+                    })
+                }
+            } else {
+                self.setOpenState(before: true, during: true, after: true)
+            }
+        }
+    }
+
+    func adjustNextButton() {
+        
+        let x : CGFloat = self.frame.width - actualRightMargin - actualNextBtnWidth
+        let y : CGFloat = (self.frame.height-actualNextBtnHeight) / 2.0
+        nextButton.frame = CGRect(x: x, y: y, width: actualNextBtnWidth, height: actualNextBtnHeight)
+        if self.ccnIsOpen && (showNextButton || designMode) {
+            nextButton.alpha = 1
+        } else {
+            nextButton.alpha = 0
+        }
+    }
+    
+    private func setButtonImage() {
+        
+        var btnImage : UIImage?
+        if let img = self.nextBtnImage {
+            btnImage = img
+        } else {
+            btnImage = BSViewsManager.getImage(imageName: "forward_arrow")
+        }
+        if let img = btnImage {
+            nextButton.setImage(img, for: .normal)
+            nextButton.contentVerticalAlignment = .fill
+            nextButton.contentHorizontalAlignment = .fill
+            nextButton.addTarget(self, action: #selector(self.nextArrowClick), for: .touchUpInside)
+            self.addSubview(nextButton)
+        }
+    }
+
+    
     func updateCcIcon(ccType : String?) {
         
         // change the image in ccIconImage
@@ -855,5 +895,80 @@ public class BSCcInputLine: BSBaseTextInput {
             return true
         }
     }
+    
+    private func closeExpCvv() {
+        
+        self.expTextField.frame = CGRect(x: self.expTextField.frame.maxX, y: self.expTextField.frame.minY, width: 0, height: self.expTextField.frame.height)
+        self.cvvTextField.frame = CGRect(x: self.cvvTextField.frame.maxX, y: self.cvvTextField.frame.minY, width: 0, height: self.cvvTextField.frame.height)
+    }
+    
+    private func openExpCvv() {
+        self.expTextField.frame = CGRect(x: self.expTextField.frame.maxX-actualExpWidth, y: self.expTextField.frame.minY, width: actualExpWidth, height: self.expTextField.frame.height)
+        self.cvvTextField.frame = CGRect(x: self.cvvTextField.frame.maxX-actualCvvWidth, y: self.cvvTextField.frame.minY, width: actualCvvWidth, height: self.cvvTextField.frame.height)
+
+    }
+    
+    private func setClosedState(before: Bool, during: Bool, after: Bool) {
+        
+        if before {
+            closeExpCvv()
+            self.ccnAnimationLabel.text = self.ccn
+            self.textField.alpha = 0
+            self.ccnAnimationLabel.alpha = 1
+            //self.layoutIfNeeded()
+        }
+        if during {
+            self.expTextField.alpha = 1
+            self.cvvTextField.alpha = 1
+            self.ccnAnimationLabel.frame = CGRect(x: self.textField.frame.minX, y: self.textField.frame.minY, width: self.actualLast4Width, height: self.textField.frame.height)
+            openExpCvv()
+            adjustNextButton()
+        }
+        if (after) {
+            self.ccnAnimationLabel.text = BSStringUtils.last4(ccn)
+            self.isEditable = false
+            self.adjustCoverButton()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                //self.layoutIfNeeded()
+                _ = self.validateExp(ignoreIfEmpty: true)
+                _ = self.validateCvv(ignoreIfEmpty: true)
+            }
+        }
+    }
+    
+    override func getCoverButtonWidth() -> CGFloat {
+        return actualLast4Width
+    }
+    
+    private func setOpenState(before: Bool, during: Bool, after: Bool) {
+        
+        if before {
+            self.ccnAnimationLabel.frame = CGRect(x: self.textField.frame.minX, y: self.textField.frame.minY, width: self.actualLast4Width, height: self.textField.frame.height)
+            self.ccnAnimationLabel.alpha = 1
+            self.ccnAnimationLabel.text = BSStringUtils.last4(ccn)
+            self.textField.alpha = 0
+        }
+        if during {
+            self.expTextField.alpha = 0
+            self.cvvTextField.alpha = 0
+            self.ccnAnimationLabel.alpha = 1
+            self.ccnAnimationLabel.frame = CGRect(x: self.textField.frame.minX, y: self.textField.frame.minY, width: self.actualCcnWidth, height: self.textField.frame.height)
+            self.ccnAnimationLabel.text = ccn
+            closeExpCvv()
+            adjustNextButton()
+        }
+        if (after) {
+            self.ccnAnimationLabel.alpha = 0
+            self.textField.alpha = 1
+            self.isEditable = true
+            self.adjustCoverButton()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                //self.layoutIfNeeded()
+                self.delegate?.startEditCreditCard()
+                self.focusOnCcnField()
+            }
+        }
+    }
+
 
 }

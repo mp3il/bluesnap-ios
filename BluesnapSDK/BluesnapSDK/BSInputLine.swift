@@ -45,8 +45,10 @@ public class BSInputLine: BSBaseTextInput {
      */
     @IBInspectable var labelWidth : CGFloat = 104 {
         didSet {
-            _ = initRatios()
-            resizeElements()
+            if designMode {
+                _ = initRatios()
+                resizeElements()
+            }
         }
     }
 
@@ -55,8 +57,10 @@ public class BSInputLine: BSBaseTextInput {
      */
     @IBInspectable var labelHeight : CGFloat = 17 {
         didSet {
-            _ = initRatios()
-            resizeElements()
+            if designMode {
+                _ = initRatios()
+                resizeElements()
+            }
         }
     }
 
@@ -65,8 +69,10 @@ public class BSInputLine: BSBaseTextInput {
      */
     @IBInspectable var labelFontSize : CGFloat = 14 {
         didSet {
-            _ = initRatios()
-            resizeElements()
+            if designMode {
+                _ = initRatios()
+                resizeElements()
+            }
         }
     }
 

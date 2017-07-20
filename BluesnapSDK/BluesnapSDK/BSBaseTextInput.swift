@@ -24,6 +24,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         a clear button. Clicking on that button sets the touchUpInside action
      */
     @IBInspectable var isEditable: Bool = true
+    
     /**
         placeHolder (default = blank) determines the placeholder on the text field, meaning: 
         grayed text that appears when the field is empty
@@ -38,7 +39,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     */
     @IBInspectable var textColor: UIColor = UIColor.black {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     /**
@@ -46,7 +49,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var fieldBkdColor: UIColor = UIColor.white {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     /**
@@ -78,7 +83,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var fieldCornerRadius : CGFloat = 0 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -86,7 +93,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var fieldBorderWidth : CGFloat = 0 {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     /**
@@ -94,7 +103,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var fieldBorderColor: UIColor? {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     
@@ -115,12 +126,16 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     */
     @IBInspectable var designWidth : CGFloat = 335 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     @IBInspectable var designHeight : CGFloat = 43 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -128,7 +143,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var leftMargin : CGFloat = 16 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -136,7 +153,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var middleMargin : CGFloat = 8 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -144,7 +163,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var rightMargin : CGFloat = 16 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -153,7 +174,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var fieldHeight : CGFloat = 20 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -161,7 +184,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var imageWidth : CGFloat = 28 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
     /**
@@ -169,7 +194,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var imageHeight : CGFloat = 20 {
         didSet {
-            resizeElements()
+            if designMode {
+                resizeElements()
+            }
         }
     }
 
@@ -196,7 +223,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var cornerRadius: CGFloat = 5.0 {
         didSet {
-            drawBoundsAndShadow()
+            if designMode {
+                drawBoundsAndShadow()
+            }
         }
     }
     /**
@@ -204,7 +233,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var borderColor: UIColor = UIColor(red: 248, green: 248, blue: 248, alpha: 1) {
         didSet {
-            drawBoundsAndShadow()
+            if designMode {
+                drawBoundsAndShadow()
+            }
         }
     }
     /**
@@ -212,7 +243,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var borderWidth: CGFloat = 0.5 {
         didSet {
-            drawBoundsAndShadow()
+            if designMode {
+                drawBoundsAndShadow()
+            }
         }
     }
     /**
@@ -230,7 +263,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var shadowDarkColor: UIColor = UIColor.lightGray {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     /**
@@ -238,7 +273,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var shadowRadius: CGFloat = 15.0 {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     /**
@@ -246,7 +283,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     @IBInspectable var shadowOpacity: CGFloat = 0.5 {
         didSet {
-            setElementAttributes()
+            if designMode {
+                setElementAttributes()
+            }
         }
     }
     
@@ -566,17 +605,30 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         let fieldY = (self.frame.height-actualFieldHeight)/2
         textField.frame = CGRect(x: fieldX, y: fieldY, width: actualFieldWidth, height: actualFieldHeight)
         
-        buildFieldCoverButton()
-        if let fieldCoverButton = fieldCoverButton {
-            if !self.isEditable {
-                fieldCoverButton.frame = CGRect(x: fieldX, y: fieldY, width: actualFieldWidth, height: actualFieldHeight)
-            }
-        }
-        
+        adjustCoverButton()
         resizeError()
         
         if fieldCornerRadius != 0 {
             self.textField.layer.cornerRadius = fieldCornerRadius
+        }
+    }
+    
+    internal func getCoverButtonWidth() -> CGFloat {
+        return getFieldWidth()
+    }
+    
+    internal func adjustCoverButton() {
+        
+        buildFieldCoverButton()
+        if let fieldCoverButton = fieldCoverButton {
+            if !self.isEditable {
+                let actualFieldWidth = getCoverButtonWidth()
+                let fieldX = textField.frame.minX
+                let fieldY = textField.frame.minY
+                fieldCoverButton.frame = CGRect(x: fieldX, y: fieldY, width: actualFieldWidth, height: actualFieldHeight)
+            }
+            fieldCoverButton.alpha = self.isEditable ? 0 : 1
+            textField.isUserInteractionEnabled = self.isEditable
         }
     }
     
@@ -609,25 +661,13 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
      */
     private func buildFieldCoverButton() {
         
-        if self.isEditable {
+        if !self.isEditable && fieldCoverButton == nil {
+            fieldCoverButton = UIButton()
             if let fieldCoverButton = fieldCoverButton {
-                fieldCoverButton.isHidden = true
-                textField.isUserInteractionEnabled = true
+                fieldCoverButton.backgroundColor = UIColor.clear
+                self.addSubview(fieldCoverButton)
+                fieldCoverButton.addTarget(self, action: #selector(BSInputLine.fieldCoverButtonTouchUpInside(_:)), for: .touchUpInside)
             }
-        } else {
-            if fieldCoverButton == nil {
-                fieldCoverButton = UIButton()
-                if let fieldCoverButton = fieldCoverButton {
-                    fieldCoverButton.backgroundColor = UIColor.clear
-                    //fieldCoverButton.alpha = 0.3
-                    self.addSubview(fieldCoverButton)
-                    fieldCoverButton.addTarget(self, action: #selector(BSInputLine.fieldCoverButtonTouchUpInside(_:)), for: .touchUpInside)
-                }
-            }
-            if let fieldCoverButton = fieldCoverButton {
-                fieldCoverButton.isHidden = false
-                textField.isUserInteractionEnabled = false
-             }
         }
     }
     
