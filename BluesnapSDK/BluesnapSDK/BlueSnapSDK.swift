@@ -81,7 +81,7 @@ import PassKit
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
-     - throws BSApiErrors
+     - throws BSErrors
      */
     open class func getCurrencyRates() -> BSCurrencies? {
         let result = BSApiManager.getCurrencyRates()

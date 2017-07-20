@@ -32,7 +32,6 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     /**
      Re-load currencies data if necessary; should be called before displaying the view
-     - throws BSApiErrors
      */
     func initCurrencies() -> Bool {
         if let tmp = BSApiManager.getCurrencyRates() {
