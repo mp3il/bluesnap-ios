@@ -56,7 +56,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
-    
     var movedUp = false
     var fieldBottom : Int?
     @IBOutlet weak var scrollView: UIScrollView!
