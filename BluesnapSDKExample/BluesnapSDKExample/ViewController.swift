@@ -79,30 +79,8 @@ class ViewController: UIViewController {
         
         resultTextView.text = ""
         
-        // for debug - supply initial values:
-        if fullBillingSwitch.isOn == true {
-            if let billingDetails = paymentRequest.getBillingDetails() {
-                billingDetails.name = "John Doe"
-                billingDetails.address = "333 elm st"
-                billingDetails.city = "New York"
-                billingDetails.zip = "532464"
-                billingDetails.country = "US"
-                billingDetails.state = "MA"
-                billingDetails.email = "john@gmail.com"
-            }
-        }
-        if withShippingSwitch.isOn {
-            if paymentRequest.getShippingDetails() == nil {
-                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
-            }
-            if let shippingDetails = paymentRequest.getShippingDetails() {
-                shippingDetails.name = "Mary Doe"
-                shippingDetails.address = "333 elm st"
-                shippingDetails.city = "New York"
-                shippingDetails.country = "US"
-                shippingDetails.state = "MA"
-            }
-        }
+        // If you have the shopper details, you can supply initial values like this:
+        //setInitialShopperDetails()
         
         // open the purchase screen
         fillPaymentRequest()
@@ -133,6 +111,36 @@ class ViewController: UIViewController {
 	}
     
     // MARK: private methods
+    
+    /**
+        If you have the shopper details, you can supply initial values to the BlueSnap purchasde flow.
+        This is just an exmaple with hard-coded values.
+        You can supply partial data as you have it.
+    */
+    private func setInitialShopperDetails() {
+        
+        if let billingDetails = paymentRequest.getBillingDetails() {
+            billingDetails.name = "John Doe"
+            billingDetails.address = "333 elm st"
+            billingDetails.city = "New York"
+            billingDetails.zip = "532464"
+            billingDetails.country = "US"
+            billingDetails.state = "MA"
+            billingDetails.email = "john@gmail.com"
+        }
+        if withShippingSwitch.isOn {
+            if paymentRequest.getShippingDetails() == nil {
+                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
+            }
+            if let shippingDetails = paymentRequest.getShippingDetails() {
+                shippingDetails.name = "Mary Doe"
+                shippingDetails.address = "333 elm st"
+                shippingDetails.city = "New York"
+                shippingDetails.country = "US"
+                shippingDetails.state = "MA"
+            }
+        }
+    }
     
     /**
      Show error pop-up
