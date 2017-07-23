@@ -122,4 +122,20 @@ class BSStartViewController: UIViewController {
         let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
         return applePaySupported.canMakePayments
     }
+    
+    
+    // MARK: Prevent rotation, support only Portrait mode
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIInterfaceOrientation.portrait
+    }
+
 }

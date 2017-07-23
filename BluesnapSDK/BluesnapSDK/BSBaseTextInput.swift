@@ -419,12 +419,12 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         super.init(coder: aDecoder)
         designMode = false
         buildElements()
-        NotificationCenter.default.addObserver(
+        /*NotificationCenter.default.addObserver(
             self,
             selector:  #selector(deviceDidRotate),
             name: .UIDeviceOrientationDidChange,
             object: nil
-        )
+        )*/
     }
 
     override public func draw(_ rect: CGRect) {
@@ -456,9 +456,9 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     /**
     Called by observer to re-draw after devioce rotation.
     */
-    internal func deviceDidRotate() {
+    /*internal func deviceDidRotate() {
         draw(CGRect(x: 0, y: 0, width: 0, height: 0))
-    }
+    }*/
     
     /**
     Handle drawing of the component's round corners and shadow
