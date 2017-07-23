@@ -16,11 +16,8 @@ class ViewController: UIViewController {
 	@IBOutlet weak var convertButton: UIButton!
     @IBOutlet weak var withShippingSwitch: UISwitch!
     @IBOutlet weak var taxTextField: UITextField!
-    @IBOutlet weak var taxPercentTextField: UITextField!
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var fullBillingSwitch: UISwitch!
-    
-    @IBOutlet weak var flagImage: UIImageView!
     
     // MARK: private properties
     
@@ -45,9 +42,8 @@ class ViewController: UIViewController {
         resultTextView.text = ""
         
         // Example of using BSImageLibrary
-        if let img = BSImageLibrary.getFlag(countryCode: "US") {
-            self.flagImage.image = img
-        }
+        //if let img = BSImageLibrary.getFlag(countryCode: "US") {
+        //}
  	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -68,8 +64,6 @@ class ViewController: UIViewController {
             valueTextField.resignFirstResponder()
         } else if taxTextField.isFirstResponder {
             taxTextField.resignFirstResponder()
-        } else if taxPercentTextField.isFirstResponder {
-            taxPercentTextField.resignFirstResponder()
         }
     }
 
@@ -164,9 +158,7 @@ class ViewController: UIViewController {
     private func fillPaymentRequest() {
         
         let amount = (valueTextField.text! as NSString).doubleValue
-        let taxPercent = (taxPercentTextField.text! as NSString).doubleValue
-        let taxAmount = (taxTextField.text! as NSString).doubleValue + (taxPercent * amount / 100.0)
-        
+        let taxAmount = (taxTextField.text! as NSString).doubleValue
         paymentRequest.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: paymentRequest.getCurrency())
     }
     
