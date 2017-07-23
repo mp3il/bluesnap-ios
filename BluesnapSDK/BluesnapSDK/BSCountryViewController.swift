@@ -139,6 +139,9 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         
         // call updateFunc
         updateFunc(selectedCountryCode, country.name)
+        
+        // go back
+        _ = navigationController?.popViewController(animated: true)
     }
     
 }

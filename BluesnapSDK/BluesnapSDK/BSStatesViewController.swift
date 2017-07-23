@@ -124,6 +124,9 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         
         // call updateFunc
         updateFunc(selectedCode, state.name)
+        
+        // go back
+        _ = navigationController?.popViewController(animated: true)
     }
 
 }

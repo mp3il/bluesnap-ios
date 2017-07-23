@@ -135,6 +135,9 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
             
             // call updateFunc
             updateFunc(oldBsCurrency, newBsCurrency)
+            
+            // go back
+            _ = navigationController?.popViewController(animated: true)
         }
     }
     

@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
@@ -680,7 +680,7 @@
                                         <rect key="frame" x="0.0" y="28" width="336" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -788,7 +788,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
