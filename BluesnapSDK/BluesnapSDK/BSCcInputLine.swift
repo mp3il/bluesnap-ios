@@ -59,6 +59,11 @@ public class BSCcInputLine: BSBaseTextInput {
         didSet {
             if designMode {
                 ccnIsOpen = showOpenInDesign
+                if ccnIsOpen {
+                    setOpenState(before: true, during: true, after: true)
+                } else {
+                    setClosedState(before: true, during: true, after: true)
+                }
             }
         }
     }
@@ -215,6 +220,21 @@ public class BSCcInputLine: BSBaseTextInput {
     fileprivate let animationDuration = TimeInterval(0.4)
 
     
+    // MARK: UIView override functions
+    
+    // called at design time (StoryBoard) to init the component
+    override init(frame: CGRect) {
+        
+        super.init(frame: frame)
+        updateCcIcon(ccType: "")
+    }
+    
+    // called at runtime to init the component
+    required public init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+    }
+
     // MARK: Public functions
     
     /**
