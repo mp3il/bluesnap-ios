@@ -13,6 +13,7 @@ class BSViewsManager {
     // MARK: - Constants
     
     static let bundleIdentifier = "com.bluesnap.BluesnapSDK"
+    static var bundle: Bundle!
     static let storyboardName = "BlueSnap"
     static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
     static let startScreenStoryboardId = "BSStartScreenStoryboardId"
@@ -38,7 +39,7 @@ class BSViewsManager {
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
-    open class func showStartScreen(
+    open static func showStartScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
         paymentRequest : BSPaymentRequest!,
@@ -47,8 +48,16 @@ class BSViewsManager {
         purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
         
         if startScreen == nil {
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
-            startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
+            let bundleforURL = Bundle(for: BSViewsManager.self)
+            if let bundleurl = bundleforURL.url(forResource: "BluesnapUI", withExtension: "bundle") {
+                bundle = Bundle(url: bundleurl)
+                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+                startScreen = (storyboard.instantiateViewController(withIdentifier: "BSNavToStart") as! UINavigationController).topViewController as! BSStartViewController;
+            } else {
+                bundle = Bundle(identifier: BSViewsManager.bundleIdentifier)!;
+                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+                startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
+            }
         }
         
         startScreen.paymentRequest = paymentRequest
@@ -83,7 +92,7 @@ class BSViewsManager {
         purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
         
         if purchaseScreen == nil {
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: BSViewsManager.bundle);
             purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController //BSSummaryScreen
         }
         
@@ -112,8 +121,8 @@ class BSViewsManager {
         countryManager : BSCountryManager,
         selectedCountryCode : String!,
         updateFunc: @escaping (String, String)->Void) {
-        
-        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
         let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BSCountryViewController
 
         screen.selectedCountryCode = selectedCountryCode

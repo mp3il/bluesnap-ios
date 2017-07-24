@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "Bluesnap"
+  s.name         = "BluesnapSDK"
   s.version      = "0.0.1"
   s.summary      = "An iOS SDK for Bluesnap "
 
@@ -40,7 +40,6 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  #s.license      = "MIT"
   s.license      = { :type => "MIT", :file => "LICENSE.md" }
 
 
@@ -55,10 +54,7 @@ Pod::Spec.new do |s|
   #
 
   s.author             = { "snpori" => "oribsnap@gmail.com" }
-  # Or just: s.author    = "snpori"
-  # s.authors            = { "snpori" => "oribsnap@gmail.com" }
-  # s.social_media_url   = "http://twitter.com/snpori"
-
+  
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  If this Pod runs only on iOS or OS X, then specify the platform and
@@ -93,11 +89,17 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "BluesnapSDK", "BluesnapSDK/BluesnapSDK/**/*.*"
-  #s.exclude_files = "Classes/Exclude"
+  s.source_files  = "BluesnapSDK/**/*.{h,m,swift}"
+  s.resource_bundles = {
+    'BluesnapUI' => [
+        'BluesnapSDK/**/*.xib',
+        'BluesnapSDK/**/*.storyboard',
+        'BluesnapSDK/**/Media.xcassets',
+    ]
+  }
+  s.exclude_files = "BluesnapSDK/BluesnapSDKTests/**/*.*"
 
-  s.public_header_files = "BluesnapSDK/**/*.h"
-
+  #s.public_header_files = "BluesnapSDK/**/*.h"
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -107,9 +109,8 @@ Pod::Spec.new do |s|
   #  non-essential files like tests, examples and documentation.
   #
 
-  # s.resource  = "icon.png"
-  # s.resources = "Resources/*.png"
-
+  #s.resource  = "BluesnapSDK/**/*.{storyboard}"
+  s.resources = "BluesnapSDK/**/Media.xcassets"
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
 
@@ -121,7 +122,8 @@ Pod::Spec.new do |s|
 
   # s.framework  = "SomeFramework"
   # s.frameworks = "SomeFramework", "AnotherFramework"
-
+  s.frameworks                     = 'Foundation', 'Security', 'WebKit', 'PassKit', 'AddressBook', 'UIKit'
+  s.weak_frameworks                = 'Contacts'
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
 
@@ -132,7 +134,7 @@ Pod::Spec.new do |s|
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  # s.requires_arc = true
+  s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
