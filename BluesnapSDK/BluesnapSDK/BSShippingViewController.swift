@@ -142,7 +142,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         
         super.viewDidAppear(animated)
-        adjustToPageRotate()
+        //adjustToPageRotate()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -290,7 +290,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: private functions
     
-    private func adjustToPageRotate() {
+    /*private func adjustToPageRotate() {
         
         DispatchQueue.main.async{
             
@@ -302,7 +302,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             
             self.viewDidLayoutSubviews()
         }
-    }
+    }*/
     
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
@@ -354,4 +354,18 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.stateInputLine.setValue(stateName)
     }
     
+    // MARK: Prevent rotation, support only Portrait mode
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIInterfaceOrientation.portrait
+    }
+
 }

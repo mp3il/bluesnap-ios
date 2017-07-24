@@ -29,11 +29,11 @@ class BluesnapSDKExampleTests: XCTestCase {
         do {
             let token = try BlueSnapSDK.createSandboxTestToken()
             XCTAssertNotNil(token, "Failed to get token")
-            NSLog("Token: \(token?.getTokenStr())")
+            NSLog("Token: \(token?.getTokenStr() ?? "")")
             
             BlueSnapSDK.setBsToken(bsToken: token)
             
-            let bsCurrencies = try BlueSnapSDK.getCurrencyRates()
+            let bsCurrencies = BlueSnapSDK.getCurrencyRates()
             XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
             
             let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")

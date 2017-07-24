@@ -16,11 +16,8 @@ class ViewController: UIViewController {
 	@IBOutlet weak var convertButton: UIButton!
     @IBOutlet weak var withShippingSwitch: UISwitch!
     @IBOutlet weak var taxTextField: UITextField!
-    @IBOutlet weak var taxPercentTextField: UITextField!
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var fullBillingSwitch: UISwitch!
-    
-    @IBOutlet weak var flagImage: UIImageView!
     
     // MARK: private properties
     
@@ -45,9 +42,8 @@ class ViewController: UIViewController {
         resultTextView.text = ""
         
         // Example of using BSImageLibrary
-        if let img = BSImageLibrary.getFlag(countryCode: "US") {
-            self.flagImage.image = img
-        }
+        //if let img = BSImageLibrary.getFlag(countryCode: "US") {
+        //}
  	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -68,8 +64,6 @@ class ViewController: UIViewController {
             valueTextField.resignFirstResponder()
         } else if taxTextField.isFirstResponder {
             taxTextField.resignFirstResponder()
-        } else if taxPercentTextField.isFirstResponder {
-            taxPercentTextField.resignFirstResponder()
         }
     }
 
@@ -79,30 +73,8 @@ class ViewController: UIViewController {
         
         resultTextView.text = ""
         
-        // for debug - supply initial values:
-        if fullBillingSwitch.isOn == true {
-            if let billingDetails = paymentRequest.getBillingDetails() {
-                billingDetails.name = "John Doe"
-                billingDetails.address = "333 elm st"
-                billingDetails.city = "New York"
-                billingDetails.zip = "532464"
-                billingDetails.country = "US"
-                billingDetails.state = "MA"
-                billingDetails.email = "john@gmail.com"
-            }
-        }
-        if withShippingSwitch.isOn {
-            if paymentRequest.getShippingDetails() == nil {
-                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
-            }
-            if let shippingDetails = paymentRequest.getShippingDetails() {
-                shippingDetails.name = "Mary Doe"
-                shippingDetails.address = "333 elm st"
-                shippingDetails.city = "New York"
-                shippingDetails.country = "US"
-                shippingDetails.state = "MA"
-            }
-        }
+        // If you have the shopper details, you can supply initial values like this:
+        //setInitialShopperDetails()
         
         // open the purchase screen
         fillPaymentRequest()
@@ -135,6 +107,36 @@ class ViewController: UIViewController {
     // MARK: private methods
     
     /**
+        If you have the shopper details, you can supply initial values to the BlueSnap purchasde flow.
+        This is just an exmaple with hard-coded values.
+        You can supply partial data as you have it.
+    */
+    private func setInitialShopperDetails() {
+        
+        if let billingDetails = paymentRequest.getBillingDetails() {
+            billingDetails.name = "John Doe"
+            billingDetails.address = "333 elm st"
+            billingDetails.city = "New York"
+            billingDetails.zip = "532464"
+            billingDetails.country = "US"
+            billingDetails.state = "MA"
+            billingDetails.email = "john@gmail.com"
+        }
+        if withShippingSwitch.isOn {
+            if paymentRequest.getShippingDetails() == nil {
+                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
+            }
+            if let shippingDetails = paymentRequest.getShippingDetails() {
+                shippingDetails.name = "Mary Doe"
+                shippingDetails.address = "333 elm st"
+                shippingDetails.city = "New York"
+                shippingDetails.country = "US"
+                shippingDetails.state = "MA"
+            }
+        }
+    }
+    
+    /**
      Show error pop-up
      */
     private func showErrorAlert(message: String) {
@@ -156,9 +158,7 @@ class ViewController: UIViewController {
     private func fillPaymentRequest() {
         
         let amount = (valueTextField.text! as NSString).doubleValue
-        let taxPercent = (taxPercentTextField.text! as NSString).doubleValue
-        let taxAmount = (taxTextField.text! as NSString).doubleValue + (taxPercent * amount / 100.0)
-        
+        let taxAmount = (taxTextField.text! as NSString).doubleValue
         paymentRequest.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: paymentRequest.getCurrency())
     }
     
@@ -210,7 +210,15 @@ class ViewController: UIViewController {
         }
 
         if result.success == true {
-            resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
+            //resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
+            
+            // Show thank you screen (ThankYouViewController)
+            if let thankYouScreen = storyboard?.instantiateViewController(withIdentifier: "ThankYouViewController") as? ThankYouViewController {
+                self.navigationController?.pushViewController(thankYouScreen, animated: true)
+            } else {
+                resultTextView.text = "An error occurred trying to show the Thank You screen."
+            }
+            
         } else {
             let errorDesc = result.data ?? ""
             resultTextView.text = "An error occurred trying to create BLS transaction.\n\n\(errorDesc)"

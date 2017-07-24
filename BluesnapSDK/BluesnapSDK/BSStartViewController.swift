@@ -36,7 +36,6 @@ class BSStartViewController: UIViewController {
         
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
-        self.navigationItem.prompt = "dgfsdaaa"
 
         // Hide/show the applepay 
         let tmpY = self.view.center.y
@@ -123,4 +122,20 @@ class BSStartViewController: UIViewController {
         let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
         return applePaySupported.canMakePayments
     }
+    
+    
+    // MARK: Prevent rotation, support only Portrait mode
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIInterfaceOrientation.portrait
+    }
+
 }
