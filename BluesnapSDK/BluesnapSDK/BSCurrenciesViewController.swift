@@ -64,6 +64,11 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         self.tableView.reloadData()
     }
     
+    // UISearchBarDelegate
+    func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
@@ -136,6 +141,11 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
             // call updateFunc
             updateFunc(oldBsCurrency, newBsCurrency)
             
+            // lose focus on search bar
+            if let searchBar = self.searchBar {
+                searchBar.resignFirstResponder()
+            }
+
             // go back
             _ = navigationController?.popViewController(animated: true)
         }

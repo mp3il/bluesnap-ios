@@ -60,6 +60,11 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         return nil
     }
     
+    // UISearchBarDelegate
+    func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
