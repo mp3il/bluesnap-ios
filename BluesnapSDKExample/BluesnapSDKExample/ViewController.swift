@@ -210,7 +210,15 @@ class ViewController: UIViewController {
         }
 
         if result.success == true {
-            resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
+            //resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
+            
+            // Show thank you screen (ThankYouViewController)
+            if let thankYouScreen = storyboard?.instantiateViewController(withIdentifier: "ThankYouViewController") as? ThankYouViewController {
+                self.navigationController?.pushViewController(thankYouScreen, animated: true)
+            } else {
+                resultTextView.text = "An error occurred trying to show the Thank You screen."
+            }
+            
         } else {
             let errorDesc = result.data ?? ""
             resultTextView.text = "An error occurred trying to create BLS transaction.\n\n\(errorDesc)"
