@@ -120,9 +120,33 @@ public class BSCountryManager {
         ,"il"
     ]
     
+    internal var removeCountriesWithoutFlag = true
+    
     
     init() {
+        initCountryCodes()
+    }
+    
+    func initCountryCodes() {
+        
         countryCodes = NSLocale.isoCountryCodes
+        if removeCountriesWithoutFlag {
+            var tmpCodes : [String] = []
+            for countryCode in countryCodes {
+                if let _ = BSImageLibrary.getFlag(countryCode: countryCode) {
+                    tmpCodes.append(countryCode)
+                }
+            }
+            countryCodes = tmpCodes
+        }
+    }
+    
+    func handleCountriesWithoutFlag(remove: Bool) {
+        if remove != removeCountriesWithoutFlag {
+            removeCountriesWithoutFlag = remove
+            initCountryCodes()
+        }
+        removeCountriesWithoutFlag = remove
     }
     
     func getCountryCodes() -> [String] {

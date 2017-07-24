@@ -26,6 +26,7 @@
 		D4BF8F684D49EBF26C3471C0 /* BuddyBuildSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFD5DA00E6D9D413F0E884C5 /* BuddyBuildSDK.framework */; };
 		E09E73F9DBF6074864644F11 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BBCD0E0159D220A2D83C91 /* CoreVideo.framework */; };
 		FD89AB641EB6038600A1B257 /* DemoTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD89AB631EB6038600A1B257 /* DemoTransactions.swift */; };
+		FDF2217C1F25CAB10078217C /* ThankYouViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		F7A1D0EF03F84A1CE191C991 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		FD89AB631EB6038600A1B257 /* DemoTransactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoTransactions.swift; sourceTree = "<group>"; };
+		FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYouViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 				2D4E278B1E8808A700C56C46 /* LaunchScreen.storyboard */,
 				2D4E278E1E8808A700C56C46 /* Info.plist */,
 				FD89AB631EB6038600A1B257 /* DemoTransactions.swift */,
+				FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */,
 			);
 			path = BluesnapSDKExample;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D4E27851E8808A700C56C46 /* ViewController.swift in Sources */,
+				FDF2217C1F25CAB10078217C /* ThankYouViewController.swift in Sources */,
 				2D4E27831E8808A700C56C46 /* AppDelegate.swift in Sources */,
 				FD89AB641EB6038600A1B257 /* DemoTransactions.swift in Sources */,
 			);

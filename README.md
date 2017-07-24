@@ -341,6 +341,11 @@ The sample app shows the various stages you need to implement (everything is in 
 
 And that’s it!
  
+*Note*: our pages do not support landscape mode, so in order to make sure the screen does not rotate with the device (and look bad), you need to add this code to your application's AppDelegate.swift file:
 
+    // MARK: Prevent auto-rotate
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.portrait.rawValue)
+    }
 
 > Written with [StackEdit](https://stackedit.io/).

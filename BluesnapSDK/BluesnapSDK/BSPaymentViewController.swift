@@ -56,7 +56,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
-    
     var movedUp = false
     var fieldBottom : Int?
     @IBOutlet weak var scrollView: UIScrollView!
@@ -207,12 +206,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             zipTopConstraintOriginalConstant = zipTopConstraint.constant
         }
         
-        NotificationCenter.default.addObserver(
+        /*NotificationCenter.default.addObserver(
             self,
             selector:  #selector(deviceDidRotate),
             name: .UIDeviceOrientationDidChange,
             object: nil
-        )
+        )*/
         registerTapToHideKeyboard()
     }
     
@@ -258,7 +257,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if ccInputLine.ccnIsOpen == true {
             self.ccInputLine.focusOnCcnField()
         }
-        adjustToPageRotate()
+        //adjustToPageRotate()
     }
         
     override func viewWillDisappear(_ animated: Bool) {
@@ -271,7 +270,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
 
 
-    private func adjustToPageRotate() {
+    /*private func adjustToPageRotate() {
         
         DispatchQueue.main.async{
             
@@ -287,7 +286,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             
             self.viewDidLayoutSubviews()
         }
-    }
+    }*/
     
     private func isShippingSameAsBilling() -> Bool {
         return !shippingSameAsBillingView.isHidden && self.shippingSameAsBillingSwitch.isOn
@@ -320,8 +319,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    func deviceDidRotate() {
-    }
+    /*func deviceDidRotate() {
+    }*/
 
     private func updateState() {
         
@@ -610,6 +609,20 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             countryManager: countryManager,
             addressDetails: paymentRequest.getBillingDetails(),
             updateFunc: updateWithNewState)
+    }
+
+    // MARK: Prevent rotation, support only Portrait mode
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIInterfaceOrientation.portrait
     }
 
 }

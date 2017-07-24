@@ -60,10 +60,18 @@ class BluesnapSDKTests: XCTestCase {
         
         createToken()
         
-        submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSCcDetailErrors.invalidCcNumber)
-        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSCcDetailErrors.invalidCvv)
-        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSCcDetailErrors.invalidExpDate)
+        submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSErrors.invalidCcNumber)
+        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSErrors.invalidCvv)
+        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSErrors.invalidExpDate)
     }
+    
+    func testSubmitEmptyCCDetailsError() {
+        
+        createToken()
+
+        submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
+    }
+    
     
     func testGetTokenWithBadCredentials() {
         
@@ -71,8 +79,8 @@ class BluesnapSDKTests: XCTestCase {
             let _ = try BSApiManager.createBSToken(domain: BSApiManager.BS_SANDBOX_DOMAIN, user: "dummy", password: "dummypass")
             print("We should have crashed here")
             fatalError()
-        } catch let error as BSApiErrors {
-            if error == BSApiErrors.invalidInput {
+        } catch let error as BSErrors {
+            if error == BSErrors.invalidInput {
                 print("Got the correct error")
             } else {
                 print("Got wrong error \(error.localizedDescription)")
@@ -87,7 +95,7 @@ class BluesnapSDKTests: XCTestCase {
    
     // MARK: proivate functions
     
-    private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSCcDetailErrors) {
+    private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
         
         BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in

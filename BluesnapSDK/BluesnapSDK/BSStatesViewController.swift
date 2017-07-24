@@ -59,6 +59,11 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         return nil
     }
     
+    // UISearchBarDelegate
+    func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
     
     // MARK: - UIViewController's methods
     
@@ -124,6 +129,9 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         
         // call updateFunc
         updateFunc(selectedCode, state.name)
+        
+        // go back
+        _ = navigationController?.popViewController(animated: true)
     }
 
 }

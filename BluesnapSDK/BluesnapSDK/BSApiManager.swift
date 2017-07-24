@@ -51,7 +51,7 @@ class BSApiManager {
 
     /**
         Use this method only in tests to get a token for sandbox
-     - throws BSApiErrors.unknown in case of some server error
+     - throws BSErrors.unknown in case of some server error
     */
     static func createSandboxBSToken() throws -> BSToken? {
 
@@ -65,7 +65,6 @@ class BSApiManager {
 
     /**
         Return a list of currencies and their rates from BlueSnap server
-     - throws BSApiErrors
     */
     static func getCurrencyRates() -> BSCurrencies? {
 
@@ -326,7 +325,7 @@ class BSApiManager {
      - domain: look at BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
      - user: username
      - password: password
-     - throws BSApiErrors.invalidInput if user/pass are incorrect, BSApiErrors.unknown otherwise
+     - throws BSErrors.invalidInput if user/pass are incorrect, BSErrors.unknown otherwise
      */
     internal static func createBSToken(domain: String, user: String, password: String) throws -> BSToken? {
 

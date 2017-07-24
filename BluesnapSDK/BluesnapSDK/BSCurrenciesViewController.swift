@@ -32,7 +32,6 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     /**
      Re-load currencies data if necessary; should be called before displaying the view
-     - throws BSApiErrors
      */
     func initCurrencies() -> Bool {
         if let tmp = BSApiManager.getCurrencyRates() {
@@ -63,6 +62,11 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
             filteredCurrencies = BSCurrencies(currencies: [])
         }
         self.tableView.reloadData()
+    }
+    
+    // UISearchBarDelegate
+    func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
     // MARK: - UIViewController's methods
@@ -136,6 +140,14 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
             
             // call updateFunc
             updateFunc(oldBsCurrency, newBsCurrency)
+            
+            // lose focus on search bar
+            if let searchBar = self.searchBar {
+                searchBar.resignFirstResponder()
+            }
+
+            // go back
+            _ = navigationController?.popViewController(animated: true)
         }
     }
     
