@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -14,7 +14,7 @@
         <!--Select Country-->
         <scene sceneID="xEC-pU-5Oa">
             <objects>
-                <viewController storyboardIdentifier="BSCountriesStoryboardId" title="Select Country" id="Cnt-Wb-Tw2" customClass="BSCountryViewController" customModule="BluesnapUI" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSCountriesStoryboardId" title="Select Country" id="Cnt-Wb-Tw2" customClass="BSCountryViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QuX-Rp-J6V"/>
                         <viewControllerLayoutGuide type="bottom" id="t7U-xS-hlt"/>
@@ -239,7 +239,7 @@
                             </scrollView>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lFE-br-NNC">
                                 <rect key="frame" x="0.0" y="603" width="375" height="64"/>
-                                <color key="backgroundColor" red="0.23921568630000001" green="0.23137254900000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.23921568627450979" green="0.23137254901960785" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="xIM-JF-Nt4"/>
@@ -585,7 +585,7 @@
                             </view>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTt-Ww-2zE">
                                 <rect key="frame" x="0.0" y="602" width="375" height="65"/>
-                                <color key="backgroundColor" red="0.23921568630000001" green="0.23137254900000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.23921568627450979" green="0.23137254901960785" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="aKf-g1-3h2"/>
@@ -653,7 +653,7 @@
         <!--Select Currency-->
         <scene sceneID="T9n-5J-QN1">
             <objects>
-                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select Currency" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapUI" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select Currency" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="T2c-iX-ssj"/>
                         <viewControllerLayoutGuide type="bottom" id="AeU-Nz-6go"/>
@@ -758,7 +758,7 @@
         <!--Select State-->
         <scene sceneID="ZWS-TW-Oq9">
             <objects>
-                <viewController storyboardIdentifier="BSStatesStoryboardId" title="Select State" id="2Ni-9L-E0D" customClass="BSStatesViewController" customModule="BluesnapUI" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSStatesStoryboardId" title="Select State" id="2Ni-9L-E0D" customClass="BSStatesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QYq-7U-9kH"/>
                         <viewControllerLayoutGuide type="bottom" id="VZz-ls-6bv"/>
@@ -788,7 +788,7 @@
                                         <rect key="frame" x="0.0" y="28" width="344" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
