@@ -62,6 +62,8 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
     
     // UISearchBarDelegate
     func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.text = ""
+        filterCountries("")
         searchBar.resignFirstResponder()
     }
 

@@ -66,6 +66,8 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     // UISearchBarDelegate
     func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.text = ""
+        filterCurrencies("")
         searchBar.resignFirstResponder()
     }
     

@@ -61,6 +61,8 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
     
     // UISearchBarDelegate
     func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.text = ""
+        filterStates("")
         searchBar.resignFirstResponder()
     }
     
