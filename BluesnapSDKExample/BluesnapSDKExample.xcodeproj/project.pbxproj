@@ -197,12 +197,12 @@
 				2DC57DD61EF2DB2000CD6946 /* BluesnapSDKExample.entitlements */,
 				2D4E27821E8808A700C56C46 /* AppDelegate.swift */,
 				2D4E27841E8808A700C56C46 /* ViewController.swift */,
+				FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */,
 				2D4E27861E8808A700C56C46 /* Main.storyboard */,
 				2D4E27891E8808A700C56C46 /* Assets.xcassets */,
 				2D4E278B1E8808A700C56C46 /* LaunchScreen.storyboard */,
 				2D4E278E1E8808A700C56C46 /* Info.plist */,
 				FD89AB631EB6038600A1B257 /* DemoTransactions.swift */,
-				FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */,
 			);
 			path = BluesnapSDKExample;
 			sourceTree = "<group>";

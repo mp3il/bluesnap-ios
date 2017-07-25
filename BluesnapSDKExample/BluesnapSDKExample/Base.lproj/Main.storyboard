@@ -188,40 +188,77 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6D7-ha-199">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Checkmark" translatesAutoresizingMaskIntoConstraints="NO" id="SZe-k1-CoZ">
-                                        <rect key="frame" x="55" y="64" width="253" height="253"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Checkmark" translatesAutoresizingMaskIntoConstraints="NO" id="SZe-k1-CoZ">
+                                        <rect key="frame" x="61" y="31" width="253" height="253"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="253" id="Gkz-xr-BmH"/>
+                                            <constraint firstAttribute="height" constant="253" id="Mvw-xm-SzO"/>
+                                        </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Success!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3N-It-HEB">
-                                        <rect key="frame" x="0.0" y="352" width="375" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="45"/>
-                                        <color key="textColor" red="0.43529412150000002" green="0.4431372583" blue="0.47450980539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Success!" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3N-It-HEB">
+                                        <rect key="frame" x="95" y="303" width="184" height="53"/>
+                                        <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="45"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NTs-3n-r0Y">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NTs-3n-r0Y">
                                         <rect key="frame" x="0.0" y="448" width="375" height="155"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="155" id="9YT-Qf-rkb"/>
+                                            <constraint firstAttribute="width" constant="375" id="dDp-Gx-8c0"/>
+                                        </constraints>
                                         <state key="normal" image="TryAgain"/>
                                         <connections>
                                             <action selector="tryAgainClicked:" destination="NDA-h3-Z7o" eventType="touchUpInside" id="eNa-gw-qNY"/>
                                         </connections>
                                     </button>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Something went wrong" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KfV-UR-b1h">
+                                        <rect key="frame" x="109" y="374" width="158" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="TIc-eV-eUb">
+                                        <rect key="frame" x="20" y="409" width="335" height="48"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="TIc-eV-eUb" secondAttribute="bottom" constant="146" id="BCL-Hr-Glb"/>
+                                    <constraint firstItem="TIc-eV-eUb" firstAttribute="top" secondItem="KfV-UR-b1h" secondAttribute="bottom" constant="17" id="CLB-Sg-FeP"/>
+                                    <constraint firstAttribute="bottom" secondItem="NTs-3n-r0Y" secondAttribute="bottom" id="D2n-Ro-Lj2"/>
+                                    <constraint firstItem="A3N-It-HEB" firstAttribute="top" secondItem="SZe-k1-CoZ" secondAttribute="bottom" constant="19" id="OF7-A8-YI8"/>
+                                    <constraint firstItem="TIc-eV-eUb" firstAttribute="leading" secondItem="6D7-ha-199" secondAttribute="leading" constant="20" symbolic="YES" id="QQH-iV-mZc"/>
+                                    <constraint firstItem="TIc-eV-eUb" firstAttribute="top" secondItem="KfV-UR-b1h" secondAttribute="bottom" constant="17" id="WX3-GU-2HO"/>
+                                    <constraint firstAttribute="trailing" secondItem="TIc-eV-eUb" secondAttribute="trailing" constant="20" symbolic="YES" id="gkI-7J-0Lq"/>
+                                    <constraint firstItem="KfV-UR-b1h" firstAttribute="top" secondItem="A3N-It-HEB" secondAttribute="bottom" constant="18" id="izP-aR-FEC"/>
+                                    <constraint firstItem="SZe-k1-CoZ" firstAttribute="top" secondItem="6D7-ha-199" secondAttribute="top" constant="31" id="mWk-e6-Yk8"/>
+                                    <constraint firstItem="KfV-UR-b1h" firstAttribute="top" secondItem="A3N-It-HEB" secondAttribute="bottom" constant="18" id="q9b-2K-Blm"/>
+                                    <constraint firstItem="A3N-It-HEB" firstAttribute="top" secondItem="SZe-k1-CoZ" secondAttribute="bottom" constant="19" id="z10-SL-Gcw"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6D7-ha-199" firstAttribute="leading" secondItem="oVr-E3-2Kg" secondAttribute="leading" id="3i1-lE-kpB"/>
                             <constraint firstItem="6D7-ha-199" firstAttribute="top" secondItem="F8s-7l-byI" secondAttribute="bottom" id="B4W-CV-bWo"/>
+                            <constraint firstItem="A3N-It-HEB" firstAttribute="centerX" secondItem="oVr-E3-2Kg" secondAttribute="centerX" id="IN7-gu-LQU"/>
+                            <constraint firstItem="NTs-3n-r0Y" firstAttribute="centerX" secondItem="oVr-E3-2Kg" secondAttribute="centerX" id="SLi-w8-oGJ"/>
                             <constraint firstItem="dPo-ut-OTj" firstAttribute="top" secondItem="6D7-ha-199" secondAttribute="bottom" id="hmG-jS-n32"/>
                             <constraint firstAttribute="trailing" secondItem="6D7-ha-199" secondAttribute="trailing" id="tiu-zd-g2W"/>
+                            <constraint firstItem="SZe-k1-CoZ" firstAttribute="centerX" secondItem="oVr-E3-2Kg" secondAttribute="centerX" id="z5m-IM-3gM"/>
+                            <constraint firstItem="KfV-UR-b1h" firstAttribute="centerX" secondItem="oVr-E3-2Kg" secondAttribute="centerX" id="zgA-Iz-Sb4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Thank You" id="zz5-Bd-FDJ"/>
                     <connections>
                         <outlet property="checkmarkImageView" destination="SZe-k1-CoZ" id="O1b-cb-Le0"/>
+                        <outlet property="errorTextView" destination="TIc-eV-eUb" id="980-jI-Dd9"/>
+                        <outlet property="somethingWentWrongLabel" destination="KfV-UR-b1h" id="Ynv-FQ-vza"/>
                         <outlet property="successLabel" destination="A3N-It-HEB" id="Yvz-2t-d6l"/>
                     </connections>
                 </viewController>

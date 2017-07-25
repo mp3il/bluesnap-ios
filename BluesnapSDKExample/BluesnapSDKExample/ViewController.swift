@@ -181,6 +181,7 @@ class ViewController: UIViewController {
      to execute the purchase.
      In this sample app we do it client-to-server, but this is not the way to do it in a real app.
     */
+    
     private func completePurchase(paymentRequest: BSPaymentRequest!) {
         
         if let resultPaymentDetails = paymentRequest.getResultPaymentDetails() {
@@ -210,18 +211,24 @@ class ViewController: UIViewController {
         }
 
         if result.success == true {
-            //resultTextView.text = "BLS transaction created Successfully!\n\n\(result.data!)"
-            
-            // Show thank you screen (ThankYouViewController)
-            if let thankYouScreen = storyboard?.instantiateViewController(withIdentifier: "ThankYouViewController") as? ThankYouViewController {
-                self.navigationController?.pushViewController(thankYouScreen, animated: true)
-            } else {
-                resultTextView.text = "An error occurred trying to show the Thank You screen."
-            }
-            
+            NSLog("BLS transaction created Successfully!\n\n\(result.data!)")
+            showThankYouScreen(errorText: nil)
         } else {
-            let errorDesc = result.data ?? ""
-            resultTextView.text = "An error occurred trying to create BLS transaction.\n\n\(errorDesc)"
+            let errorText = result.data ?? ""
+            NSLog("An error occurred trying to create BLS transaction.\n\n\(errorText)")
+            showThankYouScreen(errorText: errorText)
+        }
+    }
+    
+    
+    private func showThankYouScreen(errorText: String?) {
+        
+        // Show thank you screen (ThankYouViewController)
+        if let thankYouScreen = storyboard?.instantiateViewController(withIdentifier: "ThankYouViewController") as? ThankYouViewController {
+            thankYouScreen.errorText = errorText
+            self.navigationController?.pushViewController(thankYouScreen, animated: true)
+        } else {
+            resultTextView.text = "An error occurred trying to show the Thank You screen."
         }
     }
     
