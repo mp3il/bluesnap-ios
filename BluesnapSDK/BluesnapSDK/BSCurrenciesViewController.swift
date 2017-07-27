@@ -27,7 +27,9 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     fileprivate var bsCurrencies : BSCurrencies?
     fileprivate var filteredCurrencies : BSCurrencies?
     @IBOutlet weak var tableView: UITableView!
-    
+    fileprivate var groups = [String: [BSCurrency]]()
+    fileprivate var groupSections = [String]()
+
     // MARK: init currencies
     
     /**
@@ -61,11 +63,15 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         } else {
             filteredCurrencies = BSCurrencies(currencies: [])
         }
+        generateGroups()
         self.tableView.reloadData()
     }
     
     // UISearchBarDelegate
+    
     func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
+        searchBar.text = ""
+        filterCurrencies("")
         searchBar.resignFirstResponder()
     }
     
@@ -84,8 +90,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         self.navigationController!.isNavigationBarHidden = false
         
         // scroll to selected
-        if let index = filteredCurrencies?.getCurrencyIndex(code: selectedCurrencyCode) {
-            let indexPath = IndexPath(row: index, section: 0)
+        if let indexPath = getIndex(ofValue: selectedCurrencyCode) {
             self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
@@ -99,22 +104,26 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         guard let cell = reusableCell as? BSCurrencyTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        if let bsCurrency = filteredCurrencies?.currencies[indexPath.row] {
+        let firstLetter = groupSections[indexPath.section]
+        if let bsCurrency = groups[firstLetter]?[indexPath.row] {
             cell.CurrencyUILabel.text = bsCurrency.getName() + " " + bsCurrency.getCode()
             cell.checkMarkImage.image = nil
             if (bsCurrency.getCode() == selectedCurrencyCode) {
                 if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
                     cell.checkMarkImage.image = image
                 }
+            } else {
+                cell.checkMarkImage.image = nil
             }
         }
         return cell
     }
     
-    // Return # rows to display in the table
+    // Return # rows to display in the section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let filteredCurrencies = filteredCurrencies {
-            return filteredCurrencies.currencies.count
+        let firstLetter = groupSections[section]
+        if let valuesOfSection = groups[firstLetter] {
+            return valuesOfSection.count
         } else {
             return 0
         }
@@ -123,18 +132,18 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     //Tells the delegate that the specified row is now selected.
     func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         
-        if let filteredCurrencies = filteredCurrencies, let bsCurrencies = bsCurrencies {
+        if let bsCurrencies = bsCurrencies {
             
             // find and deselect previous option
             let oldBsCurrency : BSCurrency? = bsCurrencies.getCurrencyByCode(code: selectedCurrencyCode)
-            if let oldIndex = filteredCurrencies.getCurrencyIndex(code: selectedCurrencyCode) {
-                let path = IndexPath(row: oldIndex, section: 0)
+            if let indexPath = getIndex(ofValue: selectedCurrencyCode) {
                 selectedCurrencyCode = ""
-                self.tableView.reloadRows(at: [path], with: .none)
+                self.tableView.reloadRows(at: [indexPath], with: .none)
             }
             
             // select current option
-            let newBsCurrency : BSCurrency = filteredCurrencies.currencies[didSelectRowAt.row]
+            let firstLetter = groupSections[didSelectRowAt.section]
+            let newBsCurrency : BSCurrency = groups[firstLetter]![didSelectRowAt.row]
             selectedCurrencyCode = newBsCurrency.getCode()
             self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
             
@@ -151,4 +160,58 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return groupSections.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return groupSections[section]
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return groupSections
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
+    }
+    
+    // MARK: group sections and index
+    
+    
+    func generateGroups() {
+        
+        groups = [String: [BSCurrency]]()
+        for currency: BSCurrency in (filteredCurrencies?.currencies)! {
+            let name = currency.getName() ?? " "
+            let firstLetter = "\(name[name.startIndex])".lowercased()
+            if var currenciesByFirstLetter = groups[firstLetter] {
+                currenciesByFirstLetter.append(currency)
+                groups[firstLetter] = currenciesByFirstLetter
+            } else {
+                groups[firstLetter] = [currency]
+            }
+        }
+        groupSections = [String](groups.keys)
+        groupSections = groupSections.sorted()
+    }
+    
+    func getIndex(ofValue: String) -> IndexPath? {
+        
+        if ofValue.characters.count > 0 {
+            let firstLetter = "\(ofValue[ofValue.startIndex])".lowercased()
+            if let section = groups[firstLetter] {
+                var index = 0
+                for currency: BSCurrency in section {
+                    if currency.getCode() == ofValue {
+                        let row = groupSections.index(of: firstLetter)
+                        let indexPath = IndexPath(row: index, section: row!)
+                        return indexPath
+                    }
+                    index = index + 1
+                }
+            }
+        }
+        return nil
+    }
 }

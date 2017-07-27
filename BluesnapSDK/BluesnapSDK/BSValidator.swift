@@ -273,6 +273,7 @@ public class BSValidator {
         var input : String = sender.getValue() ?? ""
         input = BSStringUtils.removeNoneAlphaCharacters(input)
         input = BSStringUtils.cutToMaxLength(input, maxLength: 100)
+        input = input.capitalized
         sender.setValue(input)
     }
     

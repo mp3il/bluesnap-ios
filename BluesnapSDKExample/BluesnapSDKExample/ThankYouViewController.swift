@@ -10,21 +10,28 @@ import UIKit
 
 class ThankYouViewController: UIViewController {
 
+    var errorText : String?
+    
     @IBOutlet weak var checkmarkImageView: UIImageView!
     @IBOutlet weak var successLabel: UILabel!
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @IBOutlet weak var errorTextView: UITextView!
+    @IBOutlet weak var somethingWentWrongLabel: UILabel!
 
-        // Do any additional setup after loading the view.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let errorText = errorText {
+            checkmarkImageView.image = #imageLiteral(resourceName: "Sadface")
+            successLabel.text = "Oops!"
+            somethingWentWrongLabel.isHidden = false
+            errorTextView.text = errorText
+        } else {
+            checkmarkImageView.image = #imageLiteral(resourceName: "Checkmark")
+            successLabel.text = "Success!"
+            somethingWentWrongLabel.isHidden = true
+            errorTextView.text = ""
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     @IBAction func tryAgainClicked(_ sender: Any) {
         

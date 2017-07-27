@@ -99,8 +99,6 @@ class BSViewsManager {
         purchaseScreen.paymentRequest = paymentRequest
         purchaseScreen.purchaseFunc = purchaseFunc
         purchaseScreen.fullBilling = fullBilling
-        
-        //purchaseScreen.transitioningDelegate = BSViewsManager.transitionManager
        
         inNavigationController.pushViewController(purchaseScreen, animated: animated)
     }
