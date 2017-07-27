@@ -76,6 +76,11 @@ class ViewController: UIViewController {
         // If you have the shopper details, you can supply initial values like this:
         //setInitialShopperDetails()
         
+        // Override the navigation name, so that the next screen navigation item will say "Cancel"
+        let backItem = UIBarButtonItem()
+        backItem.title = "Cancel"
+        navigationItem.backBarButtonItem = backItem
+
         // open the purchase screen
         fillPaymentRequest()
         BlueSnapSDK.showCheckoutScreen(

@@ -99,6 +99,10 @@ class BSStartViewController: UIViewController {
 
     @IBAction func ccDetailsClick(_ sender: Any) {
 
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
+
         animateToPaymentScreen(completion: { animate in
             _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
         })
