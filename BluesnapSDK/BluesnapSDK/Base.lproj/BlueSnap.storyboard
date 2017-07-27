@@ -317,7 +317,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Button" image="card_number_box">
+                                        <state key="normal" title="Button" image="CardBox">
                                             <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
@@ -942,10 +942,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="CardBox" width="375" height="143"/>
         <image name="IL" width="28" height="20"/>
         <image name="apple_pay_button" width="375" height="143"/>
         <image name="blue_check_mark" width="16" height="13"/>
-        <image name="card_number_box" width="375" height="143"/>
         <image name="cc_default" width="25" height="17"/>
         <image name="menu_button" width="20" height="16"/>
     </resources>
