@@ -29,6 +29,8 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var tableView: UITableView!
     fileprivate var countries : [(name: String, code: String)] = []
     fileprivate var filteredCountries : [(name: String, code: String)] = []
+    fileprivate var groups = [String: [(name: String, code: String)]]()
+    fileprivate var groupSections = [String]()
 
     
     // MARK: Search bar stuff
@@ -47,18 +49,11 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         } else {
             filteredCountries = countries.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
         }
+        generateGroups()
         self.tableView.reloadData()
     }
     
-    private func getCountryIndex(code: String) -> Int? {
-        
-        for (index, country) in filteredCountries.enumerated() {
-            if country.code == code {
-                return index
-            }
-        }
-        return nil
-    }
+
     
     // UISearchBarDelegate
     func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
@@ -91,8 +86,8 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
         
-        if let index = getCountryIndex(code: self.selectedCountryCode) {
-            let indexPath = IndexPath(row: index, section: 0)
+        // scroll to selected
+        if let indexPath = getIndex(ofValue: selectedCountryCode) {
             self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
@@ -107,40 +102,49 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         guard let cell = reusableCell as? BSCountryTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        let country = self.filteredCountries[indexPath.row]
-        cell.itemNameUILabel.text = country.name
-        cell.checkMarkImageView.image = nil
-        if (country.code == selectedCountryCode) {
-            if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
-                cell.checkMarkImageView.image = image
+        
+        let firstLetter = groupSections[indexPath.section]
+        if let country = groups[firstLetter]?[indexPath.row] {
+            cell.itemNameUILabel.text = country.name
+            cell.checkMarkImageView.image = nil
+            if (country.code == selectedCountryCode) {
+                if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
+                    cell.checkMarkImageView.image = image
+                }
+            }
+            // load the flag image
+            cell.flagImageView.image = nil
+            if let image = BSViewsManager.getImage(imageName: country.code.uppercased()) {
+                cell.flagImageView.image = image
             }
         }
-        // load the flag image
-        cell.flagImageView.image = nil
-        if let image = BSViewsManager.getImage(imageName: country.code.uppercased()) {
-            cell.flagImageView.image = image
-        }
+
         return cell
     }
     
-    // Return # rows to display in the table
+    // Return # rows to display in the section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return filteredCountries.count
+        let firstLetter = groupSections[section]
+        if let valuesOfSection = groups[firstLetter] {
+            return valuesOfSection.count
+        } else {
+            return 0
+        }
     }
     
     //Tells the delegate that the specified row is now selected.
     func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         
         // find and deselect previous option
-        if let oldIndex = self.getCountryIndex(code: selectedCountryCode) {
-            let path = IndexPath(row: oldIndex, section: 0)
+        if let indexPath = getIndex(ofValue: selectedCountryCode) {
             selectedCountryCode = ""
-            self.tableView.reloadRows(at: [path], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
         }
 
         // select current option
-        let country = filteredCountries[didSelectRowAt.row]
+        let firstLetter = groupSections[didSelectRowAt.section]
+        let country = groups[firstLetter]![didSelectRowAt.row]
         selectedCountryCode = country.code
         self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
         
@@ -149,6 +153,61 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         
         // go back
         _ = navigationController?.popViewController(animated: true)
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return groupSections.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return groupSections[section]
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return groupSections
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
+    }
+
+    // MARK: group sections and index
+    
+    
+    func generateGroups() {
+        
+        groups = [String: [(name: String, code: String)]]()
+        for country: (name: String, code: String) in filteredCountries {
+            let name = country.name
+            let firstLetter = "\(name[name.startIndex])".lowercased()
+            if var countriesByFirstLetter = groups[firstLetter] {
+                countriesByFirstLetter.append(country)
+                groups[firstLetter] = countriesByFirstLetter
+            } else {
+                groups[firstLetter] = [country]
+            }
+        }
+        groupSections = [String](groups.keys)
+        groupSections = groupSections.sorted()
+    }
+    
+    func getIndex(ofValue: String) -> IndexPath? {
+        
+        if ofValue.characters.count > 0 {
+            let firstLetter = "\(ofValue[ofValue.startIndex])".lowercased()
+            if let section = groups[firstLetter] {
+                var index = 0
+                for country: (name: String, code: String) in section {
+                    if country.code == ofValue {
+                        let row = groupSections.index(of: firstLetter)
+                        let indexPath = IndexPath(row: index, section: row!)
+                        return indexPath
+                    }
+                    index = index + 1
+                }
+            }
+        }
+        return nil
     }
     
 }

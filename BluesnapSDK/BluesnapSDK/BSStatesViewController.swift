@@ -28,7 +28,9 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet weak var tableView: UITableView!
     fileprivate var filteredStates : [(name: String, code: String)] = []
-    
+    fileprivate var groups = [String: [(name: String, code: String)]]()
+    fileprivate var groupSections = [String]()
+
     
     // MARK: Search bar stuff
     
@@ -46,6 +48,7 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         } else {
             filteredStates = allStates.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
         }
+        generateGroups()
         self.tableView.reloadData()
     }
     
@@ -82,8 +85,8 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         
         self.navigationController!.isNavigationBarHidden = false
         
-        if let index = getStateIndex(code: self.selectedCode) {
-            let indexPath = IndexPath(row: index, section: 0)
+        // scroll to selected
+        if let indexPath = getIndex(ofValue: selectedCode) {
             self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
@@ -97,35 +100,44 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         guard let cell = reusableCell as? BSStateTableViewCell else {
             fatalError("The cell item is not an instancre of the right class")
         }
-        let state = filteredStates[indexPath.row]
-        cell.itemNameUILabel.text = state.name
-        cell.checkMarkImage.image = nil
-        if (state.code == selectedCode) {
-            if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
-                cell.checkMarkImage.image = image
+        let firstLetter = groupSections[indexPath.section]
+        if let state = groups[firstLetter]?[indexPath.row] {
+            cell.itemNameUILabel.text = state.name
+            cell.checkMarkImage.image = nil
+            if (state.code == selectedCode) {
+                if let image = BSViewsManager.getImage(imageName: "blue_check_mark") {
+                    cell.checkMarkImage.image = image
+                }
+            } else {
+                cell.checkMarkImage.image = nil
             }
         }
         return cell
     }
     
-    // Return # rows to display in the table
+    // Return # rows to display in the section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return filteredStates.count
+        let firstLetter = groupSections[section]
+        if let valuesOfSection = groups[firstLetter] {
+            return valuesOfSection.count
+        } else {
+            return 0
+        }
     }
     
     //Tells the delegate that the specified row is now selected.
     func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         
         // find and deselect previous option
-        if let oldIndex = self.getStateIndex(code: selectedCode) {
-            let path = IndexPath(row: oldIndex, section: 0)
+        if let indexPath = getIndex(ofValue: selectedCode) {
             selectedCode = ""
-            self.tableView.reloadRows(at: [path], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
         }
         
         // select current option
-        let state = filteredStates[didSelectRowAt.row]
+        let firstLetter = groupSections[didSelectRowAt.section]
+        let state = groups[firstLetter]![didSelectRowAt.row]
         selectedCode = state.code
         self.tableView.reloadRows(at: [didSelectRowAt], with: .none)
         
@@ -136,4 +148,61 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         _ = navigationController?.popViewController(animated: true)
     }
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return groupSections.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return groupSections[section]
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return groupSections
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
+    }
+
+    // MARK: group sections and index
+    
+    
+    func generateGroups() {
+        
+        groups = [String: [(name: String, code: String)]]()
+        for state: (name: String, code: String) in filteredStates {
+            let name = state.name
+            let firstLetter = "\(name[name.startIndex])".lowercased()
+            if var stateByFirstLetter = groups[firstLetter] {
+                stateByFirstLetter.append(state)
+                groups[firstLetter] = stateByFirstLetter
+            } else {
+                groups[firstLetter] = [state]
+            }
+        }
+        groupSections = [String](groups.keys)
+        groupSections = groupSections.sorted()
+    }
+    
+    func getIndex(ofValue: String) -> IndexPath? {
+        
+        if ofValue.characters.count > 0 {
+            let firstLetter = "\(ofValue[ofValue.startIndex])".lowercased()
+            if let section = groups[firstLetter] {
+                var index = 0
+                for country: (name: String, code: String) in section {
+                    if country.code == ofValue {
+                        let row = groupSections.index(of: firstLetter)
+                        let indexPath = IndexPath(row: index, section: row!)
+                        return indexPath
+                    }
+                    index = index + 1
+                }
+            }
+        }
+        return nil
+    }
+    
+    
+    
 }
