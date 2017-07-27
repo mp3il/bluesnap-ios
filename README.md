@@ -25,7 +25,42 @@ The SDK offers you several types of purchase flows when you use our UI:
 If you are a top-to-bottom person, skip ahead to the section that explains the sample app and look at the code. Look up functions as you go along.
 
 If you are a bottom-to-top person, read on about the data structures and classes we offer you.
- 
+## Installation
+
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+> CocoaPods 1.1.0+ is required to build this SDK
+
+To integrate BluesnapSDK into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
+
+target '<Your Target Name>' do
+    pod 'BluesnapSDK', '~> 0.3'
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+>Use the .xcworkspace file to open your project in Xcode.
+
+
+### Objective C Applications
+This SDK is written in Swift, If your application is written in Objective-C than you might need to embed swift runtime library. Please follow the link below to set up your project accordingly:
+https://developer.apple.com/library/content/qa/qa1881/_index.html
+
 # Data Structures
 
 In the BlueSnap IOS SDK project you have a Model group which contains the data structures we use.
@@ -303,7 +338,7 @@ There are a lot of comments inside the code, explaining how to use them and what
 All 3 are @IBDesignable UIViews, so you can easily check them out: simply drag a UIView into your Storyboard, change the class name to one of these below, and start playing with the inspectable properties.
 
 ### BSBaseTextInput
-BSBaseTextInput is a UIView that holds a text field and optional image; you can customize almost every part of it. It is less useful in itself, seeing it’s a base class for the following 2 controls.
+BSBaseTextInput is a UIView that holds a text field and optional image; you can customize almost every part of it. It is less useful in itself, seeing it?s a base class for the following 2 controls.
 ### BSInputLine
 BSInputLine is a UIView that holds a label, text field and optional image; you can customize almost every part of it.
 ### BSCcInputLine
@@ -315,31 +350,30 @@ BSCcInputLine is a UIView that holds the credit card fields (Cc number, expirati
 Accepting payments with apple pay using Bluesnap iOS SDK is easy, you don't need to deal with encrypted credit card details or any sensitive information in your server side. The SDK checkout screen includes an Apple Pay button that will be displayed if the device supports apple pay.
 In order to enable it in your app few steps has to be taken.
 
-1. Obtain an Apple Merchant ID using the Apple Developer Website, you'll find it under the Registering a Merchant ID page.
-2. Download a CSR from bluesnap
-3. Generate a certificate with that CSR and upload it to BlueSnap
-4. Enable apple pay Capabilities in Xcode project settings
-5. Select the Merchant ID that you created in Apple Dashboard
-6. Pass your Merchant ID to BlueSnap SDK by calling:
-    
+>1. Obtain an Apple Merchant ID using the Apple Developer Website, you'll find it under the Registering a Merchant ID page.
+>2. Download a CSR from bluesnap
+>3. Generate a certificate with that CSR and upload it to BlueSnap
+>4. Enable apple pay Capabilities in Xcode project settings
+>5. Select the Merchant ID that you created in Apple Dashboard
+>6. Pass your Merchant ID to BlueSnap SDK by calling:
     `    BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example")`
     
 After a user complete the checkout and pays with apple pay the SDK will call your completion callback, with the PaymentRequest containing the result of the purchase.
 
 Calling paymentRequest.getResultPaymentDetails() will return a BSResultApplePayDetails that can be used to complete the transaction in your server.
-You'll find a sample of this kind of HTTP call in DemoTransactions.swift, you should implement those calls in your server.
+You'll find a sample of this HTTP call in DemoTransactions.swift, you should implement those calls in your *server*.
  
 
 # Sample App - explained
 
 The sample app shows the various stages you need to implement (everything is in class ViewController):
 
- 1. Get a token from the BlueSnap server – normally, you need to do this in your server-side implementation (so as not to expose your BlueSnap username/pass in the app code). In the sample app we create a token from BlueSnap Sandbox environment, with dummy credentials. Call BLueSnapSDK.setToken() to set it.
+ 1. Get a token from the BlueSnap server ? normally, you need to do this in your server-side implementation (so as not to expose your BlueSnap username/pass in the app code). In the sample app we create a token from BlueSnap Sandbox environment, with dummy credentials. Call BLueSnapSDK.setToken() to set it.
  2. Initialize the input to the checkout flow: create an instance of BSPaymentRequest and fill the parts you may know already of the shopper.
  3. Call BlueSnapSDK.showCheckoutScreen() with callback for completion
  4. In that callback you need to call your application server to complete the purchase using BlueSnap API. In the sample app you'll find an implementation of those calls, those are demonstration purpose only and should be made in your server side.
 
-And that’s it!
+And that?s it!
  
 *Note*: our pages do not support landscape mode, so in order to make sure the screen does not rotate with the device (and look bad), you need to add this code to your application's AppDelegate.swift file:
 
@@ -348,4 +382,4 @@ And that’s it!
         return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.portrait.rawValue)
     }
 
-> Written with [StackEdit](https://stackedit.io/).
+
