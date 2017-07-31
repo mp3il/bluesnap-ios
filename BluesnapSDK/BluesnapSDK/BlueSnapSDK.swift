@@ -32,7 +32,7 @@ import PassKit
         
         BSApiManager.setBsToken(bsToken: bsToken)
     }
-    
+
     /**
      Start the check-out flow, where the shopper payment details are entered.
      
@@ -154,8 +154,22 @@ import PassKit
         }
     }
 
-    open class func setApplePayMerchantIdentifier(merchantId: String!) {
+    /**
+    Objective C helper method for returning sandbox token
+    */
+    @objc open class func createSandboxTestTokenOrNil() -> BSToken? {
+        do {
+            return try BSApiManager.createSandboxBSToken()!
+        } catch let error {
+            NSLog("Error creating token")
+            return nil
+        }
+    }
+
+
+    open class func setApplePayMerchantIdentifier(merchantId: String!) -> String? {
         BSApplePayConfiguration.setIdentifier(merchantId: merchantId)
+        return "OK"
     }
     
     // MARK: Private functions

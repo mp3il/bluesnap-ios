@@ -10,7 +10,7 @@
 
 import Foundation
 
-class BSApiManager {
+@objc class BSApiManager: NSObject {
 
     // MARK: Constants
 
