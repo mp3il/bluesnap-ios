@@ -226,9 +226,11 @@ class BSViewsManager {
         return indicator
     }
     
-    open class func startActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
+    open class func startActivityIndicator(activityIndicator: UIActivityIndicatorView!, blockEvents: Bool) {
         
-        UIApplication.shared.beginIgnoringInteractionEvents()
+        if blockEvents {
+           UIApplication.shared.beginIgnoringInteractionEvents() 
+        }
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 activityIndicator.startAnimating()

@@ -27,6 +27,7 @@ class BSWebViewController: UIViewController, UIWebViewDelegate {
         activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
         
         let wUrl = URL(string: self.url)
+        NSLog("WebView loading URL \(url)")
         webView.loadRequest(URLRequest(url: wUrl!))
     }
     
@@ -38,7 +39,7 @@ class BSWebViewController: UIViewController, UIWebViewDelegate {
     
     func webViewDidStartLoad(_ webView: UIWebView)
     {
-        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
+        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: false)
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView)

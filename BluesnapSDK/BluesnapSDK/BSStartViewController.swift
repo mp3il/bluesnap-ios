@@ -22,6 +22,7 @@ class BSStartViewController: UIViewController {
     }
 
     var paymentSummaryItems: [PKPaymentSummaryItem] = [];
+    internal var activityIndicator : UIActivityIndicatorView?
 
     // MARK: Outlets
 
@@ -70,6 +71,11 @@ class BSStartViewController: UIViewController {
             or2Label.isHidden = true
             payPalButton.isHidden = true
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopActivityIndicator()
     }
 
     // MARK: button functions
@@ -129,6 +135,30 @@ class BSStartViewController: UIViewController {
             _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
         })
     }
+    
+    @IBAction func payPalClicked(_ sender: Any) {
+        
+        DispatchQueue.main.async {
+            self.startActivityIndicator()
+        }
+        
+        DispatchQueue.main.async {
+            BSApiManager.createPayPalToken(paymentRequest: self.paymentRequest, completion: { resultToken, resultError in
+                
+                if let resultToken = resultToken {
+                    self.stopActivityIndicator()
+                    DispatchQueue.main.async {
+                        BSViewsManager.showBrowserScreen(inNavigationController: self.navigationController, url: resultToken)
+                    }
+                } else {
+                    let alert = BSViewsManager.createErrorAlert(title: "Oops", message: "An error occurred")
+                    self.stopActivityIndicator()
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        }
+    }
+    
 
     // Mark: private functions
 
@@ -150,7 +180,7 @@ class BSStartViewController: UIViewController {
     }
     
     private func showPayPalButton() -> Bool {
-        return true
+        return false
     }
     
     // MARK: Prevent rotation, support only Portrait mode
@@ -166,5 +196,20 @@ class BSStartViewController: UIViewController {
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.portrait
     }
+    
+    // Activity indicator
+    
+    func startActivityIndicator() {
+        
+        if self.activityIndicator == nil {
+            activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
+        }
+        BSViewsManager.startActivityIndicator(activityIndicator: activityIndicator!, blockEvents: true)
+    }
 
+    func stopActivityIndicator() {
+        if let activityIndicator = activityIndicator {
+            BSViewsManager.stopActivityIndicator(activityIndicator: activityIndicator)
+        }
+    }
 }

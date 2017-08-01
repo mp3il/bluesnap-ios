@@ -538,7 +538,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: activity indicator methods
     
     func startActivityIndicator() {
-        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
+        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
     }
     func stopActivityIndicator() {
         BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)

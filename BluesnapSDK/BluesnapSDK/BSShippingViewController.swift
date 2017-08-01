@@ -157,7 +157,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
             
-            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
+            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
             submitPaymentFields()
             
         } else {
