@@ -21,6 +21,29 @@ class BluesnapSDKTests: XCTestCase {
         super.tearDown()
     }
     
+    func testGetSupportedPaymentMethods() {
+    
+        createToken()
+        
+        do {
+            let supportedPaymentMethods = try BSApiManager.getSupportedPaymentMethods()
+            print(supportedPaymentMethods)
+            // again, see we don't go to the server
+            let supportedPaymentMethods2 = try BSApiManager.getSupportedPaymentMethods()
+            print(supportedPaymentMethods2)
+            // check that CC and ApplePay are supported
+            let ccIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.CreditCard)
+            XCTAssertTrue(ccIsSupported)
+            let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay)
+            XCTAssertFalse(applePayIsSupported)
+            let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal)
+            XCTAssertTrue(payPalIsSupported)
+        } catch let error {
+            print("Got wrong error \(error.localizedDescription)")
+            fatalError()
+        }
+    }
+    
     func testGetTokenAndCurrencies() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -108,7 +131,6 @@ class BluesnapSDKTests: XCTestCase {
             }
         })
     }
-    
 
     private func createToken() {
         

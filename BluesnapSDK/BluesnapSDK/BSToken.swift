@@ -13,6 +13,11 @@ public class BSToken {
     internal var tokenStr: String! = ""
     internal var serverUrl: String! = ""
     
+    public init(tokenStr : String!, isProduction : Bool) {
+        self.tokenStr = tokenStr
+        self.serverUrl = isProduction ? BSApiManager.BS_PRODUCTION_DOMAIN : BSApiManager.BS_SANDBOX_DOMAIN
+    }
+    
     public init(tokenStr : String!, serverUrl : String!) {
         self.tokenStr = tokenStr
         self.serverUrl = serverUrl

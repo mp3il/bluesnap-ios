@@ -15,7 +15,7 @@ class BSApiManager {
     // MARK: Constants
 
     internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
-    internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
+    internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/" // "https://us-qa-fct02.bluesnap.com/"
     internal static let BS_SANDBOX_TEST_USER = "sdkuser"
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
@@ -23,7 +23,9 @@ class BSApiManager {
 
     // MARK: private properties
     internal static var bsCurrencies: BSCurrencies?
+    internal static var supportedPaymentMethods: [String] = []
     internal static var lastCurrencyFetchDate: Date?
+    internal static var lastSupportedPaymentMethodsFetchDate: Date?
     internal static var apiToken: BSToken?
 
     // MARK: bsToken setter/getter
@@ -167,6 +169,72 @@ class BSApiManager {
         })
     }
 
+
+    /**
+     Return a list of merchant-supported payment methods from BlueSnap server
+     */
+    static func getSupportedPaymentMethods() -> [String] {
+        
+        let bsToken = getBsToken()
+        
+        if let lastSupportedPaymentMethodsFetchDate = lastSupportedPaymentMethodsFetchDate {
+            let diff = lastSupportedPaymentMethodsFetchDate.timeIntervalSinceNow as Double // interval in seconds
+            if (diff > TIME_DIFF_TO_RELOAD) {
+                return supportedPaymentMethods
+            }
+        }
+        
+        let domain: String! = bsToken!.serverUrl
+        let urlStr = domain + "services/2/tokenized-services/supported-payment-methods"
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        
+        // fire request
+        
+        var resultError: BSErrors?
+        let semaphore = DispatchSemaphore(value: 0)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response, error) in
+            if let error = error {
+                let errorType = type(of: error)
+                NSLog("error getting BS currencies - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
+                resultError = .unknown
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode:Int = (httpResponse?.statusCode) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        supportedPaymentMethods = parsePaymentMethodsJSON(data: data)
+                    } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                        resultError = parseError(data: data, httpStatusCode: httpStatusCode)
+                    } else {
+                        resultError = .unknown
+                        NSLog("Http error getting BS Supported Payment Methods; HTTP status = \(httpStatusCode)")
+                    }
+                } else {
+                    resultError = .unknown
+                    NSLog("Http error getting BS Supported Payment Methods response")}
+            }
+            defer {
+                semaphore.signal()
+            }
+        }
+        task.resume()
+        semaphore.wait()
+        
+        return supportedPaymentMethods
+    }
+    
+    /**
+     Return a list of merchant-supported payment methods from BlueSnap server
+     */
+    static func isSupportedPaymentMethod(_ paymentType: BSPaymentType) -> Bool {
+        
+        let supportedPaymentMethods = getSupportedPaymentMethods()
+        let exists = supportedPaymentMethods.index(of: paymentType.rawValue)
+        return exists != nil
+    }
+    
 
     // MARK: Private functions
 
@@ -316,7 +384,28 @@ class BSApiManager {
         return resultData
     }
 
-
+    
+    private static func parsePaymentMethodsJSON(data: Data?) -> [String] {
+        
+        if let data = data {
+            do {
+                // Parse the result JSOn object
+                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                    if let arr = json["paymentMethods"] as? [String] {
+                        return arr
+                    }
+                } else {
+                    NSLog("Error parsing BS Supported Payment Methods")
+                }
+            } catch let error as NSError {
+                NSLog("Error parsing Bs Supported Payment Methods: \(error.localizedDescription)")
+            }
+        } else {
+            NSLog("No BS Supported Payment Methods data exists")
+        }
+        return []
+    }
+    
     /**
      Get BlueSnap Token from BlueSnap server
      Normally you will not do this from the app.

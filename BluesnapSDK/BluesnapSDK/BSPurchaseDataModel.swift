@@ -140,9 +140,10 @@ public class BSShippingAddressDetails : BSBaseAddressDetails {
 
 // MARK: purchase flow output
 
-public enum BSPaymentType {
-    case CreditCard
-    case ApplePay
+public enum BSPaymentType : String {
+    case CreditCard = "CC"
+    case ApplePay = "APPLE_PAY"
+    case PayPal = "PAYPAL"
 }
 
 /*
