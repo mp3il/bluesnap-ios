@@ -293,27 +293,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FkL-LM-R7b" userLabel="Centered View">
-                                <rect key="frame" x="0.0" y="164" width="375" height="338"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FkL-LM-R7b" userLabel="Centered View">
+                                <rect key="frame" x="0.0" y="72" width="375" height="523"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y0h-By-eMw" userLabel="Apple Pay Button">
-                                        <rect key="frame" x="0.0" y="20" width="375" height="143"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="0.0" y="40" width="375" height="143"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <state key="normal" title="Button" image="apple_pay_button"/>
                                         <connections>
                                             <action selector="applePayClick:" destination="f14-WO-daN" eventType="touchUpInside" id="MPU-hd-zkw"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xk8-02-9HE">
-                                        <rect key="frame" x="0.0" y="163" width="375" height="12"/>
+                                        <rect key="frame" x="0.0" y="184" width="375" height="12"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1a-n9-LUQ" userLabel="Card Number Button">
-                                        <rect key="frame" x="0.0" y="175" width="375" height="143"/>
+                                        <rect key="frame" x="0.0" y="196" width="375" height="143"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -325,23 +324,79 @@
                                             <action selector="ccDetailsClick:" destination="f14-WO-daN" eventType="touchUpInside" id="oDn-h8-X7r"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rmD-vI-h9O">
+                                        <rect key="frame" x="0.0" y="339" width="375" height="12"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxD-gL-uXq">
+                                        <rect key="frame" x="0.0" y="339" width="429" height="143"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                        <state key="normal" title="PayPal" image="paypal_button"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="523" id="GgR-si-gsF"/>
+                                    <constraint firstAttribute="width" constant="375" id="yH5-Vt-wSa"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="FkL-LM-R7b" firstAttribute="centerY" secondItem="zLN-4V-elS" secondAttribute="centerY" id="vKO-Rl-vVH"/>
+                            <constraint firstItem="FkL-LM-R7b" firstAttribute="centerX" secondItem="zLN-4V-elS" secondAttribute="centerX" id="w1X-n8-IYq"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Payment Type" id="Py8-S0-Quf"/>
                     <connections>
                         <outlet property="applePayButton" destination="y0h-By-eMw" id="mc0-kk-JjP"/>
                         <outlet property="ccnButton" destination="M1a-n9-LUQ" id="bfm-K8-KKo"/>
                         <outlet property="centeredView" destination="FkL-LM-R7b" id="Wre-WY-Jla"/>
+                        <outlet property="or2Label" destination="rmD-vI-h9O" id="ZIV-Fc-JwB"/>
                         <outlet property="orLabel" destination="Xk8-02-9HE" id="LWy-9d-G0w"/>
+                        <outlet property="payPalButton" destination="pxD-gL-uXq" id="QT5-r0-szE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2728.8000000000002" y="-380.05997001499253"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="Jh7-rO-NOj">
+            <objects>
+                <viewController storyboardIdentifier="BSWebViewController" id="GdF-z9-L8H" customClass="BSWebViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eBE-RF-26P"/>
+                        <viewControllerLayoutGuide type="bottom" id="cwg-QC-gXn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KOa-3i-rgh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LVX-U6-30z">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cwg-QC-gXn" firstAttribute="top" secondItem="LVX-U6-30z" secondAttribute="bottom" id="BbK-qJ-17n"/>
+                            <constraint firstAttribute="trailing" secondItem="LVX-U6-30z" secondAttribute="trailing" id="Kow-84-vtI"/>
+                            <constraint firstItem="LVX-U6-30z" firstAttribute="leading" secondItem="KOa-3i-rgh" secondAttribute="leading" id="neW-FR-wng"/>
+                            <constraint firstItem="LVX-U6-30z" firstAttribute="top" secondItem="eBE-RF-26P" secondAttribute="bottom" id="qv8-YX-hUe"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="9dS-vY-bCk"/>
+                    <connections>
+                        <outlet property="webView" destination="LVX-U6-30z" id="vhi-Ia-h0Y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lUW-xz-fu0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4831.1999999999998" y="-457.42128935532236"/>
         </scene>
         <!--Payment-->
         <scene sceneID="7hI-Z7-7qB">
@@ -940,13 +995,32 @@
             </objects>
             <point key="canvasLocation" x="1950" y="304"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="whc-Ma-f8J">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="f8g-Mh-XU9" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Nch-Pq-eRy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="GdF-z9-L8H" kind="relationship" relationship="rootViewController" id="mIm-an-R8Y"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PI7-dT-t1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3892" y="-457.42128935532236"/>
+        </scene>
     </scenes>
     <resources>
         <image name="CardBox" width="375" height="143"/>
         <image name="IL" width="28" height="20"/>
         <image name="apple_pay_button" width="375" height="143"/>
         <image name="blue_check_mark" width="16" height="13"/>
-        <image name="cc_default" width="25" height="17"/>
+        <image name="cc_default" width="35" height="21"/>
         <image name="menu_button" width="20" height="16"/>
+        <image name="paypal_button" width="375" height="143"/>
     </resources>
 </document>

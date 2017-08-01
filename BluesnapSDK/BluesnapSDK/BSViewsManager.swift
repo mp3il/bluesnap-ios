@@ -276,4 +276,22 @@ class BSViewsManager {
         //presentViewController(otherAlert, animated: true, completion: nil)
         return menu
     }
+    
+    /**
+     Navigate to the web browser screen, showing the given URL.
+     
+     - parameters:
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - url : URL for the browser
+     */
+    open class func showBrowserScreen(
+        inNavigationController: UINavigationController!,
+        url: String!) {
+        
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+        let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
+        
+        screen.url = url
+        inNavigationController.pushViewController(screen, animated: true)
+    }
 }

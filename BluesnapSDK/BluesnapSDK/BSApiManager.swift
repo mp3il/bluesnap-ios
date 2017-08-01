@@ -20,6 +20,9 @@ class BSApiManager {
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
     // every hour (interval should be negative, and in seconds)
+    internal static let PAYPAL_SERVICE = "services/2/tokenized-services/paypal-token?amount="
+    internal static let TOKENIZED_SERVICE = "services/2/payment-fields-tokens/"
+    internal static let PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2"
 
     // MARK: private properties
     internal static var bsCurrencies: BSCurrencies?
@@ -235,6 +238,54 @@ class BSApiManager {
         return exists != nil
     }
     
+    /**
+     Create PayPal token on BlueSnap server and get back the URL for redirect
+     */
+    static func createPayPalToken(paymentRequest: BSPaymentRequest, completion: @escaping (String?, BSErrors?) -> Void) {
+        
+        DispatchQueue.global().async {
+            
+            let bsToken = getBsToken()
+            
+            let domain: String! = bsToken!.serverUrl
+            var urlStr = domain + PAYPAL_SERVICE  + "\(paymentRequest.getAmount() ?? 0)" + "&currency=" + paymentRequest.getCurrency()
+            if paymentRequest.getShippingDetails() != nil {
+                urlStr += PAYPAL_SHIPPING
+            }
+
+            NSLog("Calling \(urlStr)")
+            
+            let url = NSURL(string: urlStr)!
+            var request = NSMutableURLRequest(url: url as URL)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+            
+            // fire request
+            
+            var resultToken: String?
+            var resultError: BSErrors?
+            
+            let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+                if let error = error {
+                    let errorType = type(of: error)
+                    NSLog("error submitting BS Payment details - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
+                    completion(nil, .unknown)
+                    return
+                }
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode: Int = (httpResponse?.statusCode) {
+                    (resultToken, resultError) = parsePayPalTokenResponse(httpStatusCode: httpStatusCode, data: data)
+                } else {
+                    NSLog("Error getting response from BS on submitting Payment details")
+                }
+                defer {
+                    completion(resultToken, resultError)
+                }
+            }
+            task.resume()
+        }
+        
+    }
 
     // MARK: Private functions
 
@@ -246,8 +297,8 @@ class BSApiManager {
 
             let domain: String! = bsToken!.serverUrl
             // If you want to test expired token, use this:
-            //let urlStr = domain + "services/2/payment-fields-tokens/" + "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
-            let urlStr = domain + "services/2/payment-fields-tokens/" + bsToken!.getTokenStr()
+            //let urlStr = domain + TOKENIZED_SERVICE + "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
+            let urlStr = domain + TOKENIZED_SERVICE + bsToken!.getTokenStr()
             let url = NSURL(string: urlStr)!
             var request = NSMutableURLRequest(url: url as URL)
             request.httpMethod = "PUT"
@@ -288,6 +339,41 @@ class BSApiManager {
         }
     }
 
+    private static func parsePayPalTokenResponse(httpStatusCode: Int, data: Data?) -> (String?, BSErrors?) {
+        
+        var resultToken: String?
+        var resultError: BSErrors?
+        
+        if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+            resultToken = ""
+            
+            if let data = data {
+                do {
+                    print("\(data)")
+                    // Parse the result JSOn object
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        resultToken = json["paypalUrl"] as? String
+                    } else {
+                        NSLog("Error parsing BS result on getting PayPal Token")
+                    }
+                } catch let error as NSError {
+                    NSLog("Error parsing BS result on getting PayPal Token: \(error.localizedDescription)")
+                }
+            } else {
+                resultError = .unknown
+                NSLog("No data in BS result on getting PayPal Token")
+            }
+
+            
+        } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+            resultError = parseError(data: data, httpStatusCode: httpStatusCode)
+        } else {
+            NSLog("Http error getting PayPal Token from BS; HTTP status = \(httpStatusCode)")
+            resultError = .unknown
+        }
+        return (resultToken, resultError)
+    }
+    
     private static func parseCCResponse(httpStatusCode: Int, data: Data?) -> (BSResultCcDetails?, BSErrors?) {
         var result: BSResultCcDetails?
         var resultError: BSErrors?
