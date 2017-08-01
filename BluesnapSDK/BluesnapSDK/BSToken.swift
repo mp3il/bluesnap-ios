@@ -9,15 +9,15 @@ import Foundation
  The token is the String you get from BlueSnap API when generating a new token (/services/2/payment-fields-tokens).
  The serverURL should look liker this: https://api.bluesnap.com/ meaning: it should include the https, the domain, and end with a /
  */
-public class BSToken {
+@objc public class BSToken: NSObject {
     internal var tokenStr: String! = ""
     internal var serverUrl: String! = ""
-    
+
     public init(tokenStr : String!, isProduction : Bool) {
         self.tokenStr = tokenStr
         self.serverUrl = isProduction ? BSApiManager.BS_PRODUCTION_DOMAIN : BSApiManager.BS_SANDBOX_DOMAIN
     }
-    
+
     public init(tokenStr : String!, serverUrl : String!) {
         self.tokenStr = tokenStr
         self.serverUrl = serverUrl
