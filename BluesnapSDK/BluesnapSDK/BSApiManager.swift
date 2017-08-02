@@ -208,6 +208,7 @@ class BSApiManager {
                 if let httpStatusCode:Int = (httpResponse?.statusCode) {
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         supportedPaymentMethods = parsePaymentMethodsJSON(data: data)
+                        NSLog("supportedPaymentMethods = \(supportedPaymentMethods)")
                     } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
                         resultError = parseError(data: data, httpStatusCode: httpStatusCode)
                     } else {

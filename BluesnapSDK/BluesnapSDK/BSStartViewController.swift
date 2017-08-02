@@ -180,6 +180,9 @@ class BSStartViewController: UIViewController {
     }
     
     private func showPayPalButton() -> Bool {
+        
+        //if BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal) {
+        //}
         return false
     }
     
