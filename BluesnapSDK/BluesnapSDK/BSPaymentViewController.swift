@@ -316,6 +316,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.paymentRequest.taxAmount == 0
+            updateZipFieldLocation()
         }
     }
     
@@ -406,6 +407,14 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
 
+    private func updateZipFieldLocation() {
+        
+        if !zipInputLine.isHidden {
+            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+        } else {
+            zipTopConstraint.constant = -1 * emailInputLine.frame.height
+        }
+    }
     
     // MARK: menu actions
     

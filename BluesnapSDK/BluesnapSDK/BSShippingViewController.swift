@@ -18,7 +18,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
     internal var activityIndicator : UIActivityIndicatorView?
-    
+    fileprivate var zipTopConstraintOriginalConstant : CGFloat?
+
     // MARK: outlets
         
     @IBOutlet weak var payUIButton: UIButton!
@@ -28,7 +29,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var cityInputLine: BSInputLine!
     @IBOutlet weak var stateInputLine: BSInputLine!
     @IBOutlet weak var phoneInputLine: BSInputLine!
-    
+    @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
     // MARK: Keyboard functions
     
@@ -114,6 +115,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         registerTapToHideKeyboard()
         activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
+        if let zipTopConstraint = self.zipTopConstraint {
+            zipTopConstraintOriginalConstant = zipTopConstraint.constant
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -329,16 +333,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.phoneInputLine.fieldKeyboardType = .numbersAndPunctuation
-
-        /*if countryCode.lowercased() == "us" {
-            zipInputLine.labelText = "Shipping Zip"
-            zipInputLine.fieldKeyboardType = .numberPad
-        } else {
-            zipInputLine.labelText = "Postal Code"
-            zipInputLine.fieldKeyboardType = .numbersAndPunctuation
-        }*/
         zipInputLine.isHidden = hideZip
         zipInputLine.hideError()
+        updateZipFieldLocation()
     }
     
     private func updateState() {
@@ -354,6 +351,15 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.stateInputLine.setValue(stateName)
     }
     
+    private func updateZipFieldLocation() {
+        
+        if !zipInputLine.isHidden {
+            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+        } else {
+            zipTopConstraint.constant = -1 * phoneInputLine.frame.height
+        }
+    }
+
     // MARK: Prevent rotation, support only Portrait mode
     
     override var shouldAutorotate: Bool {
