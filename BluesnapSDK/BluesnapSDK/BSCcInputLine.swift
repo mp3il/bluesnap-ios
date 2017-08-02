@@ -712,6 +712,8 @@ public class BSCcInputLine: BSBaseTextInput {
         
         if ccnLength >= 6 {
             cardType = BSValidator.getCCTypeByRegex(textField.text ?? "")?.lowercased() ?? ""
+        } else {
+            cardType = ""
         }
         let maxLength : Int = BSValidator.getCcLengthByCardType(cardType)
         if checkMaxLength(textField: sender, maxLength: maxLength) == true {
