@@ -75,6 +75,14 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         searchBar.resignFirstResponder()
     }
     
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {

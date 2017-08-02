@@ -56,12 +56,22 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
 
     
     // UISearchBarDelegate
+    
     func searchBarCancelButtonClicked(_ searchBar : UISearchBar) {
         searchBar.text = ""
         filterCountries("")
         searchBar.resignFirstResponder()
     }
 
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+
+    
     // MARK: - UIViewController's methods
     
     override func viewDidLoad() {
