@@ -58,7 +58,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         if searchText == "" {
             self.filteredCurrencies = self.bsCurrencies
         } else if let bsCurrencies = self.bsCurrencies {
-            let filtered = bsCurrencies.currencies.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
+            let filtered = bsCurrencies.currencies.filter{(x) -> Bool in (x.name.uppercased().range(of:searchText.uppercased())) != nil }
             filteredCurrencies = BSCurrencies(currencies: filtered)
         } else {
             filteredCurrencies = BSCurrencies(currencies: [])
@@ -184,7 +184,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         groups = [String: [BSCurrency]]()
         for currency: BSCurrency in (filteredCurrencies?.currencies)! {
             let name = currency.getName() ?? " "
-            let firstLetter = "\(name[name.startIndex])".lowercased()
+            let firstLetter = "\(name[name.startIndex])".uppercased()
             if var currenciesByFirstLetter = groups[firstLetter] {
                 currenciesByFirstLetter.append(currency)
                 groups[firstLetter] = currenciesByFirstLetter
@@ -199,7 +199,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     func getIndex(ofValue: String) -> IndexPath? {
         
         if ofValue.characters.count > 0 {
-            let firstLetter = "\(ofValue[ofValue.startIndex])".lowercased()
+            let firstLetter = "\(ofValue[ofValue.startIndex])".uppercased()
             if let section = groups[firstLetter] {
                 var index = 0
                 for currency: BSCurrency in section {

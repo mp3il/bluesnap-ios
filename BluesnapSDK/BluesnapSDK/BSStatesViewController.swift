@@ -46,7 +46,7 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         if searchText == "" {
             self.filteredStates = self.allStates
         } else {
-            filteredStates = allStates.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
+            filteredStates = allStates.filter{(x) -> Bool in (x.name.uppercased().range(of:searchText.uppercased())) != nil }
         }
         generateGroups()
         self.tableView.reloadData()
@@ -172,7 +172,7 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
         groups = [String: [(name: String, code: String)]]()
         for state: (name: String, code: String) in filteredStates {
             let name = state.name
-            let firstLetter = "\(name[name.startIndex])".lowercased()
+            let firstLetter = "\(name[name.startIndex])".uppercased()
             if var stateByFirstLetter = groups[firstLetter] {
                 stateByFirstLetter.append(state)
                 groups[firstLetter] = stateByFirstLetter
@@ -187,7 +187,7 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
     func getIndex(ofValue: String) -> IndexPath? {
         
         if ofValue.characters.count > 0 {
-            let firstLetter = "\(ofValue[ofValue.startIndex])".lowercased()
+            let firstLetter = "\(ofValue[ofValue.startIndex])".uppercased()
             if let section = groups[firstLetter] {
                 var index = 0
                 for country: (name: String, code: String) in section {

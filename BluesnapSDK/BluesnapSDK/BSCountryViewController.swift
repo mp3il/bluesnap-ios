@@ -47,7 +47,7 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         if searchText == "" {
             self.filteredCountries = self.countries
         } else {
-            filteredCountries = countries.filter{(x) -> Bool in (x.name.lowercased().range(of:searchText.lowercased())) != nil }
+            filteredCountries = countries.filter{(x) -> Bool in (x.name.uppercased().range(of:searchText.uppercased())) != nil }
         }
         generateGroups()
         self.tableView.reloadData()
@@ -179,7 +179,7 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         groups = [String: [(name: String, code: String)]]()
         for country: (name: String, code: String) in filteredCountries {
             let name = country.name
-            let firstLetter = "\(name[name.startIndex])".lowercased()
+            let firstLetter = "\(name[name.startIndex])".uppercased()
             if var countriesByFirstLetter = groups[firstLetter] {
                 countriesByFirstLetter.append(country)
                 groups[firstLetter] = countriesByFirstLetter
@@ -194,7 +194,7 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
     func getIndex(ofValue: String) -> IndexPath? {
         
         if ofValue.characters.count > 0 {
-            let firstLetter = "\(ofValue[ofValue.startIndex])".lowercased()
+            let firstLetter = "\(ofValue[ofValue.startIndex])".uppercased()
             if let section = groups[firstLetter] {
                 var index = 0
                 for country: (name: String, code: String) in section {
