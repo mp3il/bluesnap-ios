@@ -950,8 +950,12 @@ public class BSCcInputLine: BSBaseTextInput {
             self.adjustCoverButton()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 //self.layoutIfNeeded()
-                _ = self.validateExp(ignoreIfEmpty: true)
-                _ = self.validateCvv(ignoreIfEmpty: true)
+                if !self.expTextField.isFirstResponder {
+                    _ = self.validateExp(ignoreIfEmpty: true)
+                }
+                if !self.cvvTextField.isFirstResponder {
+                   _ = self.validateCvv(ignoreIfEmpty: true)
+                }
             }
         }
     }
