@@ -777,6 +777,9 @@ public class BSCcInputLine: BSBaseTextInput {
     
     func validateExp(ignoreIfEmpty : Bool) -> Bool {
         
+        if ccnIsOpen {
+            return true
+        }
         var result = true
         if !ignoreIfEmpty || (expTextField.text?.characters.count)! > 0 {
             result = BSValidator.validateExp(input: self)
@@ -786,6 +789,9 @@ public class BSCcInputLine: BSBaseTextInput {
     
     func validateCvv(ignoreIfEmpty : Bool) -> Bool {
         
+        if ccnIsOpen {
+            return true
+        }
         var result = true
         if !ignoreIfEmpty || (cvvTextField.text?.characters.count)! > 0 {
             result = BSValidator.validateCvv(input: self, cardType: cardType)
@@ -823,13 +829,13 @@ public class BSCcInputLine: BSBaseTextInput {
             if !cvvTextField.canResignFirstResponder {
                 canOpen = false
             } else {
-                cvvTextField.resignFirstResponder()
+                //cvvTextField.resignFirstResponder()
             }
         } else if expTextField.isFirstResponder {
             if !expTextField.canResignFirstResponder {
                 canOpen = false
             } else {
-                expTextField.resignFirstResponder()
+                //expTextField.resignFirstResponder()
             }
         }
         if canOpen {
