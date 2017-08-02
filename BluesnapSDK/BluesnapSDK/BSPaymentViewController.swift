@@ -370,6 +370,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             }
         }
         self.shippingScreen.payText = self.payButtonText
+        if self.taxDetailsView.isHidden {
+            shippingScreen.subTotalText = nil
+            shippingScreen.taxText = nil
+        } else {
+            shippingScreen.subTotalText = self.subtotalUILabel.text
+            shippingScreen.taxText = self.taxAmountUILabel.text
+        }
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
     

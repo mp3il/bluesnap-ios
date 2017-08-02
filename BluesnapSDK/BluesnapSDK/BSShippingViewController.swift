@@ -15,6 +15,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     internal var paymentRequest : BSPaymentRequest!
     internal var payText : String!
+    internal var subTotalText : String?
+    internal var taxText : String?
     internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
     internal var activityIndicator : UIActivityIndicatorView?
@@ -31,6 +33,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var phoneInputLine: BSInputLine!
     @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var subtotalUILabel: UILabel!
+    @IBOutlet weak var taxAmountUILabel: UILabel!
+    @IBOutlet weak var taxDetailsView: UIView!
+
     // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
@@ -140,6 +146,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             updateFlagImage(countryCode: countryCode)
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
+            if subTotalText == nil {
+                self.taxDetailsView.isHidden = true
+            } else {
+                self.taxDetailsView.isHidden = false
+                self.taxAmountUILabel.text = self.taxText
+                self.subtotalUILabel.text = self.subTotalText
+            }
         }
     }
     
