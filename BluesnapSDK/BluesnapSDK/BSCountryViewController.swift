@@ -34,8 +34,9 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
 
     @IBOutlet weak var searchBar: UISearchBar!
     
-    let SECTION_HEADER_LABEL_HEIGHT: CGFloat = 15
+    let SECTION_HEADER_LABEL_HEIGHT: CGFloat = 18
     let SECTION_HEADER_MARGIN: CGFloat = 5
+    let sectionColor = UIColor(red: 234/255, green: 235/255, blue: 237/255, alpha: 1)
 
     // MARK: Search bar stuff
     
@@ -200,6 +201,7 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
         label.font.withSize(SECTION_HEADER_LABEL_HEIGHT)
         
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: SECTION_HEADER_LABEL_HEIGHT + 2*SECTION_HEADER_MARGIN))
+        view.backgroundColor = sectionColor
         view.addSubview(label)
         
         return view

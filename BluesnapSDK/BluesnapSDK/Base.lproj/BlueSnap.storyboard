@@ -33,9 +33,9 @@
                                     <outlet property="delegate" destination="Cnt-Wb-Tw2" id="F90-Pn-JC2"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Js1-Mf-mQv">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Js1-Mf-mQv">
                                 <rect key="frame" x="20" y="108" width="335" height="559"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="jmW-2z-Xb6" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
                                         <rect key="frame" x="0.0" y="55.5" width="335" height="40"/>
@@ -789,9 +789,9 @@
                                     <outlet property="delegate" destination="CMN-vn-Foo" id="dhR-eb-iON"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="40" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="DXK-pe-9ap">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="40" sectionHeaderHeight="28" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="DXK-pe-9ap">
                                 <rect key="frame" x="16" y="108" width="343" height="559"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" userLabel="I" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
                                         <rect key="frame" x="0.0" y="55.5" width="343" height="40"/>
@@ -889,9 +889,9 @@
                                     <outlet property="delegate" destination="2Ni-9L-E0D" id="giZ-oE-33e"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Zqq-Eb-cFM">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="40" sectionHeaderHeight="28" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Zqq-Eb-cFM">
                                 <rect key="frame" x="20" y="108" width="335" height="559"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="k9o-eM-cDg" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
                                         <rect key="frame" x="0.0" y="55.5" width="335" height="40"/>

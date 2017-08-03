@@ -34,7 +34,7 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     let SECTION_HEADER_LABEL_HEIGHT: CGFloat = 18
     let SECTION_HEADER_MARGIN: CGFloat = 5
-    
+    let sectionColor = UIColor(red: 234/255, green: 235/255, blue: 237/255, alpha: 1)
     
     // MARK: init currencies
     
@@ -197,19 +197,20 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
         return 0.1
     }
 
-    // create a section cell
+    // create a section header
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let label = UILabel(frame: CGRect(x: 0, y: SECTION_HEADER_MARGIN, width: self.view.frame.width, height: SECTION_HEADER_LABEL_HEIGHT))
         label.text = groupSections[section]
         label.font.withSize(SECTION_HEADER_LABEL_HEIGHT)
+        //label.backgroundColor = UIColor.clear
         
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: SECTION_HEADER_LABEL_HEIGHT + 2*SECTION_HEADER_MARGIN))
+        view.backgroundColor = sectionColor
         view.addSubview(label)
         
         return view
     }
-    
     
     // MARK: group sections and index
     
