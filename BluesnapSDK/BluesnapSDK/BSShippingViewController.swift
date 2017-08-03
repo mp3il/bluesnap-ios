@@ -345,7 +345,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
-        self.phoneInputLine.fieldKeyboardType = .numbersAndPunctuation
+        self.phoneInputLine.fieldKeyboardType = .phonePad
+        //self.streetInputLine.fieldKeyboardType = .numbersAndPunctuation
         zipInputLine.isHidden = hideZip
         zipInputLine.hideError()
         updateZipFieldLocation()

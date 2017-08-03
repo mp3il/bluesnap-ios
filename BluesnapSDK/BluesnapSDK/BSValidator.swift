@@ -280,7 +280,6 @@ public class BSValidator {
     class func phoneEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = BSStringUtils.removeNonePhoneCharacters(input)
         input = BSStringUtils.cutToMaxLength(input, maxLength: 30)
         sender.setValue(input)
     }
