@@ -10,24 +10,18 @@ import Foundation
 
 class BSStatesViewController : BSBaseListController {
     
-    // MARK: puclic properties
+    // MARK: private properties
     
+    fileprivate var filteredItems : [(name: String, code: String)] = []
     // data: state codes and names
-    internal var allStates : [(name: String, code: String)] = []
-    
+    fileprivate var allStates : [(name: String, code: String)] = []
     // the callback function that gets called when a state is selected;
     // this is just a default
-    internal var updateFunc : (String, String)->Void = {
+    fileprivate var updateFunc : (String, String)->Void = {
         code, name in
         NSLog("state \(code):\(name) was selected")
     }
-    
-    // MARK: private properties
-    
-    @IBOutlet weak var tableView: UITableView!
-    fileprivate var filteredItems : [(name: String, code: String)] = []
-    @IBOutlet weak var searchBar: UISearchBar!
-    
+   
     // MARK: init
     
     func initStates(selectedCode: String!, allStates : [(name: String, code: String)], updateFunc : @escaping (String, String)->Void) {
@@ -53,18 +47,6 @@ class BSStatesViewController : BSBaseListController {
         }
         generateGroups()
         self.tableView.reloadData()
-    }
-    
-    override func getMySearchBar() -> UISearchBar? {
-        return self.searchBar
-    }
-    
-    override func setMySearchBar(_ searchBar : UISearchBar) {
-        self.searchBar = searchBar
-    }
-    
-    override func getMyTableView() -> UITableView? {
-        return self.tableView
     }
     
     override func selectItem(newItem: (name: String, code: String)) {

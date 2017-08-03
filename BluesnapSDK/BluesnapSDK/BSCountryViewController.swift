@@ -10,16 +10,10 @@ import Foundation
 
 class BSCountryViewController : BSBaseListController {
     
-    // MARK: puclic properties
-        
-    
-    
     // MARK: private properties
     
     fileprivate var countries : [(name: String, code: String)] = []
     fileprivate var filteredItems : [(name: String, code: String)] = []
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
     // the callback function that gets called when a country is selected;
     // this is just a default
     fileprivate var updateFunc : (String, String)->Void = {
@@ -59,18 +53,6 @@ class BSCountryViewController : BSBaseListController {
         }
         generateGroups()
         self.tableView.reloadData()
-    }
-    
-    override func getMySearchBar() -> UISearchBar? {
-        return self.searchBar
-    }
-    
-    override func setMySearchBar(_ searchBar : UISearchBar) {
-        self.searchBar = searchBar
-    }    
-    
-    override func getMyTableView() -> UITableView? {
-        return self.tableView
     }
 
     override func selectItem(newItem: (name: String, code: String)) {

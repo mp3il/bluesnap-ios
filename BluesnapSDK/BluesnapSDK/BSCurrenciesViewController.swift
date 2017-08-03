@@ -15,8 +15,6 @@ class BSCurrenciesViewController: BSBaseListController {
     fileprivate var oldSelectedItem : (name: String, code: String)?
     fileprivate var bsCurrencies : BSCurrencies?
     fileprivate var filteredItems : BSCurrencies?
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
     // the callback function that gets called when a currency is selected;
     // this ids just a default
     fileprivate var updateFunc : (BSCurrency?, BSCurrency?)->Void = {
@@ -59,18 +57,6 @@ class BSCurrenciesViewController: BSBaseListController {
         }
         generateGroups()
         self.tableView.reloadData()
-    }
-    
-    override func getMySearchBar() -> UISearchBar? {
-        return self.searchBar
-    }
-    
-    override func setMySearchBar(_ searchBar : UISearchBar) {
-        self.searchBar = searchBar
-    }
-    
-    override func getMyTableView() -> UITableView? {
-        return self.tableView
     }
     
     override func selectItem(newItem: (name: String, code: String)) {
