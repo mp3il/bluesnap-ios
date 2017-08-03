@@ -38,10 +38,10 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="jmW-2z-Xb6" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="335" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="335" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="335" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="335" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
@@ -49,14 +49,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="35" y="10" width="278" height="22"/>
+                                                    <rect key="frame" x="34.5" y="9.5" width="278.5" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="313" y="15" width="17" height="13"/>
+                                                    <rect key="frame" x="313" y="15" width="16.5" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -167,8 +167,8 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="editingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="jdY-ii-VKc"/>
                                                     <action selector="streetEditingChanged:" destination="PPS-Pq-6Wu" eventType="editingChanged" id="tRO-pj-qne"/>
+                                                    <action selector="streetEditingDidBegin:" destination="PPS-Pq-6Wu" eventType="editingDidBegin" id="L5p-mb-EKn"/>
                                                     <action selector="streetEditingDidEnd:" destination="PPS-Pq-6Wu" eventType="editingDidEnd" id="iDh-Ub-8b9"/>
                                                 </connections>
                                             </view>
@@ -549,9 +549,9 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="addressEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="9eT-pS-hme"/>
-                                                    <action selector="addressEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="EfC-d0-WFf"/>
-                                                    <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="XBM-8g-XUK"/>
+                                                    <action selector="streetEditingChanged:" destination="W0G-M6-3dM" eventType="editingChanged" id="weg-y9-p4W"/>
+                                                    <action selector="streetEditingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="5sT-Yg-mcE"/>
+                                                    <action selector="streetEditingDidEnd:" destination="W0G-M6-3dM" eventType="editingDidEnd" id="Zye-Lj-A9b"/>
                                                 </connections>
                                             </view>
                                             <view tag="6" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sW-jJ-zDD" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
@@ -793,10 +793,10 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" userLabel="I" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="343" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="343" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -892,10 +892,10 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="k9o-eM-cDg" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="335" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="335" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="335" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="335" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">

@@ -188,7 +188,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     func validateForm() -> Bool {
         
         let ok1 = validateName(ignoreIfEmpty: false)
-        let ok2 = validateAddress(ignoreIfEmpty: false)
+        let ok2 = validateStreet(ignoreIfEmpty: false)
         let ok3 = validateCity(ignoreIfEmpty: false)
         let ok4 = validateZip(ignoreIfEmpty: false)
         let ok5 = validateState(ignoreIfEmpty: false)
@@ -202,9 +202,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         return result
     }
     
-    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
+    func validateStreet(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validateStreet(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getShippingDetails())
         return result
     }
     
@@ -256,7 +256,17 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func streetEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateAddress(ignoreIfEmpty: true)
+        _ = validateStreet(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func streetEditingDidBegin(_ sender: BSInputLine) {
+        
+        editingDidBegin(sender)
+        if streetInputLine.getValue() == "" {
+            streetInputLine.fieldKeyboardType = .numbersAndPunctuation
+        } else {
+            streetInputLine.fieldKeyboardType = .default
+        }
     }
     
     @IBAction func cityEditingChanged(_ sender: BSInputLine) {
@@ -346,7 +356,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.phoneInputLine.fieldKeyboardType = .phonePad
-        //self.streetInputLine.fieldKeyboardType = .numbersAndPunctuation
         zipInputLine.isHidden = hideZip
         zipInputLine.hideError()
         updateZipFieldLocation()

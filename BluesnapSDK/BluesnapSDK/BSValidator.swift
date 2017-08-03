@@ -85,7 +85,7 @@ public class BSValidator {
         return true
     }
 
-    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
+    class func validateStreet(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         if let addressDetails = addressDetails {

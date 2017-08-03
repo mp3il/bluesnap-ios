@@ -398,6 +398,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.zipInputLine.isHidden = hideZip
         self.zipInputLine.hideError()
+        //self.streetInputLine.fieldKeyboardType = .numbersAndPunctuation
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
@@ -470,7 +471,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if fullBilling {
             let ok1 = validateEmail(ignoreIfEmpty: false)
             let ok2 = validateCity(ignoreIfEmpty: false)
-            let ok3 = validateAddress(ignoreIfEmpty: false)
+            let ok3 = validateStreet(ignoreIfEmpty: false)
             let ok4 = validateCity(ignoreIfEmpty: false)
             let ok5 = validateZip(ignoreIfEmpty: false)
             let ok6 = validateState(ignoreIfEmpty: false)
@@ -508,9 +509,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         return result
     }
     
-    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
+    func validateStreet(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getBillingDetails())
+        let result : Bool = BSValidator.validateStreet(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getBillingDetails())
         return result
     }
     
@@ -592,12 +593,22 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         _ = validateEmail(ignoreIfEmpty: true)
     }
     
-    @IBAction func addressEditingChanged(_ sender: BSInputLine) {
+    @IBAction func streetEditingChanged(_ sender: BSInputLine) {
         BSValidator.addressEditingChanged(sender)
     }
     
-    @IBAction func addressEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateAddress(ignoreIfEmpty: true)
+    @IBAction func streetEditingDidEnd(_ sender: BSInputLine) {
+        _ = validateStreet(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func streetEditingDidBegin(_ sender: BSInputLine) {
+        
+        editingDidBegin(sender)
+        if streetInputLine.getValue() == "" {
+            streetInputLine.fieldKeyboardType = .numbersAndPunctuation
+        } else {
+            streetInputLine.fieldKeyboardType = .default
+        }
     }
     
     @IBAction func cityEditingChanged(_ sender: BSInputLine) {
