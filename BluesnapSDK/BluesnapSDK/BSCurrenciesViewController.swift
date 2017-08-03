@@ -30,6 +30,8 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     fileprivate var groups = [String: [BSCurrency]]()
     fileprivate var groupSections = [String]()
 
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     // MARK: init currencies
     
     /**
@@ -46,7 +48,6 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     
     // MARK: Search bar stuff
     
-    fileprivate var searchBar : UISearchBar?
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         self.searchBar = searchBar
@@ -88,6 +89,12 @@ class BSCurrenciesViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        // add thin border below the searchBar
+        let border = CALayer()
+        border.frame = CGRect(x: 0, y: searchBar.frame.height-1, width: searchBar.frame.width, height: 0.5)
+        border.backgroundColor = UIColor.lightGray.cgColor
+        searchBar.layer.addSublayer(border)
     }
     
     override func viewWillAppear(_ animated: Bool) {

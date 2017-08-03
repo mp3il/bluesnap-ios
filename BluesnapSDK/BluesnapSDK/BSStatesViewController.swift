@@ -31,10 +31,10 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
     fileprivate var groups = [String: [(name: String, code: String)]]()
     fileprivate var groupSections = [String]()
 
+    @IBOutlet weak var searchBar: UISearchBar!
     
     // MARK: Search bar stuff
     
-    fileprivate var searchBar : UISearchBar?
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         self.searchBar = searchBar
@@ -84,6 +84,12 @@ class BSStatesViewController : UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        // add thin border below the searchBar
+        let border = CALayer()
+        border.frame = CGRect(x: 0, y: searchBar.frame.height-1, width: searchBar.frame.width, height: 0.5)
+        border.backgroundColor = UIColor.lightGray.cgColor
+        searchBar.layer.addSublayer(border)
     }
     
     override func viewWillAppear(_ animated: Bool) {

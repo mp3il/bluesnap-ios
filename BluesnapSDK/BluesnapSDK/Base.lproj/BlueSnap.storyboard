@@ -34,7 +34,7 @@
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Js1-Mf-mQv">
-                                <rect key="frame" x="20" y="112" width="335" height="547"/>
+                                <rect key="frame" x="20" y="108" width="335" height="559"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="jmW-2z-Xb6" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
@@ -83,13 +83,14 @@
                             <constraint firstAttribute="trailing" secondItem="Js1-Mf-mQv" secondAttribute="trailing" constant="20" symbolic="YES" id="IbR-ss-2O3"/>
                             <constraint firstItem="3Ep-JQ-pQu" firstAttribute="centerX" secondItem="85X-D6-3iM" secondAttribute="centerX" id="Jp9-CZ-taw"/>
                             <constraint firstItem="3Ep-JQ-pQu" firstAttribute="top" secondItem="QuX-Rp-J6V" secondAttribute="bottom" id="MxS-XR-RCp"/>
-                            <constraint firstItem="Js1-Mf-mQv" firstAttribute="top" secondItem="3Ep-JQ-pQu" secondAttribute="bottom" constant="4" id="iXw-he-hSG"/>
+                            <constraint firstItem="Js1-Mf-mQv" firstAttribute="top" secondItem="3Ep-JQ-pQu" secondAttribute="bottom" id="iXw-he-hSG"/>
                             <constraint firstItem="Js1-Mf-mQv" firstAttribute="leading" secondItem="85X-D6-3iM" secondAttribute="leading" constant="20" symbolic="YES" id="ons-M0-pOn"/>
-                            <constraint firstItem="t7U-xS-hlt" firstAttribute="top" secondItem="Js1-Mf-mQv" secondAttribute="bottom" constant="8" symbolic="YES" id="zqU-YK-vQX"/>
+                            <constraint firstItem="t7U-xS-hlt" firstAttribute="top" secondItem="Js1-Mf-mQv" secondAttribute="bottom" id="zqU-YK-vQX"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Select Country" id="C39-tG-WiX"/>
                     <connections>
+                        <outlet property="searchBar" destination="3Ep-JQ-pQu" id="feb-Th-Gl6"/>
                         <outlet property="tableView" destination="Js1-Mf-mQv" id="82G-tP-gZC"/>
                     </connections>
                 </viewController>
@@ -789,7 +790,7 @@
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="40" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="DXK-pe-9ap">
-                                <rect key="frame" x="16" y="112" width="343" height="547"/>
+                                <rect key="frame" x="16" y="108" width="343" height="559"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" userLabel="I" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
@@ -839,9 +840,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7kx-hO-24w" firstAttribute="centerX" secondItem="mBG-P4-R6g" secondAttribute="centerX" id="4bk-fF-6hj"/>
-                            <constraint firstItem="DXK-pe-9ap" firstAttribute="top" secondItem="7kx-hO-24w" secondAttribute="bottom" constant="4" id="DNf-qV-FYM"/>
+                            <constraint firstItem="DXK-pe-9ap" firstAttribute="top" secondItem="7kx-hO-24w" secondAttribute="bottom" id="DNf-qV-FYM"/>
                             <constraint firstItem="7kx-hO-24w" firstAttribute="leading" secondItem="mBG-P4-R6g" secondAttribute="leadingMargin" constant="-16" id="IPU-DH-7fq"/>
-                            <constraint firstItem="AeU-Nz-6go" firstAttribute="top" secondItem="DXK-pe-9ap" secondAttribute="bottom" constant="8" symbolic="YES" id="MmJ-Ei-Ktg"/>
+                            <constraint firstItem="AeU-Nz-6go" firstAttribute="top" secondItem="DXK-pe-9ap" secondAttribute="bottom" id="MmJ-Ei-Ktg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="DXK-pe-9ap" secondAttribute="trailing" id="UnJ-7g-6Oe"/>
                             <constraint firstItem="7kx-hO-24w" firstAttribute="top" secondItem="T2c-iX-ssj" secondAttribute="bottom" id="aQX-sg-P2A"/>
                             <constraint firstItem="DXK-pe-9ap" firstAttribute="leading" secondItem="mBG-P4-R6g" secondAttribute="leadingMargin" id="teb-wn-Cxf"/>
@@ -849,6 +850,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Select Currency" id="vbq-Vt-6wb"/>
                     <connections>
+                        <outlet property="searchBar" destination="7kx-hO-24w" id="lJt-X6-6vD"/>
                         <outlet property="searchDisplayController" destination="m4Q-0f-btD" id="FtM-Pd-cMb"/>
                         <outlet property="tableView" destination="DXK-pe-9ap" id="Vq9-tg-TyB"/>
                     </connections>
@@ -888,7 +890,7 @@
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Zqq-Eb-cFM">
-                                <rect key="frame" x="20" y="111" width="335" height="548"/>
+                                <rect key="frame" x="20" y="108" width="335" height="559"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="k9o-eM-cDg" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
@@ -936,17 +938,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="VZz-ls-6bv" firstAttribute="top" secondItem="Zqq-Eb-cFM" secondAttribute="bottom" constant="8" symbolic="YES" id="0sX-Rf-ufE"/>
+                            <constraint firstItem="VZz-ls-6bv" firstAttribute="top" secondItem="Zqq-Eb-cFM" secondAttribute="bottom" id="0sX-Rf-ufE"/>
                             <constraint firstItem="N0X-tR-l6A" firstAttribute="leading" secondItem="8Y8-Co-ANG" secondAttribute="leading" id="Kuj-aW-CWx"/>
                             <constraint firstAttribute="trailing" secondItem="N0X-tR-l6A" secondAttribute="trailing" id="Pde-tW-5Eu"/>
                             <constraint firstItem="N0X-tR-l6A" firstAttribute="top" secondItem="QYq-7U-9kH" secondAttribute="bottom" id="ZYu-i1-xfB"/>
                             <constraint firstAttribute="trailing" secondItem="Zqq-Eb-cFM" secondAttribute="trailing" constant="20" symbolic="YES" id="p72-yz-sBL"/>
-                            <constraint firstItem="Zqq-Eb-cFM" firstAttribute="top" secondItem="N0X-tR-l6A" secondAttribute="bottom" constant="3" id="u03-iz-5MR"/>
+                            <constraint firstItem="Zqq-Eb-cFM" firstAttribute="top" secondItem="N0X-tR-l6A" secondAttribute="bottom" id="u03-iz-5MR"/>
                             <constraint firstItem="Zqq-Eb-cFM" firstAttribute="leading" secondItem="8Y8-Co-ANG" secondAttribute="leading" constant="20" symbolic="YES" id="zAg-g6-z12"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="vA5-vw-cRh"/>
                     <connections>
+                        <outlet property="searchBar" destination="N0X-tR-l6A" id="mlp-m2-7Me"/>
                         <outlet property="tableView" destination="Zqq-Eb-cFM" id="ibh-Fs-JKV"/>
                     </connections>
                 </viewController>
