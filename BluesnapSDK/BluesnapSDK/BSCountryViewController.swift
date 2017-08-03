@@ -34,6 +34,9 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
 
     @IBOutlet weak var searchBar: UISearchBar!
     
+    let SECTION_HEADER_LABEL_HEIGHT: CGFloat = 15
+    let SECTION_HEADER_MARGIN: CGFloat = 5
+
     // MARK: Search bar stuff
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -174,17 +177,32 @@ class BSCountryViewController : UIViewController, UITableViewDelegate, UITableVi
     func numberOfSections(in tableView: UITableView) -> Int {
         return groupSections.count
     }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return groupSections[section]
-    }
-    
+        
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return groupSections
     }
     
+    // return height of section header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return SECTION_HEADER_LABEL_HEIGHT + 2*SECTION_HEADER_MARGIN
+    }
+    
+    // return height of section footer
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+    
+    // create a section cell
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let label = UILabel(frame: CGRect(x: 0, y: SECTION_HEADER_MARGIN, width: self.view.frame.width, height: SECTION_HEADER_LABEL_HEIGHT))
+        label.text = groupSections[section]
+        label.font.withSize(SECTION_HEADER_LABEL_HEIGHT)
+        
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: SECTION_HEADER_LABEL_HEIGHT + 2*SECTION_HEADER_MARGIN))
+        view.addSubview(label)
+        
+        return view
     }
 
     // MARK: group sections and index
