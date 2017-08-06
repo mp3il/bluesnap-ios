@@ -206,13 +206,13 @@ class ViewController: UIViewController {
             result = demo.createCreditCardTransaction(
                     paymentRequest: paymentRequest,
                     bsToken: bsToken!)
-            logResultDetails(result)
+            logResultDetails(result, paymentRequest: paymentRequest)
 
         } else if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
 
             result = demo.createApplePayTransaction(paymentRequest: paymentRequest,
                     bsToken: bsToken!)
-            logResultDetails(result)
+            logResultDetails(result, paymentRequest: paymentRequest)
         }
 
         if result.success == true {
@@ -237,10 +237,15 @@ class ViewController: UIViewController {
         }
     }
     
-    private func logResultDetails(_ result : (success:Bool, data: String?)) {
+    private func logResultDetails(_ result : (success:Bool, data: String?), paymentRequest: BSPaymentRequest!) {
         
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
+        
+        NSLog(" amount=\(paymentRequest.getAmount() ?? 0.0)")
+        NSLog(" tax=\(paymentRequest.getTaxAmount() ?? 0.0)")
+        NSLog(" currency=\(paymentRequest.getCurrency() ?? "")")
+        
         if let billingDetails = paymentRequest.getBillingDetails() {
             NSLog("Result Data: Name:\(billingDetails.name ?? "")")
             if let zip = billingDetails.zip {
@@ -256,8 +261,9 @@ class ViewController: UIViewController {
                 NSLog(" State code:\(billingDetails.state ?? "")")
             }
         }
+        
         if let shippingDetails = paymentRequest.getShippingDetails() {
-            NSLog("Shipping Data: Name:\(shippingDetails.name)")
+            NSLog("Shipping Data: Name:\(shippingDetails.name ?? "")")
             NSLog(" Phone:\(shippingDetails.phone ?? "")")
             NSLog(" Zip code:\(shippingDetails.zip ?? "")")
             NSLog(" Street address:\(shippingDetails.address ?? "")")

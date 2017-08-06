@@ -89,21 +89,23 @@ class DemoTreansactions {
         bsToken: BSToken!) -> (success:Bool, data: String?) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!
-        //"card-transaction" : [
+        
+        var cardHolderInfo: [String:String] = [
+            "firstName": "\(name.firstName)",
+            "lastName": "\(name.lastName)"
+        ]
+        if let zip = paymentRequest.getBillingDetails().zip {
+            cardHolderInfo["zip"] = "\(zip)"
+        }
         let requestBody = [
             "amount": "\(paymentRequest.getAmount()!)",
             "recurringTransaction": "ECOMMERCE",
             "softDescriptor": "MobileSDKtest",
-            "cardHolderInfo": [
-                "firstName": "\(name.firstName)",
-                "lastName": "\(name.lastName)",
-                "zip": "\(paymentRequest.getBillingDetails().zip!)"
-            ],
+            "cardHolderInfo": cardHolderInfo,
             "currency": "\(paymentRequest.getCurrency()!)",
             "cardTransactionType": "AUTH_CAPTURE",
             "pfToken": "\(bsToken.getTokenStr()!)"
         ] as [String : Any]
-        // ]
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
         
