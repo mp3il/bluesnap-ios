@@ -10,17 +10,18 @@ import UIKit
 
 class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
-    // MARK: shipping data as input and output
-    //internal var storyboard : UIStoryboard?
-    
-    internal var paymentRequest : BSPaymentRequest!
-    internal var payText : String!
-    internal var subTotalText : String?
-    internal var taxText : String?
-    internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
-    internal var countryManager : BSCountryManager!
+    // MARK: internal properties
     internal var activityIndicator : UIActivityIndicatorView?
+
+    // MARK: private properties
+    fileprivate var paymentRequest : BSPaymentRequest!
+    fileprivate var payText : String!
+    fileprivate var subTotalText : String?
+    fileprivate var taxText : String?
+    fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
+    fileprivate var countryManager : BSCountryManager!
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
+    fileprivate var firstTime : Bool = true
 
     // MARK: outlets
         
@@ -37,6 +38,19 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taxAmountUILabel: UILabel!
     @IBOutlet weak var taxDetailsView: UIView!
 
+    // MARK: init
+    
+    func initScreen(paymentRequest : BSPaymentRequest!, payText : String!, subTotalText : String?, taxText : String?, submitPaymentFields : @escaping () -> Void, countryManager : BSCountryManager!, firstTime: Bool) {
+        
+        self.paymentRequest = paymentRequest
+        self.payText = payText
+        self.subTotalText = subTotalText
+        self.taxText = taxText
+        self.submitPaymentFields = submitPaymentFields
+        self.countryManager = countryManager
+        self.firstTime = firstTime
+    }
+    
     // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
@@ -153,6 +167,15 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
                 self.taxAmountUILabel.text = self.taxText
                 self.subtotalUILabel.text = self.subTotalText
             }
+        }
+        if firstTime {
+            firstTime = false
+            nameInputLine.hideError()
+            phoneInputLine.hideError()
+            streetInputLine.hideError()
+            zipInputLine.hideError()
+            cityInputLine.hideError()
+            stateInputLine.hideError()
         }
     }
     

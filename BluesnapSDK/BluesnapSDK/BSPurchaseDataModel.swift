@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSPaymentRequest : NSObject {
+public class BSPaymentRequest : NSObject, NSCopying {
     
     // These 3 fields are input + output (they may change if shopper changes currency)
     var amount : Double! = 0.0
@@ -28,6 +28,21 @@ public class BSPaymentRequest : NSObject {
     internal var originalTaxAmount : Double! = 0.0
     internal var originalRate : Double?
     
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = BSPaymentRequest()
+        copy.amount = amount
+        copy.taxAmount = taxAmount
+        copy.currency = currency
+        
+        copy.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
+        copy.shippingDetails = shippingDetails == nil ? nil : (shippingDetails!.copy() as! BSShippingAddressDetails)
+        
+        copy.originalAmount = originalAmount
+        copy.originalTaxAmount = originalTaxAmount
+        copy.originalRate = originalRate
+        
+        return copy
+    }
     // MARK: Change currency methods
     
     /*
@@ -107,9 +122,9 @@ public class BSPaymentRequest : NSObject {
     For full billing details, everything is mandatory except email which is optional.
     For shipping details all field are mandatory except phone which is optional.
  */
-public class BSBaseAddressDetails {
+public class BSBaseAddressDetails: NSObject {
     
-    public init() {}
+    public override init() {}
     
     public var name : String! = ""
     public var address : String?
@@ -123,18 +138,42 @@ public class BSBaseAddressDetails {
     }
 }
 
-public class BSBillingAddressDetails : BSBaseAddressDetails {
+public class BSBillingAddressDetails : BSBaseAddressDetails, NSCopying {
     
     public override init() { super.init() }
     
     public var email : String?
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = BSBillingAddressDetails()
+        copy.name = name
+        copy.address = address
+        copy.city = city
+        copy.zip = zip
+        copy.country = country
+        copy.state = state
+        copy.email = email
+        return copy
+    }
 }
 
-public class BSShippingAddressDetails : BSBaseAddressDetails {
+public class BSShippingAddressDetails : BSBaseAddressDetails, NSCopying {
     
     public override init() { super.init() }
     
     public var phone : String?
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = BSShippingAddressDetails()
+        copy.name = name
+        copy.address = address
+        copy.city = city
+        copy.zip = zip
+        copy.country = country
+        copy.state = state
+        copy.phone = phone
+        return copy
+    }
 }
 
 

@@ -11,7 +11,7 @@ import PassKit
 
 class BSStartViewController: UIViewController {
 
-    // MARK: - internal properties
+    // MARK: - private properties
 
     internal var paymentRequest: BSPaymentRequest!
     internal var fullBilling = false
@@ -33,6 +33,16 @@ class BSStartViewController: UIViewController {
     @IBOutlet weak var or2Label: UILabel!
     @IBOutlet weak var payPalButton: UIButton!
 
+    // MARK: init
+    
+    func initScreen(paymentRequest: BSPaymentRequest!, fullBilling: Bool, withShipping: Bool, purchaseFunc: @escaping (BSPaymentRequest!) -> Void) {
+        
+        self.paymentRequest = paymentRequest
+        self.fullBilling = fullBilling
+        self.withShipping = withShipping
+        self.purchaseFunc = purchaseFunc
+    }
+    
     // MARK: UIViewController functions
 
     override func viewWillAppear(_ animated: Bool) {

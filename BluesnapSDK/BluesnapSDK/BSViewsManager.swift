@@ -59,17 +59,8 @@ class BSViewsManager {
                 startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
             }
         }
-        
-        startScreen.paymentRequest = paymentRequest
-        startScreen.purchaseFunc = purchaseFunc
-        startScreen.fullBilling = fullBilling
-        startScreen.withShipping = withShipping
-        
-        if purchaseScreen != nil {
-            purchaseScreen.resetCC()
-        }
-        
-        //startScreen.transitioningDelegate = BSViewsManager.transitionManager
+
+        startScreen.initScreen(paymentRequest: paymentRequest.copy() as! BSPaymentRequest, fullBilling: fullBilling, withShipping: withShipping, purchaseFunc: purchaseFunc)
 
         inNavigationController.pushViewController(startScreen, animated: animated)
     }
@@ -96,10 +87,8 @@ class BSViewsManager {
             purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController //BSSummaryScreen
         }
         
-        purchaseScreen.paymentRequest = paymentRequest
-        purchaseScreen.purchaseFunc = purchaseFunc
-        purchaseScreen.fullBilling = fullBilling
-       
+        purchaseScreen.initScreen(paymentRequest: paymentRequest.copy() as! BSPaymentRequest, fullBilling: fullBilling, purchaseFunc: purchaseFunc)
+
         inNavigationController.pushViewController(purchaseScreen, animated: animated)
     }
     
