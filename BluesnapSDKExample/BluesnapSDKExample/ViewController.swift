@@ -189,32 +189,33 @@ class ViewController: UIViewController {
     
     private func completePurchase(paymentRequest: BSPaymentRequest!) {
         
-        if let resultPaymentDetails = paymentRequest.getResultPaymentDetails() {
-            if resultPaymentDetails.paymentType == BSPaymentType.CreditCard {
-                if let ccDetails = resultPaymentDetails as? BSResultCcDetails {
-                    print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
-                    print("CC type: \(ccDetails.ccType ?? "")")
-                    print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
-                }
-            }
+        if let paypalDetails = paymentRequest.getResultPaymentDetails() as? BSResultPayPalDetails {
+            
+            NSLog("PayPal transaction completed Successfully! invoice ID: \(paypalDetails.payPalInvoiceId ?? "")")
+            showThankYouScreen(errorText: nil)
+            return // no need to complete purchase via BlueSnap API
         }
+        
+        // The creation of BlueSnap Demo transaction here should be done in the merchant server!!!
+        // This is just for demo purposes
+        
         let demo = DemoTreansactions()
         var result: (success: Bool, data: String?) = (false, nil)
-
-
-        if paymentRequest.getResultPaymentDetails() is BSResultCcDetails {
-            result = demo.createCreditCardTransaction(
-                    paymentRequest: paymentRequest,
-                    bsToken: bsToken!)
-            logResultDetails(result)
-
-        } else if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
-
-            result = demo.createApplePayTransaction(paymentRequest: paymentRequest,
-                    bsToken: bsToken!)
-            logResultDetails(result)
+        if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
+            
+            result = demo.createApplePayTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
+            logResultDetails(result, paymentRequest: paymentRequest)
+            
+        } else if let ccDetails = paymentRequest.getResultPaymentDetails() as? BSResultCcDetails {
+            
+            print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
+            print("CC type: \(ccDetails.ccType ?? "")")
+            print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
+            result = demo.createCreditCardTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
+            logResultDetails(result, paymentRequest: paymentRequest)
         }
-
+        
+        // Show success/fail screen
         if result.success == true {
             NSLog("BLS transaction created Successfully!\n\n\(result.data!)")
             showThankYouScreen(errorText: nil)
@@ -237,10 +238,15 @@ class ViewController: UIViewController {
         }
     }
     
-    private func logResultDetails(_ result : (success:Bool, data: String?)) {
+    private func logResultDetails(_ result : (success:Bool, data: String?), paymentRequest: BSPaymentRequest!) {
         
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
+        
+        NSLog(" amount=\(paymentRequest.getAmount() ?? 0.0)")
+        NSLog(" tax=\(paymentRequest.getTaxAmount() ?? 0.0)")
+        NSLog(" currency=\(paymentRequest.getCurrency() ?? "")")
+        
         if let billingDetails = paymentRequest.getBillingDetails() {
             NSLog("Result Data: Name:\(billingDetails.name ?? "")")
             if let zip = billingDetails.zip {
@@ -256,8 +262,9 @@ class ViewController: UIViewController {
                 NSLog(" State code:\(billingDetails.state ?? "")")
             }
         }
+        
         if let shippingDetails = paymentRequest.getShippingDetails() {
-            NSLog("Shipping Data: Name:\(shippingDetails.name)")
+            NSLog("Shipping Data: Name:\(shippingDetails.name ?? "")")
             NSLog(" Phone:\(shippingDetails.phone ?? "")")
             NSLog(" Zip code:\(shippingDetails.zip ?? "")")
             NSLog(" Street address:\(shippingDetails.address ?? "")")

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSValidator {
+@objc public class BSValidator: NSObject {
     
     
     // MARK: Constants

@@ -39,7 +39,6 @@ class BluesnapSDKTests: XCTestCase {
         semaphore.wait()
     }
     
-    /*
     func testGetSupportedPaymentMethods() {
     
         createToken()
@@ -54,7 +53,7 @@ class BluesnapSDKTests: XCTestCase {
             let ccIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.CreditCard)
             XCTAssertTrue(ccIsSupported)
             let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay)
-            XCTAssertFalse(applePayIsSupported)
+            XCTAssertTrue(applePayIsSupported)
             let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal)
             XCTAssertTrue(payPalIsSupported)
         } catch let error {
@@ -150,7 +149,7 @@ class BluesnapSDKTests: XCTestCase {
             }
         })
     }
-*/
+
     private func createToken() {
         
         do {

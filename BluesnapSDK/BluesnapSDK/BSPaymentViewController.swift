@@ -10,15 +10,6 @@ import UIKit
 
 class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputLineDelegate {
 
-    // MARK: - Public properties
-    
-    internal var paymentRequest : BSPaymentRequest!
-    internal var fullBilling = false
-    internal var purchaseFunc: (BSPaymentRequest!)->Void = {
-        paymentRequest in
-        print("purchaseFunc should be overridden")
-    }
-    internal var countryManager = BSCountryManager()
     
     // MARK: private properties
     
@@ -27,8 +18,16 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
     fileprivate var firstTime : Bool = true
+    fileprivate var firstTimeShipping : Bool = true
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
+    fileprivate var paymentRequest : BSPaymentRequest!
+    fileprivate var fullBilling = false
+    fileprivate var purchaseFunc: (BSPaymentRequest!)->Void = {
+        paymentRequest in
+        print("purchaseFunc should be overridden")
+    }
+    fileprivate var countryManager = BSCountryManager()
     
     // MARK: - Outlets
     
@@ -52,6 +51,16 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
+    // MARK: init
+    
+    public func initScreen(paymentRequest : BSPaymentRequest!, fullBilling: Bool, purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
+        
+        self.firstTime = true
+        self.firstTimeShipping = true
+        self.paymentRequest = paymentRequest
+        self.fullBilling = fullBilling
+        self.purchaseFunc = purchaseFunc
+    }
     
     // MARK: Keyboard functions
     
@@ -246,7 +255,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                     self.cityInputLine.setValue(billingDetails.city)
                 }
             }
-            ccInputLine.ccnIsOpen = true
+            nameInputLine.hideError()
+            emailInputLine.hideError()
+            streetInputLine.hideError()
+            zipInputLine.hideError()
+            cityInputLine.hideError()
+            stateInputLine.hideError()
+            ccInputLine.reset()
         }
         hideShowFields()
     }
@@ -364,19 +379,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if (self.shippingScreen == nil) {
             if let storyboard = storyboard {
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
-                self.shippingScreen.paymentRequest = self.paymentRequest
-                self.shippingScreen.submitPaymentFields = submitPaymentFields
-                self.shippingScreen.countryManager = self.countryManager
             }
         }
-        self.shippingScreen.payText = self.payButtonText
-        if self.taxDetailsView.isHidden {
-            shippingScreen.subTotalText = nil
-            shippingScreen.taxText = nil
-        } else {
-            shippingScreen.subTotalText = self.subtotalUILabel.text
-            shippingScreen.taxText = self.taxAmountUILabel.text
-        }
+        let subTotalText = self.taxDetailsView.isHidden ? nil : subtotalUILabel.text
+        let taxText = self.taxDetailsView.isHidden ? nil : taxAmountUILabel.text
+        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, subTotalText: subTotalText, taxText: taxText, submitPaymentFields: submitPaymentFields, countryManager: countryManager, firstTime: firstTimeShipping)
+        firstTimeShipping = false
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
     
@@ -546,11 +554,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         return result
     }
 
-    // MARK: public functions
-    
-    public func resetCC() {
-        ccInputLine.reset()
-    }
     
     // MARK: activity indicator methods
     

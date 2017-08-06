@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSCountryManager {
+@objc public class BSCountryManager: NSObject {
     
     fileprivate var countryCodes : [String] = []
     fileprivate let COUNTRY_STATES : [String : [String : String]] = [
@@ -121,7 +121,8 @@ public class BSCountryManager {
     internal var removeCountriesWithoutFlag = true
     
     
-    init() {
+    override init() {
+        super.init()
         initCountryCodes()
     }
     

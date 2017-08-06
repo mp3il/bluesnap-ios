@@ -27,5 +27,21 @@ class BSPaypalHandler {
     static func clearPayPalToken() {
         paypalURL = ""
     }
-
+    
+    static func isPayPalProceedUrl(url: String) -> Bool {
+        return BSStringUtils.startsWith(theString: url, subString: PAYPAL_PROCEED_URL)
+    }
+    
+    static func isPayPalCancelUrl(url: String) -> Bool {
+        return BSStringUtils.startsWith(theString: url, subString: PAYPAL_CANCEL_URL)
+    }
+    
+    static func getPayPalResultDetails(url: String) -> BSResultPayPalDetails {
+        
+        let result : BSResultPayPalDetails = BSResultPayPalDetails()
+        if let invoiceId = URLComponents(string: url)?.queryItems?.first(where: { $0.name == "INVOICE_ID"})?.value {
+            result.payPalInvoiceId = invoiceId
+        }
+        return result
+    }
 }

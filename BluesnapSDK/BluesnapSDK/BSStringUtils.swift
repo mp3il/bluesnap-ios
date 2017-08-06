@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSStringUtils {
+@objc public class BSStringUtils: NSObject {
     
     open class func removeWhitespaces(_ str : String) -> String {
         return str.components(separatedBy: .whitespaces).joined()
@@ -84,4 +84,13 @@ public class BSStringUtils {
         }
     }
     
+    open class func startsWith(theString: String, subString: String) -> Bool {
+        
+        guard let range = theString.range(of: subString, options: [.anchored]) else {
+            return false
+        }
+        
+        return range.lowerBound == theString.startIndex
+    }
+
 }
