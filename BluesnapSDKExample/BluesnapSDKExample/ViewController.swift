@@ -196,9 +196,11 @@ class ViewController: UIViewController {
             return // no need to complete purchase via BlueSnap API
         }
         
+        // The creation of BlueSnap Demo transaction here should be done in the merchant server!!!
+        // This is just for demo purposes
+        
         let demo = DemoTreansactions()
         var result: (success: Bool, data: String?) = (false, nil)
-
         if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
             
             result = demo.createApplePayTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
@@ -213,6 +215,7 @@ class ViewController: UIViewController {
             logResultDetails(result, paymentRequest: paymentRequest)
         }
         
+        // Show success/fail screen
         if result.success == true {
             NSLog("BLS transaction created Successfully!\n\n\(result.data!)")
             showThankYouScreen(errorText: nil)
@@ -223,9 +226,6 @@ class ViewController: UIViewController {
         }
     }
     
-    private func doBlsCardTransaction() {
-        
-    }
     
     private func showThankYouScreen(errorText: String?) {
         
