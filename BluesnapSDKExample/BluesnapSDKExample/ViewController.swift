@@ -189,32 +189,30 @@ class ViewController: UIViewController {
     
     private func completePurchase(paymentRequest: BSPaymentRequest!) {
         
-        if let resultPaymentDetails = paymentRequest.getResultPaymentDetails() {
-            if resultPaymentDetails.paymentType == BSPaymentType.CreditCard {
-                if let ccDetails = resultPaymentDetails as? BSResultCcDetails {
-                    print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
-                    print("CC type: \(ccDetails.ccType ?? "")")
-                    print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
-                }
-            }
+        if let paypalDetails = paymentRequest.getResultPaymentDetails() as? BSResultPayPalDetails {
+            
+            NSLog("PayPal transaction completed Successfully! invoice ID: \(paypalDetails.payPalInvoiceId ?? "")")
+            showThankYouScreen(errorText: nil)
+            return // no need to complete purchase via BlueSnap API
         }
+        
         let demo = DemoTreansactions()
         var result: (success: Bool, data: String?) = (false, nil)
 
-
-        if paymentRequest.getResultPaymentDetails() is BSResultCcDetails {
-            result = demo.createCreditCardTransaction(
-                    paymentRequest: paymentRequest,
-                    bsToken: bsToken!)
+        if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
+            
+            result = demo.createApplePayTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
             logResultDetails(result, paymentRequest: paymentRequest)
-
-        } else if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
-
-            result = demo.createApplePayTransaction(paymentRequest: paymentRequest,
-                    bsToken: bsToken!)
+            
+        } else if let ccDetails = paymentRequest.getResultPaymentDetails() as? BSResultCcDetails {
+            
+            print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
+            print("CC type: \(ccDetails.ccType ?? "")")
+            print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
+            result = demo.createCreditCardTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
             logResultDetails(result, paymentRequest: paymentRequest)
         }
-
+        
         if result.success == true {
             NSLog("BLS transaction created Successfully!\n\n\(result.data!)")
             showThankYouScreen(errorText: nil)
@@ -225,6 +223,9 @@ class ViewController: UIViewController {
         }
     }
     
+    private func doBlsCardTransaction() {
+        
+    }
     
     private func showThankYouScreen(errorText: String?) {
         

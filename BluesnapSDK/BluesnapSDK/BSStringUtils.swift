@@ -84,4 +84,13 @@ public class BSStringUtils {
         }
     }
     
+    open class func startsWith(theString: String, subString: String) -> Bool {
+        
+        guard let range = theString.range(of: subString, options: [.anchored]) else {
+            return false
+        }
+        
+        return range.lowerBound == theString.startIndex
+    }
+
 }

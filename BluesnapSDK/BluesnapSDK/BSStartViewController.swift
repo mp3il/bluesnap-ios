@@ -158,7 +158,7 @@ class BSStartViewController: UIViewController {
                 if let resultToken = resultToken {
                     self.stopActivityIndicator()
                     DispatchQueue.main.async {
-                        BSViewsManager.showBrowserScreen(inNavigationController: self.navigationController, url: resultToken)
+                        BSViewsManager.showBrowserScreen(inNavigationController: self.navigationController, url: resultToken, shouldGoToUrlFunc: self.paypalUrlListener)
                     }
                 } else {
                     let alert = BSViewsManager.createErrorAlert(title: "Oops", message: "An error occurred")
@@ -191,9 +191,34 @@ class BSStartViewController: UIViewController {
     
     private func showPayPalButton() -> Bool {
         
-        //if BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal) {
-        //}
+        if BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal) {
+            return true
+        }
         return false
+    }
+    
+    private func paypalUrlListener(url: String) -> Bool {
+        
+        if BSPaypalHandler.isPayPalProceedUrl(url: url) {
+            // paypal success - call purchase func
+            let result = BSPaypalHandler.getPayPalResultDetails(url: url)
+            self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+            // return to merchant screen
+            if let viewControllers = navigationController?.viewControllers {
+                let merchantControllerIndex = viewControllers.count - 3
+                _ = navigationController?.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+            }
+            // execute callback
+            self.purchaseFunc(self.paymentRequest)
+            return false
+            
+        } else if BSPaypalHandler.isPayPalCancelUrl(url: url) {
+            // close web screen
+            _ = navigationController?.popViewController(animated: false)
+            return false
+            
+        }
+        return true
     }
     
     // MARK: Prevent rotation, support only Portrait mode

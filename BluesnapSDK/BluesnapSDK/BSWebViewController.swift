@@ -9,14 +9,22 @@ import UIKit
 
 class BSWebViewController: UIViewController, UIWebViewDelegate {
     
-    // MARK: puclic properties
-    var url : String = ""
-    
     // MARK: private properties
     
     @IBOutlet weak var webView: UIWebView!
+    fileprivate var url : String = ""
+    fileprivate var shouldGoToUrlFunc : ((_ url : String) -> Bool)?
     fileprivate var activityIndicator : UIActivityIndicatorView?
     
+    // MARK: init
+    
+    /**
+    * Initialize the web viw to go to URL; when URL changes, we call shouldGoToUrlFunc and nacvigate only if it returns true.
+    */
+    func initScreen(url: String, shouldGoToUrlFunc: ((_ url : String) -> Bool)?) {
+        self.url = url
+        self.shouldGoToUrlFunc = shouldGoToUrlFunc
+    }
     
     // MARK: - UIViewController's methods
     
@@ -36,6 +44,15 @@ class BSWebViewController: UIViewController, UIWebViewDelegate {
     }
     
     // MARK: UIWebViewDelegate functions
+    
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        let urlStr = request.mainDocumentURL?.absoluteString ?? ""
+        print("request url = \(urlStr)")
+        if let shouldGoToUrlFunc = shouldGoToUrlFunc {
+            return shouldGoToUrlFunc(urlStr)
+        }
+        return true
+    }
     
     func webViewDidStartLoad(_ webView: UIWebView)
     {

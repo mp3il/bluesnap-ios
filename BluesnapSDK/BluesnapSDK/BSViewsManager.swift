@@ -271,12 +271,11 @@ class BSViewsManager {
      */
     open class func showBrowserScreen(
         inNavigationController: UINavigationController!,
-        url: String!) {
+        url: String!, shouldGoToUrlFunc: ((_ url : String) -> Bool)?) {
         
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
         let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
-        
-        screen.url = url
+        screen.initScreen(url: url, shouldGoToUrlFunc: shouldGoToUrlFunc)
         inNavigationController.pushViewController(screen, animated: true)
     }
 }
