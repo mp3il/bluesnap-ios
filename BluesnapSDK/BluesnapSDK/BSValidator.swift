@@ -85,7 +85,7 @@ public class BSValidator {
         return true
     }
 
-    class func validateAddress(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
+    class func validateStreet(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
         if let addressDetails = addressDetails {
@@ -280,7 +280,6 @@ public class BSValidator {
     class func phoneEditingChanged(_ sender: BSInputLine) {
         
         var input : String = sender.getValue() ?? ""
-        input = BSStringUtils.removeNonePhoneCharacters(input)
         input = BSStringUtils.cutToMaxLength(input, maxLength: 30)
         sender.setValue(input)
     }

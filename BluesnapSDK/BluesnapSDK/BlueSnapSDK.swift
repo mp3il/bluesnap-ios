@@ -131,12 +131,13 @@ import PassKit
     */
     open class func applePaySupported(supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
         
-        if #available(iOS 10, *) {
-            return (PKPaymentAuthorizationController.canMakePayments(),
-                    PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
-        } else {
-            return (canMakePayments: false, canSetupCards: false)
+        if BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay) {
+            if #available(iOS 10, *) {
+                return (PKPaymentAuthorizationController.canMakePayments(),
+                        PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
+            }
         }
+        return (canMakePayments: false, canSetupCards: false)
     }
 
     

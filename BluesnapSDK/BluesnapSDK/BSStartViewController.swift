@@ -22,6 +22,7 @@ class BSStartViewController: UIViewController {
     }
 
     var paymentSummaryItems: [PKPaymentSummaryItem] = [];
+    internal var activityIndicator : UIActivityIndicatorView?
 
     // MARK: Outlets
 
@@ -29,6 +30,8 @@ class BSStartViewController: UIViewController {
     @IBOutlet weak var ccnButton: UIButton!
     @IBOutlet weak var orLabel: UILabel!
     @IBOutlet weak var applePayButton: UIButton!
+    @IBOutlet weak var or2Label: UILabel!
+    @IBOutlet weak var payPalButton: UIButton!
 
     // MARK: UIViewController functions
 
@@ -37,17 +40,42 @@ class BSStartViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController!.isNavigationBarHidden = false
 
-        // Hide/show the applepay 
-        let tmpY = self.view.center.y
-        if showApplePayButton() {
+        // Hide/show the buttons and position them automatically
+        
+        let showPayPal = showPayPalButton()
+        let showApplePay = showApplePayButton()
+        let numSections = (showPayPal && showApplePay) ? 3 : (!showPayPal && !showApplePay) ? 1 : 2
+        let sectionY : CGFloat = (centeredView.frame.height / CGFloat(numSections+1)).rounded()
+        
+        if showApplePay {
             orLabel.isHidden = false
             applePayButton.isHidden = false
-            centeredView.center.y = tmpY
+            applePayButton.center.y = sectionY
+            orLabel.center.y = (sectionY*1.5).rounded()
+            ccnButton.center.y = sectionY*2
         } else {
             orLabel.isHidden = true
             applePayButton.isHidden = true
-            centeredView.center.y = tmpY - (ccnButton.center.y - centeredView.frame.height / 2)
         }
+        if showPayPal {
+            or2Label.isHidden = false
+            payPalButton.isHidden = false
+            if showApplePay {
+                or2Label.center.y = (sectionY*2.5).rounded()
+                payPalButton.center.y = sectionY*3
+            } else {
+                or2Label.center.y = (sectionY*1.5).rounded()
+                payPalButton.center.y = sectionY*2
+            }
+        } else {
+            or2Label.isHidden = true
+            payPalButton.isHidden = true
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopActivityIndicator()
     }
 
     // MARK: button functions
@@ -107,6 +135,30 @@ class BSStartViewController: UIViewController {
             _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
         })
     }
+    
+    @IBAction func payPalClicked(_ sender: Any) {
+        
+        DispatchQueue.main.async {
+            self.startActivityIndicator()
+        }
+        
+        DispatchQueue.main.async {
+            BSApiManager.createPayPalToken(paymentRequest: self.paymentRequest, completion: { resultToken, resultError in
+                
+                if let resultToken = resultToken {
+                    self.stopActivityIndicator()
+                    DispatchQueue.main.async {
+                        BSViewsManager.showBrowserScreen(inNavigationController: self.navigationController, url: resultToken)
+                    }
+                } else {
+                    let alert = BSViewsManager.createErrorAlert(title: "Oops", message: "An error occurred")
+                    self.stopActivityIndicator()
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        }
+    }
+    
 
     // Mark: private functions
 
@@ -127,6 +179,12 @@ class BSStartViewController: UIViewController {
         return applePaySupported.canMakePayments
     }
     
+    private func showPayPalButton() -> Bool {
+        
+        //if BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal) {
+        //}
+        return false
+    }
     
     // MARK: Prevent rotation, support only Portrait mode
     
@@ -141,5 +199,20 @@ class BSStartViewController: UIViewController {
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.portrait
     }
+    
+    // Activity indicator
+    
+    func startActivityIndicator() {
+        
+        if self.activityIndicator == nil {
+            activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
+        }
+        BSViewsManager.startActivityIndicator(activityIndicator: activityIndicator!, blockEvents: true)
+    }
 
+    func stopActivityIndicator() {
+        if let activityIndicator = activityIndicator {
+            BSViewsManager.stopActivityIndicator(activityIndicator: activityIndicator)
+        }
+    }
 }

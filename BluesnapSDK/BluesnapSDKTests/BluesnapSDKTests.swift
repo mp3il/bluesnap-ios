@@ -21,6 +21,25 @@ class BluesnapSDKTests: XCTestCase {
         super.tearDown()
     }
     
+    func testGetPayPalToken() {
+        
+        createToken()
+        let paymentRequest: BSPaymentRequest = BSPaymentRequest()
+        paymentRequest.amount = 30
+        paymentRequest.currency = "USD"
+        
+        let semaphore = DispatchSemaphore(value: 0)
+
+        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, completion: { resultToken, resultError in
+            
+            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+    }
+    
+    /*
     func testGetSupportedPaymentMethods() {
     
         createToken()
@@ -131,7 +150,7 @@ class BluesnapSDKTests: XCTestCase {
             }
         })
     }
-
+*/
     private func createToken() {
         
         do {

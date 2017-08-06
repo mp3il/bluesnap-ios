@@ -123,9 +123,7 @@ class BSViewsManager {
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
         let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BSCountryViewController
 
-        screen.selectedCountryCode = selectedCountryCode
-        screen.updateFunc = updateFunc
-        screen.countryManager = countryManager
+        screen.initCountries(selectedCode: selectedCountryCode, countryManager: countryManager, updateFunc: updateFunc)
         
         inNavigationController.pushViewController(screen, animated: animated)
     }
@@ -152,9 +150,7 @@ class BSViewsManager {
             currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
         }
         
-        if currencyScreen.initCurrencies() {
-            currencyScreen.selectedCurrencyCode = selectedCurrencyCode
-            currencyScreen.updateFunc = updateFunc
+        if currencyScreen.initCurrencies(currencyCode: selectedCurrencyCode, updateFunc: updateFunc) {
             inNavigationController.pushViewController(currencyScreen, animated: animated)
         } else {
             errorFunc()
@@ -188,9 +184,7 @@ class BSViewsManager {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
             let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.stateScreenStoryboardId) as! BSStatesViewController
             
-            screen.selectedCode = selectedStateCode
-            screen.updateFunc = updateFunc
-            screen.allStates = states
+            screen.initStates(selectedCode: selectedStateCode, allStates: states, updateFunc: updateFunc)
             
             inNavigationController.pushViewController(screen, animated: animated)
         } else {
@@ -226,9 +220,11 @@ class BSViewsManager {
         return indicator
     }
     
-    open class func startActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
+    open class func startActivityIndicator(activityIndicator: UIActivityIndicatorView!, blockEvents: Bool) {
         
-        UIApplication.shared.beginIgnoringInteractionEvents()
+        if blockEvents {
+           UIApplication.shared.beginIgnoringInteractionEvents() 
+        }
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 activityIndicator.startAnimating()
@@ -275,5 +271,23 @@ class BSViewsManager {
         
         //presentViewController(otherAlert, animated: true, completion: nil)
         return menu
+    }
+    
+    /**
+     Navigate to the web browser screen, showing the given URL.
+     
+     - parameters:
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - url : URL for the browser
+     */
+    open class func showBrowserScreen(
+        inNavigationController: UINavigationController!,
+        url: String!) {
+        
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+        let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
+        
+        screen.url = url
+        inNavigationController.pushViewController(screen, animated: true)
     }
 }

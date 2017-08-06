@@ -15,10 +15,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     internal var paymentRequest : BSPaymentRequest!
     internal var payText : String!
+    internal var subTotalText : String?
+    internal var taxText : String?
     internal var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     internal var countryManager : BSCountryManager!
     internal var activityIndicator : UIActivityIndicatorView?
-    
+    fileprivate var zipTopConstraintOriginalConstant : CGFloat?
+
     // MARK: outlets
         
     @IBOutlet weak var payUIButton: UIButton!
@@ -28,8 +31,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var cityInputLine: BSInputLine!
     @IBOutlet weak var stateInputLine: BSInputLine!
     @IBOutlet weak var phoneInputLine: BSInputLine!
+    @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
-    
+    @IBOutlet weak var subtotalUILabel: UILabel!
+    @IBOutlet weak var taxAmountUILabel: UILabel!
+    @IBOutlet weak var taxDetailsView: UIView!
+
     // MARK: Keyboard functions
     
     let scrollOffset : Int = -64 // this is the Y of scrollView
@@ -114,6 +121,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         registerTapToHideKeyboard()
         activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
+        if let zipTopConstraint = self.zipTopConstraint {
+            zipTopConstraintOriginalConstant = zipTopConstraint.constant
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -136,6 +146,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             updateFlagImage(countryCode: countryCode)
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
+            if subTotalText == nil {
+                self.taxDetailsView.isHidden = true
+            } else {
+                self.taxDetailsView.isHidden = false
+                self.taxAmountUILabel.text = self.taxText
+                self.subtotalUILabel.text = self.subTotalText
+            }
         }
     }
     
@@ -157,7 +174,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
             
-            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
+            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
             submitPaymentFields()
             
         } else {
@@ -171,7 +188,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     func validateForm() -> Bool {
         
         let ok1 = validateName(ignoreIfEmpty: false)
-        let ok2 = validateAddress(ignoreIfEmpty: false)
+        let ok2 = validateStreet(ignoreIfEmpty: false)
         let ok3 = validateCity(ignoreIfEmpty: false)
         let ok4 = validateZip(ignoreIfEmpty: false)
         let ok5 = validateState(ignoreIfEmpty: false)
@@ -185,9 +202,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         return result
     }
     
-    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
+    func validateStreet(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validateStreet(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getShippingDetails())
         return result
     }
     
@@ -239,7 +256,17 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func streetEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateAddress(ignoreIfEmpty: true)
+        _ = validateStreet(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func streetEditingDidBegin(_ sender: BSInputLine) {
+        
+        editingDidBegin(sender)
+        if streetInputLine.getValue() == "" {
+            streetInputLine.fieldKeyboardType = .numbersAndPunctuation
+        } else {
+            streetInputLine.fieldKeyboardType = .default
+        }
     }
     
     @IBAction func cityEditingChanged(_ sender: BSInputLine) {
@@ -328,17 +355,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
-        self.phoneInputLine.fieldKeyboardType = .numbersAndPunctuation
-
-        /*if countryCode.lowercased() == "us" {
-            zipInputLine.labelText = "Shipping Zip"
-            zipInputLine.fieldKeyboardType = .numberPad
-        } else {
-            zipInputLine.labelText = "Postal Code"
-            zipInputLine.fieldKeyboardType = .numbersAndPunctuation
-        }*/
+        self.phoneInputLine.fieldKeyboardType = .phonePad
         zipInputLine.isHidden = hideZip
         zipInputLine.hideError()
+        updateZipFieldLocation()
     }
     
     private func updateState() {
@@ -354,6 +374,15 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.stateInputLine.setValue(stateName)
     }
     
+    private func updateZipFieldLocation() {
+        
+        if !zipInputLine.isHidden {
+            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+        } else {
+            zipTopConstraint.constant = -1 * phoneInputLine.frame.height
+        }
+    }
+
     // MARK: Prevent rotation, support only Portrait mode
     
     override var shouldAutorotate: Bool {

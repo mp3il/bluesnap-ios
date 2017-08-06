@@ -316,6 +316,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
             taxDetailsView.isHidden = self.paymentRequest.taxAmount == 0
+            updateZipFieldLocation()
         }
     }
     
@@ -369,6 +370,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             }
         }
         self.shippingScreen.payText = self.payButtonText
+        if self.taxDetailsView.isHidden {
+            shippingScreen.subTotalText = nil
+            shippingScreen.taxText = nil
+        } else {
+            shippingScreen.subTotalText = self.subtotalUILabel.text
+            shippingScreen.taxText = self.taxAmountUILabel.text
+        }
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
     
@@ -390,6 +398,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.zipInputLine.isHidden = hideZip
         self.zipInputLine.hideError()
+        //self.streetInputLine.fieldKeyboardType = .numbersAndPunctuation
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
@@ -406,6 +415,14 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
 
+    private func updateZipFieldLocation() {
+        
+        if !zipInputLine.isHidden {
+            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+        } else {
+            zipTopConstraint.constant = -1 * emailInputLine.frame.height
+        }
+    }
     
     // MARK: menu actions
     
@@ -454,7 +471,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if fullBilling {
             let ok1 = validateEmail(ignoreIfEmpty: false)
             let ok2 = validateCity(ignoreIfEmpty: false)
-            let ok3 = validateAddress(ignoreIfEmpty: false)
+            let ok3 = validateStreet(ignoreIfEmpty: false)
             let ok4 = validateCity(ignoreIfEmpty: false)
             let ok5 = validateZip(ignoreIfEmpty: false)
             let ok6 = validateState(ignoreIfEmpty: false)
@@ -492,9 +509,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         return result
     }
     
-    func validateAddress(ignoreIfEmpty : Bool) -> Bool {
+    func validateStreet(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateAddress(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getBillingDetails())
+        let result : Bool = BSValidator.validateStreet(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getBillingDetails())
         return result
     }
     
@@ -538,7 +555,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: activity indicator methods
     
     func startActivityIndicator() {
-        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator)
+        BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
     }
     func stopActivityIndicator() {
         BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)
@@ -576,12 +593,22 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         _ = validateEmail(ignoreIfEmpty: true)
     }
     
-    @IBAction func addressEditingChanged(_ sender: BSInputLine) {
+    @IBAction func streetEditingChanged(_ sender: BSInputLine) {
         BSValidator.addressEditingChanged(sender)
     }
     
-    @IBAction func addressEditingDidEnd(_ sender: BSInputLine) {
-        _ = validateAddress(ignoreIfEmpty: true)
+    @IBAction func streetEditingDidEnd(_ sender: BSInputLine) {
+        _ = validateStreet(ignoreIfEmpty: true)
+    }
+    
+    @IBAction func streetEditingDidBegin(_ sender: BSInputLine) {
+        
+        editingDidBegin(sender)
+        if streetInputLine.getValue() == "" {
+            streetInputLine.fieldKeyboardType = .numbersAndPunctuation
+        } else {
+            streetInputLine.fieldKeyboardType = .default
+        }
     }
     
     @IBAction func cityEditingChanged(_ sender: BSInputLine) {

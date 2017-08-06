@@ -47,17 +47,6 @@ public class BSStringUtils {
         return result
     }
     
-    open class func removeNonePhoneCharacters(_ str: String) -> String {
-        
-        var result : String = "";
-        for character in str.characters {
-            if (character == " ") || (character == "-") || (character == ")") || (character == "(") || (character >= "0" && character <= "9") {
-                result.append(character)
-            }
-        }
-        return result
-    }
-    
     open class func removeNoneEmailCharacters(_ str: String) -> String {
         
         var result : String = "";

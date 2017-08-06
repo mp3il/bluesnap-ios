@@ -116,8 +116,6 @@ public class BSCountryManager {
         ]
     ]
     fileprivate let COUNTRIES_WITHOUT_ZIP : [String] = ["ao","ag","aw","ac","bs","bz","bj","bw","bo","bf","bi","cm","cf","km","cg","cd","ck","cw","dj","dm","tp","gq","er","fj","tf","gm","gh","gd","gy","hm","hk","ki","ly","mo","mw","ml","mr","nr","an","nu","kp","qa","rw","kn","st","sc","sl","sb","sr","sy","tl","tg","tk","to","tv","ug","ae","vu","ye","zw"
-    // this is for testing only!!!
-        ,"il"
     ]
     
     internal var removeCountriesWithoutFlag = true

@@ -176,7 +176,15 @@ public class BSResultApplePayDetails: BSResultPaymentDetails {
         super.init()
         self.paymentType = .ApplePay
     }
+}
 
-
+public class BSResultPayPalDetails: BSResultPaymentDetails {
+    
+    public var payPalInvoiceId : String?
+    
+    override init() {
+        super.init()
+        self.paymentType = .PayPal
+    }
 }
 
