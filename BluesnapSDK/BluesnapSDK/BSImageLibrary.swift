@@ -24,7 +24,7 @@ public enum BSImageNames : String {
     case ccUnknown = "cc_default"
 }
 
-public class BSImageLibrary {
+@objc public class BSImageLibrary: NSObject {
     
     /**
      Returns the image from BlueSnap SDK

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BSStringUtils {
+@objc public class BSStringUtils: NSObject {
     
     open class func removeWhitespaces(_ str : String) -> String {
         return str.components(separatedBy: .whitespaces).joined()
