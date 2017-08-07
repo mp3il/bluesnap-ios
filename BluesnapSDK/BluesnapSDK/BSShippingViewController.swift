@@ -14,7 +14,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     internal var activityIndicator : UIActivityIndicatorView?
 
     // MARK: private properties
-    fileprivate var paymentRequest : BSPaymentRequest!
+    fileprivate var paymentRequest : BSCcPaymentRequest!
     fileprivate var payText : String!
     fileprivate var subTotalText : String?
     fileprivate var taxText : String?
@@ -40,7 +40,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: init
     
-    func initScreen(paymentRequest : BSPaymentRequest!, payText : String!, subTotalText : String?, taxText : String?, submitPaymentFields : @escaping () -> Void, countryManager : BSCountryManager!, firstTime: Bool) {
+    func initScreen(paymentRequest : BSCcPaymentRequest!, payText : String!, subTotalText : String?, taxText : String?, submitPaymentFields : @escaping () -> Void, countryManager : BSCountryManager!, firstTime: Bool) {
         
         self.paymentRequest = paymentRequest
         self.payText = payText

@@ -22,6 +22,9 @@ public enum BSErrors : Error {
     case applePayOperationError
     case applePayCanceled
 
+    // PayPal
+    case paypalUnsupportedCurrency
+    
     // generic
     case invalidInput
     case expiredToken

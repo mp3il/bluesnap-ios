@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     // MARK: private properties
     
     fileprivate var bsToken : BSToken?
-    fileprivate var paymentRequest = BSPaymentRequest()
+    fileprivate var initialData: BSInitialData! = BSInitialData()
  
 	// MARK: - UIViewController's methods
 	
@@ -82,23 +82,21 @@ class ViewController: UIViewController {
         navigationItem.backBarButtonItem = backItem
 
         // open the purchase screen
-        fillPaymentRequest()
+        fillInitialData()
         BlueSnapSDK.showCheckoutScreen(
             inNavigationController: self.navigationController,
             animated: true,
-            paymentRequest: paymentRequest,
-            withShipping: withShippingSwitch.isOn,
-            fullBilling: fullBillingSwitch.isOn,
+            initialData: initialData,
             purchaseFunc: completePurchase)
 	}
 	
 	@IBAction func currencyButtonAction(_ sender: UIButton) {
         
-        fillPaymentRequest()
+        fillInitialData()
         BlueSnapSDK.showCurrencyList(
             inNavigationController: self.navigationController,
             animated: true,
-            selectedCurrencyCode: paymentRequest.getCurrency(),
+            selectedCurrencyCode: initialData.priceDetails.currency,
             updateFunc: updateViewWithNewCurrency,
             errorFunc: { self.showErrorAlert(message: "Failed to display currency List, please try again") })
 	}
@@ -118,7 +116,7 @@ class ViewController: UIViewController {
     */
     private func setInitialShopperDetails() {
         
-        if let billingDetails = paymentRequest.getBillingDetails() {
+        if let billingDetails = initialData.billingDetails {
             billingDetails.name = "John Doe"
             billingDetails.address = "333 elm st"
             billingDetails.city = "New York"
@@ -128,10 +126,10 @@ class ViewController: UIViewController {
             billingDetails.email = "john@gmail.com"
         }
         if withShippingSwitch.isOn {
-            if paymentRequest.getShippingDetails() == nil {
-                paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
+            if initialData.shippingDetails == nil {
+                initialData.shippingDetails = BSShippingAddressDetails()
             }
-            if let shippingDetails = paymentRequest.getShippingDetails() {
+            if let shippingDetails = initialData.shippingDetails {
                 shippingDetails.name = "Mary Doe"
                 shippingDetails.address = "333 elm st"
                 shippingDetails.city = "New York"
@@ -160,11 +158,14 @@ class ViewController: UIViewController {
     /**
      Here we adjust the checkout details with the latest amounts from the fields on our view.
     */
-    private func fillPaymentRequest() {
+    private func fillInitialData() {
         
         let amount = (valueTextField.text! as NSString).doubleValue
         let taxAmount = (taxTextField.text! as NSString).doubleValue
-        paymentRequest.setAmountsAndCurrency(amount: amount, taxAmount: taxAmount, currency: paymentRequest.getCurrency())
+        let currency = currencyButton.titleLabel?.text ?? "USD"
+        initialData.priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
+        initialData.withShipping = withShippingSwitch.isOn
+        initialData.fullBilling = fullBillingSwitch.isOn
     }
     
     /**
@@ -173,10 +174,25 @@ class ViewController: UIViewController {
     */
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        paymentRequest.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency!)
-        valueTextField.text = String(paymentRequest.getAmount())
-        taxTextField.text = String(paymentRequest.getTaxAmount())
-        currencyButton.titleLabel?.text = paymentRequest.getCurrency()
+        if let priceDetails = initialData.priceDetails {
+            if let newCurrency = newCurrency {
+                var oldRate : Double = 1.0
+                if let oldCurrency = oldCurrency {
+                    oldRate = oldCurrency.getRate() ?? 1.0
+                }
+                // convert the prices back to $
+                priceDetails.amount = priceDetails.amount / oldRate
+                priceDetails.taxAmount = priceDetails.taxAmount / oldRate
+                
+                priceDetails.currency = newCurrency.getCode()
+                priceDetails.amount = priceDetails.amount * newCurrency.getRate()
+                priceDetails.taxAmount = priceDetails.taxAmount * newCurrency.getRate()
+            }
+            
+            valueTextField.text = String(priceDetails.amount)
+            taxTextField.text = String(priceDetails.taxAmount)
+            currencyButton.titleLabel?.text = priceDetails.currency
+        }
     }
     
     /**
@@ -187,11 +203,11 @@ class ViewController: UIViewController {
      In this sample app we do it client-to-server, but this is not the way to do it in a real app.
     */
     
-    private func completePurchase(paymentRequest: BSPaymentRequest!) {
+    private func completePurchase(paymentRequest: BSBasePaymentRequest!) {
         
-        if let paypalDetails = paymentRequest.getResultPaymentDetails() as? BSResultPayPalDetails {
+        if let paypalPaymentRequest = paymentRequest as? BSPayPalPaymentRequest {
             
-            NSLog("PayPal transaction completed Successfully! invoice ID: \(paypalDetails.payPalInvoiceId ?? "")")
+            NSLog("PayPal transaction completed Successfully! invoice ID: \(paypalPaymentRequest.payPalInvoiceId ?? "")")
             showThankYouScreen(errorText: nil)
             return // no need to complete purchase via BlueSnap API
         }
@@ -201,18 +217,19 @@ class ViewController: UIViewController {
         
         let demo = DemoTreansactions()
         var result: (success: Bool, data: String?) = (false, nil)
-        if paymentRequest.getResultPaymentDetails() is BSResultApplePayDetails {
+        if let applePayPaymentRequest = paymentRequest as? BSApplePayPaymentRequest {
             
-            result = demo.createApplePayTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
-            logResultDetails(result, paymentRequest: paymentRequest)
+            result = demo.createApplePayTransaction(paymentRequest: applePayPaymentRequest, bsToken: bsToken!)
+            logResultDetails(result, paymentRequest: applePayPaymentRequest)
             
-        } else if let ccDetails = paymentRequest.getResultPaymentDetails() as? BSResultCcDetails {
+        } else if let ccPaymentRequest = paymentRequest as? BSCcPaymentRequest {
             
+            let ccDetails = ccPaymentRequest.ccDetails
             print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
             print("CC type: \(ccDetails.ccType ?? "")")
             print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
-            result = demo.createCreditCardTransaction(paymentRequest: paymentRequest, bsToken: bsToken!)
-            logResultDetails(result, paymentRequest: paymentRequest)
+            result = demo.createCreditCardTransaction(paymentRequest: ccPaymentRequest, bsToken: bsToken!)
+            logResultDetails(result, paymentRequest: ccPaymentRequest)
         }
         
         // Show success/fail screen
@@ -238,7 +255,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func logResultDetails(_ result : (success:Bool, data: String?), paymentRequest: BSPaymentRequest!) {
+    private func logResultDetails(_ result : (success:Bool, data: String?), paymentRequest: BSBasePaymentRequest!) {
         
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
@@ -246,31 +263,40 @@ class ViewController: UIViewController {
         NSLog(" amount=\(paymentRequest.getAmount() ?? 0.0)")
         NSLog(" tax=\(paymentRequest.getTaxAmount() ?? 0.0)")
         NSLog(" currency=\(paymentRequest.getCurrency() ?? "")")
+        NSLog(" payment type= \(paymentRequest.paymentType)")
         
-        if let billingDetails = paymentRequest.getBillingDetails() {
-            NSLog("Result Data: Name:\(billingDetails.name ?? "")")
-            if let zip = billingDetails.zip {
-                NSLog(" Zip code:\(zip)")
+        if let paymentRequest = paymentRequest as? BSCcPaymentRequest {
+            if let billingDetails = paymentRequest.getBillingDetails() {
+                NSLog("Result Data: Name:\(billingDetails.name ?? "")")
+                if let zip = billingDetails.zip {
+                    NSLog(" Zip code:\(zip)")
+                }
+                if let email = billingDetails.email {
+                    NSLog(" Email:\(email)")
+                }
+                if self.fullBillingSwitch.isOn {
+                    NSLog(" Street address:\(billingDetails.address ?? "")")
+                    NSLog(" City:\(billingDetails.city ?? "")")
+                    NSLog(" Country code:\(billingDetails.country ?? "")")
+                    NSLog(" State code:\(billingDetails.state ?? "")")
+                }
             }
-            if let email = billingDetails.email {
-                NSLog(" Email:\(email)")
+            
+            if let shippingDetails = paymentRequest.getShippingDetails() {
+                NSLog("Shipping Data: Name:\(shippingDetails.name ?? "")")
+                NSLog(" Phone:\(shippingDetails.phone ?? "")")
+                NSLog(" Zip code:\(shippingDetails.zip ?? "")")
+                NSLog(" Street address:\(shippingDetails.address ?? "")")
+                NSLog(" City:\(shippingDetails.city ?? "")")
+                NSLog(" Country code:\(shippingDetails.country ?? "")")
+                NSLog(" State code:\(shippingDetails.state ?? "")")
             }
-            if self.fullBillingSwitch.isOn {
-                NSLog(" Street address:\(billingDetails.address ?? "")")
-                NSLog(" City:\(billingDetails.city ?? "")")
-                NSLog(" Country code:\(billingDetails.country ?? "")")
-                NSLog(" State code:\(billingDetails.state ?? "")")
-            }
-        }
-        
-        if let shippingDetails = paymentRequest.getShippingDetails() {
-            NSLog("Shipping Data: Name:\(shippingDetails.name ?? "")")
-            NSLog(" Phone:\(shippingDetails.phone ?? "")")
-            NSLog(" Zip code:\(shippingDetails.zip ?? "")")
-            NSLog(" Street address:\(shippingDetails.address ?? "")")
-            NSLog(" City:\(shippingDetails.city ?? "")")
-            NSLog(" Country code:\(shippingDetails.country ?? "")")
-            NSLog(" State code:\(shippingDetails.state ?? "")")
+            
+        } else if let _ = paymentRequest as? BSApplePayPaymentRequest {
+            NSLog("No extra data")
+            
+        } else if let paymentRequest = paymentRequest as? BSPayPalPaymentRequest {
+            NSLog("PayPal invoice ID:\(paymentRequest.payPalInvoiceId ?? "")")
         }
         NSLog("--------------------------------------------------------")
     }
@@ -299,7 +325,7 @@ class ViewController: UIViewController {
     }
 
     func setApplePayIdentifier() {
-        BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
+        _ = BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
     }
     
     /**

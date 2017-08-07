@@ -21,9 +21,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var firstTimeShipping : Bool = true
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
-    fileprivate var paymentRequest : BSPaymentRequest!
+    fileprivate var paymentRequest : BSCcPaymentRequest!
     fileprivate var fullBilling = false
-    fileprivate var purchaseFunc: (BSPaymentRequest!)->Void = {
+    fileprivate var purchaseFunc: (BSBasePaymentRequest!)->Void = {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
@@ -53,7 +53,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: init
     
-    public func initScreen(paymentRequest : BSPaymentRequest!, fullBilling: Bool, purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
+    public func initScreen(paymentRequest : BSCcPaymentRequest!, fullBilling: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         self.firstTime = true
         self.firstTimeShipping = true
@@ -157,15 +157,16 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     func willCheckCreditCard() {
     }
     
-    func didCheckCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
-        if let result = result {
-            if let issuingCountry = result.ccIssuingCountry {
+    func didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors?) {
+        if error == nil {
+            paymentRequest.ccDetails = ccDetails
+            if let issuingCountry = ccDetails.ccIssuingCountry {
                 self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             }
         }
     }
     
-    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSErrors?) {
+    func didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors?) {
 
         if let navigationController = self.navigationController {
             
@@ -179,8 +180,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 self.stopActivityIndicator()
             }
             
-            if let result = result {
-                self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+            if error == nil {
+                paymentRequest.ccDetails = ccDetails
                 // return to merchant screen
                 let merchantControllerIndex = viewControllers.count - (inShippingScreen ? 4 : 3)
                 _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
@@ -330,7 +331,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             cityInputLine.isHidden = hideFields
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-            taxDetailsView.isHidden = self.paymentRequest.taxAmount == 0
+            taxDetailsView.isHidden = self.paymentRequest.getAmount() == 0
             updateZipFieldLocation()
         }
     }

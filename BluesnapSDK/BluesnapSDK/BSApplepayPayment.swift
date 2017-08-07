@@ -6,6 +6,18 @@
 import Foundation
 import PassKit
 
+/**
+ Apple Pay details for the purchase
+ */
+@objc public class BSApplePayPaymentRequest: BSBasePaymentRequest {
+    
+    public override init(initialData: BSInitialData) {
+        super.init(initialData: initialData)
+        self.paymentType = .ApplePay
+    }
+}
+
+
 public class BSApplePayInfo
 {
     public var tokenPaymentNetwork: String!

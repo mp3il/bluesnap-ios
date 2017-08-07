@@ -13,16 +13,15 @@ class BSStartViewController: UIViewController {
 
     // MARK: - private properties
 
-    internal var paymentRequest: BSPaymentRequest!
-    internal var fullBilling = false
-    internal var withShipping = false
-    internal var purchaseFunc: (BSPaymentRequest!) -> Void = {
+    var initialData : BSInitialData!
+    internal var purchaseFunc: (BSBasePaymentRequest!) -> Void = {
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
 
     var paymentSummaryItems: [PKPaymentSummaryItem] = [];
     internal var activityIndicator : UIActivityIndicatorView?
+    internal var payPalPaymentRequest: BSPayPalPaymentRequest!
 
     // MARK: Outlets
 
@@ -35,11 +34,9 @@ class BSStartViewController: UIViewController {
 
     // MARK: init
     
-    func initScreen(paymentRequest: BSPaymentRequest!, fullBilling: Bool, withShipping: Bool, purchaseFunc: @escaping (BSPaymentRequest!) -> Void) {
+    func initScreen(initialData: BSInitialData!, purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void) {
         
-        self.paymentRequest = paymentRequest
-        self.fullBilling = fullBilling
-        self.withShipping = withShipping
+        self.initialData = initialData
         self.purchaseFunc = purchaseFunc
     }
     
@@ -124,11 +121,10 @@ class BSStartViewController: UIViewController {
                     self.present(alert, animated: true, completion: nil)
                     return
                 } else {
-                    let result: BSResultPaymentDetails = BSResultApplePayDetails()
-                    self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
                     _ = self.navigationController?.popViewController(animated: false)
                     // execute callback
-                    self.purchaseFunc(self.paymentRequest)
+                    let applePayPaymentRequest = BSApplePayPaymentRequest(initialData: self.initialData)
+                    self.purchaseFunc(applePayPaymentRequest)
                 }
             }
         })
@@ -142,18 +138,20 @@ class BSStartViewController: UIViewController {
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
 
         animateToPaymentScreen(completion: { animate in
-            _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, paymentRequest: self.paymentRequest, fullBilling: self.fullBilling, purchaseFunc: self.purchaseFunc)
+            _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, initialData: self.initialData, purchaseFunc: self.purchaseFunc)
         })
     }
     
     @IBAction func payPalClicked(_ sender: Any) {
+        
+        payPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
         
         DispatchQueue.main.async {
             self.startActivityIndicator()
         }
         
         DispatchQueue.main.async {
-            BSApiManager.createPayPalToken(paymentRequest: self.paymentRequest, completion: { resultToken, resultError in
+            BSApiManager.createPayPalToken(paymentRequest: self.payPalPaymentRequest, withShipping: self.initialData.withShipping, completion: { resultToken, resultError in
                 
                 if let resultToken = resultToken {
                     self.stopActivityIndicator()
@@ -161,7 +159,8 @@ class BSStartViewController: UIViewController {
                         BSViewsManager.showBrowserScreen(inNavigationController: self.navigationController, url: resultToken, shouldGoToUrlFunc: self.paypalUrlListener)
                     }
                 } else {
-                    let alert = BSViewsManager.createErrorAlert(title: "Oops", message: "An error occurred")
+                    let errMsg = resultError == .paypalUnsupportedCurrency ? "This currency is not supported by PayPal" : "An error occurred"
+                    let alert = BSViewsManager.createErrorAlert(title: "Oops", message: errMsg)
                     self.stopActivityIndicator()
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -200,20 +199,22 @@ class BSStartViewController: UIViewController {
     private func paypalUrlListener(url: String) -> Bool {
         
         if BSPaypalHandler.isPayPalProceedUrl(url: url) {
-            // paypal success - call purchase func
-            let result = BSPaypalHandler.getPayPalResultDetails(url: url)
-            self.paymentRequest.setResultPaymentDetails(resultPaymentDetails: result)
+            // paypal success!
+            
+            BSPaypalHandler.parsePayPalResultDetails(url: url, paymentRequest: self.payPalPaymentRequest)
+            
             // return to merchant screen
             if let viewControllers = navigationController?.viewControllers {
                 let merchantControllerIndex = viewControllers.count - 3
                 _ = navigationController?.popToViewController(viewControllers[merchantControllerIndex], animated: false)
             }
+            
             // execute callback
-            self.purchaseFunc(self.paymentRequest)
+            self.purchaseFunc(self.payPalPaymentRequest)
             return false
             
         } else if BSPaypalHandler.isPayPalCancelUrl(url: url) {
-            // close web screen
+            // PayPal cancel URL detected - close web screen
             _ = navigationController?.popViewController(animated: false)
             return false
             

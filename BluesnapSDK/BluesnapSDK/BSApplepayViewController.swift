@@ -15,8 +15,9 @@ extension BSStartViewController : PaymentOperationDelegate {
 
     func applePayPressed(_ sender: Any, completion: @escaping (BSErrors?) -> Void) {
 
-        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: paymentRequest.getTaxAmount()), type: .final)
-        let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: paymentRequest.getAmount()), type: .final)
+        let priceDetails = initialData.priceDetails!
+        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: priceDetails.taxAmount), type: .final)
+        let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: priceDetails.amount), type: .final)
 
         paymentSummaryItems = [tax, total];
 
@@ -25,9 +26,9 @@ extension BSStartViewController : PaymentOperationDelegate {
         pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.getIdentifier()
         pkPaymentRequest.merchantCapabilities = .capability3DS
         pkPaymentRequest.countryCode = "US"
-        pkPaymentRequest.currencyCode = paymentRequest.getCurrency()
+        pkPaymentRequest.currencyCode = priceDetails.currency
 
-        if self.withShipping {
+        if initialData.withShipping {
             pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
         }
         //if self.fullBilling {

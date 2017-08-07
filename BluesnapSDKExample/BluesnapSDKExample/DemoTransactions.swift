@@ -21,7 +21,7 @@ class DemoTreansactions {
     static let BS_SANDBOX_TEST_PASS : String  = "SDKuser123"
 
 
-    func createApplePayTransaction(paymentRequest: BSPaymentRequest!,
+    func createApplePayTransaction(paymentRequest: BSApplePayPaymentRequest!,
                                    bsToken: BSToken!) -> (success: Bool, data: String?) {
 
         // let name = paymentRequest.getBillingDetails().getSplitName()!
@@ -85,7 +85,7 @@ class DemoTreansactions {
 
 
     func createCreditCardTransaction(
-        paymentRequest: BSPaymentRequest!,
+        paymentRequest: BSCcPaymentRequest!,
         bsToken: BSToken!) -> (success:Bool, data: String?) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!
@@ -155,7 +155,7 @@ class DemoTreansactions {
     }
     
     func createCreditCardTransactionWithXml(
-        paymentRequest: BSPaymentRequest!,
+        paymentRequest: BSCcPaymentRequest!,
         bsToken: BSToken!) -> (success:Bool, data: String?) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!

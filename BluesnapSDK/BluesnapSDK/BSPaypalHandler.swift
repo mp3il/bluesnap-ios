@@ -36,12 +36,10 @@ class BSPaypalHandler {
         return BSStringUtils.startsWith(theString: url, subString: PAYPAL_CANCEL_URL)
     }
     
-    static func getPayPalResultDetails(url: String) -> BSResultPayPalDetails {
+    static func parsePayPalResultDetails(url: String, paymentRequest: BSPayPalPaymentRequest) {
         
-        let result : BSResultPayPalDetails = BSResultPayPalDetails()
         if let invoiceId = URLComponents(string: url)?.queryItems?.first(where: { $0.name == "INVOICE_ID"})?.value {
-            result.payPalInvoiceId = invoiceId
+            paymentRequest.payPalInvoiceId = invoiceId
         }
-        return result
     }
 }

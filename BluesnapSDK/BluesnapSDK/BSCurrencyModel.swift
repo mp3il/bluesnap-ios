@@ -1,6 +1,6 @@
 import Foundation
 
-public class BSCurrency {
+@objc public class BSCurrency: NSObject {
     
     internal var name : String!
     internal var code : String!
@@ -26,11 +26,10 @@ public class BSCurrency {
     
 }
 
-public class BSCurrencies {
+@objc public class BSCurrencies: NSObject {
     
     internal var currencies : [BSCurrency] = []
 
-    
     internal init(currencies : [BSCurrency]) {
         
         self.currencies = currencies

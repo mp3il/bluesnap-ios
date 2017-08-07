@@ -139,16 +139,20 @@ import Foundation
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSResultCcDetails?, BSErrors?) -> Void) {
+    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
 
         let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber), "cvv": cvv, "expDate": expDate]
-        submitPaymentDetails(requestBody: requestBody, parseFunction: parseCCResponse, completion: { (result, error) in
+        submitPaymentDetails(requestBody: requestBody, parseFunction: parseCCResponse, completion: { resultData, error in
+            let ccDetails = BSCcDetails()
             if let error = error {
-                completion(nil, error)
+                completion(ccDetails, error)
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(result as? BSResultCcDetails, nil)
+            ccDetails.ccIssuingCountry = resultData["ccIssuingCountry"]
+            ccDetails.ccType = resultData["ccType"]
+            ccDetails.last4Digits = resultData["last4Digits"]
+            completion(ccDetails, nil)
         })
     }
 
@@ -158,17 +162,20 @@ import Foundation
      - ccNumber: Credit card number
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitCcn(ccNumber: String, completion: @escaping (BSResultCcDetails?, BSErrors?) -> Void) {
+    static func submitCcn(ccNumber: String, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
 
         let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber)]
-
-        submitPaymentDetails(requestBody: requestBody, parseFunction: parseCCResponse, completion: { (result, error) in
+        submitPaymentDetails(requestBody: requestBody, parseFunction: parseCCResponse, completion: { resultData, error in
+            let ccDetails = BSCcDetails()
             if let error = error {
-                completion(nil, error)
+                completion(ccDetails, error)
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(result as? BSResultCcDetails, nil)
+            ccDetails.ccIssuingCountry = resultData["ccIssuingCountry"]
+            ccDetails.ccType = resultData["ccType"]
+            ccDetails.last4Digits = resultData["last4Digits"]
+            completion(ccDetails, nil)
         })
     }
 
@@ -242,7 +249,7 @@ import Foundation
     /**
      Create PayPal token on BlueSnap server and get back the URL for redirect
      */
-    static func createPayPalToken(paymentRequest: BSPaymentRequest, completion: @escaping (String?, BSErrors?) -> Void) {
+    static func createPayPalToken(paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
         DispatchQueue.global().async {
             
@@ -250,7 +257,7 @@ import Foundation
             
             let domain: String! = bsToken!.serverUrl
             var urlStr = domain + PAYPAL_SERVICE  + "\(paymentRequest.getAmount() ?? 0)" + "&currency=" + paymentRequest.getCurrency()
-            if paymentRequest.getShippingDetails() != nil {
+            if withShipping {
                 urlStr += PAYPAL_SHIPPING
             }
 
@@ -292,7 +299,9 @@ import Foundation
 
     // MARK: Private functions
 
-    private static func submitPaymentDetails(requestBody: [String: String], parseFunction: @escaping (Int, Data?) -> (BSResultPaymentDetails?, BSErrors?), completion: @escaping (BSResultPaymentDetails?, BSErrors?) -> Void) {
+    private static func submitPaymentDetails(requestBody: [String: String],
+                                             parseFunction: @escaping (Int, Data?) -> ([String:String],BSErrors?),
+                                             completion: @escaping ([String:String], BSErrors?) -> Void) {
 
         DispatchQueue.global().async {
 
@@ -315,25 +324,25 @@ import Foundation
 
             // fire request
 
-            var result: BSResultPaymentDetails?
             var resultError: BSErrors?
 
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+                var resultData: [String:String] = [:]
                 if let error = error {
                     let errorType = type(of: error)
                     NSLog("error submitting BS Payment details - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                    completion(nil, .unknown)
+                    completion(resultData, .unknown)
                     return
                 }
                 let httpResponse = response as? HTTPURLResponse
                 if let httpStatusCode: Int = (httpResponse?.statusCode) {
-                    (result, resultError) = parseFunction(httpStatusCode, data)
+                    (resultData, resultError) = parseFunction(httpStatusCode, data)
                 } else {
                     NSLog("Error getting response from BS on submitting Payment details")
                 }
                 defer {
                     DispatchQueue.main.async {
-                        completion(result, resultError)
+                        completion(resultData, resultError)
                     }
                 }
             }
@@ -377,45 +386,47 @@ import Foundation
         return (resultToken, resultError)
     }
     
-    private static func parseCCResponse(httpStatusCode: Int, data: Data?) -> (BSResultCcDetails?, BSErrors?) {
-        var result: BSResultCcDetails?
+    // parseFunction: @escaping (BSBasePaymentRequest, Int, Data?) -> BSErrors?
+    private static func parseCCResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
+        
+        var resultData: [String:String] = [:]
         var resultError: BSErrors?
 
         if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-            result = parseResultCCDetailsFromResponse(data: data)
-            if (result == nil) {
-                resultError = .unknown
-            }
+            (resultData, resultError) = parseResultCCDetailsFromResponse(data: data)
         } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
             resultError = parseError(data: data, httpStatusCode: httpStatusCode)
         } else {
             NSLog("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
             resultError = .unknown
         }
-        return (result, resultError)
+        return (resultData, resultError)
     }
 
-    private static func parseResultCCDetailsFromResponse(data: Data?) -> BSResultCcDetails? {
+    private static func parseResultCCDetailsFromResponse(data: Data?) -> ([String:String], BSErrors?) {
 
-        var result: BSResultCcDetails?
+        var resultData: [String:String] = [:]
+        var resultError: BSErrors? = nil
         if let data = data {
             do {
                 // Parse the result JSOn object
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    result = BSResultCcDetails()
-                    result!.ccType = json["ccType"] as? String
-                    result!.last4Digits = json["last4Digits"] as? String
-                    result!.ccIssuingCountry = (json["issuingCountry"] as? String ?? "").uppercased()
+                    resultData["ccType"] = json["ccType"] as? String
+                    resultData["last4Digits"] = json["last4Digits"] as? String
+                    resultData["ccIssuingCountry"] = (json["issuingCountry"] as? String ?? "").uppercased()
                 } else {
                     NSLog("Error parsing BS result on CC details submit")
+                    resultError = .unknown
                 }
             } catch let error as NSError {
                 NSLog("Error parsing BS result on CC details submit: \(error.localizedDescription)")
+                resultError = .unknown
             }
         } else {
             NSLog("No data in BS result on CC details submit")
+            resultError = .unknown
         }
-        return result
+        return (resultData, resultError)
     }
 
     private static func extractTokenFromResponse(httpResponse: HTTPURLResponse?, domain: String!) -> BSToken? {
@@ -580,22 +591,20 @@ import Foundation
         }
     }
 
-    private static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> (BSResultApplePayDetails?, BSErrors?) {
-        var result: BSResultApplePayDetails?
+    private static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
+
+        let resultData: [String:String] = [:]
         var resultError: BSErrors?
 
         if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-            NSLog("ApplePay data submitted successfully ")
-            result = BSResultApplePayDetails()
-            // TODO: fill result
-            
+            NSLog("ApplePay data submitted successfully")
         } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
             resultError = parseError(data: data, httpStatusCode: httpStatusCode)
         } else {
             NSLog("Http error submitting ApplePay details to BS; HTTP status = \(httpStatusCode)")
             resultError = .unknown
         }
-        return (result, resultError)
+        return (resultData, resultError)
     }
 
     private static func parseError(data: Data?, httpStatusCode: Int) -> BSErrors {
@@ -642,6 +651,8 @@ import Foundation
             resultError = .usedTokenApplePay
         } else if (errStr == "TOKEN_WAS_ALREADY_USED_FOR_CC") {
             resultError = .usedTokenForCC
+        } else if (errStr == "PAYPAL_UNSUPPORTED_CURRENCY") {
+            resultError = .paypalUnsupportedCurrency
         } else if (errStr == "TOKEN_NOT_FOUND") {
             resultError = .tokenNotFound
             notifyTokenExpired()
@@ -660,18 +671,18 @@ import Foundation
      - data: The apple pay encoded data
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static internal func submitApplepayData(data: String!, completion: @escaping (BSResultApplePayDetails?, BSErrors?) -> Void) {
+    static internal func submitApplepayData(data: String!, completion: @escaping ([String:String], BSErrors?) -> Void) {
 
         let requestBody = [
                 "applePayToken": data!
         ]
-        submitPaymentDetails(requestBody: requestBody, parseFunction: parseApplePayResponse, completion: { (result, error) in
+        submitPaymentDetails(requestBody: requestBody, parseFunction: parseApplePayResponse, completion: { resultData, error in
             if let error = error {
-                completion(nil, error)
+                completion(resultData, error)
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(result as? BSResultApplePayDetails, nil)
+            completion(resultData, nil)
         })
     }
 

@@ -39,27 +39,20 @@ import PassKit
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - paymentRequest: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
-     - withShipping: if true, the shopper will be asked to supply shipping details
-     - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
+     - initialData: initial payment details + flow settings
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
     open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        paymentRequest : BSPaymentRequest!,
-        withShipping: Bool,
-        fullBilling : Bool,
-        purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
+        initialData : BSInitialData!,
+        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
-        adjustPaymentRequest(paymentRequest: paymentRequest,
-                             withShipping: withShipping)
+        adjustInitialData(initialData: initialData)
         
         BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
                                           animated: animated,
-                                          paymentRequest: paymentRequest,
-                                          withShipping: withShipping,
-                                          fullBilling: fullBilling,
+                                          initialData: initialData,
                                           purchaseFunc: purchaseFunc)
     }
     
@@ -73,7 +66,7 @@ import PassKit
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
      */
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSResultCcDetails?,BSErrors?)->Void) {
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCcDetails,BSErrors?)->Void) {
         
         BSApiManager.submitCcDetails(ccNumber: ccNumber, expDate: expDate, cvv: cvv, completion: completion)
     }
@@ -162,7 +155,7 @@ import PassKit
         do {
             return try BSApiManager.createSandboxBSToken()!
         } catch let error {
-            NSLog("Error creating token")
+            NSLog("Error creating token: \(error.localizedDescription)")
             return nil
         }
     }
@@ -175,20 +168,27 @@ import PassKit
     
     // MARK: Private functions
     
-    private class func adjustPaymentRequest(paymentRequest: BSPaymentRequest!,
-                                            withShipping: Bool) {
+    private class func adjustInitialData(initialData: BSInitialData!) {
         
         let defaultCountry = NSLocale.current.regionCode ?? "US"
-        if (withShipping && paymentRequest.shippingDetails == nil) {
-            paymentRequest.setShippingDetails(shippingDetails: BSShippingAddressDetails())
-            paymentRequest.getShippingDetails()!.country = defaultCountry
-        } else if (!withShipping && paymentRequest.shippingDetails != nil) {
-            paymentRequest.setShippingDetails(shippingDetails: nil)
+        
+        if initialData.withShipping {
+            if initialData.shippingDetails == nil {
+                initialData.shippingDetails = BSShippingAddressDetails()
+            }
+            if initialData.shippingDetails!.country ?? "" == "" {
+                initialData.shippingDetails!.country = defaultCountry
+            }
+        } else if initialData.shippingDetails != nil {
+            initialData.shippingDetails = nil
         }
-        if paymentRequest.getBillingDetails().country ?? "" == "" {
-            paymentRequest.getBillingDetails().country = defaultCountry
+        
+        if initialData.billingDetails == nil {
+            initialData.billingDetails = BSBillingAddressDetails()
         }
-
+        if initialData.billingDetails!.country ?? "" == "" {
+            initialData.billingDetails!.country = defaultCountry
+        }
     }
     
 }

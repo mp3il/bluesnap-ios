@@ -35,6 +35,9 @@
 		FD6814531F30590600FAE1ED /* BSPaypalHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6814521F30590600FAE1ED /* BSPaypalHandler.swift */; };
 		FD6814551F3071A200FAE1ED /* BSWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6814541F3071A200FAE1ED /* BSWebViewController.swift */; };
 		FD6814571F33248000FAE1ED /* BSBaseListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6814561F33248000FAE1ED /* BSBaseListController.swift */; };
+		FD68145B1F38732800FAE1ED /* BSAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD68145A1F38732800FAE1ED /* BSAddress.swift */; };
+		FD68145D1F38762E00FAE1ED /* BSCcPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD68145C1F38762E00FAE1ED /* BSCcPayment.swift */; };
+		FD68145F1F38769300FAE1ED /* BSPayPalPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD68145E1F38769300FAE1ED /* BSPayPalPayment.swift */; };
 		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
 		FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */; };
 		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
@@ -88,6 +91,9 @@
 		FD6814521F30590600FAE1ED /* BSPaypalHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaypalHandler.swift; sourceTree = "<group>"; };
 		FD6814541F3071A200FAE1ED /* BSWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSWebViewController.swift; sourceTree = "<group>"; };
 		FD6814561F33248000FAE1ED /* BSBaseListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseListController.swift; sourceTree = "<group>"; };
+		FD68145A1F38732800FAE1ED /* BSAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSAddress.swift; sourceTree = "<group>"; };
+		FD68145C1F38762E00FAE1ED /* BSCcPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcPayment.swift; sourceTree = "<group>"; };
+		FD68145E1F38769300FAE1ED /* BSPayPalPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPayPalPayment.swift; sourceTree = "<group>"; };
 		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
 		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
 		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
@@ -163,12 +169,15 @@
 		FD17062D1E9371FD00552A35 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */,
 				2D374F411E880EF100AE2A81 /* BSToken.swift */,
-				FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */,
 				FD3BD9D11EE7F7DD00486576 /* BSErrors.swift */,
+				FD68145A1F38732800FAE1ED /* BSAddress.swift */,
+				FD1ACDEE1EA5E0150010C983 /* BSPurchaseDataModel.swift */,
+				FD68145C1F38762E00FAE1ED /* BSCcPayment.swift */,
 				DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */,
+				FD68145E1F38769300FAE1ED /* BSPayPalPayment.swift */,
 				DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */,
+				2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -345,12 +354,15 @@
 				FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */,
 				FD4750B81EF7C50000E5DFBC /* BSStringUtils.swift in Sources */,
 				FDA6BE311E938B63006C3359 /* BSValidator.swift in Sources */,
+				FD68145D1F38762E00FAE1ED /* BSCcPayment.swift in Sources */,
 				FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */,
 				FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */,
+				FD68145F1F38769300FAE1ED /* BSPayPalPayment.swift in Sources */,
 				2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */,
 				FD4A14C71E96068300EDBFC0 /* BSApiManager.swift in Sources */,
 				FD1ACDEF1EA5E0150010C983 /* BSPurchaseDataModel.swift in Sources */,
 				FD1ACDED1E9F66170010C983 /* BSCurrencyTableViewCell.swift in Sources */,
+				FD68145B1F38732800FAE1ED /* BSAddress.swift in Sources */,
 				FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */,
 				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,

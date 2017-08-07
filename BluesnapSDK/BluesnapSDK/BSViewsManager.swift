@@ -42,10 +42,8 @@ class BSViewsManager {
     open static func showStartScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        paymentRequest : BSPaymentRequest!,
-        withShipping: Bool,
-        fullBilling : Bool,
-        purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
+        initialData : BSInitialData!,
+        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if startScreen == nil {
             let bundleforURL = Bundle(for: BSViewsManager.self)
@@ -60,7 +58,7 @@ class BSViewsManager {
             }
         }
 
-        startScreen.initScreen(paymentRequest: paymentRequest.copy() as! BSPaymentRequest, fullBilling: fullBilling, withShipping: withShipping, purchaseFunc: purchaseFunc)
+        startScreen.initScreen(initialData: initialData, purchaseFunc: purchaseFunc)
 
         inNavigationController.pushViewController(startScreen, animated: animated)
     }
@@ -78,16 +76,16 @@ class BSViewsManager {
     open class func showCCDetailsScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        paymentRequest : BSPaymentRequest!,
-        fullBilling : Bool,
-        purchaseFunc: @escaping (BSPaymentRequest!)->Void) {
+        initialData : BSInitialData!,
+        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if purchaseScreen == nil {
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: BSViewsManager.bundle);
             purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController //BSSummaryScreen
         }
         
-        purchaseScreen.initScreen(paymentRequest: paymentRequest.copy() as! BSPaymentRequest, fullBilling: fullBilling, purchaseFunc: purchaseFunc)
+        let paymentRequest = BSCcPaymentRequest(initialData: initialData)
+        purchaseScreen.initScreen(paymentRequest: paymentRequest, fullBilling: initialData.fullBilling, purchaseFunc: purchaseFunc)
 
         inNavigationController.pushViewController(purchaseScreen, animated: animated)
     }
@@ -234,7 +232,7 @@ class BSViewsManager {
     /*
      Create the popup menu for payment screen
     */
-    open class func openPopupMenu(paymentRequest: BSPaymentRequest?,
+    open class func openPopupMenu(paymentRequest: BSBasePaymentRequest?,
             inNavigationController : UINavigationController,
             updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
             errorFunc: @escaping ()->Void) -> UIAlertController {

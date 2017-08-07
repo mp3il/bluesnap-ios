@@ -25,13 +25,14 @@ public protocol BSCcInputLineDelegate : class {
      */
     func willCheckCreditCard()
     /**
-     didCheckCreditCard is called just after getting the BlueSnap server result; this is where you hide the activity indicator
+     didCheckCreditCard is called just after getting the BlueSnap server result; this is where you hide the activity indicator.
+     The card type, issuing country etc will be filled in the paymentRequest if the error is nil, so check the error first.
      */
-    func didCheckCreditCard(result: BSResultCcDetails?, error: BSErrors?)
+    func didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors?)
     /**
-     didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; either result or error parameters will be full, so check the error first.
+     didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; The card type, issuing country etc will be filled in the paymentRequest if the error is nil, so check the error first.
      */
-    func didSubmitCreditCard(result: BSResultCcDetails?, error: BSErrors?)
+    func didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors?)
     /**
      showAlert is called in case of unexpected errors from the BlueSnap server.
      */
@@ -331,7 +332,7 @@ public class BSCcInputLine: BSBaseTextInput {
             self.delegate?.willCheckCreditCard()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
-                BSApiManager.submitCcn(ccNumber: ccn, completion: { (result, error) in
+                BSApiManager.submitCcn(ccNumber: ccn, completion: { (ccDetails, error) in
                     
                     // Check for error
                     if let error = error {
@@ -340,13 +341,10 @@ public class BSCcInputLine: BSBaseTextInput {
                         } else {
                             self.delegate?.showAlert("An error occurred")
                         }
-                    } else if let result = result {
-                        if let cardType = result.ccType {
-                            self.cardType = cardType
-                        }
+                    } else {
+                        self.cardType = ccDetails.ccType ?? ""
                     }
-                    
-                    self.delegate?.didCheckCreditCard(result: result, error: error)
+                    self.delegate?.didCheckCreditCard(ccDetails: ccDetails, error: error)
                 })
             })
         }
@@ -363,10 +361,9 @@ public class BSCcInputLine: BSBaseTextInput {
         let cvv = self.getCvv() ?? ""
         let exp = self.getExpDateAsMMYYYY() ?? ""
         
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
+        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            ccDetails, error in
             
-            
-            //Check for error
             if let error = error {
                 if (error == .invalidCcNumber) {
                     self.showError(BSValidator.ccnInvalidMessage)
@@ -384,7 +381,7 @@ public class BSCcInputLine: BSBaseTextInput {
                 }
             }
             
-            self.delegate?.didSubmitCreditCard(result: result, error: error)
+            self.delegate?.didSubmitCreditCard(ccDetails: ccDetails, error: error)
         })
     }
 

@@ -8,41 +8,35 @@
 
 import Foundation
 
-public class BSPaymentRequest : NSObject, NSCopying {
-    
-    // These 3 fields are input + output (they may change if shopper changes currency)
-    var amount : Double! = 0.0
-    var taxAmount : Double! = 0.0
-    var currency : String! = "USD"
-    
-    // These fields are output, but may be supplied as input as well
-    var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
-    var shippingDetails : BSShippingAddressDetails?
+/**
+ Available payment types
+ */
+public enum BSPaymentType : String {
+    case CreditCard = "CC"
+    case ApplePay = "APPLE_PAY"
+    case PayPal = "PAYPAL"
+}
 
-    // Output only - result of submitting the payment details to BlueSnap server
-    var resultPaymentDetails : BSResultPaymentDetails?
+
+/**
+ Base class for payment request; this will be the result of the payment flow (one of the inherited classes: BSCcDetails/BSApplePayPaymentRequest/BSPayPalPaymentRequest)
+ */
+@objc public class BSBasePaymentRequest : NSObject {
     
+    // determines the request type: CC, Apple Pay, PayPal, etc.
+    public var paymentType : BSPaymentType!
+
+    var priceDetails: BSPriceDetails!
     
     // These fields hold the original amounts in USD, to keep precision in case of currency change
     internal var originalAmount : Double! = 0.0
     internal var originalTaxAmount : Double! = 0.0
     internal var originalRate : Double?
-    
-    public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSPaymentRequest()
-        copy.amount = amount
-        copy.taxAmount = taxAmount
-        copy.currency = currency
         
-        copy.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
-        copy.shippingDetails = shippingDetails == nil ? nil : (shippingDetails!.copy() as! BSShippingAddressDetails)
-        
-        copy.originalAmount = originalAmount
-        copy.originalTaxAmount = originalTaxAmount
-        copy.originalRate = originalRate
-        
-        return copy
+    internal init(initialData: BSInitialData) {
+        self.priceDetails = initialData.priceDetails.copy() as! BSPriceDetails
     }
+    
     // MARK: Change currency methods
     
     /*
@@ -51,11 +45,11 @@ public class BSPaymentRequest : NSObject, NSCopying {
     */
     public func setAmountsAndCurrency(amount: Double!, taxAmount: Double?, currency: String) {
         
-        self.amount = amount
+        self.priceDetails.amount = amount
         self.originalAmount = amount
-        self.taxAmount = taxAmount
+        self.priceDetails.taxAmount = taxAmount
         self.originalTaxAmount = taxAmount ?? 0.0
-        self.currency = currency
+        self.priceDetails.currency = currency
         self.originalRate = nil
     }
     
@@ -72,158 +66,65 @@ public class BSPaymentRequest : NSObject, NSCopying {
             }
         }
         if let newCurrency = newCurrency {
-            self.currency = newCurrency.code
+            self.priceDetails.currency = newCurrency.code
             let newRate = newCurrency.getRate() / originalRate!
-            self.amount = originalAmount * newRate
-            self.taxAmount = originalTaxAmount * newRate
+            self.priceDetails.amount = originalAmount * newRate
+            self.priceDetails.taxAmount = originalTaxAmount * newRate
         }
     }
-    
     
     // MARK: getters and setters
     
     public func getAmount() -> Double! {
-        return amount
+        return priceDetails.amount
     }
     
     public func getTaxAmount() -> Double! {
-        return taxAmount
+        return priceDetails.taxAmount
     }
     
     public func getCurrency() -> String! {
-        return currency
-    }
-    
-    public func getBillingDetails() -> BSBillingAddressDetails! {
-        return billingDetails
-    }
-    
-    public func getResultPaymentDetails() -> BSResultPaymentDetails? {
-        return self.resultPaymentDetails
-    }
-    
-    public func setResultPaymentDetails(resultPaymentDetails : BSResultPaymentDetails?) {
-        self.resultPaymentDetails = resultPaymentDetails
-    }
-    
-    public func getShippingDetails() -> BSShippingAddressDetails? {
-        return shippingDetails
-    }
-    
-    public func setShippingDetails(shippingDetails : BSShippingAddressDetails?) {
-        self.shippingDetails = shippingDetails
+        return priceDetails.currency
     }
 }
+
 
 /**
-    Shopper address details for purchase. 
-    State is mandfatopry only if the country has state (USA, Canada and Brazil).
-    For not-full billing details, only name, country and zip are filled, email is optional
-    For full billing details, everything is mandatory except email which is optional.
-    For shipping details all field are mandatory except phone which is optional.
+ price details: amount, tax and currency
  */
-public class BSBaseAddressDetails: NSObject {
+@objc public class BSPriceDetails : NSObject, NSCopying {
     
-    public override init() {}
+    public var amount : Double! = 0.0
+    public var taxAmount : Double! = 0.0
+    public var currency : String! = "USD"
     
-    public var name : String! = ""
-    public var address : String?
-    public var city : String?
-    public var zip : String?
-    public var country : String?
-    public var state : String?
-    
-    public func getSplitName() -> (firstName: String, lastName: String)? {
-        return BSStringUtils.splitName(name)
+    public init(amount : Double!, taxAmount : Double!, currency : String?) {
+        super.init()
+        self.amount = amount
+        self.taxAmount = taxAmount
+        self.currency = currency ?? "USD"
     }
-}
-
-public class BSBillingAddressDetails : BSBaseAddressDetails, NSCopying {
-    
-    public override init() { super.init() }
-    
-    public var email : String?
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSBillingAddressDetails()
-        copy.name = name
-        copy.address = address
-        copy.city = city
-        copy.zip = zip
-        copy.country = country
-        copy.state = state
-        copy.email = email
-        return copy
-    }
-}
-
-public class BSShippingAddressDetails : BSBaseAddressDetails, NSCopying {
-    
-    public override init() { super.init() }
-    
-    public var phone : String?
-    
-    public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSShippingAddressDetails()
-        copy.name = name
-        copy.address = address
-        copy.city = city
-        copy.zip = zip
-        copy.country = country
-        copy.state = state
-        copy.phone = phone
+        let copy = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
         return copy
     }
 }
 
 
-// MARK: purchase flow output
-
-public enum BSPaymentType : String {
-    case CreditCard = "CC"
-    case ApplePay = "APPLE_PAY"
-    case PayPal = "PAYPAL"
-}
-
-/*
- Purchase output
- */
-public class BSResultPaymentDetails {
-    
-    public var paymentType : BSPaymentType!
-}
-
 /**
- Output (PCI-compliant) CC details for the purchase
-*/
-public class BSResultCcDetails : BSResultPaymentDetails {
+  Class holds initial data for the flow: 
+    - Price details
+    - (optional) Shopper details
+    - Flow flavors (withShipping, withBilling)
+ */
+@objc public class BSInitialData : NSObject {
+
+    public var withShipping: Bool = false
+    public var fullBilling : Bool = false
+
+    public var priceDetails: BSPriceDetails! = BSPriceDetails(amount: 0, taxAmount: 0, currency: nil)
     
-    override init() {
-        super.init()
-        self.paymentType = .CreditCard
-    }
-    
-    // these fields are output - result of submitting the CC details to BlueSnap server
-    public var ccType : String?
-    public var last4Digits : String?
-    public var ccIssuingCountry : String?
+    public var billingDetails : BSBillingAddressDetails?
+    public var shippingDetails : BSShippingAddressDetails?
 }
-
-public class BSResultApplePayDetails: BSResultPaymentDetails {
-
-    override init() {
-        super.init()
-        self.paymentType = .ApplePay
-    }
-}
-
-public class BSResultPayPalDetails: BSResultPaymentDetails {
-    
-    public var payPalInvoiceId : String?
-    
-    override init() {
-        super.init()
-        self.paymentType = .PayPal
-    }
-}
-
