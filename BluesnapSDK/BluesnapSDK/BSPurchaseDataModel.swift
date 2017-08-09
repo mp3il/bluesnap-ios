@@ -34,6 +34,7 @@ public enum BSPaymentType : String {
     internal var originalRate : Double?
         
     internal init(initialData: BSInitialData) {
+        super.init()
         self.priceDetails = initialData.priceDetails.copy() as! BSPriceDetails
     }
     

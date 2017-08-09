@@ -24,13 +24,14 @@ class BluesnapSDKTests: XCTestCase {
     func testGetPayPalToken() {
         
         createToken()
-        let paymentRequest: BSPaymentRequest = BSPaymentRequest()
-        paymentRequest.amount = 30
-        paymentRequest.currency = "USD"
         
+        let initialData = BSInitialData()
+        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
+
         let semaphore = DispatchSemaphore(value: 0)
 
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, completion: { resultToken, resultError in
+        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
             
             print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
             semaphore.signal()
@@ -90,9 +91,9 @@ class BluesnapSDKTests: XCTestCase {
             (result, error) in
             
             XCTAssert(error == nil, "error: \(error)")
-            let ccType = result!.ccType
-            let last4 = result!.last4Digits
-            let country = result!.ccIssuingCountry
+            let ccType = result.ccType
+            let last4 = result.last4Digits
+            let country = result.ccIssuingCountry
             NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
        })
     }
