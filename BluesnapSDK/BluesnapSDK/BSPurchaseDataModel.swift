@@ -117,10 +117,11 @@ public enum BSPaymentType : String {
   Class holds initial data for the flow: 
     - Price details
     - (optional) Shopper details
-    - Flow flavors (withShipping, withBilling)
+    - Flow flavors (withShipping, withBilling, withEmail)
  */
 @objc public class BSInitialData : NSObject {
 
+    public var withEmail: Bool = true
     public var withShipping: Bool = false
     public var fullBilling : Bool = false
 
