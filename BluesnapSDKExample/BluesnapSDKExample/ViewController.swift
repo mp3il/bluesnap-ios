@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
-	}
+    }
 	
 	// MARK: - Dismiss keyboard
 	

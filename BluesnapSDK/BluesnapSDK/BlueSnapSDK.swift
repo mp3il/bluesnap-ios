@@ -170,7 +170,7 @@ import PassKit
     
     private class func adjustInitialData(initialData: BSInitialData!) {
         
-        let defaultCountry = NSLocale.current.regionCode ?? "US"
+        let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
         
         if initialData.withShipping {
             if initialData.shippingDetails == nil {

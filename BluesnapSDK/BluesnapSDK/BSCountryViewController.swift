@@ -44,6 +44,11 @@ class BSCountryViewController : BSBaseListController {
     
     // MARK: Override functions of BSBaseListController
     
+    override func setTitle() {
+        
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Country_Screen)
+    }
+    
     override func doFilter(_ searchText : String) {
         
         if searchText == "" {

@@ -78,6 +78,12 @@ class BSStartViewController: UIViewController {
             or2Label.isHidden = true
             payPalButton.isHidden = true
         }
+        
+        // Localize strings
+        let localizedOr = BSLocalizedStrings.getString(BSLocalizedString.Label_Or)
+        orLabel.text = localizedOr
+        or2Label.text = localizedOr
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Type)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -92,19 +98,19 @@ class BSStartViewController: UIViewController {
         let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
 
         if (!applePaySupported.canMakePayments) {
-            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Not available on this device")
+            let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Apple_Pay, message: BSLocalizedString.Error_Not_available_on_this_device)
             present(alert, animated: true, completion: nil)
             return;
         }
 
         if (!applePaySupported.canSetupCards) {
-            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "No cards set")
+            let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Apple_Pay, message: BSLocalizedString.Error_No_cards_set)
             present(alert, animated: true, completion: nil)
             return;
         }
 
         if BSApplePayConfiguration.getIdentifier() == nil {
-            let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "Setup error")
+            let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Apple_Pay, message: BSLocalizedString.Error_Setup_error)
             NSLog("Missing merchant identifier for apple pay")
             present(alert, animated: true, completion: nil)
             return;
@@ -117,7 +123,7 @@ class BSStartViewController: UIViewController {
                     NSLog("Apple Pay operation canceled")
                     return
                 } else if error != nil {
-                    let alert = BSViewsManager.createErrorAlert(title: "Apple Pay", message: "General error")
+                    let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Apple_Pay, message: BSLocalizedString.Error_General_ApplePay_error)
                     self.present(alert, animated: true, completion: nil)
                     return
                 } else {
@@ -134,7 +140,7 @@ class BSStartViewController: UIViewController {
     @IBAction func ccDetailsClick(_ sender: Any) {
 
         let backItem = UIBarButtonItem()
-        backItem.title = "Back"
+        backItem.title = BSLocalizedStrings.getString(BSLocalizedString.Navigate_Back_to_payment_type_screen)
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
 
         animateToPaymentScreen(completion: { animate in
@@ -159,8 +165,8 @@ class BSStartViewController: UIViewController {
                         BSViewsManager.showBrowserScreen(inNavigationController: self.navigationController, url: resultToken, shouldGoToUrlFunc: self.paypalUrlListener)
                     }
                 } else {
-                    let errMsg = resultError == .paypalUnsupportedCurrency ? "This currency is not supported by PayPal" : "An error occurred"
-                    let alert = BSViewsManager.createErrorAlert(title: "Oops", message: errMsg)
+                    let errMsg = resultError == .paypalUnsupportedCurrency ? BSLocalizedString.Error_PayPal_Currency_Not_Supported : BSLocalizedString.Error_General_PayPal_error
+                    let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_PayPal, message: errMsg)
                     self.stopActivityIndicator()
                     self.present(alert, animated: true, completion: nil)
                 }

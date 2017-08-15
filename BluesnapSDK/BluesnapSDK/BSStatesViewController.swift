@@ -24,6 +24,11 @@ class BSStatesViewController : BSBaseListController {
    
     // MARK: init
     
+    override func setTitle() {
+        
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_State_Screen)
+    }
+    
     func initStates(selectedCode: String!, allStates : [(name: String, code: String)], updateFunc : @escaping (String, String)->Void) {
         self.allStates = allStates
         self.updateFunc = updateFunc

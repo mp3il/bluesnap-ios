@@ -32,10 +32,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: - Outlets
     
     @IBOutlet weak var payButton: UIButton!
-    
-    @IBOutlet weak var subtotalUILabel: UILabel!
-    @IBOutlet weak var taxAmountUILabel: UILabel!
-    @IBOutlet weak var taxDetailsView: UIView!
+    @IBOutlet weak var subtotalAndTaxDetailsView: BSSubtotalUIView!
     
     @IBOutlet weak var ccInputLine: BSCcInputLine!
     
@@ -48,6 +45,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     @IBOutlet weak var shippingSameAsBillingView: UIView!
     @IBOutlet weak var shippingSameAsBillingSwitch: UISwitch!
+    @IBOutlet weak var shippingSameAsBillingLabel: UILabel!
     
     @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
@@ -108,7 +106,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             let keyboardHeight = Int(keyboardFrame.height)
             let viewHeight : Int = Int(self.view.frame.height)
             let offset = fieldBottom + keyboardHeight - scrollOffset
-            //print("fieldBottom:\(fieldBottom), keyboardHeight:\(keyboardHeight), offset:\(offset), viewHeight:\(viewHeight)")
             if (offset > viewHeight) {
                 moveUp = true
             }
@@ -198,7 +195,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     
     func showAlert(_ message : String) {
-        let alert = BSViewsManager.createErrorAlert(title: "Oops", message: message)
+        let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Payment, message: message)
         present(alert, animated: true, completion: nil)
     }
 
@@ -236,15 +233,13 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.withShipping = paymentRequest.getShippingDetails() != nil
         shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
         
-        // set the "shipping same as billing" to be true if no shipping name is supplied
+        // set the 'shipping same as billing' to be true if no shipping name is supplied
         if self.firstTime == true {
             shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
         }
         
         updateTexts()
         
-        taxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
-         
         if self.firstTime == true {
             self.firstTime = false
             if let billingDetails = self.paymentRequest.getBillingDetails() {
@@ -263,6 +258,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             cityInputLine.hideError()
             stateInputLine.hideError()
             ccInputLine.reset()
+
         }
         hideShowFields()
     }
@@ -319,7 +315,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             zipInputLine.isHidden = true
             stateInputLine.isHidden = true
             shippingSameAsBillingView.isHidden = true
-            taxDetailsView.isHidden = true
+            subtotalAndTaxDetailsView.isHidden = true
         } else {
             nameInputLine.isHidden = false
             emailInputLine.isHidden = false
@@ -331,7 +327,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             cityInputLine.isHidden = hideFields
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-            taxDetailsView.isHidden = self.paymentRequest.getAmount() == 0
+            subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getAmount() == 0
             updateZipFieldLocation()
         }
     }
@@ -350,21 +346,39 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateTexts() {
         
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Screen)
+        updateAmounts()
+        
+        self.nameInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Name)
+        self.emailInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Email)
+        self.streetInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Street)
+        self.cityInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_City)
+        self.stateInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_State)
+        
+        self.nameInputLine.placeHolder = BSLocalizedStrings.getString(BSLocalizedString.Placeholder_Name)
+        
+        self.shippingSameAsBillingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Shipping_Same_As_Billing)
+    }
+    
+    private func updateAmounts() {
+        
         let toCurrency = paymentRequest.getCurrency() ?? ""
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
         let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
+        subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
+        
         let amount = subtotalAmount + taxAmount
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
-        payButtonText = String(format:"Pay %@ %.2f", currencyCode, CGFloat(amount))
+        let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
+        payButtonText = String(format: payFormat, currencyCode, CGFloat(amount))
         updatePayButtonText()
-        subtotalUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(subtotalAmount))
-        taxAmountUILabel.text = String(format:" %@ %.2f", currencyCode, CGFloat(taxAmount))
     }
 
     private func updatePayButtonText() {
         
         if (self.withShipping && !isShippingSameAsBilling()) {
-            payButton.setTitle("Shipping >", for: UIControlState())
+            let shippingButtonText = BSLocalizedStrings.getString(BSLocalizedString.Payment_Shipping_Button)
+            payButton.setTitle(shippingButtonText, for: UIControlState())
         } else {
             payButton.setTitle(payButtonText, for: UIControlState())
         }
@@ -382,9 +396,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
             }
         }
-        let subTotalText = self.taxDetailsView.isHidden ? nil : subtotalUILabel.text
-        let taxText = self.taxDetailsView.isHidden ? nil : taxAmountUILabel.text
-        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, subTotalText: subTotalText, taxText: taxText, submitPaymentFields: submitPaymentFields, countryManager: countryManager, firstTime: firstTimeShipping)
+        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, submitPaymentFields: submitPaymentFields, countryManager: countryManager, firstTime: firstTimeShipping)
         firstTimeShipping = false
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
@@ -438,11 +450,15 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func updateCurrencyFunc(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
         paymentRequest.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
+        updateAmounts()
     }
     
     @IBAction func MenuClick(_ sender: UIBarButtonItem) {
         
-        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentRequest: paymentRequest, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc, errorFunc: { self.showAlert("An error occurred; please try again") })
+        let menu : UIAlertController = BSViewsManager.openPopupMenu(paymentRequest: paymentRequest, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc, errorFunc: {
+                let errorMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_General_Payment_error)
+                self.showAlert(errorMessage)
+            })
         present(menu, animated: true, completion: nil)
     }
     

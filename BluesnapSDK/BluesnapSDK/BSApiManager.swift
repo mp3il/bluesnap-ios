@@ -361,7 +361,6 @@ import Foundation
             
             if let data = data {
                 do {
-                    print("\(data)")
                     // Parse the result JSOn object
                     if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         resultToken = json["paypalUrl"] as? String

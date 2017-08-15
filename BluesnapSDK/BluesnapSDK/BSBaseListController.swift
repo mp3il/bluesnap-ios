@@ -35,6 +35,7 @@ class BSBaseListController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func selectItem(newItem: (name: String, code: String)) {}
     
+    func setTitle() {}
 
     // MARK: - UIViewController's methods
 
@@ -49,6 +50,8 @@ class BSBaseListController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        setTitle()
         
         doFilter(searchBar.text ?? "")
         

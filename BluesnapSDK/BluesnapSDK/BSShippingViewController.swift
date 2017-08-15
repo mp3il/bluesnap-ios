@@ -16,8 +16,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     // MARK: private properties
     fileprivate var paymentRequest : BSCcPaymentRequest!
     fileprivate var payText : String!
-    fileprivate var subTotalText : String?
-    fileprivate var taxText : String?
     fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     fileprivate var countryManager : BSCountryManager!
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
@@ -34,18 +32,14 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var phoneInputLine: BSInputLine!
     @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var subtotalUILabel: UILabel!
-    @IBOutlet weak var taxAmountUILabel: UILabel!
-    @IBOutlet weak var taxDetailsView: UIView!
+    @IBOutlet weak var subtotalAndTaxDetailsView: BSSubtotalUIView!
 
     // MARK: init
     
-    func initScreen(paymentRequest : BSCcPaymentRequest!, payText : String!, subTotalText : String?, taxText : String?, submitPaymentFields : @escaping () -> Void, countryManager : BSCountryManager!, firstTime: Bool) {
+    func initScreen(paymentRequest : BSCcPaymentRequest!, payText : String!,submitPaymentFields : @escaping () -> Void, countryManager : BSCountryManager!, firstTime: Bool) {
         
         self.paymentRequest = paymentRequest
         self.payText = payText
-        self.subTotalText = subTotalText
-        self.taxText = taxText
         self.submitPaymentFields = submitPaymentFields
         self.countryManager = countryManager
         self.firstTime = firstTime
@@ -160,13 +154,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             updateFlagImage(countryCode: countryCode)
             updateState()
             payUIButton.setTitle(payText, for: UIControlState())
-            if subTotalText == nil {
-                self.taxDetailsView.isHidden = true
-            } else {
-                self.taxDetailsView.isHidden = false
-                self.taxAmountUILabel.text = self.taxText
-                self.subtotalUILabel.text = self.subTotalText
-            }
+            
+            updateTexts()
         }
         if firstTime {
             firstTime = false
@@ -354,6 +343,23 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }*/
     
+    private func updateTexts() {
+        
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Shipping_Screen)
+        
+        let toCurrency = paymentRequest.getCurrency() ?? ""
+        let subtotalAmount = paymentRequest.getAmount() ?? 0.0
+        let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
+        subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
+        
+        self.nameInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Name)
+        self.phoneInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Phone)
+        self.streetInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Street)
+        self.cityInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_City)
+        self.stateInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_State)
+        
+        self.nameInputLine.placeHolder = BSLocalizedStrings.getString(BSLocalizedString.Placeholder_Name)
+    }
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         

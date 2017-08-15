@@ -47,7 +47,6 @@ class BSWebViewController: UIViewController, UIWebViewDelegate {
     
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         let urlStr = request.mainDocumentURL?.absoluteString ?? ""
-        print("request url = \(urlStr)")
         if let shouldGoToUrlFunc = shouldGoToUrlFunc {
             return shouldGoToUrlFunc(urlStr)
         }

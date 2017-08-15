@@ -13,19 +13,19 @@ import Foundation
     
     // MARK: Constants
     
-    static let ccnInvalidMessage = "Invalid card number"
-    static let cvvInvalidMessage = "Invalid CVV"
-    static let expMonthInvalidMessage = "Invalid month"
-    static let expPastInvalidMessage = "Date is in the past"
-    static let expInvalidMessage = "Invalid date"
-    static let nameInvalidMessage = "Enter a first and last name"
-    static let emailInvalidMessage = "Invalid email"
-    static let streetInvalidMessage = "Invalid street"
-    static let cityInvalidMessage = "Invalid city"
-    static let countryInvalidMessage = "Invalid country"
-    static let stateInvalidMessage = "Invalid state"
-    static let zipCodeInvalidMessage = "Invalid zip code"
-    static let postalCodeInvalidMessage = "Invalid postal code"
+    static let ccnInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_CCN)
+    static let cvvInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_CVV)
+    static let expMonthInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_ExpMonth)
+    static let expPastInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_ExpIsInThePast)
+    static let expInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_EXP)
+    static let nameInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_Name)
+    static let emailInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_Email)
+    static let streetInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_Street)
+    static let cityInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_City)
+    static let countryInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_Country)
+    static let stateInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_State)
+    static let zipCodeInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_ZipCode)
+    static let postalCodeInvalidMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_Invalid_PostalCode)
 
     static let defaultFieldColor = UIColor.black
     static let errorFieldColor = UIColor.red
@@ -520,20 +520,20 @@ import Foundation
     
     open class func getZipLabelText(countryCode: String, forBilling: Bool) -> String {
         
-        if countryCode.lowercased() == "us" {
+        if countryCode.uppercased() == BSCountryManager.US_COUNTRY_CODE {
             if forBilling {
-                return "Billing Zip"
+                return BSLocalizedStrings.getString(BSLocalizedString.Label_Billing_Zip)
             } else {
-                return "Shipping Zip"
+                return BSLocalizedStrings.getString(BSLocalizedString.Label_Shipping_Zip)
             }
         } else {
-            return "Postal Code"
+            return BSLocalizedStrings.getString(BSLocalizedString.Label_Postal_Code)
         }
     }
     
     open class func getZipErrorText(countryCode: String) -> String {
         
-        if countryCode.lowercased() == "us" {
+        if countryCode.uppercased() == BSCountryManager.US_COUNTRY_CODE {
             return zipCodeInvalidMessage
         } else {
             return postalCodeInvalidMessage
@@ -542,7 +542,7 @@ import Foundation
     
     open class func getZipKeyboardType(countryCode: String) -> UIKeyboardType {
     
-        if countryCode.lowercased() == "us" {
+        if countryCode.uppercased() == BSCountryManager.US_COUNTRY_CODE {
             return .numberPad
         } else {
             return .numbersAndPunctuation

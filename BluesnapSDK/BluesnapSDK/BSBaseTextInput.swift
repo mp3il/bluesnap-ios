@@ -732,9 +732,10 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     
     internal func createDoneButtonForKeyboard() -> UIToolbar {
         
+        let doneButtonText = BSLocalizedStrings.getString(BSLocalizedString.Keyboard_Done_Button_Text)
         let viewForDoneButtonOnKeyboard = UIToolbar()
         viewForDoneButtonOnKeyboard.sizeToFit()
-        let btnDoneOnKeyboard = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneBtnfromKeyboardClicked))
+        let btnDoneOnKeyboard = UIBarButtonItem(title: doneButtonText, style: .plain, target: self, action: #selector(self.doneBtnfromKeyboardClicked))
         viewForDoneButtonOnKeyboard.semanticContentAttribute = .forceRightToLeft
         viewForDoneButtonOnKeyboard.items = [btnDoneOnKeyboard]
         return viewForDoneButtonOnKeyboard

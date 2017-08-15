@@ -13,11 +13,11 @@ import UIKit
  */
 public protocol BSCcInputLineDelegate : class {
     /**
-     startEditCreditCard is called when we switch to the "open" state of the component
+     startEditCreditCard is called when we switch to the 'open' state of the component
     */
     func startEditCreditCard()
     /**
-     startEditCreditCard is called when we switch to the "closed" state of the component
+     startEditCreditCard is called when we switch to the 'closed' state of the component
      */
     func endEditCreditCard()
     /**
@@ -45,8 +45,8 @@ public protocol BSCcInputLineDelegate : class {
  [We use BSBaseTextInput for the CCN field and image,and add fields for EXP and CVV.]
 
  The control has 2 states:
- * Open: when we edit the CC number, the field gets longer, EXP and CVV fields are hidden; a "next" button is shown if the field already has a value
- * Closed: after CCN is entered and validated, the field gets shorter and displays only the last 4 digits; EXP and CVV fields are shown and ediatble; "next" button is hidden.
+ * Open: when we edit the CC number, the field gets longer, EXP and CVV fields are hidden; a 'next' button is shown if the field already has a value
+ * Closed: after CCN is entered and validated, the field gets shorter and displays only the last 4 digits; EXP and CVV fields are shown and ediatble; 'next' button is hidden.
 */
 @IBDesignable
 public class BSCcInputLine: BSBaseTextInput {
@@ -87,7 +87,7 @@ public class BSCcInputLine: BSBaseTextInput {
     }
     
     /**
-     ccnWidth (default = 220) determines the CCN text field width in the "open" state (value will change at runtime according to the device)
+     ccnWidth (default = 220) determines the CCN text field width in the 'open' state (value will change at runtime according to the device)
      */
     @IBInspectable var ccnWidth: CGFloat = 220 {
         didSet {
@@ -97,7 +97,7 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
     /**
-     last4Width (default = 70) determines the CCN text field width in the "closed" state, when we show only last 4 digits of the CCN (value will change at runtime according to the device)
+     last4Width (default = 70) determines the CCN text field width in the 'closed' state, when we show only last 4 digits of the CCN (value will change at runtime according to the device)
      */
     @IBInspectable var last4Width: CGFloat = 70 {
         didSet {
@@ -239,7 +239,7 @@ public class BSCcInputLine: BSBaseTextInput {
     // MARK: Public functions
     
     /**
-     reset sets the component to its initial state, where the fields are emnpty and we are in the "open" state
+     reset sets the component to its initial state, where the fields are emnpty and we are in the 'open' state
     */
     public func reset() {
         closing = false
@@ -339,7 +339,8 @@ public class BSCcInputLine: BSBaseTextInput {
                         if (error == .invalidCcNumber) {
                             self.showError(BSValidator.ccnInvalidMessage)
                         } else {
-                            self.delegate?.showAlert("An error occurred")
+                            let message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Validation_Error)
+                            self.delegate?.showAlert(message)
                         }
                     } else {
                         self.cardType = ccDetails.ccType ?? ""
@@ -351,7 +352,7 @@ public class BSCcInputLine: BSBaseTextInput {
     }
 
     /**
-     This should be called by the "Pay" button - it submits all the CC details to BlueSnap server, so that later purchase requests to BlueSnap will not need gto contain these values (they will be automatically identified by the token).
+     This should be called by the 'Pay' button - it submits all the CC details to BlueSnap server, so that later purchase requests to BlueSnap will not need gto contain these values (they will be automatically identified by the token).
      In case of errors from the server (there may be validations we did not catch before), we show the errors under the matching fields.
      After getting the result, we call the delegate's didSubmitCreditCard function.
     */
@@ -372,12 +373,15 @@ public class BSCcInputLine: BSBaseTextInput {
                 } else if (error == .invalidCvv) {
                     self.showCvvError(BSValidator.cvvInvalidMessage)
                 } else if (error == .expiredToken) {
-                    self.delegate?.showAlert("Your session has expired, please go back and try again")
+                    let message = BSLocalizedStrings.getString(BSLocalizedString.Error_Cc_Submit_Token_expired)
+                    self.delegate?.showAlert(message)
                 } else if (error == .tokenNotFound) {
-                    self.delegate?.showAlert("Your session is invalid, please go back and try again")
+                    let message = BSLocalizedStrings.getString(BSLocalizedString.Error_Cc_Submit_Token_not_found)
+                    self.delegate?.showAlert(message)
                 } else {
                     NSLog("Unexpected error submitting Payment Fields to BS")
-                    self.delegate?.showAlert("An error occurred, please try again")
+                    let message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Submit_Error)
+                    self.delegate?.showAlert(message)
                 }
             }
             
@@ -592,7 +596,7 @@ public class BSCcInputLine: BSBaseTextInput {
         return true
     }
     
-    // MARK: Numeric Keyboard "done" button enhancement
+    // MARK: Numeric Keyboard 'done' button enhancement
     
     override internal func setNumericKeyboard() {
         

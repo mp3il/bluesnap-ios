@@ -17,7 +17,7 @@ class BSViewsManager {
     static let storyboardName = "BlueSnap"
     static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
     static let startScreenStoryboardId = "BSStartScreenStoryboardId"
-    static let purchaseScreenStoryboardId = "BSPaymentScreenStoryboardId" //"BSPurchaseScreenStoryboardId"
+    static let purchaseScreenStoryboardId = "BSPaymentScreenStoryboardId"
     static let countryScreenStoryboardId = "BSCountriesStoryboardId"
     static let stateScreenStoryboardId = "BSStatesStoryboardId"
     static let webScreenStoryboardId = "BSWebViewController"
@@ -25,8 +25,28 @@ class BSViewsManager {
     fileprivate static var startScreen: BSStartViewController!
     fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
     fileprivate static var currencyScreen: BSCurrenciesViewController!
+    fileprivate static var bsBundle: Bundle = createBundle()
     
-    //static let transitionManager = BSTransitionManager()
+    /**
+     Create the bundle containing BlueSnap assets
+     */
+    private static func createBundle() -> Bundle {
+        
+        let bundleforURL = Bundle(for: BSViewsManager.self)
+        if let bundleurl = bundleforURL.url(forResource: "BluesnapUI", withExtension: "bundle") {
+            return Bundle(url: bundleurl)!
+        } else {
+            return Bundle(identifier: BSViewsManager.bundleIdentifier)!;
+        }
+    }
+    
+    /**
+     Get the bundle containing BlueSnap assets
+     */
+    open static func getBundle() -> Bundle {
+        
+        return bsBundle //createBundle()
+    }
 
     /**
      Open the check-out start screen, where the shopper chooses CC/ApplePay.
@@ -46,6 +66,10 @@ class BSViewsManager {
         purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if startScreen == nil {
+//            let bundle = BSViewsManager.getBundle()
+//            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+//            startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
+
             let bundleforURL = Bundle(for: BSViewsManager.self)
             if let bundleurl = bundleforURL.url(forResource: "BluesnapUI", withExtension: "bundle") {
                 bundle = Bundle(url: bundleurl)
@@ -168,7 +192,8 @@ class BSViewsManager {
         
         if let states = countryManager.getCountryStates(countryCode: selectedCountryCode) {
             
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+            let bundle = BSViewsManager.getBundle()
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
             let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.stateScreenStoryboardId) as! BSStatesViewController
             
             screen.initStates(selectedCode: selectedStateCode, allStates: states, updateFunc: updateFunc)
@@ -182,17 +207,25 @@ class BSViewsManager {
     open class func getImage(imageName: String!) -> UIImage? {
         
         var result : UIImage?
-        if let myBundle = Bundle(identifier: bundleIdentifier) {
+        let myBundle = BSViewsManager.getBundle()
+        //if let myBundle = Bundle(identifier: bundleIdentifier) {
             if let image = UIImage(named: imageName, in: myBundle, compatibleWith: nil) {
                 result = image
             }
-        }
+        //}
         return result
     }
     
-    open class func createErrorAlert(title: String, message: String) -> UIAlertController {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+    open class func createErrorAlert(title: BSLocalizedString, message: BSLocalizedString) -> UIAlertController {
+        let messageText = BSLocalizedStrings.getString(message)
+        return createErrorAlert(title: title, message: messageText)
+    }
+    
+    open class func createErrorAlert(title: BSLocalizedString, message: String) -> UIAlertController {
+        let titleText = BSLocalizedStrings.getString(title)
+        let okButtonText = BSLocalizedStrings.getString(BSLocalizedString.Alert_OK_Button_Text)
+        let alert = UIAlertController(title: titleText, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: okButtonText, style: .default, handler: { (action) -> Void in })
         alert.addAction(cancel)
         return alert
         //After you create alert, you show it like this: present(alert, animated: true, completion: nil)
@@ -239,7 +272,8 @@ class BSViewsManager {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let currencyMenuOption = UIAlertAction(title: "Currency", style: UIAlertActionStyle.default) { _ in
+        let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
+        let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
             if let paymentRequest = paymentRequest {
                 BSViewsManager.showCurrencyList(
                     inNavigationController: inNavigationController,
@@ -250,7 +284,8 @@ class BSViewsManager {
             }
         }
         
-        let cancelMenuOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        let cancelMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Cancel)
+        let cancelMenuOption = UIAlertAction(title: cancelMenuTitle, style: UIAlertActionStyle.cancel, handler: nil)
         
         // relate actions to controllers
         menu.addAction(currencyMenuOption)
@@ -271,7 +306,8 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         url: String!, shouldGoToUrlFunc: ((_ url : String) -> Bool)?) {
         
-        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+        let bundle = BSViewsManager.getBundle()
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
         let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
         screen.initScreen(url: url, shouldGoToUrlFunc: shouldGoToUrlFunc)
         inNavigationController.pushViewController(screen, animated: true)

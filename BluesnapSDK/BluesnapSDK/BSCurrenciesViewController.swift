@@ -45,6 +45,11 @@ class BSCurrenciesViewController: BSBaseListController {
     
     // MARK: Override functions of BSBaseListController
     
+    override func setTitle() {
+    
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Currency_Screen)
+    }
+    
     override func doFilter(_ searchText : String) {
         
         if searchText == "" {
