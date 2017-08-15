@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var taxTextField: UITextField!
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var fullBillingSwitch: UISwitch!
+    @IBOutlet weak var withEmailSwitch: UISwitch!
     
     // MARK: private properties
     
@@ -166,6 +167,7 @@ class ViewController: UIViewController {
         initialData.priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
         initialData.withShipping = withShippingSwitch.isOn
         initialData.fullBilling = fullBillingSwitch.isOn
+        initialData.withEmail = withEmailSwitch.isOn
     }
     
     /**

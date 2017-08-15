@@ -14,6 +14,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: private properties
     
     fileprivate var withShipping = false
+    fileprivate var fullBilling = false
+    fileprivate var withEmail = true
     fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
@@ -22,7 +24,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     fileprivate var paymentRequest : BSCcPaymentRequest!
-    fileprivate var fullBilling = false
     fileprivate var purchaseFunc: (BSBasePaymentRequest!)->Void = {
         paymentRequest in
         print("purchaseFunc should be overridden")
@@ -51,13 +52,15 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: init
     
-    public func initScreen(paymentRequest : BSCcPaymentRequest!, fullBilling: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
+    public func initScreen(paymentRequest : BSCcPaymentRequest!, fullBilling: Bool, withEmail: Bool, withShipping: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         self.firstTime = true
         self.firstTimeShipping = true
         self.paymentRequest = paymentRequest
         self.fullBilling = fullBilling
+        self.withEmail = withEmail
         self.purchaseFunc = purchaseFunc
+        self.withShipping = withShipping //paymentRequest.getShippingDetails() != nil
     }
     
     // MARK: Keyboard functions
@@ -230,7 +233,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         self.navigationController!.isNavigationBarHidden = false
         
-        self.withShipping = paymentRequest.getShippingDetails() != nil
         shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
         
         // set the 'shipping same as billing' to be true if no shipping name is supplied
@@ -318,7 +320,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             subtotalAndTaxDetailsView.isHidden = true
         } else {
             nameInputLine.isHidden = false
-            emailInputLine.isHidden = false
+            emailInputLine.isHidden = !self.withEmail
             let hideFields = !self.fullBilling
             streetInputLine.isHidden = hideFields
             let countryCode = self.paymentRequest.getBillingDetails().country ?? ""
@@ -439,9 +441,17 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func updateZipFieldLocation() {
         
         if !zipInputLine.isHidden {
-            zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+            if withEmail {
+                zipTopConstraint.constant = zipTopConstraintOriginalConstant ?? 1
+            } else {
+                zipTopConstraint.constant = -1 * emailInputLine.frame.height
+            }
         } else {
-            zipTopConstraint.constant = -1 * emailInputLine.frame.height
+            if withEmail {
+                zipTopConstraint.constant = -1 * emailInputLine.frame.height
+            } else {
+                zipTopConstraint.constant = -2 * emailInputLine.frame.height
+            }
         }
     }
     
@@ -530,6 +540,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     func validateEmail(ignoreIfEmpty : Bool) -> Bool {
         
+        if emailInputLine.isHidden {
+            return true
+        }
         let result : Bool = BSValidator.validateEmail(ignoreIfEmpty: ignoreIfEmpty, input: emailInputLine, addressDetails: paymentRequest.getBillingDetails())
         return result
     }
