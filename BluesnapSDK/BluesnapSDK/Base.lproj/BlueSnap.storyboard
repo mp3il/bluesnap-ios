@@ -14,7 +14,7 @@
         <!--Select Country-->
         <scene sceneID="xEC-pU-5Oa">
             <objects>
-                <viewController storyboardIdentifier="BSCountriesStoryboardId" title="Select Country" id="Cnt-Wb-Tw2" customClass="BSCountryViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSCountriesStoryboardId" title="Select Country" id="Cnt-Wb-Tw2" customClass="BSCountryViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QuX-Rp-J6V"/>
                         <viewControllerLayoutGuide type="bottom" id="t7U-xS-hlt"/>
@@ -49,14 +49,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="35" y="10" width="278" height="23"/>
+                                                    <rect key="frame" x="31" y="8" width="281" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="313" y="15" width="16" height="13"/>
+                                                    <rect key="frame" x="312" y="15" width="14" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -770,7 +770,7 @@
         <!--Select Currency-->
         <scene sceneID="T9n-5J-QN1">
             <objects>
-                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select Currency" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSCurrenciesStoryboardId" title="Select Currency" id="CMN-vn-Foo" customClass="BSCurrenciesViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="T2c-iX-ssj"/>
                         <viewControllerLayoutGuide type="bottom" id="AeU-Nz-6go"/>
@@ -870,7 +870,7 @@
         <!--Select State-->
         <scene sceneID="ZWS-TW-Oq9">
             <objects>
-                <viewController storyboardIdentifier="BSStatesStoryboardId" title="Select State" id="2Ni-9L-E0D" customClass="BSStatesViewController" customModule="BluesnapSDK" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BSStatesStoryboardId" title="Select State" id="2Ni-9L-E0D" customClass="BSStatesViewController" customModule="BluesnapSDK" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QYq-7U-9kH"/>
                         <viewControllerLayoutGuide type="bottom" id="VZz-ls-6bv"/>

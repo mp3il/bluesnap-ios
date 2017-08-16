@@ -13,7 +13,6 @@ class BSViewsManager {
     // MARK: - Constants
     
     static let bundleIdentifier = "com.bluesnap.BluesnapSDK"
-    static var bundle: Bundle!
     static let storyboardName = "BlueSnap"
     static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
     static let startScreenStoryboardId = "BSStartScreenStoryboardId"
@@ -25,9 +24,29 @@ class BSViewsManager {
     fileprivate static var startScreen: BSStartViewController!
     fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
     fileprivate static var currencyScreen: BSCurrenciesViewController!
-    
-    //static let transitionManager = BSTransitionManager()
+    fileprivate static var bsBundle: Bundle = createBundle()
 
+    /**
+     Create the bundle containing BlueSnap assets
+     */
+    private static func createBundle() -> Bundle {
+        
+        let bundleforURL = Bundle(for: BSViewsManager.self)
+        if let bundleurl = bundleforURL.url(forResource: "BluesnapUI", withExtension: "bundle") {
+            return Bundle(url: bundleurl)!
+        } else {
+            return Bundle(identifier: BSViewsManager.bundleIdentifier)!;
+        }
+    }
+    
+    /**
+     Get the bundle containing BlueSnap assets
+     */
+    open static func getBundle() -> Bundle {
+        
+        return bsBundle
+    }
+    
     /**
      Open the check-out start screen, where the shopper chooses CC/ApplePay.
      
@@ -46,16 +65,9 @@ class BSViewsManager {
         purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if startScreen == nil {
-            let bundleforURL = Bundle(for: BSViewsManager.self)
-            if let bundleurl = bundleforURL.url(forResource: "BluesnapUI", withExtension: "bundle") {
-                bundle = Bundle(url: bundleurl)
-                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
-                startScreen = (storyboard.instantiateViewController(withIdentifier: "BSNavToStart") as! UINavigationController).topViewController as! BSStartViewController;
-            } else {
-                bundle = Bundle(identifier: BSViewsManager.bundleIdentifier)!;
-                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
-                startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
-            }
+            let bundle = BSViewsManager.getBundle()
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+            startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
         }
 
         startScreen.initScreen(initialData: initialData, purchaseFunc: purchaseFunc)
@@ -80,8 +92,9 @@ class BSViewsManager {
         purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if purchaseScreen == nil {
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: BSViewsManager.bundle);
-            purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController //BSSummaryScreen
+            let bundle = BSViewsManager.getBundle()
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
+            purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController
         }
         
         let paymentRequest = BSCcPaymentRequest(initialData: initialData)
@@ -107,8 +120,9 @@ class BSViewsManager {
         selectedCountryCode : String!,
         updateFunc: @escaping (String, String)->Void) {
 
-        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
-        let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BSCountryViewController
+        let bundle = BSViewsManager.getBundle()
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+        let screen : BSCountryViewController! = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BluesnapSDK.BSCountryViewController
 
         screen.initCountries(selectedCode: selectedCountryCode, countryManager: countryManager, updateFunc: updateFunc)
         
@@ -133,7 +147,8 @@ class BSViewsManager {
         errorFunc: @escaping ()->Void) {
         
         if currencyScreen == nil {
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+            let bundle = BSViewsManager.getBundle()
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
             currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
         }
         
@@ -168,7 +183,8 @@ class BSViewsManager {
         
         if let states = countryManager.getCountryStates(countryCode: selectedCountryCode) {
             
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+            let bundle = BSViewsManager.getBundle()
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
             let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.stateScreenStoryboardId) as! BSStatesViewController
             
             screen.initStates(selectedCode: selectedStateCode, allStates: states, updateFunc: updateFunc)
@@ -182,10 +198,9 @@ class BSViewsManager {
     open class func getImage(imageName: String!) -> UIImage? {
         
         var result : UIImage?
-        if let myBundle = Bundle(identifier: bundleIdentifier) {
-            if let image = UIImage(named: imageName, in: myBundle, compatibleWith: nil) {
-                result = image
-            }
+        let myBundle = BSViewsManager.getBundle()
+        if let image = UIImage(named: imageName, in: myBundle, compatibleWith: nil) {
+            result = image
         }
         return result
     }
@@ -271,7 +286,8 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         url: String!, shouldGoToUrlFunc: ((_ url : String) -> Bool)?) {
         
-        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: Bundle(identifier: BSViewsManager.bundleIdentifier))
+        let bundle = BSViewsManager.getBundle()
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
         let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
         screen.initScreen(url: url, shouldGoToUrlFunc: shouldGoToUrlFunc)
         inNavigationController.pushViewController(screen, animated: true)

@@ -36,24 +36,13 @@ public enum BSPaymentType : String {
     internal init(initialData: BSInitialData) {
         super.init()
         self.priceDetails = initialData.priceDetails.copy() as! BSPriceDetails
-    }
-    
-    // MARK: Change currency methods
-    
-    /*
-    Set amounts will reset the currency and amounts, including the original
-    amounts.
-    */
-    public func setAmountsAndCurrency(amount: Double!, taxAmount: Double?, currency: String) {
-        
-        self.priceDetails.amount = amount
-        self.originalAmount = amount
-        self.priceDetails.taxAmount = taxAmount
-        self.originalTaxAmount = taxAmount ?? 0.0
-        self.priceDetails.currency = currency
+        self.originalAmount = priceDetails.amount
+        self.originalTaxAmount = priceDetails.taxAmount ?? 0.0
         self.originalRate = nil
     }
     
+    // MARK: Change currency methods
+        
     /*
     Change currency will also change the amounts according to the change rates
     */
