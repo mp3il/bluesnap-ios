@@ -15,33 +15,23 @@ This document will cover the following topics:
 # Checkout flow options
 The BlueSnap iOS SDK provides two elegant checkout flows to choose from. 
 ## Standard Checkout Flow 
-<div style="display:block;line-height: 1.7em;">
-  <div style="display:inline-block;width: 40%;text-align:justify;margin-right:6px;">The Standard Checkout Flow allows you to get up and running quicky with of our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.
- Some of the benefits include: 
-    <ul>
-      <li>Specifying required user info, such as email or billing address. </li>
-      <li>Pre-populating checkout page.</li>
-      <li>Launching checkout UI with simple start function.</li>
-    </ul>
-  </div>
-  
-  ![Standard Checkout Flow](https://files.readme.io/e67770e-completeFlow.PNG)
-  <img style="display:inline-block;vertical-align:top;width: 57%;margin-top:0px;" src="https://files.readme.io/e67770e-completeFlow.PNG">
-</div>
+The Standard Checkout Flow allows you to get up and running quicky with of our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.
+ Some of the benefits include:
+* Specifying required user info, such as email or billing address. 
+* Pre-populating checkout page.
+* Launching checkout UI with simple start function.
+
+To see an image of the Standard Checkout Flow, click [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk). 
 
 ## Custom Checkout Flow
-<div style="display:block;margin-bottom: -46px; line-height: 1.7em;">
-  <div style="display:inline-block; width:55%;margin-right:35px">
-The Custom Checkout Flow enables you to easily accept credit card payments using our flexible credit card UI component, allowing you to have full control over the look and feel of your checkout experience. Some of the benefits include: 
-    <br>
-    <ul>
-      <li>Flexible and customizable UI element with built-in validations and card-type detection.</li>
-      <li>Helper classes to assist you in currency conversions, removing whitespace, and more.</li>
-      <li>Simple function that submits sensitive card details directly to BlueSnap's server. </li>
-    </ul>
-  </div>
-  <img style="display:inline-block; vertical-align:top;margin-top:0px;border: 2px solid #EDEAE5;" src="https://files.readme.io/d54a75d-custom1.PNG">
-</div>
+The Custom Checkout Flow enables you to easily accept credit card payments using our flexible credit card UI component, allowing you to have full control over the look and feel of your checkout experience. 
+Some of the benefits include: 
+* Flexible and customizable UI element with built-in validations and card-type detection.
+* Helper classes to assist you in currency conversions, removing whitespace, and more.
+* Simple function that submits sensitive card details directly to BlueSnap's server.
+
+To see an image of the credit card UI component, click [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk#section-custom-checkout-flow). 
+
 # Installation
 > The SDK is written in Swift 3, using Xcode 8.
 
@@ -180,7 +170,7 @@ The following properties of `initialData` allow you to specify the required user
 
 *In the UI, shipping details are collected on a separate shipping details page.
 
-The following code will result in the flow shown in the above [images](#standard-checkout-flow). Note that `fullBilling` is `false` and `withEmail` is `true` by default. 
+The following code will result in the flow shown [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk). Note that `fullBilling` is `false` and `withEmail` is `true` by default. 
 
 ```swift
 initialData.withShipping = true
@@ -271,11 +261,11 @@ If you're using `BSCcInputLine` to collect the user's data, in your `viewControl
 
 | Method      | Description   |
 | ------------- | ------------- |
-| `startEditCreditCard()` | Called just before the user enters the "open" state of CC field to edit it (in our UI, we use this stage to hide other fields). |
-| `endEditCreditCard()` | Called after the user exits the CC field and we "close" it to show CC number last 4 digits (in our UI, we use this stage to un-hide the other fields). |
-| `willCheckCreditCard()` | Called just before submitting the CC number to BlueSnap servers for validation (this action is asynchronous; in our UI, we do nothing at this stage). |
-| `didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors)` | Called when we get the CC number validation response; if the error is empty, you will get the CC type, issuing country and last 4 digits inside `ccDetails` (in our UI, we use it to change the icon for the credit card type). Errors are shown by the component, you need not handle them. |
-| `didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors)`* | Called when the response for the token submission is received (in our UI, we use it to close the window and callback the success action) – errors are shown by the component, you need not handle them. |
+| `startEditCreditCard()` | Called just before the user enters the "open" state of CC field to edit it (in the UI, BlueSnap uses this stage to hide other fields). |
+| `endEditCreditCard()` | Called after the user exits the CC field and we "close" it to show CC number last 4 digits (in the UI, BlueSnap uses this stage to un-hide the other fields). |
+| `willCheckCreditCard()` | Called just before submitting the CC number to BlueSnap servers for validation (this action is asynchronous; in the UI, BlueSnap does nothing at this stage). |
+| `didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors)` | Called when we get the CC number validation response; if the error is empty, you will get the CC type, issuing country and last 4 digits inside `ccDetails` (in the UI, BlueSnap uses this stage to change the icon for the credit card type). Errors are shown by the component, you need not handle them. |
+| `didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors)`* | Called when the response for the token submission is received (in the UI, BlueSnap uses this stage to close the window and callback the success action) – errors are shown by the component, you need not handle them. |
 | `showAlert(_ message: String)` | Called when we want to show an error (not a validation error, just an unexpected one). |
 
 *Within `didSubmitCreditCard`, you'll do the following: 
