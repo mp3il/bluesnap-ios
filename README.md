@@ -24,8 +24,11 @@ The BlueSnap iOS SDK provides two elegant checkout flows to choose from.
       <li>Launching checkout UI with simple start function.</li>
     </ul>
   </div>
+  
+  ![Standard Checkout Flow](https://files.readme.io/e67770e-completeFlow.PNG)
   <img style="display:inline-block;vertical-align:top;width: 57%;margin-top:0px;" src="https://files.readme.io/e67770e-completeFlow.PNG">
 </div>
+
 ## Custom Checkout Flow
 <div style="display:block;margin-bottom: -46px; line-height: 1.7em;">
   <div style="display:inline-block; width:55%;margin-right:35px">
@@ -300,7 +303,7 @@ For credit card and Apple Pay payments, you will use our Payment API to send an 
 
 > DemoTransactions.swift of demo app shows an example of these HTTP calls. Please note that these calls are for demonstration purposes only - the transaction should be sent from your server.
 
-###Apple Pay payments (Standard Checkout Flow)
+### Apple Pay payments (Standard Checkout Flow)
 For Apple Pay payments, send an HTTP POST request to `/services/2/transactions` of the BlueSnap sandbox or production environment. 
 
 For example: 
