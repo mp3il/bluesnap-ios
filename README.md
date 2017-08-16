@@ -708,12 +708,12 @@ We have 2 data structures (see BSCurrencyModel.swift): BSCurrency holds a single
 #### getCurrencyRates
 This function returns a list of currencies and their rates from BlueSnap server
 
-Parameters:
- - throws `BSApiErrors`
-
 Signature:
 
     open class func getCurrencyRates() throws -> BSCurrencies?
+    
+Parameters:
+- throws `BSApiErrors`
  
 #### showCurrencyList
 This function navigates to the currency list, allowing the user to change the current currency selection.
