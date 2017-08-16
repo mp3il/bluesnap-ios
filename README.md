@@ -15,17 +15,30 @@ This document will cover the following topics:
 # Checkout flow options
 The BlueSnap iOS SDK provides two elegant checkout flows to choose from. 
 ## Standard Checkout Flow 
-[block:html]
-{
-  "html": "<div style=\"display:block;line-height: 1.7em;\">\n  <div style=\"display:inline-block;width: 40%;text-align:justify;margin-right:6px;\">The Standard Checkout Flow allows you to get up and running quicky with of our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.\n Some of the benefits include: \n    <ul>\n      <li>Specifying required user info, such as email or billing address. </li>\n      <li>Pre-populating checkout page.</li>\n      <li>Launching checkout UI with simple start function.</li>\n    </ul>\n  </div>\n  <img style=\"display:inline-block;vertical-align:top;width: 57%;margin-top:0px;\" src=\"https://files.readme.io/e67770e-completeFlow.PNG\">\n</div>"
-}
-[/block]
+<div style="display:block;line-height: 1.7em;">
+  <div style="display:inline-block;width: 40%;text-align:justify;margin-right:6px;">The Standard Checkout Flow allows you to get up and running quicky with of our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.
+ Some of the benefits include: 
+    <ul>
+      <li>Specifying required user info, such as email or billing address. </li>
+      <li>Pre-populating checkout page.</li>
+      <li>Launching checkout UI with simple start function.</li>
+    </ul>
+  </div>
+  <img style="display:inline-block;vertical-align:top;width: 57%;margin-top:0px;" src="https://files.readme.io/e67770e-completeFlow.PNG">
+</div>
 ## Custom Checkout Flow
-[block:html]
-{
-  "html": "<div style=\"display:block;margin-bottom: -46px; line-height: 1.7em;\">\n  <div style=\"display:inline-block; width:55%;margin-right:35px\">\nThe Custom Checkout Flow enables you to easily accept credit card payments using our flexible credit card UI component, allowing you to have full control over the look and feel of your checkout experience. Some of the benefits include: \n    <br>\n    <ul>\n      <li>Flexible and customizable UI element with built-in validations and card-type detection.</li>\n      <li>Helper classes to assist you in currency conversions, removing whitespace, and more.</li>\n      <li>Simple function that submits sensitive card details directly to BlueSnap's server. </li>\n    </ul>\n  </div>\n  <img style=\"display:inline-block; vertical-align:top;margin-top:0px;border: 2px solid #EDEAE5;\" src=\"https://files.readme.io/d54a75d-custom1.PNG\">\n</div>"
-}
-[/block]
+<div style="display:block;margin-bottom: -46px; line-height: 1.7em;">
+  <div style="display:inline-block; width:55%;margin-right:35px">
+The Custom Checkout Flow enables you to easily accept credit card payments using our flexible credit card UI component, allowing you to have full control over the look and feel of your checkout experience. Some of the benefits include: 
+    <br>
+    <ul>
+      <li>Flexible and customizable UI element with built-in validations and card-type detection.</li>
+      <li>Helper classes to assist you in currency conversions, removing whitespace, and more.</li>
+      <li>Simple function that submits sensitive card details directly to BlueSnap's server. </li>
+    </ul>
+  </div>
+  <img style="display:inline-block; vertical-align:top;margin-top:0px;border: 2px solid #EDEAE5;" src="https://files.readme.io/d54a75d-custom1.PNG">
+</div>
 # Installation
 > The SDK is written in Swift 3, using Xcode 8.
 
