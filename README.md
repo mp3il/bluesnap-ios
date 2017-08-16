@@ -645,7 +645,7 @@ Signature:
 |`completion`* | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
 
 *Your `completion` callback should do the following: 
-1. Detect if the user's card data was successfully submitted to BlueSnap (if `BSError` is `nil`). 
+1. Detect if the user's card data was successfully submitted to BlueSnap (if `BSErrors` is `nil`). 
 2. If submission was successful, you'll update your server with the transaction details. 
 3. From your server, you'll [Send the payment for processing](#sending-the-payment-for-processing) using your token. 
 4. After receiving BlueSnap's response, you'll update the client and display an appropriate message to the user. 
