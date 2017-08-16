@@ -286,13 +286,13 @@ If the validation was successful (i.e. `validate` returns `true`), then call `BS
 And that's it! You're ready to start accepting credit card payments! 
 
 # Sending the payment for processing
-For credit card and Apple Pay payments, you will use our Payment API to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) or [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) request with your token from your server. 
+For credit card and Apple Pay payments, you will use our Payment API with your token to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture), [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) or [subscription](https://developers.bluesnap.com/v8976-JSON/docs/create-subscription) request, or to attach the payment details to a [shopper](https://developers.bluesnap.com/v8976-JSON/docs/create-vaulted-shopper). 
 
 **Note**: The token must be associated with the user's payment details. In the Standard Checkout Flow, this is when `purchaseFunc` is called. In the Custom Checkout Flow, this is when `didSubmitCreditCard` is called (if you're using the `BSCcInputLine` field) or `completion` is called (if you're using your own input fields). 
 
-> DemoTransactions.swift of demo app shows an example of these HTTP calls. Please note that these calls are for demonstration purposes only - the transaction should be sent from your server.
+> DemoTransactions.swift of demo app shows an example of an Auth Capture request. Please note that these calls are for demonstration purposes only - the transaction should be sent from your server.
 
-### Apple Pay payments (Standard Checkout Flow)
+### Auth Capture example - Apple Pay payments (Standard Checkout Flow)
 For Apple Pay payments, send an HTTP POST request to `/services/2/transactions` of the BlueSnap sandbox or production environment. 
 
 For example: 
@@ -313,7 +313,7 @@ curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 ```
 If successful, the response HTTP status code is 200 OK. Visit our [API Reference](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) for more details. 
 
-### Credit card payments
+### Auth Capture example - Credit card payments
 For credit card payments, send an HTTP POST request to `/services/2/transactions` of the BlueSnap sandbox or production environment. 
 
 For example: 
