@@ -9,7 +9,7 @@ This document will cover the following topics:
 * [Implementing Standard Checkout Flow](#implementing-standard-checkout-flow)
 * [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow)
 * [Sending the payment for processing](#sending-the-payment-for-processing)
-* [Demo app - explained](#demo-app-explained)
+* [Demo app - explained](#demo-app---explained)
 * [Reference](#reference)
 
 # Checkout flow options
@@ -21,7 +21,7 @@ The Standard Checkout Flow allows you to get up and running quicky with of our p
 * Pre-populating checkout page.
 * Launching checkout UI with simple start function.
 
-To see an image of the Standard Checkout Flow, click [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk). 
+To see an image of the Standard Checkout Flow, click [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk#standard-checkout-flow). 
 
 ## Custom Checkout Flow
 The Custom Checkout Flow enables you to easily accept credit card payments using our flexible credit card UI component, allowing you to have full control over the look and feel of your checkout experience. 
@@ -117,17 +117,17 @@ BlueSnapSDK.setBsToken(bsToken: bsToken)
 > **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase. 
 > **Tip**: Listen for the token expiration event to generate a new token if needed. You can see how we do it in the demo app: The helper function `listenForBsTokenExpiration()` listens for a token expiration error and `bsTokenExpired()` resolves the error by generating a new token. 
 
-→ If you're using the Standard Checkout Flow, then continue on to the next section. 
+→ If you're using the Standard Checkout Flow, then continue on to the next section. <br>
 → If you're using the Custom Checkout Flow, then jump down to [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow). 
 
 # Implementing Standard Checkout Flow
 This section will cover the following topics: 
-* [Configuring Apple Pay (optional)](#configuring-apple-pay-optional-)
+* [Configuring Apple Pay (optional)](#configuring-apple-pay-optional)
 * [Defining your checkout settings & callback function](#defining-your-checkout-settings-callback-function)
 * [Launching checkout UI](#launching-checkout-ui)
 
 ## Configuring Apple Pay (optional)
-Pass your Apple Pay Merchant ID to BlueSnap SDK by calling:
+Pass your [Apple Pay Merchant ID](#apple-pay-optional) to BlueSnap SDK by calling:
 
 ```swift
 BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example")
@@ -144,7 +144,7 @@ This function takes the parameters listed below. We'll go over setting `initialD
 | `initialData` | Object that holds price information, required checkout fields, and initial user data. |
 | `purchaseFunc` | Callback invoked after user's data is successfully submitted to BlueSnap. |
 
-See the [Reference](#show-checkout-screen) section below for more information on `showCheckoutScreen`. 
+See the [Reference](#showcheckoutscreen) section below for more information on `showCheckoutScreen`. 
 
 ### Defining initialData
 `initialData` (an instance of `BSInitialData`) allows you to initialize your checkout settings, such as price details, required user fields, and user data you've already collected.
@@ -154,7 +154,7 @@ fileprivate var initialData: BSInitialData! = BSInitialData()
 ```
 
 #### Defining priceDetails
-`priceDetails` (an instance of `BSPriceDetails`) is a property of `initialData` that contains properties for amount, tax amount, and [currency](https://developers.bluesnap.com/docs/currency-codes). 
+`priceDetails` (an instance of `BSPriceDetails`) is a property of `initialData` that contains properties for amount, tax amount, and [currency](https://developers.bluesnap.com/docs/currency-codes). Set these properties to intialize the price details of the checkout page. 
 
 ```swift
 initialData.priceDetails = BSPriceDetails(amount: 25.00, taxAmount: 1.52, currency: "USD")
@@ -170,7 +170,7 @@ The following properties of `initialData` allow you to specify the required user
 
 *In the UI, shipping details are collected on a separate shipping details page.
 
-The following code will result in the flow shown [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk). Note that `fullBilling` is `false` and `withEmail` is `true` by default. 
+The following code will result in the flow shown [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk#standard-checkout-flow). Note that `fullBilling` is `false` and `withEmail` is `true` by default. 
 
 ```swift
 initialData.withShipping = true
@@ -194,13 +194,13 @@ In ViewController.swift of the demo app, take a look at the `setInitialShopperDe
 `purchaseFunc` will be called with an instance of either the `BSApplePayPaymentRequest` class (if the user selected Apple Pay), `BSCcPaymentRequest` class (if the user selected credit card), or `BSPayPalPaymentRequest` class (if the user selected PayPal) – all classes derive from `BSBasePaymentRequest`. 
 
 Within `purchaseFunc`, the following logic will apply: 
-1. Detect the specific payment method the user chose. 
+1. Detect the specific payment method the user selected. 
 
 2. If the user selected PayPal, no further action is required - transaction is complete. Show success message.
 
 3. If the user selected Apple Pay or credit card, update your server with the order details and the token.
 
-4. From your server, [complete the purchase](#send-the-payment-for-processing) with your token. 
+4. From your server, [complete the purchase](#sending-the-payment-for-processing) with your token. 
 
 5. After receiving BlueSnap's response, update the client and display an appropriate message to the user. 
 
@@ -252,9 +252,9 @@ This section will cover the following topics:
 * [Setting up your submit action](#setting-up-your-submit-action)
 
 ## Configuring BSCcInputLine
-[`BSCcInputLine`](#bsccinputline) is a UIView that holds the user's sensitive credit card data - credit card number, expiration date, and CVV. In addition to supplying an elegant user experience, it handles input validations, and submits the secured data to the BlueSnap server. Simply place a UIView in your storyboard and change the class to `BSCcInputLine`.
+[`BSCcInputLine`](#bsccinputline) is a UIView that holds the user's sensitive credit card data - credit card number, expiration date, and CVV. In addition to supplying an elegant user experience, it handles input validations, and submits the secured data to BlueSnap. Simply place a UIView in your storyboard and set its class to `BSCcInputLine`.
 
-> If you would rather build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap's server. Visit the [Reference]() section to learn more.
+> If you would rather build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submitccdetails) section to learn more.
 
 ## Setting up BSCcInputLineDelegate
 If you're using `BSCcInputLine` to collect the user's data, in your `viewController` you'll need to implement `BSCcInputLineDelegate`, which has 6 methods:
@@ -272,8 +272,7 @@ If you're using `BSCcInputLine` to collect the user's data, in your `viewControl
 1. Detect if the user's card data was successfully submitted to BlueSnap (i.e. error is `nil`). 
 
 
-2. If error is `nil`, you'll get the CC type, issuing country, and last 4 digits of CC number. Update your server. 
-
+2. If error is `nil`, you'll get the CC type, issuing country, and last 4 digits of CC number within `ccDetails`. Update your server. 
 
 3. From your server, you'll [send the payment for processing](#sending-the-payment-for-processing) using your token.
 
@@ -353,11 +352,10 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 
 5. Define your `purchaseFunc` callback to call your application's server to complete the purchase (see [Defining your callback function](#defining-your-callback-function) for the logic of this function).
 
-6. Call `BlueSnapSDK.showCheckoutScreen` with`purchaseFunc` and its other [parameters](#showcheckoutcsreen) to launch the checkout UI for the user. 
+6. Call `BlueSnapSDK.showCheckoutScreen` with`purchaseFunc` and its other [parameters](#showcheckoutscreen) to launch the checkout UI for the user. 
 
 > **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling `BlueSnapSDK.showCurrencyList` with its associated parameters. 
  
-
  > **Important**: All transaction calls are for demonstration purposes only. These calls should be made from your server. 
 
 # Reference
@@ -628,10 +626,16 @@ Signature:
 
 * If the result is a `BSPayPalPaymentRequest`, then the transaction has already been completed! There is no need to send the transaction for processing from your server. 
 
+To see how to structure `purchaseFunc`, check out [Defining your callback function](#defining-your-callback-function). 
+
 ### submitCcDetails
 This function is relevant if you're collecting the user's card data using your own input fields. 
 When called, `submitCcDetails` submits the user's card data to BlueSnap's servers, where it will be associated with your token. 
 > **Note**: Do not send raw credit card data to your server. Use this function from the client-side to submit sensitive data directly to BlueSnap.  
+
+Signature:
+
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCcDetails, BSErrors?)->Void)
 
 | Parameter      | Description   |
 | ------------- | ------------- |
@@ -639,10 +643,6 @@ When called, `submitCcDetails` submits the user's card data to BlueSnap's server
 | `expDate` | CC expiration date in the format MM/YYYY |
 |`cvv` | CC security code (CVV) |
 |`completion`* | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
-
-Signature:
-
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCcDetails, BSErrors?)->Void)
 
 *Your `completion` callback should do the following: 
 1. Detect if the user's card data was successfully submitted to BlueSnap (if `BSError` is `nil`). 
@@ -663,7 +663,7 @@ Under the model file BSToken.swift, you will find this extension, which holds th
 
     public extension Notification.Name { static let bsTokenExpirationNotification = Notification.Name("bsTokenExpirationNotification") }
 
-If you look at the example app ViewController.swift, you will see at the bottom, the functions that handle the token. 
+If you look at the demo app in ViewController.swift, you will see the functions that handle the token at the bottom of the file.  
 
 * `listenForBsTokenExpiration()` - this function is called to start listening for the token expiration event.
 * `bsTokenExpired()` - this function handles the error by generating a new token.
