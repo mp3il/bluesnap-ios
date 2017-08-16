@@ -17,7 +17,8 @@ Pod::Spec.new do |s|
         'BluesnapSDK/**/*.xib',
         'BluesnapSDK/**/*.storyboard',
         'BluesnapSDK/**/Media.xcassets',
-    ]
+        'BluesnapSDK/**/*.strings' 
+	]
   }
   s.exclude_files = "BluesnapSDK/BluesnapSDKTests/**/*.*"
   s.resources = "BluesnapSDK/**/Media.xcassets"

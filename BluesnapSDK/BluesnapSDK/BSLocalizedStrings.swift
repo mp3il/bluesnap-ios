@@ -11,8 +11,12 @@ import Foundation
 class BSLocalizedStrings {
 
     open class func getString(_ str: BSLocalizedString) -> String {
+        
+        let key = str.rawValue
         let stringsBundle = BSViewsManager.getBundle()
-        return NSLocalizedString(str.rawValue, tableName: "BSLocalizable", bundle: stringsBundle, value: "", comment: "")
+        
+        let res : String = NSLocalizedString(key, tableName: "BSLocalizable", bundle: stringsBundle, value: "", comment: "")
+        return res
     }
 }
 

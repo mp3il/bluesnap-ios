@@ -71,7 +71,6 @@
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
 		2DADB9D81EC31F4200C1A2D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BlueSnap.storyboard; sourceTree = "<group>"; };
-		2DADB9DA1EC31F5400C1A2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BlueSnap.strings; sourceTree = "<group>"; };
 		DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayPayment.swift; sourceTree = "<group>"; };
 		DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayViewController.swift; sourceTree = "<group>"; };
 		DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayOperation.swift; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		FD68145C1F38762E00FAE1ED /* BSCcPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcPayment.swift; sourceTree = "<group>"; };
 		FD68145E1F38769300FAE1ED /* BSPayPalPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPayPalPayment.swift; sourceTree = "<group>"; };
 		FD6814661F4041B000FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/BSLocalizable.strings; sourceTree = "<group>"; };
+		FD91973D1F44667E008C266A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BSLocalizable.strings; sourceTree = "<group>"; };
 		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
 		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
 		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
@@ -320,10 +320,9 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
-				"he-IL",
 				de,
+				en,
 			);
 			mainGroup = 2D374F161E880E7200AE2A81;
 			productRefGroup = 2D374F211E880E7200AE2A81 /* Products */;
@@ -422,7 +421,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				2DADB9D81EC31F4200C1A2D2 /* Base */,
-				2DADB9DA1EC31F5400C1A2D2 /* en */,
 			);
 			name = BlueSnap.storyboard;
 			sourceTree = "<group>";
@@ -432,6 +430,7 @@
 			children = (
 				FD6814661F4041B000FAE1ED /* Base */,
 				FD461F5E1F42E0760050F0FD /* de */,
+				FD91973D1F44667E008C266A /* en */,
 			);
 			name = BSLocalizable.strings;
 			sourceTree = "<group>";
