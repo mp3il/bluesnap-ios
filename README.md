@@ -717,6 +717,14 @@ Signature:
  
 #### showCurrencyList
 This function navigates to the currency list, allowing the user to change the current currency selection.
+Signature:
+
+    open class func showCurrencyList(
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        selectedCurrencyCode : String!,
+        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+        errorFunc: @escaping()->Void)
 
 Parameters:
 
@@ -727,17 +735,7 @@ Parameters:
 | `selectedCurrencyCode` | 3 character [currency code](https://developers.bluesnap.com/docs/currency-codes) |
 | `updateFunc` | Callback function that will be invoked each time a new value is selected. |
 | `errorFunc` | Callback function that will be invoked if we fail to get the currencies. |
-
-Signature:
-
-    open class func showCurrencyList(
-        inNavigationController: UINavigationController!,
-        animated: Bool,
-        selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
-        errorFunc: @escaping()->Void)
- 
- 
+  
 ## Custom UI Controls
 If you want to build your own UI, you may find our custom controls useful, in themselves or to inherit from them and adjust to your own functionality.
 
