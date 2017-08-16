@@ -110,6 +110,8 @@
 		D4C1F041334E92065E9D2639 /* Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		DD1DA5729FE41DCDE3370A44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A1D0EF03F84A1CE191C991 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		FD461F5F1F42E3A80050F0FD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		FD461F601F42E3A90050F0FD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		FD68146E1F405EAD00FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD89AB631EB6038600A1B257 /* DemoTransactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoTransactions.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 2D4E27761E8808A700C56C46;
 			productRefGroup = 2D4E27801E8808A700C56C46 /* Products */;
@@ -453,6 +456,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				2D4E27871E8808A700C56C46 /* Base */,
+				FD461F5F1F42E3A80050F0FD /* de */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -469,6 +473,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				FD68146E1F405EAD00FAE1ED /* Base */,
+				FD461F601F42E3A90050F0FD /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -480,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -531,6 +537,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

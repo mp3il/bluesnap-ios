@@ -1,0 +1,39 @@
+
+/* Class = "UITextField"; text = "20"; ObjectID = "1E4-kM-4oY"; */
+"1E4-kM-4oY.text" = "20";
+
+/* Class = "UILabel"; text = "Success!"; ObjectID = "A3N-It-HEB"; */
+"A3N-It-HEB.text" = "Success!";
+
+/* Class = "UITextField"; text = "1"; ObjectID = "AB2-QV-u38"; */
+"AB2-QV-u38.text" = "1";
+
+/* Class = "UILabel"; text = "Something went wrong"; ObjectID = "KfV-UR-b1h"; */
+"KfV-UR-b1h.text" = "Something went wrong";
+
+/* Class = "UILabel"; text = "With shipping"; ObjectID = "RTe-GM-YPU"; */
+"RTe-GM-YPU.text" = "With shipping";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "TT4-Lq-e8Y"; */
+"TT4-Lq-e8Y.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
+
+/* Class = "UINavigationItem"; title = "BlueSnap IOS SDK Example App"; ObjectID = "Wrn-am-caX"; */
+"Wrn-am-caX.title" = "BlueSnap IOS SDK Example App";
+
+/* Class = "UIButton"; normalTitle = "USD"; ObjectID = "dMR-1J-U5n"; */
+"dMR-1J-U5n.normalTitle" = "USD";
+
+/* Class = "UILabel"; text = "Amount:"; ObjectID = "iOS-3A-GN6"; */
+"iOS-3A-GN6.text" = "Amount:";
+
+/* Class = "UILabel"; text = "Full billing"; ObjectID = "l8V-G4-lWL"; */
+"l8V-G4-lWL.text" = "Full billing";
+
+/* Class = "UILabel"; text = "With Email"; ObjectID = "sqi-jc-dUs"; */
+"sqi-jc-dUs.text" = "With Email";
+
+/* Class = "UILabel"; text = "Tax:"; ObjectID = "uPH-f5-LxL"; */
+"uPH-f5-LxL.text" = "Tax:";
+
+/* Class = "UINavigationItem"; title = "Thank You"; ObjectID = "zz5-Bd-FDJ"; */
+"zz5-Bd-FDJ.title" = "Thank You";
