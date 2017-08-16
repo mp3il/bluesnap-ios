@@ -292,7 +292,7 @@ import Foundation
             }
             task.resume()
             // This notification is because once we use the token for PayPal - it cannot be used again
-            notifyTokenExpired()
+            //notifyTokenExpired()
         }
         
     }
