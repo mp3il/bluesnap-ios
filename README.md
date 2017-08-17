@@ -159,7 +159,7 @@ fileprivate var initialData: BSInitialData! = BSInitialData()
 ```swift
 initialData.priceDetails = BSPriceDetails(amount: 25.00, taxAmount: 1.52, currency: "USD")
 ```
-> **Note**: The PayPal button will be displayed on the Payment Method screen only if `currency` is set to a currency supported by your PayPal configuration. See the [PayPal Guide](https://support.bluesnap.com/docs/connecting-paypal-and-bluesnap#section-4-synchronize-your-currency-balances) for more information. 
+> **Note**: If you're using PayPal, please note that PayPal will be an available payment method only if `currency` is set to a currency supported by your [PayPal configuration](https://support.bluesnap.com/docs/connecting-paypal-and-bluesnap#section-4-synchronize-your-currency-balances).
 
 #### Specifying required checkout fields
 The following properties of `initialData` allow you to specify the required user information. Note that name, credit card number, exp. date, CVV, and zip are always required. 
