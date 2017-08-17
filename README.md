@@ -358,7 +358,7 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 
 6. Call `BlueSnapSDK.showCheckoutScreen` with`purchaseFunc` and its other [parameters](#showcheckoutscreen) to launch the checkout UI for the user. 
 
-> **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling `BlueSnapSDK.showCurrencyList` with its associated parameters. 
+> **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling [`BlueSnapSDK.showCurrencyList`](#showcurrencylist) with its associated parameters. 
  
  > **Important**: All transaction calls are for demonstration purposes only. These calls should be made from your server. 
 
