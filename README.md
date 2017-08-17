@@ -78,7 +78,7 @@ Landscape mode is not supported in our UI, so in order to make sure the screen d
 This SDK is written in Swift. If your application is written in Objective-C, you might need to embed a Swift runtime library. Please follow [Apple's documentation](https://developer.apple.com/library/content/qa/qa1881/_index.html) to set up your project accordingly.
 
 ## Apple Pay (optional)
-In the Standard Checkout Flow, Apple Pay is available for you to offer in your app. You will need to create a new Apple Pay Certificate and configure Apple Pay in Xcode. Detailed instructions are available in our [Apple Pay Guide](https://developers.bluesnap.com/docs/apple-pay#section-implementing-apple-pay-in-your-website-or-ios-app). 
+In the Standard Checkout Flow, Apple Pay is available for you to offer in your app. You will need to create a new Apple Pay Certificate, Apple Merchant ID, and configure Apple Pay in Xcode. Detailed instructions are available in our [Apple Pay Guide](https://developers.bluesnap.com/docs/apple-pay#section-implementing-apple-pay-in-your-website-or-ios-app). 
 
 ## PayPal (optional)
 In the Standard Checkout Flow, you have the option to accept PayPal payments in your app. Follow these steps: 
@@ -115,7 +115,7 @@ BlueSnapSDK.setBsToken(bsToken: bsToken)
 ```
 
 > **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase. <br>
-> **Tip**: Listen for the token expiration event to generate a new token if needed. You can see how we do it in the demo app: The helper function `listenForBsTokenExpiration()` listens for a token expiration error and `bsTokenExpired()` resolves the error by generating a new token. 
+> **Tip**: Listen for the token expiration event to generate a new token if needed. You can see how we do it in the demo app: The helper function `listenForBsTokenExpiration()` listens for a token expiration notification and `bsTokenExpired()` resolves the issue by generating a new token. 
 
 → If you're using the Standard Checkout Flow, then continue on to the next section. <br>
 → If you're using the Custom Checkout Flow, then jump down to [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow). 
@@ -127,7 +127,7 @@ This section will cover the following topics:
 * [Launching checkout UI](#launching-checkout-ui)
 
 ## Configuring Apple Pay (optional)
-Pass your [Apple Pay Merchant ID](#apple-pay-optional) to BlueSnap SDK by calling:
+Pass your [Apple Pay Merchant ID](#apple-pay-optional) to the BlueSnap SDK by calling:
 
 ```swift
 BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example")
@@ -257,7 +257,7 @@ This section will cover the following topics:
 [`BSCcInputLine`](#bsccinputline) is a UIView that holds the user's sensitive credit card data - credit card number, expiration date, and CVV. In addition to supplying an elegant user experience, it handles input validations, and submits the secured data to BlueSnap. Simply place a UIView in your storyboard and set its class to `BSCcInputLine`.
 
 > **Notes**: 
-> * In addition to card details, be sure to collect the shopper information marked as **required** on this [page](https://developers.bluesnap.com/v8976-JSON/docs/card-holder-info). 
+> * In addition to card details, BlueSnap requires the user's details marked as **required** on this [page](https://developers.bluesnap.com/v8976-JSON/docs/card-holder-info), so be sure to collect this information from the user. 
 > * If you would rather build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submitccdetails) section to learn more.
 
 ## Setting up BSCcInputLineDelegate
@@ -287,7 +287,7 @@ On your "submit" action (i.e. when the user submits their payment during checkou
 
 If the validation was successful (i.e. `validate` returns `true`), then call `BSCcInputLine`'s `submitPaymentFields()` function, which will call the `didSubmitCreditCard` callback with the results of the submission. 
 
-And that's it! You're ready to start accepting credit card payments! 
+Congratulations, you're ready to start accepting credit card payments! 
 
 # Sending the payment for processing
 For credit card and Apple Pay payments, you will use our Payment API with your token to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture), [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) or [subscription](https://developers.bluesnap.com/v8976-JSON/docs/create-subscription) request, or to attach the payment details to a [shopper](https://developers.bluesnap.com/v8976-JSON/docs/create-vaulted-shopper). 
