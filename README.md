@@ -478,13 +478,13 @@ public class BSShippingAddressDetails : BSBaseAddressDetails {
 
 ### BSPaymentType (in BSPurchaseDataModel.swift)
 This enum differentiates between the payment method the user chose. It will contain cases for credit card, Apple Pay, and PayPal. 
-
-    public enum BSPaymentType {
-    	case CreditCard = "CC"
-    	case ApplePay = "APPLE_PAY"
-        case PayPal = "PAYPAL"
-	}
-
+```
+public enum BSPaymentType {
+	case CreditCard = "CC"
+	case ApplePay = "APPLE_PAY"
+	case PayPal = "PAYPAL"
+}
+```
 ### BSBasePaymentRequest (in BSPurchaseDataModel.swift)
 The central data structure is this class (and its derived classes), which holds user data that is both input and output. This is an abbreviated version of the class:
 
@@ -693,12 +693,12 @@ These currency structures and methods assist you in performing currency conversi
 #### Currency Data Structures
 We have 2 data structures (see BSCurrencyModel.swift): 	`BSCurrency` holds a single currency and  `BSCurrencies` holds all the currencies.
 
-    public class BSCurrency {
-    	internal var name : String!
+```
+public class BSCurrency {
+	internal var name : String!
 	internal var code : String!
 	internal var rate: Double!
 	...
-	}
 	public func getName() -> String! {
 		return self.name
 	}
@@ -707,22 +707,22 @@ We have 2 data structures (see BSCurrencyModel.swift): 	`BSCurrency` holds a sin
 	}
 	public func getRate() -> Double! {
 		return self.rate
-	 }
-    }
+	}
+}
 
-    public class BSCurrencies {
-    ...
-        public func getCurrencyByCode(code : String!) -> BSCurrency? {
-            ...
-        }
-        public func getCurrencyIndex(code : String) -> Int? {
-            ...
-        }
-        public func getCurrencyRateByCurrencyCode(code : String!) -> Double? {
-            ...
-        }
-    }
- 
+public class BSCurrencies {
+	...
+	public func getCurrencyByCode(code : String!) -> BSCurrency? {
+		...
+	}
+	public func getCurrencyIndex(code : String) -> Int? {
+		...
+	}
+	public func getCurrencyRateByCurrencyCode(code : String!) -> Double? {
+		...
+	}
+}
+```
 #### Currency Functionality (in BlueSnapSDK class):
 ##### getCurrencyRates
 This function returns a list of currencies and their rates from BlueSnap. 
