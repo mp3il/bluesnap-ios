@@ -446,29 +446,35 @@ Optional/Mandatory:
 * For full billing details, everything is mandatory. 
 * For shipping details, all fields are mandatory except phone which is optional.
 
-	    public class BSBaseAddressDetails {
-		public init() {}
-		public var name : String! = ""
-		public var address : String?
-		public var city : String?
-		public var zip : String?
-		public var country : String?
-		public var state : String?
+```
+     public class BSBaseAddressDetails {
+    
+    	public init() {}
+    
+    	public var name : String! = ""
+    	public var address : String?
+    	public var city : String?
+    	public var zip : String?
+    	public var country : String?
+    	public var state : String?
+    
+    	public func getSplitName() -> (firstName: String, lastName: String)? {
+        	return BSStringUtils.splitName(name)
+    	}
+    }
 
-		public func getSplitName() -> (firstName: String, lastName: String)? {
-			return BSStringUtils.splitName(name)
-		}
-	    }
-	    
-	    public class BSBillingAddressDetails : BSBaseAddressDetails {
-	    	public override init() { super.init() }
-		public var email : String?
-	    }
-	    
-	    public class BSShippingAddressDetails : BSBaseAddressDetails {
-	    	public override init() { super.init() }
-		public var phone : String?
-	    }
+    public class BSBillingAddressDetails : BSBaseAddressDetails {
+    
+    	public override init() { super.init() }
+    	public var email : String?
+    }
+
+    public class BSShippingAddressDetails : BSBaseAddressDetails {
+    
+    	public override init() { super.init() }
+    	public var phone : String?
+    }
+```
 
 ### BSPaymentType (in BSPurchaseDataModel.swift)
 This enum differentiates between the payment method the user chose. It will contain cases for credit card, Apple Pay, and PayPal. 
