@@ -114,7 +114,7 @@ Initialize the SDK by passing `bsToken` to the [`setBsToken`](#setbstoken) funct
 BlueSnapSDK.setBsToken(bsToken: bsToken)
 ```
 
-> **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase. 
+> **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase. <br>
 > **Tip**: Listen for the token expiration event to generate a new token if needed. You can see how we do it in the demo app: The helper function `listenForBsTokenExpiration()` listens for a token expiration error and `bsTokenExpired()` resolves the error by generating a new token. 
 
 → If you're using the Standard Checkout Flow, then continue on to the next section. <br>
