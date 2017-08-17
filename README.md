@@ -738,7 +738,7 @@ Parameters:
 | `inNavigationController` | Your ViewController's navigationController (to be able to navigate back). |
 | `animated` | Determines how to navigate to new screen. If `true`, then transition is animated.  |
 | `selectedCurrencyCode` | 3 character [currency code](https://developers.bluesnap.com/docs/currency-codes) |
-| `updateFunc` | Callback function that will be invoked each time a new value is selected. See the function `updateViewWithNewCurrency` from demo app to see how to update checkout details/UI fields according tp the new currency. |
+| `updateFunc` | Callback function that will be invoked each time a new value is selected. <br> See the function `updateViewWithNewCurrency` from demo app to see how to update checkout details according to new currency. |
 | `errorFunc` | Callback function that will be invoked if we fail to get the currencies. |
   
 ## Custom UI Controls
