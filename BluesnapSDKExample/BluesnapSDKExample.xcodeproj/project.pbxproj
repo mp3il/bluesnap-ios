@@ -110,11 +110,11 @@
 		D4C1F041334E92065E9D2639 /* Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		DD1DA5729FE41DCDE3370A44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A1D0EF03F84A1CE191C991 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		FD461F5F1F42E3A80050F0FD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		FD461F601F42E3A90050F0FD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		FD68146E1F405EAD00FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD89AB631EB6038600A1B257 /* DemoTransactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoTransactions.swift; sourceTree = "<group>"; };
+		FD9197341F443A8A008C266A /* de */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = de; path = de.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYouViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -456,7 +456,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				2D4E27871E8808A700C56C46 /* Base */,
-				FD461F5F1F42E3A80050F0FD /* de */,
+				FD9197341F443A8A008C266A /* de */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
