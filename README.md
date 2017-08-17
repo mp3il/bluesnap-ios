@@ -257,8 +257,8 @@ This section will cover the following topics:
 [`BSCcInputLine`](#bsccinputline) is a UIView that holds the user's sensitive credit card data - credit card number, expiration date, and CVV. In addition to supplying an elegant user experience, it handles input validations, and submits the secured data to BlueSnap. Simply place a UIView in your storyboard and set its class to `BSCcInputLine`.
 
 > **Notes**: 
-> * In addition to card details, BlueSnap requires the user's details marked as **required** on this [page](https://developers.bluesnap.com/v8976-JSON/docs/card-holder-info), so be sure to collect this information from the user. 
-> * If you would rather build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submitccdetails) section to learn more.
+> * Be sure to collect the user information marked as **Required** on [this page](https://developers.bluesnap.com/v8976-JSON/docs/card-holder-info).
+> * If you woule like to build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submitccdetails) section to learn more.
 
 ## Setting up BSCcInputLineDelegate
 If you're using `BSCcInputLine` to collect the user's data, in your `viewController` you'll need to implement `BSCcInputLineDelegate`, which has 6 methods:
