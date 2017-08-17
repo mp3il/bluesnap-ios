@@ -437,43 +437,38 @@ This class contains the price details that are both input and output for the pur
 
 ### BSBaseAddressDetails, BSBillingAddressDetails, BSShippingAddressDetails (in BSAddress.swift)
 
-These classes hold the user's details for either billing or shipping. 
+These classes hold the user's bill and shipping details. 
 Optional/Mandatory:
 * Email will be collected only if `withEmail` is set to `true` in `BSInitialData`. 
 * State is mandatory only if the country has state (USA, Canada and Brazil).
-* Zip is mandatory except for countries that have no postal/zip code.
+* Zip is always mandatory except for countries that have no postal/zip code.
 * If you choose not to use the full billing option, name, country and zip are required, and email is optional.
 * For full billing details, everything is mandatory. 
 * For shipping details, all fields are mandatory except phone which is optional.
 
+	    public class BSBaseAddressDetails {
+		public init() {}
+		public var name : String! = ""
+		public var address : String?
+		public var city : String?
+		public var zip : String?
+		public var country : String?
+		public var state : String?
 
-     public class BSBaseAddressDetails {
-    
-    	public init() {}
-    
-    	public var name : String! = ""
-    	public var address : String?
-    	public var city : String?
-    	public var zip : String?
-    	public var country : String?
-    	public var state : String?
-    
-    	public func getSplitName() -> (firstName: String, lastName: String)? {
-        	return BSStringUtils.splitName(name)
-    	}
-    }
-
-    public class BSBillingAddressDetails : BSBaseAddressDetails {
-    
-    	public override init() { super.init() }
-    	public var email : String?
-    }
-
-    public class BSShippingAddressDetails : BSBaseAddressDetails {
-    
-    	public override init() { super.init() }
-    	public var phone : String?
-    }
+		public func getSplitName() -> (firstName: String, lastName: String)? {
+			return BSStringUtils.splitName(name)
+		}
+	    }
+	    
+	    public class BSBillingAddressDetails : BSBaseAddressDetails {
+	    	public override init() { super.init() }
+		public var email : String?
+	    }
+	    
+	    public class BSShippingAddressDetails : BSBaseAddressDetails {
+	    	public override init() { super.init() }
+		public var phone : String?
+	    }
 
 ### BSPaymentType (in BSPurchaseDataModel.swift)
 This enum differentiates between the payment method the user chose. It will contain cases for credit card, Apple Pay, and PayPal. 
@@ -640,6 +635,8 @@ When called, `submitCcDetails` submits the user's card data to BlueSnap's server
 Signature:
 
     open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCcDetails, BSErrors?)->Void)
+    
+Parameter: 
 
 | Parameter      | Description   |
 | ------------- | ------------- |
