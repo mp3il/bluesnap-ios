@@ -688,10 +688,20 @@ In our UI we allow the user to change the used currency. In case you need this f
 We have 2 data structures (see BSCurrencyModel.swift): BSCurrency holds a single currency, and  BSCurrencies holds all the currencies.
 
     public class BSCurrency {
-        internal var name : String!
-        internal var code : String!
-        internal var rate: Double!
-    ...
+    	internal var name : String!
+	internal var code : String!
+	internal var rate: Double!
+	...
+	}
+	public func getName() -> String! {
+		return self.name
+	}
+	public func getCode() -> String! {
+		return self.code
+	}
+	public func getRate() -> Double! {
+		return self.rate
+	 }
     }
 
     public class BSCurrencies {
