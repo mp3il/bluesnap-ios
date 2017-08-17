@@ -123,7 +123,7 @@ BlueSnapSDK.setBsToken(bsToken: bsToken)
 # Implementing Standard Checkout Flow
 This section will cover the following topics: 
 * [Configuring Apple Pay (optional)](#configuring-apple-pay-optional)
-* [Defining your checkout settings & callback function](#defining-your-checkout-settings-callback-function)
+* [Defining your checkout settings & callback function](#defining-your-checkout-settings--callback-function)
 * [Launching checkout UI](#launching-checkout-ui)
 
 ## Configuring Apple Pay (optional)
@@ -365,7 +365,7 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 # Reference
 This section will cover the following topics: 
 * [Data structures](#data-structures)
-* [Main functionality - BlueSnapSDK class](#main-functionality-bluesnapsdk-class)
+* [Main functionality - BlueSnapSDK class](#main-functionality---bluesnapsdk-class)
 * [Handling token expiration](#handling-token-expiration)
 * [Helper classes](#helper-classes)
 * [Custom UI controls](#custom-ui-controls)
