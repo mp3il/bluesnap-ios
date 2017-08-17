@@ -678,10 +678,12 @@ If the user gets an error and you generate a new token,  the second purchase att
 These helper classes provide additional functionality you can take advantage of, such as string valiations and currency conversions. 
  
 ### String Utils and Validations
-**BSStringUtils** supplies string helper functions like removeWhitespaces, removeNoneDigits, etc.
-**BSValidator** provides lots of validation functions like isValidEmail, getCcLengthByCardType, formatCCN, getCCTypeByRegex, etc.
-The code is self-explanatory and has comments where needed.
- 
+#### BSStringUtils (in BSStringUtils.swift)
+This string provide string helper functions like removeWhitespaces, removeNoneDigits, etc. 
+
+#### BSValidator (in BSValidator.swift)
+This class provides validation functions like isValidEmail, getCcLengthByCardType, formatCCN, getCCTypeByRegex, etc. to help you format credit card information, and validate user details. 
+
 ### Handling currencies and rates
 These currency structures and methods assist you in performing currency conversions during checkout.
 
@@ -719,7 +721,6 @@ We have 2 data structures (see BSCurrencyModel.swift): 	`BSCurrency` holds a sin
     }
  
 #### Currency Functionality (in BlueSnapSDK class):
-
 ##### getCurrencyRates
 This function returns a list of currencies and their rates from BlueSnap. 
 
