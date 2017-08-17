@@ -15,8 +15,8 @@ This document will cover the following topics:
 # Checkout flow options
 The BlueSnap iOS SDK provides two elegant checkout flows to choose from. 
 ## Standard Checkout Flow 
-The Standard Checkout Flow allows you to get up and running quicky with of our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.
- Some of the benefits include:
+The Standard Checkout Flow allows you to get up and running quicky with our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.
+ Some of the capabilities include:
 * Specifying required user info, such as email or billing address. 
 * Pre-populating checkout page.
 * Launching checkout UI with simple start function.
@@ -25,7 +25,7 @@ To see an image of the Standard Checkout Flow, click [here](https://developers.b
 
 ## Custom Checkout Flow
 The Custom Checkout Flow enables you to easily accept credit card payments using our flexible credit card UI component, allowing you to have full control over the look and feel of your checkout experience. 
-Some of the benefits include: 
+Some of the capabilities include: 
 * Flexible and customizable UI element with built-in validations and card-type detection.
 * Helper classes to assist you in currency conversions, removing whitespace, and more.
 * Simple function that submits sensitive card details directly to BlueSnap's server.
@@ -159,6 +159,8 @@ fileprivate var initialData: BSInitialData! = BSInitialData()
 ```swift
 initialData.priceDetails = BSPriceDetails(amount: 25.00, taxAmount: 1.52, currency: "USD")
 ```
+> **Note**: The PayPal button will be displayed on the Payment Method screen only if `currency` is set to a currency supported by your PayPal configuration. See the [PayPal Guide](https://support.bluesnap.com/docs/connecting-paypal-and-bluesnap#section-4-synchronize-your-currency-balances) for more information. 
+
 #### Specifying required checkout fields
 The following properties of `initialData` allow you to specify the required user information. Note that name, credit card number, exp. date, CVV, and zip are always required. 
 
