@@ -605,6 +605,14 @@ Signature:
 ### showCheckoutScreen
 This is the main function for the Standard Checkout Flow (you'll call it after calling `setBsToken` with the token you generated). Once you call `showCheckoutScreen`, the SDK starts the checkout flow of choosing the payment method and collecting the user's details.
 
+Signature:
+
+    open class func showCheckoutScreen(
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        initialData: BSInitialData!
+        purchaseFunc: @escaping (BSBasePaymentDetails!)->Void)
+
 Parameters:
 
 | Parameter | Description |
@@ -613,14 +621,6 @@ Parameters:
 | `animated` | Boolean that indicates if page transitions are animated. If `true`, wipe transition is used. If `false`, no animation is used - pages replace one another at once. |
 | `initialData` | Object that holds price information, required checkout fields, and initial user data. |
 | `purchaseFunc`* | Callback invoked after user's data is successfully submitted to BlueSnap. |
-   
-Signature:
-
-    open class func showCheckoutScreen(
-        inNavigationController: UINavigationController!,
-        animated: Bool,
-        initialData: BSInitialData!
-        purchaseFunc: @escaping (BSBasePaymentDetails!)->Void)
 
 *`purchaseFunc` will be invoked with one of the following class instances (if and only if data submission to BlueSnap was successful): 
 
