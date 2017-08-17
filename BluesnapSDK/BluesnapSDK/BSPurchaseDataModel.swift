@@ -42,7 +42,7 @@ public enum BSPaymentType : String {
     }
     
     // MARK: Change currency methods
-    
+
     /*
     Change currency will also change the amounts according to the change rates
     */

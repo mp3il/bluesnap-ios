@@ -25,12 +25,12 @@ class BSViewsManager {
     fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
     fileprivate static var currencyScreen: BSCurrenciesViewController!
     fileprivate static var bsBundle: Bundle = createBundle()
-    
+
     /**
      Create the bundle containing BlueSnap assets
      */
     private static func createBundle() -> Bundle {
-        
+
         let bundleforURL = Bundle(for: BSViewsManager.self)
         if let bundleurl = bundleforURL.url(forResource: "BluesnapUI", withExtension: "bundle") {
             return Bundle(url: bundleurl)!
@@ -38,12 +38,12 @@ class BSViewsManager {
             return Bundle(identifier: BSViewsManager.bundleIdentifier)!;
         }
     }
-    
+
     /**
      Get the bundle containing BlueSnap assets
      */
     open static func getBundle() -> Bundle {
-        
+
         return bsBundle
     }
 
@@ -209,7 +209,7 @@ class BSViewsManager {
         let messageText = BSLocalizedStrings.getString(message)
         return createErrorAlert(title: title, message: messageText)
     }
-    
+
     open class func createErrorAlert(title: BSLocalizedString, message: String) -> UIAlertController {
         let titleText = BSLocalizedStrings.getString(title)
         let okButtonText = BSLocalizedStrings.getString(BSLocalizedString.Alert_OK_Button_Text)
