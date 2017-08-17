@@ -139,7 +139,7 @@ This function takes the parameters listed below. We'll go over setting `initialD
 
 | Parameter | Description |
 | ------------- | ------------- |
-| `inNavigationController`  | Your `viewController`'s `navigationController` (to be able to navigate back).  |
+| `inNavigationController`  | Your `ViewController`'s `navigationController` (to be able to navigate back).  |
 | `animated` | Boolean that indicates if page transitions are animated. If `true`, wipe transition is used. If `false`, no animation is used - pages replace one another at once. |
 | `initialData` | Object that holds price information, required checkout fields, and initial user data. |
 | `purchaseFunc` | Callback invoked after user's data is successfully submitted to BlueSnap. |
@@ -261,7 +261,7 @@ This section will cover the following topics:
 > * If you woule like to build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submitccdetails) section to learn more.
 
 ## Setting up BSCcInputLineDelegate
-If you're using `BSCcInputLine` to collect the user's data, in your `viewController` you'll need to implement `BSCcInputLineDelegate`, which has 6 methods:
+If you're using `BSCcInputLine` to collect the user's data, in your `ViewController` you'll need to implement `BSCcInputLineDelegate`, which has 6 methods:
 
 | Method      | Description   |
 | ------------- | ------------- |
@@ -609,7 +609,7 @@ Parameters:
 
 | Parameter | Description |
 | ------------- | ------------- |
-| `inNavigationController`  | Your `viewController`'s `navigationController` (to be able to navigate back).  |
+| `inNavigationController`  | Your `ViewController`'s `navigationController` (to be able to navigate back).  |
 | `animated` | Boolean that indicates if page transitions are animated. If `true`, wipe transition is used. If `false`, no animation is used - pages replace one another at once. |
 | `initialData` | Object that holds price information, required checkout fields, and initial user data. |
 | `purchaseFunc`* | Callback invoked after user's data is successfully submitted to BlueSnap. |
@@ -734,7 +734,7 @@ Parameters:
 
 | Parameter      | Description   |
 | ------------- | ------------- |
-| `inNavigationController` | Your viewController's navigationController (to be able to navigate back). |
+| `inNavigationController` | Your ViewController's navigationController (to be able to navigate back). |
 | `animated` | Determines how to navigate to new screen. If `true`, then transition is animated.  |
 | `selectedCurrencyCode` | 3 character [currency code](https://developers.bluesnap.com/docs/currency-codes) |
 | `updateFunc` | Callback function that will be invoked each time a new value is selected. |
