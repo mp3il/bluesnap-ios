@@ -1,6 +1,6 @@
 # BlueSnap iOS SDK overview
 BlueSnap's iOS SDK enables you to easily accept credit card payments directly from your iOS app and then process the payments via BlueSnap's Payment API. Additionally, if you use the Standard Checkout Flow (described below), you can easily process Apple Pay and PayPal payments as well.
-When you use this library, BlueSnap handles most of the PCI compliance burden for you, as the user's payment data is tokenized and sent directly to BlueSnap's servers.
+When you use this library, BlueSnap handles most of the PCI compliance burden for you, as the user's payment data is tokenized and sent directly to BlueSnap.
 
 This document will cover the following topics: 
 * [Checkout flow options](#checkout-flow-options)
@@ -675,7 +675,7 @@ If you look at the demo app in ViewController.swift, you will see the functions 
 If the user gets an error and you generate a new token,  the second purchase attempt (with the new token) will succeed. 
 
 ## Helper Classes
-We provide several classes that give some functionality you can use if you want to build your own checkout flow or re-use our code in any way.
+These helper classes provide additional functionality you can take advantage of, such as string valiations and currency conversions. 
  
 ### String Utils and Validations
 **BSStringUtils** supplies string helper functions like removeWhitespaces, removeNoneDigits, etc.
@@ -683,9 +683,10 @@ We provide several classes that give some functionality you can use if you want 
 The code is self-explanatory and has comments where needed.
  
 ### Handling currencies and rates
-In our UI we allow the user to change the used currency. In case you need this functionality in your app, we provide easy methods to do that.
-### Currency Data Structures
-We have 2 data structures (see BSCurrencyModel.swift): BSCurrency holds a single currency, and  BSCurrencies holds all the currencies.
+These currency structures and methods assist you in performing currency conversions during checkout.
+
+#### Currency Data Structures
+We have 2 data structures (see BSCurrencyModel.swift): 	`BSCurrency` holds a single currency and  `BSCurrencies` holds all the currencies.
 
     public class BSCurrency {
     	internal var name : String!
@@ -717,10 +718,10 @@ We have 2 data structures (see BSCurrencyModel.swift): BSCurrency holds a single
         }
     }
  
-### Currency Functionality (in BlueSnapSDK class):
+#### Currency Functionality (in BlueSnapSDK class):
 
-#### getCurrencyRates
-This function returns a list of currencies and their rates from BlueSnap server
+##### getCurrencyRates
+This function returns a list of currencies and their rates from BlueSnap. 
 
 Signature:
 
@@ -729,8 +730,8 @@ Signature:
 Parameters:
 - throws `BSApiErrors`
  
-#### showCurrencyList
-This function navigates to the currency list, allowing the user to change the current currency selection.
+##### showCurrencyList
+If you're using the Standard Checkout Flow, you can use this function to take advantage of our currency selection screen, allowing the user to select a new currency to pay in. To see an example of calling this function, see ViewController.swift of the demo app. 
 
 Signature:
 
@@ -739,7 +740,8 @@ Signature:
         animated: Bool,
         selectedCurrencyCode : String!,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
-        errorFunc: @escaping()->Void)
+        errorFunc: @escaping()->Void
+    )
 
 Parameters:
 
