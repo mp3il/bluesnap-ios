@@ -265,12 +265,12 @@ If you're using `BSCcInputLine` to collect the user's data, in your `ViewControl
 
 | Method      | Description   |
 | ------------- | ------------- |
-| `startEditCreditCard()` | Called just before the user enters the "open" state of CC field to edit it (in the UI, BlueSnap uses this stage to hide other fields). |
-| `endEditCreditCard()` | Called after the user exits the CC field and we "close" it to show CC number last 4 digits (in the UI, BlueSnap uses this stage to un-hide the other fields). |
-| `willCheckCreditCard()` | Called just before submitting the CC number to BlueSnap servers for validation (this action is asynchronous; in the UI, BlueSnap does nothing at this stage). |
-| `didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors)` | Called when we get the CC number validation response; if the error is empty, you will get the CC type, issuing country and last 4 digits inside `ccDetails` (in the UI, BlueSnap uses this stage to change the icon for the credit card type). Errors are shown by the component, you need not handle them. |
+| `startEditCreditCard()` | Called just before the user enters the Open state of CC field to edit it (in the UI, BlueSnap uses this stage to hide other fields). |
+| `endEditCreditCard()` | Called after the user exits the CC field and it is the Closed state to show last 4 digits of CC number (in the UI, BlueSnap uses this stage to un-hide the other fields). |
+| `willCheckCreditCard()` | Called just before submitting the CC number to BlueSnap for validation (this action is asynchronous; in the UI, BlueSnap does nothing at this stage). |
+| `didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors)` | Called when BlueSnap gets the CC number validation response; if the error is empty, you will get the CC type, issuing country, and last 4 digits of CC number inside `ccDetails` (in the UI, BlueSnap uses this stage to change the icon for the credit card type). Errors are shown by the component, you need not handle them. |
 | `didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors)`* | Called when the response for the token submission is received (in the UI, BlueSnap uses this stage to close the window and callback the success action) – errors are shown by the component, you need not handle them. |
-| `showAlert(_ message: String)` | Called when we want to show an error (not a validation error, just an unexpected one). |
+| `showAlert(_ message: String)` | Called when there is an unexpected error (not a validation error). |
 
 *Within `didSubmitCreditCard`, you'll do the following: 
 1. Detect if the user's card data was successfully submitted to BlueSnap (i.e. error is `nil`). 
@@ -555,7 +555,7 @@ This class contains the user's non-sensitive CC details for the purchase, includ
 
 	@objc public class BSCcDetails : NSObject, NSCopying {
 		
-		// these fields are output - result of submitting the CC details to BlueSnap server
+		// these fields are output - result of submitting the CC details to BlueSnap
 		public var ccType : String?
 		public var last4Digits : String?
 		public var ccIssuingCountry : String?
@@ -635,7 +635,7 @@ To see how to structure `purchaseFunc`, check out [Defining your callback functi
 
 ### submitCcDetails
 This function is relevant if you're collecting the user's card data using your own input fields. 
-When called, `submitCcDetails` submits the user's card data to BlueSnap's servers, where it will be associated with your token. 
+When called, `submitCcDetails` submits the user's card data to BlueSnap, where it will be associated with your token. 
 > **Note**: Do not send raw credit card data to your server. Use this function from the client-side to submit sensitive data directly to BlueSnap.  
 
 Signature:
@@ -771,4 +771,4 @@ BSBaseTextInput is a UIView that holds a text field and optional image; you can 
 BSInputLine is a UIView that holds a label, text field and optional image; you can customize almost every part of it.
 
 ### BSCcInputLine
-BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data to the BlueSnap server, so that your application does not have to handle it.
+BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data to the BlueSnap, so that your application does not have to handle it.
