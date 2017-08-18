@@ -265,10 +265,10 @@ If you're using `BSCcInputLine` to collect the user's data, in your `ViewControl
 
 | Method      | Description   |
 | ------------- | ------------- |
-| `startEditCreditCard()` | Called just before the user enters the Open state of CC field to edit it (in the UI, BlueSnap uses this stage to hide other fields). |
-| `endEditCreditCard()` | Called after the user exits the CC field and it is the Closed state to show last 4 digits of CC number (in the UI, BlueSnap uses this stage to un-hide the other fields). |
+| `startEditCreditCard()` | Called just before the user enters the open state of CC field to edit it (in the UI, BlueSnap uses this stage to hide other fields). |
+| `endEditCreditCard()` | Called after the user exits the CC field and it is the closed state to show last 4 digits of CC number (in the UI, BlueSnap uses this stage to un-hide the other fields). |
 | `willCheckCreditCard()` | Called just before submitting the CC number to BlueSnap for validation (this action is asynchronous; in the UI, BlueSnap does nothing at this stage). |
-| `didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors)` | Called when BlueSnap gets the CC number validation response; if the error is empty, you will get the CC type, issuing country, and last 4 digits of CC number inside `ccDetails` (in the UI, BlueSnap uses this stage to change the icon for the credit card type). Errors are shown by the component, you need not handle them. |
+| `didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors)` | Called when BlueSnap gets the CC number validation response; if the error is empty, you will get the CC type, issuing country, and last 4 digits of CC number inside `ccDetails` (in the UI, BlueSnap uses this stage to change the icon for the credit card type). Errors are shown by the component, you do not need to handle them. |
 | `didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors)`* | Called when the response for the token submission is received (in the UI, BlueSnap uses this stage to close the window and callback the success action) – errors are shown by the component, you need not handle them. |
 | `showAlert(_ message: String)` | Called when there is an unexpected error (not a validation error). |
 
@@ -283,7 +283,7 @@ If you're using `BSCcInputLine` to collect the user's data, in your `ViewControl
 4. After you receive BlueSnap's response, you'll update the client and display an appropriate message to your user (i.e. "Congratulations, your payment was successful!" or "Oops, please try again.").
 
 ## Setting up your submit action
-On your "submit" action (i.e. when the user submits their payment during checkout), you should call `BSCcInputLine`'s `validate` function (which returns a boolean) to make sure the data is correct. 
+On your submit action (i.e. when the user submits their payment during checkout), you should call `BSCcInputLine`'s `validate` function (which returns a boolean) to make sure the data is correct. 
 
 If the validation was successful (i.e. `validate` returns `true`), then call `BSCcInputLine`'s `submitPaymentFields()` function, which will call the `didSubmitCreditCard` callback with the results of the submission. 
 
