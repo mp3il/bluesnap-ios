@@ -11,7 +11,9 @@ import Foundation
 @objc public class BSCountryManager: NSObject {
     
     public static let US_COUNTRY_CODE: String = "US"
-    
+
+    fileprivate static var countryManager = BSCountryManager()
+
     fileprivate var countryCodes : [String] = []
     fileprivate let COUNTRY_STATES : [String : [String : String]] = [
         "US": [
@@ -126,6 +128,10 @@ import Foundation
     override init() {
         super.init()
         initCountryCodes()
+    }
+    
+    open class func getInstance() -> BSCountryManager {
+        return countryManager
     }
     
     func initCountryCodes() {
