@@ -21,64 +21,22 @@ class BluesnapSDKTests: XCTestCase {
         super.tearDown()
     }
     
-    func testGetPayPalToken() {
+    //------------------------------------------------------
+    // MARK: setBsToken
+    //------------------------------------------------------
+    func testSetBsToken() {
+    
+        let token = BSToken(tokenStr: "aaa", isProduction: false)
+        BlueSnapSDK.setBsToken(bsToken: token)
         
-        createToken()
-        
-        let initialData = BSInitialData()
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
-        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
-
-        let semaphore = DispatchSemaphore(value: 0)
-
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
-            
-            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
-            semaphore.signal()
-        })
-        
-        semaphore.wait()
+        XCTAssertEqual(BSApiManager.apiToken, token)
     }
     
-    func testGetSupportedPaymentMethods() {
-    
-        createToken()
-        
-        do {
-            let supportedPaymentMethods = try BSApiManager.getSupportedPaymentMethods()
-            print(supportedPaymentMethods)
-            // again, see we don't go to the server
-            let supportedPaymentMethods2 = try BSApiManager.getSupportedPaymentMethods()
-            print(supportedPaymentMethods2)
-            // check that CC and ApplePay are supported
-            let ccIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.CreditCard)
-            XCTAssertTrue(ccIsSupported)
-            let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay)
-            XCTAssertTrue(applePayIsSupported)
-            let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal)
-            XCTAssertTrue(payPalIsSupported)
-        } catch let error {
-            print("Got wrong error \(error.localizedDescription)")
-            fatalError()
-        }
-    }
-    
-    func testGetTokenAndCurrencies() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        
-        createToken()
-        
-        let bsCurrencies = getCurrencies()
-        XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-        
-        let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-        NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
-            
-        let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-        NSLog("EUR currency rate is: \(eurCurrencyRate)")
-    }
 
+    //------------------------------------------------------
+    // MARK: submitCcDetails
+    //------------------------------------------------------
+    
     func testSubmitCCDetailsSuccess() {
  
         createToken()
@@ -87,7 +45,7 @@ class BluesnapSDKTests: XCTestCase {
         let cvv = "111"
         let exp = "10/2020"
         
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
             XCTAssert(error == nil, "error: \(error)")
@@ -115,31 +73,39 @@ class BluesnapSDKTests: XCTestCase {
     }
     
     
-    func testGetTokenWithBadCredentials() {
+    //------------------------------------------------------
+    // MARK: getCurrencyRates
+    //------------------------------------------------------
+
+    func testGetTokenAndCurrencies() {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
         
+        createToken()
+        
+        var bsCurrencies : BSCurrencies?
         do {
-            let _ = try BSApiManager.createBSToken(domain: BSApiManager.BS_SANDBOX_DOMAIN, user: "dummy", password: "dummypass")
-            print("We should have crashed here")
-            fatalError()
-        } catch let error as BSErrors {
-            if error == BSErrors.invalidInput {
-                print("Got the correct error")
-            } else {
-                print("Got wrong error \(error.localizedDescription)")
-                fatalError()
-            }
+            bsCurrencies = try BlueSnapSDK.getCurrencyRates()
         } catch let error {
             print("Got wrong error \(error.localizedDescription)")
             fatalError()
         }
+        XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+        
+        let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+        NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+        
+        let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+        NSLog("EUR currency rate is: \(eurCurrencyRate)")
     }
 
-   
-    // MARK: proivate functions
+    //------------------------------------------------------
+    // MARK: private functions
+    //------------------------------------------------------
     
     private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
         
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
             if let error = error {
@@ -159,17 +125,6 @@ class BluesnapSDKTests: XCTestCase {
             BSApiManager.setBsToken(bsToken: token)
         } catch let error {
             print("Got error \(error.localizedDescription)")
-            fatalError()
-        }
-    }
-    
-    private func getCurrencies() -> BSCurrencies! {
-        
-        do {
-            let bsCurrencies = try BSApiManager.getCurrencyRates()
-            return bsCurrencies!
-        } catch let error {
-            print("Got wrong error \(error.localizedDescription)")
             fatalError()
         }
     }
