@@ -16,13 +16,13 @@
 /* ------- BSCcInputLine ------- */
 
 /* General error while submitting CC to validate credit card */
-"Error_General_CC_Validation_Error" = "An error occurred";
+"Error_General_CC_Validation_Error" = "An error occurred. Please try again.";
 /* Token expired error while submitting CC details to BlueSnap server */
-"Error_Cc_Submit_Token_expired" = "Your session has expired, please go back and try again";
+"Error_Cc_Submit_Token_expired" = "An error occurred. Please try again.";
 /* Token not found error while submitting CC details to BlueSnap server */
-"Error_Cc_Submit_Token_not_found" = "Your session is invalid, please go back and try again";
+"Error_Cc_Submit_Token_not_found" = "An error occurred. Please try again.";
 /* General error while submitting CC details to BlueSnap server */
-"Error_General_CC_Submit_Error" = "An error occurred, please try again";
+"Error_General_CC_Submit_Error" = "An error occurred. Please try again.";
 
 /* ------- Validation errors ------- */
 
@@ -88,7 +88,7 @@
 /* Various Apple Pay errors */
 "Error_Not_available_on_this_device" = "Not available on this device";
 "Error_No_cards_set" = "No cards set";
-"Error_Setup_error" = "Setup error";
+"Error_Setup_error" = "Unable to connect to Apple Pay. Please select a different payment method.";
 "Error_General_ApplePay_error" = "Unable to connect to Apple Pay";
 
 

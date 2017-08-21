@@ -16,13 +16,13 @@
 /* ------- BSCcInputLine ------- */
 
 /* General error while submitting CC to validate credit card */
-"Error_General_CC_Validation_Error" = "Ein Fehler ist aufgetreten";
+"Error_General_CC_Validation_Error" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
 /* Token expired error while submitting CC details to BlueSnap server */
-"Error_Cc_Submit_Token_expired" = "Ihre Sitzung ist abgelaufen, bitte geh zurück und versuche es erneut";
+"Error_Cc_Submit_Token_expired" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
 /* Token not found error while submitting CC details to BlueSnap server */
-"Error_Cc_Submit_Token_not_found" = "Ihre Sitzung ist ungültig, bitte geh zurück und versuche es nochmal";
+"Error_Cc_Submit_Token_not_found" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
 /* General error while submitting CC details to BlueSnap server */
-"Error_General_CC_Submit_Error" = "Es ist ein Fehler aufgetreten. Versuchen Sie es erneut";
+"Error_General_CC_Submit_Error" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
 
 /* ------- Validation errors ------- */
 
@@ -79,7 +79,7 @@
 /* Error in alert pop-up when we get this error from PayPal while trying to start the flow*/
 "Error_PayPal_Currency_Not_Supported" = "Diese Währung wird von PayPal nicht unterstützt";
 /* Error in alert pop-up when we get an unknown error from PayPal while trying to start the flow*/
-"Error_General_PayPal_error" = "Ein Fehler ist aufgetreten";
+"Error_General_PayPal_error" = "Kann nicht mit PayPal verbunden werden";
 
 /* ------- Apple Pay functionality ------- */
 
@@ -88,8 +88,8 @@
 /* Various Apple Pay errors */
 "Error_Not_available_on_this_device" = "Nicht verfügbar auf diesem Gerät";
 "Error_No_cards_set" = "Keine Karten gesetzt";
-"Error_Setup_error" = "Setup-Fehler";
-"Error_General_ApplePay_error" = "Allgemeiner Fehler";
+"Error_Setup_error" = "Kann nicht mit Apple Pay verbunden werden. Bitte wählen Sie eine andere Zahlungsmethode.";
+"Error_General_ApplePay_error" = "Kann nicht mit Apple Pay verbunden werden";
 
 
 /* ------- (CC) Payment screen ------- */
