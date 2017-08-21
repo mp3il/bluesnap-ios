@@ -56,8 +56,9 @@ extension BSApplePayInfo: DictionaryConvertible
 //        return map;
 //    }
 
-    public func toDictionary() -> [String: Any] {
-        let desrilaziedToken = try! JSONSerialization.jsonObject(with: payment.token.paymentData, options: JSONSerialization.ReadingOptions())
+    public func toDictionary() throws -> [String: Any] {
+
+        let desrilaziedToken = try JSONSerialization.jsonObject(with: payment.token.paymentData, options: JSONSerialization.ReadingOptions())
 
         let shippingContactDict = [
                 //"addressLines": shippingContact?.postalAddress?.description,

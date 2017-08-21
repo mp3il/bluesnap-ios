@@ -31,9 +31,9 @@ extension BSStartViewController : PaymentOperationDelegate {
         if initialData.withShipping {
             pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
         }
-        //if self.fullBilling {
+        if initialData.fullBilling {
             pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
-        //}
+        }
 
         pkPaymentRequest.supportedNetworks = [
                 .amex,
@@ -68,18 +68,23 @@ extension BSStartViewController : PaymentOperationDelegate {
     }
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (BSErrors?) -> Void) {
-        let jsonData = String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString()
-        //print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
-        BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
-            if let error = error {
-                completion(error)
-                debugPrint(error.localizedDescription)
-                return
-            }
-            completion(nil) // no result from BS on 200
-        }
-        )
+        if let jsonData = try? String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString() {
 
+            //print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
+            BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
+                if let error = error {
+                    completion(error)
+                    debugPrint(error.localizedDescription)
+                    return
+                }
+                completion(nil) // no result from BS on 200
+            }
+            )
+        } else {
+            NSLog("PaymentInformation parse error")
+            completion(BSErrors.applePayOperationError)
+            return
+        }
     }
 
     func didSelectPaymentMethod(method: PKPaymentMethod, completion: @escaping ([PKPaymentSummaryItem]) -> Void) {
