@@ -226,10 +226,17 @@ class BSValidatorTests: XCTestCase {
         XCTAssertEqual(BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails), false)
 
         addressDetails.state = "12"
-        XCTAssertEqual(BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails), true)
+        XCTAssertEqual(BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails), false)
 
         addressDetails.state = "12 Cdf"
         XCTAssertEqual(BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails), false)
+        
+        addressDetails.state = "AL"
+        XCTAssertEqual(BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails), false)
+        
+        addressDetails.country = "US"
+        addressDetails.state = "AL"
+        XCTAssertEqual(BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails), true)
     }
     
     func testValidateExp() {
