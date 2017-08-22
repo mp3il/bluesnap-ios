@@ -28,6 +28,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
+    fileprivate var updateTaxFunc : ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?
     fileprivate var countryManager = BSCountryManager()
     
     // MARK: - Outlets
@@ -52,7 +53,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: init
     
-    public func initScreen(paymentRequest : BSCcPaymentRequest!, fullBilling: Bool, withEmail: Bool, withShipping: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
+    public func initScreen(paymentRequest : BSCcPaymentRequest!, fullBilling: Bool, withEmail: Bool, withShipping: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!)->Void, updateTaxFunc: ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?) {
         
         self.firstTime = true
         self.firstTimeShipping = true
@@ -61,6 +62,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.withEmail = withEmail
         self.purchaseFunc = purchaseFunc
         self.withShipping = withShipping //paymentRequest.getShippingDetails() != nil
+        self.updateTaxFunc = updateTaxFunc
     }
     
     // MARK: Keyboard functions
@@ -238,9 +240,17 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         // set the 'shipping same as billing' to be true if no shipping name is supplied
         if self.firstTime == true {
             shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
+            
+            // in case of empty shipping country - fill with default and call updateTaxFunc
+            if withShipping && paymentRequest.shippingDetails!.country ?? "" == "" {
+                let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
+                paymentRequest.shippingDetails!.country = defaultCountry
+                callUpdateTax(ifSameAsBilling: false, ifNotSameAsBilling: true)
+            }
         }
         
         updateTexts()
+        updateAmounts()
         
         if self.firstTime == true {
             self.firstTime = false
@@ -303,7 +313,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }*/
     
     private func isShippingSameAsBilling() -> Bool {
-        return !shippingSameAsBillingView.isHidden && self.shippingSameAsBillingSwitch.isOn
+        return self.withShipping && self.fullBilling && self.shippingSameAsBillingSwitch.isOn
     }
     
     private func hideShowFields() {
@@ -329,7 +339,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             cityInputLine.isHidden = hideFields
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-            subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getAmount() == 0
+            subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
             updateZipFieldLocation()
         }
     }
@@ -364,6 +374,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateAmounts() {
         
+        if self.ccInputLine.ccnIsOpen {
+            subtotalAndTaxDetailsView.isHidden = true
+        } else {
+            subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
+        }
+
         let toCurrency = paymentRequest.getCurrency() ?? ""
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
         let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
@@ -398,7 +414,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
             }
         }
-        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, submitPaymentFields: submitPaymentFields, countryManager: countryManager, firstTime: firstTimeShipping)
+        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, submitPaymentFields: submitPaymentFields, countryManager: countryManager, firstTime: firstTimeShipping, updateTaxFunc: updateTaxFunc)
         firstTimeShipping = false
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
@@ -412,6 +428,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         // load the flag image
         updateFlagImage(countryCode: countryCode.uppercased())
+        
+        callUpdateTax(ifSameAsBilling: true, ifNotSameAsBilling: false)
     }
 
     private func updateZipByCountry(countryCode : String) {
@@ -428,6 +446,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         paymentRequest.getBillingDetails().state = stateCode
         self.stateInputLine.setValue(stateName)
+        callUpdateTax(ifSameAsBilling: true, ifNotSameAsBilling: false)
     }
     
     private func updateFlagImage(countryCode : String) {
@@ -476,14 +495,38 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     @IBAction func shippingSameAsBillingValueChanged(_ sender: Any) {
         
-        updatePayButtonText()
+        callUpdateTax(ifSameAsBilling: true, ifNotSameAsBilling: true)
+        updateAmounts()
     }
     
+    private func callUpdateTax(ifSameAsBilling: Bool, ifNotSameAsBilling: Bool) {
+        
+        if updateTaxFunc != nil && self.withShipping {
+            var country : String = ""
+            var state : String?
+            var callFunc : Bool = false
+            if ifSameAsBilling && isShippingSameAsBilling() {
+                country = paymentRequest.billingDetails.country!
+                state = paymentRequest.billingDetails.state
+                callFunc = true
+            } else if ifNotSameAsBilling && !isShippingSameAsBilling() {
+                let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
+                country = paymentRequest.shippingDetails?.country ?? defaultCountry
+                state = paymentRequest.shippingDetails?.state
+                callFunc = true
+            }
+            if callFunc {
+                updateTaxFunc!(country, state, paymentRequest.priceDetails)
+            }
+        }
+    }
+
     @IBAction func clickPay(_ sender: UIButton) {
         
         if (validateForm()) {
             
             if (withShipping && !isShippingSameAsBilling()) {
+                updateAmounts()
                 gotoShippingScreen()
             } else {
                 startActivityIndicator()

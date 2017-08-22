@@ -176,9 +176,6 @@ import PassKit
             if initialData.shippingDetails == nil {
                 initialData.shippingDetails = BSShippingAddressDetails()
             }
-            if initialData.shippingDetails!.country ?? "" == "" {
-                initialData.shippingDetails!.country = defaultCountry
-            }
         } else if initialData.shippingDetails != nil {
             initialData.shippingDetails = nil
         }

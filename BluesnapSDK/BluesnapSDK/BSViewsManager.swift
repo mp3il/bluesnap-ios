@@ -98,7 +98,7 @@ class BSViewsManager {
         }
         
         let paymentRequest = BSCcPaymentRequest(initialData: initialData)
-        purchaseScreen.initScreen(paymentRequest: paymentRequest, fullBilling: initialData.fullBilling, withEmail: initialData.withEmail, withShipping: initialData.withShipping, purchaseFunc: purchaseFunc)
+        purchaseScreen.initScreen(paymentRequest: paymentRequest, fullBilling: initialData.fullBilling, withEmail: initialData.withEmail, withShipping: initialData.withShipping, purchaseFunc: purchaseFunc, updateTaxFunc: initialData.updateTaxFunc)
 
         inNavigationController.pushViewController(purchaseScreen, animated: animated)
     }
