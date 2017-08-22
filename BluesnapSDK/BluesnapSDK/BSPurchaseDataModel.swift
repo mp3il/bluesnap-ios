@@ -23,9 +23,6 @@ public enum BSPaymentType : String {
  */
 @objc public class BSBasePaymentRequest : NSObject {
     
-    // determines the request type: CC, Apple Pay, PayPal, etc.
-    public var paymentType : BSPaymentType!
-
     var priceDetails: BSPriceDetails!
     
     // These fields hold the original amounts in USD, to keep precision in case of currency change

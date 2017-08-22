@@ -265,9 +265,9 @@ class ViewController: UIViewController {
         NSLog(" amount=\(paymentRequest.getAmount() ?? 0.0)")
         NSLog(" tax=\(paymentRequest.getTaxAmount() ?? 0.0)")
         NSLog(" currency=\(paymentRequest.getCurrency() ?? "")")
-        NSLog(" payment type= \(paymentRequest.paymentType)")
         
         if let paymentRequest = paymentRequest as? BSCcPaymentRequest {
+            NSLog(" payment type= Credit Card")
             if let billingDetails = paymentRequest.getBillingDetails() {
                 NSLog("Result Data: Name:\(billingDetails.name ?? "")")
                 if let zip = billingDetails.zip {
@@ -295,9 +295,11 @@ class ViewController: UIViewController {
             }
             
         } else if let _ = paymentRequest as? BSApplePayPaymentRequest {
+            NSLog(" payment type= Apple Pay")
             NSLog("No extra data")
             
         } else if let paymentRequest = paymentRequest as? BSPayPalPaymentRequest {
+            NSLog(" payment type= Pay Pal")
             NSLog("PayPal invoice ID:\(paymentRequest.payPalInvoiceId ?? "")")
         }
         NSLog("--------------------------------------------------------")

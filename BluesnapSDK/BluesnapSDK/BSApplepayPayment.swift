@@ -13,7 +13,6 @@ import PassKit
     
     public override init(initialData: BSInitialData) {
         super.init(initialData: initialData)
-        self.paymentType = .ApplePay
     }
 }
 

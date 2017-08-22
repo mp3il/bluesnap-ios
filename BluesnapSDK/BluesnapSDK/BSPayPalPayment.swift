@@ -18,6 +18,5 @@ import Foundation
     
     override public init(initialData: BSInitialData) {
         super.init(initialData: initialData)
-        self.paymentType = .PayPal
     }
 }
