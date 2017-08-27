@@ -101,9 +101,10 @@ public enum BSPaymentType : String {
 
 /**
   Class holds initial data for the flow: 
+    - Flow flavors (withShipping, withBilling, withEmail)
     - Price details
     - (optional) Shopper details
-    - Flow flavors (withShipping, withBilling, withEmail)
+    - (optional) function for updating tax amount based on shipping country/state. Only called when 'withShipping
  */
 @objc public class BSInitialData : NSObject {
 
@@ -115,4 +116,6 @@ public enum BSPaymentType : String {
     
     public var billingDetails : BSBillingAddressDetails?
     public var shippingDetails : BSShippingAddressDetails?
+    
+    public var updateTaxFunc : ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?
 }

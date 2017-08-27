@@ -168,6 +168,7 @@ class ViewController: UIViewController {
         initialData.withShipping = withShippingSwitch.isOn
         initialData.fullBilling = fullBillingSwitch.isOn
         initialData.withEmail = withEmailSwitch.isOn
+        initialData.updateTaxFunc = self.updateTax
     }
     
     /**
@@ -245,6 +246,27 @@ class ViewController: UIViewController {
         }
     }
     
+    /**
+        This function is called to recalculate the tax amoutn based on the country/state.
+        In this example we give tax only to US states, with 5% for all states, except NY which has 8%.
+    */
+    func updateTax(_ shippingCountry : String,
+                       _ shippingState : String?,
+                       _ priceDetails : BSPriceDetails) -> Void {
+        
+        var taxPercent : Double = 0
+        if shippingCountry.uppercased() == "US" {
+            taxPercent = 5
+            if let state = shippingState {
+                if state == "NY" {
+                    taxPercent = 8
+                }
+            }
+        }
+        let newTax = priceDetails.amount * taxPercent / 100.0
+        NSLog("Changing tax amount from \(priceDetails.taxAmount) to \(newTax)")
+        priceDetails.taxAmount = newTax
+    }
     
     private func showThankYouScreen(errorText: String?) {
         
