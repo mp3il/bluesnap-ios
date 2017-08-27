@@ -28,7 +28,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
-    fileprivate var countryManager = BSCountryManager()
     
     // MARK: - Outlets
     
@@ -340,7 +339,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func updateState() {
         
         if (fullBilling) {
-            BSValidator.updateState(addressDetails: paymentRequest.getBillingDetails(), countryManager: countryManager, stateInputLine: stateInputLine)
+            BSValidator.updateState(addressDetails: paymentRequest.getBillingDetails(), stateInputLine: stateInputLine)
         } else {
             stateInputLine.isHidden = true
         }
@@ -398,7 +397,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
             }
         }
-        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, submitPaymentFields: submitPaymentFields, countryManager: countryManager, firstTime: firstTimeShipping)
+        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, submitPaymentFields: submitPaymentFields, firstTime: firstTimeShipping)
         firstTimeShipping = false
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }
@@ -416,7 +415,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
 
     private func updateZipByCountry(countryCode : String) {
         
-        let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
+        let hideZip = BSCountryManager.getInstance().countryHasNoZip(countryCode: countryCode)
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: true)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
         self.zipInputLine.isHidden = hideZip
@@ -613,7 +612,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
-            countryManager: countryManager,
             selectedCountryCode: selectedCountryCode,
             updateFunc: updateWithNewCountry)
     }
@@ -666,7 +664,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         BSViewsManager.showStateList(
             inNavigationController: self.navigationController,
             animated: true,
-            countryManager: countryManager,
             addressDetails: paymentRequest.getBillingDetails(),
             updateFunc: updateWithNewState)
     }

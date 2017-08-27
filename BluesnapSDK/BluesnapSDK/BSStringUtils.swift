@@ -21,7 +21,7 @@ import Foundation
             let lastName = str.substring(with: p..<str.endIndex).trimmingCharacters(in: .whitespaces)
             return (firstName, lastName)
         } else {
-            return nil
+            return ("", str)
         }
     }
     

@@ -188,8 +188,8 @@ public class BSCcInputLine: BSBaseTextInput {
     internal var expTextField : UITextField = UITextField()
     internal var cvvTextField : UITextField = UITextField()
     private var ccnAnimationLabel : UILabel = UILabel()
-    private var expErrorLabel : UILabel?
-    private var cvvErrorLabel : UILabel?
+    internal var expErrorLabel : UILabel?
+    internal var cvvErrorLabel : UILabel?
     private var nextButton : UIButton = UIButton()
     private var showNextButton = false
 

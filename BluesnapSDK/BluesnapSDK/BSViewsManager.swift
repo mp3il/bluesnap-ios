@@ -109,14 +109,12 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - countryManager: instance of BSCountryManager
      - selectedCountryCode: ISO country code
      - updateFunc: callback; will be called each time a new value is selected
      */
     open class func showCountryList(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        countryManager : BSCountryManager,
         selectedCountryCode : String!,
         updateFunc: @escaping (String, String)->Void) {
 
@@ -124,7 +122,7 @@ class BSViewsManager {
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
         let screen : BSCountryViewController! = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BluesnapSDK.BSCountryViewController
 
-        screen.initCountries(selectedCode: selectedCountryCode, countryManager: countryManager, updateFunc: updateFunc)
+        screen.initCountries(selectedCode: selectedCountryCode, updateFunc: updateFunc)
         
         inNavigationController.pushViewController(screen, animated: animated)
     }
@@ -166,7 +164,6 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - countryManager: instance of BSCountryManager
      - selectedCountryCode: ISO country code
      - selectedStateCode: state code
      - updateFunc: callback; will be called each time a new value is selected
@@ -174,13 +171,13 @@ class BSViewsManager {
     open class func showStateList(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        countryManager : BSCountryManager,
         addressDetails: BSBaseAddressDetails,
         updateFunc: @escaping (String, String)->Void) {
         
         let selectedCountryCode = addressDetails.country ?? ""
         let selectedStateCode = addressDetails.state ?? ""
         
+        let countryManager = BSCountryManager.getInstance()
         if let states = countryManager.getCountryStates(countryCode: selectedCountryCode) {
             
             let bundle = BSViewsManager.getBundle()

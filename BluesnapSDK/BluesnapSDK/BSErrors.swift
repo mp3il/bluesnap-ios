@@ -17,8 +17,6 @@ public enum BSErrors : Error {
 
     // ApplePay
     case cantMakePaymentError
-    case usedTokenForCC
-    case usedTokenApplePay
     case applePayOperationError
     case applePayCanceled
 
@@ -29,5 +27,6 @@ public enum BSErrors : Error {
     case invalidInput
     case expiredToken
     case tokenNotFound
+    case tokenAlreadyUsed
     case unknown
 }
