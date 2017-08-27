@@ -38,7 +38,6 @@ import Foundation
     
     public override init(initialData: BSInitialData) {
         super.init(initialData: initialData)
-        self.paymentType = .ApplePay
         if let billingDetails = initialData.billingDetails {
             self.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
         }
