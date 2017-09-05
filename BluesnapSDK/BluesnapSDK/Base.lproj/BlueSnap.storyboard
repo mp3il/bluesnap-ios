@@ -64,6 +64,7 @@
                                                 </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <accessibility key="accessibilityConfiguration" identifier="CountryViewCell"/>
                                         <connections>
                                             <outlet property="checkMarkImageView" destination="Eic-Oi-nQ3" id="aX7-r0-FFB"/>
                                             <outlet property="flagImageView" destination="g0G-ax-3BT" id="lpo-9N-Vv7"/>
@@ -78,6 +79,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration" identifier="SelectCountryView"/>
                         <constraints>
                             <constraint firstItem="3Ep-JQ-pQu" firstAttribute="leading" secondItem="85X-D6-3iM" secondAttribute="leadingMargin" constant="-16" id="Czq-TI-LKr"/>
                             <constraint firstAttribute="trailing" secondItem="Js1-Mf-mQv" secondAttribute="trailing" constant="20" symbolic="YES" id="IbR-ss-2O3"/>
@@ -119,6 +121,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Tf-NL-jP3" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="20" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingName"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="John Doe"/>
@@ -137,6 +140,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3n5-zz-YeP" userLabel="Phone Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="64" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingPhone"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Phone"/>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="labelBkdColor">
@@ -152,6 +156,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7GX-8o-fbs" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="108" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingZip"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
                                                 </userDefinedRuntimeAttributes>
@@ -164,6 +169,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-vo-Aht" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="152" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingStreet"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
                                                 </userDefinedRuntimeAttributes>
@@ -176,6 +182,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8Q-CA-XJP" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="196" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingCity"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
                                                 </userDefinedRuntimeAttributes>
@@ -188,6 +195,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qye-kG-IzH" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="240" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingState"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isEditable" value="NO"/>
@@ -235,10 +243,12 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAV-S1-BNT" customClass="BSSubtotalUIView" customModule="BluesnapSDK">
                                 <rect key="frame" x="119" y="559" width="240" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration" identifier="ShippingSubtotalAndTaxView"/>
                             </view>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lFE-br-NNC">
                                 <rect key="frame" x="0.0" y="602" width="375" height="65"/>
                                 <color key="backgroundColor" red="0.23921568627450979" green="0.23137254901960785" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration" identifier="ShippingPayButton"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="xIM-JF-Nt4"/>
@@ -310,6 +320,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y0h-By-eMw" userLabel="Apple Pay Button">
                                         <rect key="frame" x="0.0" y="40" width="375" height="143"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ApplePayButton"/>
                                         <state key="normal" title="Button" image="apple_pay_button"/>
                                         <connections>
                                             <action selector="applePayClick:" destination="f14-WO-daN" eventType="touchUpInside" id="MPU-hd-zkw"/>
@@ -318,6 +329,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xk8-02-9HE">
                                         <rect key="frame" x="0.0" y="184" width="375" height="12"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="Or1Label"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -326,6 +338,7 @@
                                         <rect key="frame" x="0.0" y="196" width="375" height="143"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="CcButton"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="Button" image="CardBox">
                                             <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -338,6 +351,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rmD-vI-h9O">
                                         <rect key="frame" x="0.0" y="339" width="375" height="12"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="Or2Label"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -345,6 +359,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxD-gL-uXq">
                                         <rect key="frame" x="0.0" y="339" width="429" height="143"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="PayPalButton"/>
                                         <state key="normal" title="PayPal" image="paypal_button"/>
                                         <connections>
                                             <action selector="payPalClicked:" destination="f14-WO-daN" eventType="touchUpInside" id="M5K-kF-25T"/>
@@ -398,6 +413,7 @@
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration" identifier="WebViewView"/>
                         <constraints>
                             <constraint firstItem="cwg-QC-gXn" firstAttribute="top" secondItem="LVX-U6-30z" secondAttribute="bottom" id="BbK-qJ-17n"/>
                             <constraint firstAttribute="trailing" secondItem="LVX-U6-30z" secondAttribute="trailing" id="Kow-84-vtI"/>
@@ -435,6 +451,7 @@
                                             <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="okv-vf-cV8" customClass="BSCcInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="16" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="CCN"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="1234 5678 9012 3456"/>
                                                     <userDefinedRuntimeAttribute type="image" keyPath="image" value="cc_default"/>
@@ -452,6 +469,7 @@
                                             <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcs-xh-zfv" userLabel="Name Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="75" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="Name"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Name"/>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="placeHolder" value="John Doe"/>
@@ -470,6 +488,7 @@
                                             <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAV-CU-OEK" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="119" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="Email"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Email"/>
                                                 </userDefinedRuntimeAttributes>
@@ -482,6 +501,7 @@
                                             <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yRx-IZ-fub" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="163" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="Zip"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Zip"/>
                                                 </userDefinedRuntimeAttributes>
@@ -494,6 +514,7 @@
                                             <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Vk-vx-UOS" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="207" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="Street"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="Street"/>
                                                 </userDefinedRuntimeAttributes>
@@ -506,6 +527,7 @@
                                             <view tag="6" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sW-jJ-zDD" userLabel="City Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="251" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="City"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="City"/>
                                                 </userDefinedRuntimeAttributes>
@@ -518,6 +540,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EKc-lR-XxG" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="295" width="335" height="43"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="State"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="labelText" value="State"/>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isEditable" value="NO"/>
@@ -574,17 +597,20 @@
                                 <subviews>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWl-8L-gmv">
                                         <rect key="frame" x="238" y="2.5" width="51" height="31"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ShippingAsBillingSwitch"/>
                                         <connections>
                                             <action selector="shippingSameAsBillingValueChanged:" destination="W0G-M6-3dM" eventType="valueChanged" id="TrO-Bd-u8l"/>
                                         </connections>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping same as billing" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0EE-XI-ScQ">
                                         <rect key="frame" x="20" y="9.5" width="205" height="17"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ShippingAsBillingLabel"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration" identifier="ShippingAsBillingView"/>
                                 <constraints>
                                     <constraint firstItem="XWl-8L-gmv" firstAttribute="leading" secondItem="0EE-XI-ScQ" secondAttribute="trailing" constant="13" id="1mj-ly-gcF"/>
                                     <constraint firstItem="0EE-XI-ScQ" firstAttribute="centerX" secondItem="yCg-Wt-HfE" secondAttribute="centerX" constant="-31" id="CeQ-f3-bUZ"/>
@@ -597,10 +623,12 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yFX-qm-9XX" customClass="BSSubtotalUIView" customModule="BluesnapSDK">
                                 <rect key="frame" x="119" y="559" width="240" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration" identifier="SubtotalAndTaxView"/>
                             </view>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTt-Ww-2zE">
                                 <rect key="frame" x="0.0" y="602" width="375" height="65"/>
                                 <color key="backgroundColor" red="0.23921568627450979" green="0.23137254901960785" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration" identifier="PayButton"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="aKf-g1-3h2"/>
@@ -725,6 +753,7 @@
                                                 <constraint firstItem="SPl-dB-Ocj" firstAttribute="leading" secondItem="Lvq-lv-yB8" secondAttribute="trailing" constant="2" id="zVE-Ay-3At"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <accessibility key="accessibilityConfiguration" identifier="CurrencyViewCell"/>
                                         <connections>
                                             <outlet property="CurrencyUILabel" destination="Lvq-lv-yB8" id="1vb-69-usI"/>
                                             <outlet property="checkMarkImage" destination="SPl-dB-Ocj" id="SVQ-Gm-zPu"/>
@@ -738,6 +767,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration" identifier="SelectCurrencyView"/>
                         <constraints>
                             <constraint firstItem="7kx-hO-24w" firstAttribute="centerX" secondItem="mBG-P4-R6g" secondAttribute="centerX" id="4bk-fF-6hj"/>
                             <constraint firstItem="DXK-pe-9ap" firstAttribute="top" secondItem="7kx-hO-24w" secondAttribute="bottom" id="DNf-qV-FYM"/>
@@ -824,6 +854,7 @@
                                                 <constraint firstItem="MdR-u1-48S" firstAttribute="trailing" secondItem="CMm-xm-mVN" secondAttribute="trailingMargin" id="wh7-1V-ogw"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <accessibility key="accessibilityConfiguration" identifier="StateViewCell"/>
                                         <connections>
                                             <outlet property="checkMarkImage" destination="MdR-u1-48S" id="dq8-KN-g4B"/>
                                             <outlet property="itemNameUILabel" destination="U25-dp-1Tb" id="TyJ-2M-gZz"/>
@@ -837,6 +868,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration" identifier="SelectStateView"/>
                         <constraints>
                             <constraint firstItem="VZz-ls-6bv" firstAttribute="top" secondItem="Zqq-Eb-cFM" secondAttribute="bottom" id="0sX-Rf-ufE"/>
                             <constraint firstItem="N0X-tR-l6A" firstAttribute="leading" secondItem="8Y8-Co-ANG" secondAttribute="leading" id="Kuj-aW-CWx"/>
