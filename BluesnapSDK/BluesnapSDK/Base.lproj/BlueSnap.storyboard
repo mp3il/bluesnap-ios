@@ -49,14 +49,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="33" y="8" width="279" height="24"/>
+                                                    <rect key="frame" x="33" y="8" width="278" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="312" y="15" width="14" height="13"/>
+                                                    <rect key="frame" x="311" y="15" width="14" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -96,7 +96,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h2d-uf-6vd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3598" y="1091"/>
+            <point key="canvasLocation" x="3425" y="1091"/>
         </scene>
         <!--Shipping-->
         <scene sceneID="rbP-bj-wQc">
@@ -290,7 +290,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hfL-eJ-YBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3597.5999999999999" y="303.59820089955025"/>
+            <point key="canvasLocation" x="3425" y="340"/>
         </scene>
         <!--Payment Type-->
         <scene sceneID="urS-zv-Kno">
@@ -372,6 +372,8 @@
                         <outlet property="or2Label" destination="rmD-vI-h9O" id="ZIV-Fc-JwB"/>
                         <outlet property="orLabel" destination="Xk8-02-9HE" id="LWy-9d-G0w"/>
                         <outlet property="payPalButton" destination="pxD-gL-uXq" id="QT5-r0-szE"/>
+                        <segue destination="GdF-z9-L8H" kind="show" id="1KG-Ig-ECE"/>
+                        <segue destination="W0G-M6-3dM" kind="show" id="rfc-7Z-z7N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -410,7 +412,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lUW-xz-fu0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4831.1999999999998" y="-457.42128935532236"/>
+            <point key="canvasLocation" x="3426" y="-380"/>
         </scene>
         <!--Payment-->
         <scene sceneID="7hI-Z7-7qB">
@@ -655,11 +657,15 @@
                         <outlet property="subtotalAndTaxDetailsView" destination="yFX-qm-9XX" id="hMe-w6-Soy"/>
                         <outlet property="zipInputLine" destination="yRx-IZ-fub" id="n5X-b7-TOL"/>
                         <outlet property="zipTopConstraint" destination="Zch-dH-6RJ" id="A8W-lo-FnM"/>
+                        <segue destination="PPS-Pq-6Wu" kind="show" id="sh5-3f-7TO"/>
+                        <segue destination="CMN-vn-Foo" kind="show" id="icf-mO-ubI"/>
+                        <segue destination="Cnt-Wb-Tw2" kind="show" id="cUQ-Cn-kJl"/>
+                        <segue destination="2Ni-9L-E0D" kind="show" id="6FB-PZ-3S1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A8J-iy-m7u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2728.8000000000002" y="303.59820089955025"/>
+            <point key="canvasLocation" x="2729" y="341"/>
         </scene>
         <!--Select Currency-->
         <scene sceneID="T9n-5J-QN1">
@@ -759,7 +765,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="2728.8000000000002" y="1004.3478260869566"/>
+            <point key="canvasLocation" x="2729" y="1091"/>
         </scene>
         <!--Select State-->
         <scene sceneID="ZWS-TW-Oq9">
@@ -849,61 +855,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nud-ba-zIi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2729" y="1705"/>
-        </scene>
-        <!--Navigation Controller to Currency Scene-->
-        <scene sceneID="VNs-D6-HAF">
-            <objects>
-                <navigationController storyboardIdentifier="BSNavToCurrency" automaticallyAdjustsScrollViewInsets="NO" id="n9L-ed-m3M" userLabel="Navigation Controller to Currency Scene" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mBH-tz-0Wz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="CMN-vn-Foo" kind="relationship" relationship="rootViewController" id="rJq-JV-Jcp"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5Ci-ug-ldM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1950" y="1004"/>
-        </scene>
-        <!--Navigation Controller to Country Scene-->
-        <scene sceneID="lxD-O3-2U2">
-            <objects>
-                <navigationController storyboardIdentifier="BSNavToCountry" automaticallyAdjustsScrollViewInsets="NO" id="7Sq-7r-cAr" userLabel="Navigation Controller to Country Scene" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="odG-Z4-bNj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Cnt-Wb-Tw2" kind="relationship" relationship="rootViewController" id="QiA-Uk-xeh"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cMB-tg-qhK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4382" y="1091"/>
-        </scene>
-        <!--Navigation Controller to State Scene-->
-        <scene sceneID="Fu6-Ll-d6D">
-            <objects>
-                <navigationController storyboardIdentifier="BSNavToState" automaticallyAdjustsScrollViewInsets="NO" id="IwX-4e-IhH" userLabel="Navigation Controller to State Scene" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VRB-KX-jfZ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="2Ni-9L-E0D" kind="relationship" relationship="rootViewController" id="4uS-d0-lCQ"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4i9-NR-Keg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1950" y="1704"/>
+            <point key="canvasLocation" x="4132" y="1091"/>
         </scene>
         <!--Navigation Controller to Start Scene-->
         <scene sceneID="5Dn-3y-Min">
@@ -922,60 +874,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fxW-DM-hAh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1950" y="-380"/>
-        </scene>
-        <!--Navigation Controller to Shipping Scene-->
-        <scene sceneID="kMu-UY-6EB">
-            <objects>
-                <navigationController storyboardIdentifier="BSNavToShipping" automaticallyAdjustsScrollViewInsets="NO" id="4q2-oc-g7O" userLabel="Navigation Controller to Shipping Scene" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uOi-ZJ-xAK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="PPS-Pq-6Wu" kind="relationship" relationship="rootViewController" id="7Ca-Jv-ofa"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="H7e-80-BdY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4382" y="304"/>
-        </scene>
-        <!--Navigation Controller to Payment Scene-->
-        <scene sceneID="WdT-4h-Qji">
-            <objects>
-                <navigationController storyboardIdentifier="BSNavToPayment" automaticallyAdjustsScrollViewInsets="NO" id="Lc4-G9-eue" userLabel="Navigation Controller to Payment Scene" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xJ1-Ni-3xo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="W0G-M6-3dM" kind="relationship" relationship="rootViewController" id="Qcy-3I-0b7"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HmX-QM-dSP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1950" y="304"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="whc-Ma-f8J">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="f8g-Mh-XU9" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Nch-Pq-eRy">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="GdF-z9-L8H" kind="relationship" relationship="rootViewController" id="mIm-an-R8Y"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PI7-dT-t1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3892" y="-457.42128935532236"/>
         </scene>
     </scenes>
     <resources>
