@@ -89,6 +89,7 @@ public class BSInputLine: BSBaseTextInput {
     
     override func buildElements() {
         super.buildElements()
+        label.accessibilityIdentifier = "InputLabel"
         self.addSubview(label)
     }
     

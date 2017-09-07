@@ -345,6 +345,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         
         if errorLabel == nil {
             self.errorLabel = UILabel()
+            errorLabel?.accessibilityIdentifier = "ErrorLabel"
             initErrorLabel(errorLabel: errorLabel)
         }
         showErrorByField(field: self.textField, errorLabel: errorLabel, errorText: errorText)
@@ -516,6 +517,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     */
     internal func buildElements() {
 
+        textField.accessibilityIdentifier = "TextField"
         self.addSubview(textField)
         
         textField.addTarget(self, action: #selector(BSInputLine.textFieldDidBeginEditing(_:)), for: .editingDidBegin)
@@ -524,6 +526,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         textField.delegate = self
         
         self.imageButton = UIButton(type: UIButtonType.custom)
+        imageButton.accessibilityIdentifier = "ImageButton"
         self.addSubview(imageButton)
         imageButton.addTarget(self, action: #selector(BSBaseTextInput.imageTouchUpInside(_:)), for: .touchUpInside)
         imageButton.contentVerticalAlignment = .fill
@@ -663,6 +666,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         
         if !self.isEditable && fieldCoverButton == nil {
             fieldCoverButton = UIButton()
+            fieldCoverButton?.accessibilityIdentifier = "FieldCoverButton"
             if let fieldCoverButton = fieldCoverButton {
                 fieldCoverButton.backgroundColor = UIColor.clear
                 self.addSubview(fieldCoverButton)
