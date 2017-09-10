@@ -74,9 +74,6 @@ class ViewController: UIViewController {
         
         resultTextView.text = ""
         
-        // If you have the shopper details, you can supply initial values like this:
-        //setInitialShopperDetails()
-        
         // Override the navigation name, so that the next screen navigation item will say "Cancel"
         let backItem = UIBarButtonItem()
         backItem.title = "Cancel"
@@ -117,26 +114,10 @@ class ViewController: UIViewController {
     */
     private func setInitialShopperDetails() {
         
-        if let billingDetails = initialData.billingDetails {
-            billingDetails.name = "John Doe"
-            billingDetails.address = "333 elm st"
-            billingDetails.city = "New York"
-            billingDetails.zip = "532464"
-            billingDetails.country = "US"
-            billingDetails.state = "MA"
-            billingDetails.email = "john@gmail.com"
-        }
+        initialData.billingDetails = BSBillingAddressDetails(email: "john@gmail.com", name: "John Doe", address: "333 elm st", city: "New York", zip: "532464", country: "US", state: "MA")
+
         if withShippingSwitch.isOn {
-            if initialData.shippingDetails == nil {
-                initialData.shippingDetails = BSShippingAddressDetails()
-            }
-            if let shippingDetails = initialData.shippingDetails {
-                shippingDetails.name = "Mary Doe"
-                shippingDetails.address = "333 elm st"
-                shippingDetails.city = "New York"
-                shippingDetails.country = "US"
-                shippingDetails.state = "MA"
-            }
+            initialData.shippingDetails = BSShippingAddressDetails(phone: "972-528-9999999", name: "Mary Doe", address: "333 elm st", city: "Boston", zip: "111222", country: "US", state: "MA")
         }
     }
     
@@ -168,6 +149,9 @@ class ViewController: UIViewController {
         initialData.withShipping = withShippingSwitch.isOn
         initialData.fullBilling = fullBillingSwitch.isOn
         initialData.withEmail = withEmailSwitch.isOn
+        
+        // If you have the shopper details, you can supply initial values like this:
+        //setInitialShopperDetails()
     }
     
     /**

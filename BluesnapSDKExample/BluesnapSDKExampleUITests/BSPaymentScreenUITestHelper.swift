@@ -20,6 +20,8 @@ class BSPaymentScreenUITestHelper {
     var cityInput : XCUIElement!
     var streetInput : XCUIElement!
     var stateInput : XCUIElement!
+    
+    let bsCountryManager = BSCountryManager.getInstance()
 
     init(app: XCUIApplication!) {
         self.app = app
@@ -85,18 +87,85 @@ class BSPaymentScreenUITestHelper {
     }
     
     // check visibility of inputs - make sure fields are shown according to configuration
-    func checkVisibilityOfInputs(initialData: BSInitialData) {
+    func checkInputs(initialData: BSInitialData) {
         
-        checkInput(input: nameInput, expectedExists: true, expectedValue: "", expectedLabelText: "Name:")
-        checkInput(input: emailInput, expectedExists: initialData.withEmail, expectedValue: "", expectedLabelText: "Email:")
-        // zip should be hidden only for country that does not have zip, meanwhile we ignore; label also changes according to country
-        checkInput(input: zipInput, expectedExists: true, expectedValue: "", expectedLabelText: "Zip Code:")
-        checkInput(input: cityInput, expectedExists: initialData.fullBilling, expectedValue: "", expectedLabelText: "City:")
-        checkInput(input: streetInput, expectedExists: initialData.fullBilling, expectedValue: "", expectedLabelText: "Street:")
-        // state should be visible for US/Canada/Brazil, meanwhile we say true
-        checkInput(input: stateInput, expectedExists: initialData.fullBilling, expectedValue: "", expectedLabelText: "State:")
-    }
+        if let billingDetails = initialData.billingDetails {
+            checkInput(input: nameInput, expectedExists: true, expectedValue: billingDetails.name ?? "", expectedLabelText: "Name")
+            checkInput(input: emailInput, expectedExists: initialData.withEmail, expectedValue: billingDetails.email ?? "", expectedLabelText: "Email")
+            checkInput(input: cityInput, expectedExists: initialData.fullBilling, expectedValue: billingDetails.city ?? "", expectedLabelText: "City")
+            checkInput(input: streetInput, expectedExists: initialData.fullBilling, expectedValue: billingDetails.address ?? "", expectedLabelText: "Street")
+            // zip should be hidden only for country that does not have zip; label also changes according to country
+            let expectedZipLabelText = (billingDetails.country == "US") ? "Billing Zip" : "Postal Code"
+            let zipShouldBeVisible = !BSCountryManager.getInstance().countryHasNoZip(countryCode: billingDetails.country ?? "")
+            checkInput(input: zipInput, expectedExists: zipShouldBeVisible, expectedValue: initialData.billingDetails?.zip ?? "", expectedLabelText: expectedZipLabelText)
+            if let countryCode = billingDetails.country {
+                // check country image - this does not work, don;t know how to access the image
+                //let countryFlagButton = getInputImageButtonElement(nameInput)
+                //assert(countryFlagButton.exists)
+                //let countryImage = countryFlagButton.otherElements.images[countryCode]
+                //assert(countryImage.exists)
+                
+                // state should be visible for US/Canada/Brazil
+                let stateIsVisible = initialData.fullBilling && BSCountryManager.getInstance().countryHasStates(countryCode: countryCode)
+                var expectedStateValue = ""
+                if let stateName = bsCountryManager.getStateName(countryCode : countryCode, stateCode: billingDetails.state ?? "") {
+                    expectedStateValue = stateName
+                }
+                checkInput(input: stateInput, expectedExists: stateIsVisible, expectedValue: expectedStateValue, expectedLabelText: "State")
+            }
 
+        }
+    }
+    
+    func setFieldValues(billingDetails: BSBillingAddressDetails) {
+    
+        setInputValue(input: nameInput, value: billingDetails.name ?? "")
+        setInputValue(input: emailInput, value: billingDetails.email ?? "")
+        setInputValue(input: zipInput, value: billingDetails.zip ?? "")
+        setInputValue(input: cityInput, value: billingDetails.city ?? "")
+        setInputValue(input: streetInput, value: billingDetails.address ?? "")
+
+        if let countryCode = billingDetails.country {
+            setCountry(countryCode: countryCode)
+            if let stateCode = billingDetails.state {
+                setState(countryCode: countryCode, stateCode: stateCode)
+            }
+        }
+    }
+    
+    func setCountry(countryCode: String) {
+        
+        if let countryName = bsCountryManager.getCountryName(countryCode: countryCode) {
+            let countryImageButton = getInputImageButtonElement(nameInput)
+            countryImageButton.tap()
+            app.searchFields["Search"].tap()
+            app.searchFields["Search"].typeText(countryName)
+            app.tables.staticTexts[countryName].tap()
+        }
+    }
+    
+    func setState(countryCode: String, stateCode: String) {
+        
+        if let stateName = bsCountryManager.getStateName(countryCode : countryCode, stateCode: stateCode) {
+            let stateButton = getInputCoverButtonElement(stateInput)
+            stateButton.tap()
+            app.searchFields["Search"].tap()
+            app.searchFields["Search"].typeText(stateName)
+            app.tables.staticTexts[stateName].tap()
+        }
+    }
+    
+    func setInputValue(input: XCUIElement, value: String) {
+        
+        //sleep(1)
+        let textField = getInputFieldElement(input)
+        if textField.exists {
+            textField.tap()
+            textField.typeText(value)
+        }
+        //sleep(1)
+    }
+    
     func checkInput(input: XCUIElement, expectedExists: Bool, expectedValue: String, expectedLabelText: String) {
         
         let textField = getInputFieldElement(input)
@@ -107,7 +176,7 @@ class BSPaymentScreenUITestHelper {
             assert(expectedValue == value)
 
             let label = getInputLabelElement(input)
-            let labelText = label.value as! String
+            let labelText: String = label.label //label.value as! String
             assert(labelText == expectedLabelText)
         }
     }

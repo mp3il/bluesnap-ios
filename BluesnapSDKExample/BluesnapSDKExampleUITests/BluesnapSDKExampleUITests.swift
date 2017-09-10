@@ -47,7 +47,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0.5, currency: "USD")
         
         // set switches and amounts in merchant checkout screen
-        setMerchantCheckoutScreen(initialData: initialData)
+        setMerchantCheckoutScreen(app: app, initialData: initialData)
         
         // click "Checkout" button
         app.buttons["CheckoutButton"].tap()
@@ -73,28 +73,19 @@ class BluesnapSDKExampleUITests: XCTestCase {
         let cvvTextField = paymentHelper.getCvvInputFieldElement()
         cvvTextField.typeText("333")
         
-
         // make sure fields are shown according to configuration
-        paymentHelper.checkVisibilityOfInputs(initialData: initialData)
+        paymentHelper.checkInputs(initialData: initialData)
+        
+        // fill field values
+        let billingDetails = BSBillingAddressDetails(email: "shevie@gmail.com", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : "CA", state : "ON")
+        paymentHelper.setFieldValues(billingDetails: billingDetails)
+
+        // check that the values are in correctly
+        initialData.billingDetails = billingDetails
+        paymentHelper.checkInputs(initialData: initialData)
         
         //let elementsQuery = app.scrollViews.otherElements
-        
-
         /*
-        
-        
-        let johnDoeTextField = elementsQuery.textFields["John Doe"]
-        johnDoeTextField.tap()
-        johnDoeTextField.typeText("John Doe")
-        
-        let textField = elementsQuery2.otherElements["Email"].children(matching: .textField).element
-        textField.tap()
-        textField.typeText("john@aaa.com")
-        
-        let textField2 = elementsQuery2.otherElements["Zip"].children(matching: .textField).element
-        textField2.tap()
-        app.typeText("12345")
-        
         let paybuttonButton = app.buttons["PayButton"]
         paybuttonButton.tap()
         */

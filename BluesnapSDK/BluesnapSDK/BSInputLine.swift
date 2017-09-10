@@ -91,6 +91,7 @@ public class BSInputLine: BSBaseTextInput {
         super.buildElements()
         label.accessibilityIdentifier = "InputLabel"
         self.addSubview(label)
+        self.textField.autocorrectionType = .no
     }
     
     override func initRatios() -> (hRatio: CGFloat, vRatio: CGFloat) {

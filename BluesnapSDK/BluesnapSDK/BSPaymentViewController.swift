@@ -28,7 +28,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
-    fileprivate var countryManager = BSCountryManager()
+    fileprivate var countryManager = BSCountryManager.getInstance()
     
     // MARK: - Outlets
     
