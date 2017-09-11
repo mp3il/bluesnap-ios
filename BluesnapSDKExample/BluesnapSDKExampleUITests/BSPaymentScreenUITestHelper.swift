@@ -68,6 +68,29 @@ class BSPaymentScreenUITestHelper {
     }
 
 
+    // fill CC details 
+    func setCcDetails(isOpen: Bool, ccn: String, exp: String, cvv: String) {
+        
+        // check CCN component state
+        checkCcnComponentState(shouldBeOpen: isOpen)
+        
+        if (!isOpen) {
+            let ccnCoverButton = getInputCoverButtonElement(ccInput)
+            ccnCoverButton.tap()
+        }
+        
+        let ccnTextField = getCcInputFieldElement()
+        ccnTextField.typeText("4111 1111 1111 1111")
+        
+        checkCcnComponentState(shouldBeOpen: false)
+        
+        let expTextField = getExpInputFieldElement()
+        expTextField.typeText("1126")
+        
+        let cvvTextField = getCvvInputFieldElement()
+        cvvTextField.typeText("333")
+    }
+    
     // check CCN component state
     func checkCcnComponentState(shouldBeOpen: Bool) {
         
@@ -117,21 +140,37 @@ class BSPaymentScreenUITestHelper {
         }
     }
     
-    func setFieldValues(billingDetails: BSBillingAddressDetails) {
+    func setFieldValues(billingDetails: BSBillingAddressDetails, initialData: BSInitialData) {
     
         setInputValue(input: nameInput, value: billingDetails.name ?? "")
-        setInputValue(input: emailInput, value: billingDetails.email ?? "")
+        if initialData.withEmail {
+            setInputValue(input: emailInput, value: billingDetails.email ?? "")
+        }
         setInputValue(input: zipInput, value: billingDetails.zip ?? "")
-        setInputValue(input: cityInput, value: billingDetails.city ?? "")
-        setInputValue(input: streetInput, value: billingDetails.address ?? "")
-
+        if initialData.fullBilling {
+            setInputValue(input: cityInput, value: billingDetails.city ?? "")
+            setInputValue(input: streetInput, value: billingDetails.address ?? "")
+        }
         if let countryCode = billingDetails.country {
             setCountry(countryCode: countryCode)
-            if let stateCode = billingDetails.state {
-                setState(countryCode: countryCode, stateCode: stateCode)
+            if initialData.fullBilling {
+                if let stateCode = billingDetails.state {
+                    setState(countryCode: countryCode, stateCode: stateCode)
+                }
             }
         }
     }
+    
+    func setShippingSameAsBillingSwitch(shouldBeOn: Bool) {
+        
+        // set with Shipping switch = on
+        let shippingAsBillingSwitch = app.switches["ShippingAsBillingSwitch"]
+        let switchValue = (shippingAsBillingSwitch.value as? String) ?? "0"
+        if (switchValue == "0" && shouldBeOn) || (switchValue == "1" && !shouldBeOn) {
+            shippingAsBillingSwitch.tap()
+        }
+    }
+
     
     func setCountry(countryCode: String) {
         

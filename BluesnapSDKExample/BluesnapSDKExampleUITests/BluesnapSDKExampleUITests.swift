@@ -31,20 +31,166 @@ class BluesnapSDKExampleUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func testFlowFullBillingNoShippingNoEmail() {
         
         let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: true, withShipping: false, withEmail: false, amount: 30, taxAmount: 0.5, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let _ = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.50")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    func testFlowFullBillingWithShippingNoEmail() {
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: false, amount: 30, taxAmount: 0.5, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let paymentHelper = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        
+        paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
+        let _ = checkPayButton(app: app, expectedPayText: "Pay $ 30.50")
 
-        let paymentTypeHelper = BSPaymentTypeScreenUITestHelper(app: app)
+        paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: false)
+        let payButton = checkPayButton(app: app, expectedPayText: "Shipping >")
+        
+        payButton.tap()
+        
+        //TODO: fill shipping details and click pay
+        
+        //checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    
+    func testFlowFullBillingNoShippingWithEmail() {
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: true, withShipping: false, withEmail: true, amount: 30, taxAmount: 0.5, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let _ = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.50")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    
+    func testFlowNoFullBillingNoShippingWithEmail() {
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: true, amount: 30, taxAmount: 0.5, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let _ = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.50")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    
+    func testFlowNoFullBillingNoShippingNoEmail() {
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 30, taxAmount: 0.5, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let _ = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.50")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    
+    
+    //------------------------------------ Helper functions ----------------------------
+    
+     
+    private func checkResult(app: XCUIApplication, expectedSuccessText: String) {
+        
+        let successLabel = app.staticTexts["SuccessLabel"]
+        let labelText: String = successLabel.label
+        assert(labelText == expectedSuccessText)
+    }
+    
+    private func checkPayButton(app: XCUIApplication, expectedPayText: String) -> XCUIElement {
+        
+        let payButton = app.buttons["PayButton"]
+        let payButtonText = payButton.label
+        assert(expectedPayText == payButtonText)
+        return payButton
+    }
+    
+    private func getDummyBillingDetails() -> BSBillingAddressDetails {
+        
+        let billingDetails = BSBillingAddressDetails(email: "shevie@gmail.com", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : "CA", state : "ON")
+        return billingDetails
+    }
+    
+    private func prepareInitialData(fullBilling: Bool, withShipping: Bool, withEmail: Bool, amount: Double!, taxAmount: Double, currency: String) -> BSInitialData {
 
-        // prepare initial data for the test
         let initialData = BSInitialData()
-        initialData.fullBilling = true
-        initialData.withShipping = true
-        initialData.withEmail = false
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0.5, currency: "USD")
+        initialData.fullBilling = fullBilling
+        initialData.withShipping = withShipping
+        initialData.withEmail = withEmail
+        initialData.priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
+        return initialData
+    }
+    
+    private func fillBillingDetails(app: XCUIApplication, initialData: BSInitialData, ccn: String, exp: String, cvv: String, billingDetails: BSBillingAddressDetails) -> BSPaymentScreenUITestHelper {
+        
+        let paymentHelper = BSPaymentScreenUITestHelper(app:app)
+        
+        // fill CC values
+        paymentHelper.setCcDetails(isOpen: true, ccn: ccn, exp: exp, cvv: cvv)
+        
+        // make sure fields are shown according to configuration
+        paymentHelper.checkInputs(initialData: initialData)
+        
+        // fill field values
+        paymentHelper.setFieldValues(billingDetails: billingDetails, initialData: initialData)
+        
+        // check that the values are in correctly
+        initialData.billingDetails = billingDetails
+        paymentHelper.checkInputs(initialData: initialData)
+        
+        return paymentHelper
+    }
+    
+    private func gotoPaymentScreen(app: XCUIApplication, initialData: BSInitialData) {
+        
+        let paymentTypeHelper = BSPaymentTypeScreenUITestHelper(app: app)
         
         // set switches and amounts in merchant checkout screen
         setMerchantCheckoutScreen(app: app, initialData: initialData)
@@ -57,43 +203,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         // click CC button
         app.buttons["CcButton"].tap()
-        
-        // check CCN component state
-        let paymentHelper = BSPaymentScreenUITestHelper(app:app)
-        paymentHelper.checkCcnComponentState(shouldBeOpen: true)
-        
-        let ccnTextField = paymentHelper.getCcInputFieldElement()
-        ccnTextField.typeText("4111 1111 1111 1111")
-
-        paymentHelper.checkCcnComponentState(shouldBeOpen: false)
-
-        let expTextField = paymentHelper.getExpInputFieldElement()
-        expTextField.typeText("1126")
-        
-        let cvvTextField = paymentHelper.getCvvInputFieldElement()
-        cvvTextField.typeText("333")
-        
-        // make sure fields are shown according to configuration
-        paymentHelper.checkInputs(initialData: initialData)
-        
-        // fill field values
-        let billingDetails = BSBillingAddressDetails(email: "shevie@gmail.com", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : "CA", state : "ON")
-        paymentHelper.setFieldValues(billingDetails: billingDetails)
-
-        // check that the values are in correctly
-        initialData.billingDetails = billingDetails
-        paymentHelper.checkInputs(initialData: initialData)
-        
-        //let elementsQuery = app.scrollViews.otherElements
-        /*
-        let paybuttonButton = app.buttons["PayButton"]
-        paybuttonButton.tap()
-        */
-        
-        print("done")
     }
-    
-    
     
     private func setMerchantCheckoutScreen(app: XCUIApplication, initialData: BSInitialData) {
         
