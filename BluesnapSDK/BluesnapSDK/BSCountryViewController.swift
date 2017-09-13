@@ -23,9 +23,9 @@ class BSCountryViewController : BSBaseListController {
     
     
     // MARK: init
-    
-    func initCountries(selectedCode: String!, updateFunc : @escaping (String, String)->Void) {
-        
+
+    func initCountries(selectedCode: String!, updateFunc: @escaping (String, String) -> Void) {
+
         let countryManager = BSCountryManager.getInstance()
         self.updateFunc = updateFunc
         if let countryName = countryManager.getCountryName(countryCode: selectedCode) {

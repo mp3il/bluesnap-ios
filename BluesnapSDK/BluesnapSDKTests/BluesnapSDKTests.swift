@@ -20,18 +20,18 @@ class BluesnapSDKTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     //------------------------------------------------------
     // MARK: setBsToken
     //------------------------------------------------------
     func testSetBsToken() {
-    
+
         let token = BSToken(tokenStr: "aaa", isProduction: false)
         BlueSnapSDK.setBsToken(bsToken: token)
-        
+
         XCTAssertEqual(BSApiManager.apiToken, token)
     }
-    
+
 
     //------------------------------------------------------
     // MARK: submitCcDetails
@@ -44,7 +44,7 @@ class BluesnapSDKTests: XCTestCase {
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
-        
+
         BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
@@ -71,8 +71,8 @@ class BluesnapSDKTests: XCTestCase {
 
         submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
     }
-    
-    
+
+
     //------------------------------------------------------
     // MARK: getCurrencyRates
     //------------------------------------------------------
@@ -80,10 +80,10 @@ class BluesnapSDKTests: XCTestCase {
     func testGetTokenAndCurrencies() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        
+
         createToken()
-        
-        var bsCurrencies : BSCurrencies?
+
+        var bsCurrencies: BSCurrencies?
         do {
             bsCurrencies = try BlueSnapSDK.getCurrencyRates()
         } catch let error {
@@ -91,11 +91,11 @@ class BluesnapSDKTests: XCTestCase {
             fatalError()
         }
         XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-        
-        let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+
+        let gbpCurrency: BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
         NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
-        
-        let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+
+        let eurCurrencyRate: Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
         NSLog("EUR currency rate is: \(eurCurrencyRate)")
     }
 
@@ -104,7 +104,7 @@ class BluesnapSDKTests: XCTestCase {
     //------------------------------------------------------
     
     private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
-        
+
         BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             

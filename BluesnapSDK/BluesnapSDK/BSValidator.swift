@@ -75,7 +75,7 @@ import Foundation
         }
         return result
     }
-    
+
     // no validation yet, this is just a preparation
     class func validatePhone(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSShippingAddressDetails?) -> Bool {
         
@@ -343,7 +343,7 @@ import Foundation
         input = BSStringUtils.cutToMaxLength(input, maxLength: 4)
         sender.text = input
     }
-    
+
     class func updateState(addressDetails: BSBaseAddressDetails!, stateInputLine: BSInputLine) {
         
         let selectedCountryCode = addressDetails.country ?? ""

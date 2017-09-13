@@ -176,7 +176,7 @@ class BSViewsManager {
         
         let selectedCountryCode = addressDetails.country ?? ""
         let selectedStateCode = addressDetails.state ?? ""
-        
+
         let countryManager = BSCountryManager.getInstance()
         if let states = countryManager.getCountryStates(countryCode: selectedCountryCode) {
             

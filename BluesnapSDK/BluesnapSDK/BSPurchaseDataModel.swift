@@ -116,6 +116,6 @@ public enum BSPaymentType : String {
     
     public var billingDetails : BSBillingAddressDetails?
     public var shippingDetails : BSShippingAddressDetails?
-    
-    public var updateTaxFunc : ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?
+
+    public var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
 }
