@@ -20,18 +20,18 @@ class BluesnapSDKTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     //------------------------------------------------------
     // MARK: setBsToken
     //------------------------------------------------------
     func testSetBsToken() {
-    
+
         let token = BSToken(tokenStr: "aaa", isProduction: false)
         BlueSnapSDK.setBsToken(bsToken: token)
-        
+
         XCTAssertEqual(BSApiManager.apiToken, token)
     }
-    
+
 
     //------------------------------------------------------
     // MARK: submitCcDetails
@@ -44,7 +44,7 @@ class BluesnapSDKTests: XCTestCase {
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
-        
+
         BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
@@ -71,8 +71,8 @@ class BluesnapSDKTests: XCTestCase {
 
         submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
     }
-    
-    
+
+
     //------------------------------------------------------
     // MARK: getCurrencyRates
     //------------------------------------------------------
@@ -102,7 +102,7 @@ class BluesnapSDKTests: XCTestCase {
     //------------------------------------------------------
     
     private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
-        
+
         BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             

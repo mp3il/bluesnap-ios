@@ -17,7 +17,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     fileprivate var paymentRequest : BSCcPaymentRequest!
     fileprivate var payText : String!
     fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
-    fileprivate var updateTaxFunc : ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?
+    fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager : BSCountryManager!
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     fileprivate var firstTime : Bool = true
@@ -36,8 +36,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var subtotalAndTaxDetailsView: BSSubtotalUIView!
 
     // MARK: init
-    
-    func initScreen(paymentRequest : BSCcPaymentRequest!, payText : String!,submitPaymentFields : @escaping () -> Void, firstTime: Bool, updateTaxFunc: ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?) {
+
+    func initScreen(paymentRequest: BSCcPaymentRequest!, payText: String!, submitPaymentFields: @escaping () -> Void, firstTime: Bool, updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
         
         self.paymentRequest = paymentRequest
         self.payText = payText
@@ -341,9 +341,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             self.viewDidLayoutSubviews()
         }
     }*/
-    
+
     private func updateAmounts() {
-        
+
         subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
         let toCurrency = paymentRequest.getCurrency() ?? ""
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
@@ -384,7 +384,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func updateZipByCountry(countryCode: String) {
-        
+
         let hideZip = BSCountryManager.getInstance().countryHasNoZip(countryCode: countryCode)
         
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
@@ -396,7 +396,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func updateState() {
-        
+
         BSValidator.updateState(addressDetails: paymentRequest.getShippingDetails()!, stateInputLine: stateInputLine)
     }
     

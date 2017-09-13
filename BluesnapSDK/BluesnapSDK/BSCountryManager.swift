@@ -12,8 +12,7 @@ import Foundation
     
     public static let US_COUNTRY_CODE: String = "US"
 
-    fileprivate static var countryManager = BSCountryManager()
-
+    fileprivate static let instance = BSCountryManager()
     fileprivate var countryCodes : [String] = []
     fileprivate let COUNTRY_STATES : [String : [String : String]] = [
         "US": [
@@ -125,15 +124,15 @@ import Foundation
     internal var removeCountriesWithoutFlag = true
     
     
-    override init() {
+    override fileprivate init() {
         super.init()
         initCountryCodes()
     }
     
     open class func getInstance() -> BSCountryManager {
-        return countryManager
+        return instance
     }
-    
+
     func initCountryCodes() {
         
         countryCodes = NSLocale.isoCountryCodes
@@ -148,24 +147,24 @@ import Foundation
         }
     }
     
-    func handleCountriesWithoutFlag(remove: Bool) {
-        if remove != removeCountriesWithoutFlag {
-            removeCountriesWithoutFlag = remove
-            initCountryCodes()
-        }
-        removeCountriesWithoutFlag = remove
-    }
+//    func handleCountriesWithoutFlag(remove: Bool) {
+//        if remove != removeCountriesWithoutFlag {
+//            removeCountriesWithoutFlag = remove
+//            initCountryCodes()
+//        }
+//        removeCountriesWithoutFlag = remove
+//    }
     
-    func getCountryCodes() -> [String] {
+    public func getCountryCodes() -> [String] {
         return self.countryCodes
     }
     
-    func getCountryName(countryCode: String) -> String? {
+    public func getCountryName(countryCode: String) -> String? {
         let current = Locale(identifier: "en_US")
         return current.localizedString(forRegionCode: countryCode) ?? nil
     }
     
-    func countryHasStates(countryCode : String) -> Bool {
+    public func countryHasStates(countryCode : String) -> Bool {
         
         if let _ = COUNTRY_STATES[countryCode.uppercased()] {
             return true
@@ -173,7 +172,7 @@ import Foundation
         return false
     }
     
-    func getCountryStates(countryCode : String) -> [(name: String, code: String)]? {
+    public func getCountryStates(countryCode : String) -> [(name: String, code: String)]? {
         
         if let states = COUNTRY_STATES[countryCode.uppercased()] {
             var result : [(name: String, code: String)] = []
@@ -188,7 +187,7 @@ import Foundation
         return nil
     }
     
-    func getStateName(countryCode : String, stateCode: String) -> String? {
+    public func getStateName(countryCode : String, stateCode: String) -> String? {
         
         if let states = COUNTRY_STATES[countryCode.uppercased()] {
             return states[stateCode]
@@ -196,7 +195,7 @@ import Foundation
         return nil
     }
     
-    func countryHasNoZip(countryCode : String) -> Bool {
+    public func countryHasNoZip(countryCode : String) -> Bool {
          return self.COUNTRIES_WITHOUT_ZIP.index(of: countryCode.lowercased()) != nil
     }
 }

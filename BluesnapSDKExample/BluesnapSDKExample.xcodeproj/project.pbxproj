@@ -25,6 +25,9 @@
 		926D45929502286419E25FCB /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C4E68941D1C882B3AE350E9 /* CoreText.framework */; };
 		D4BF8F684D49EBF26C3471C0 /* BuddyBuildSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFD5DA00E6D9D413F0E884C5 /* BuddyBuildSDK.framework */; };
 		E09E73F9DBF6074864644F11 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BBCD0E0159D220A2D83C91 /* CoreVideo.framework */; };
+		FD50228F1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD50228E1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift */; };
+		FD5022911F61399300C820AC /* BSPaymentScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */; };
+		FD5022931F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */; };
 		FD68146D1F405EAD00FAE1ED /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD68146F1F405EAD00FAE1ED /* Localizable.strings */; };
 		FD89AB641EB6038600A1B257 /* DemoTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD89AB631EB6038600A1B257 /* DemoTransactions.swift */; };
 		FDF2217C1F25CAB10078217C /* ThankYouViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */; };
@@ -111,6 +114,9 @@
 		DD1DA5729FE41DCDE3370A44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A1D0EF03F84A1CE191C991 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FD461F601F42E3A90050F0FD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FD50228E1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentTypeScreenUITestHelper.swift; sourceTree = "<group>"; };
+		FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentScreenUITestHelper.swift; sourceTree = "<group>"; };
+		FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		FD68146E1F405EAD00FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD89AB631EB6038600A1B257 /* DemoTransactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoTransactions.swift; sourceTree = "<group>"; };
@@ -226,6 +232,9 @@
 			children = (
 				2D4E27A21E8808A800C56C46 /* BluesnapSDKExampleUITests.swift */,
 				2D4E27A41E8808A800C56C46 /* Info.plist */,
+				FD50228E1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift */,
+				FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */,
+				FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */,
 			);
 			path = BluesnapSDKExampleUITests;
 			sourceTree = "<group>";
@@ -427,7 +436,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD50228F1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift in Sources */,
 				2D4E27A31E8808A800C56C46 /* BluesnapSDKExampleUITests.swift in Sources */,
+				FD5022931F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift in Sources */,
+				FD5022911F61399300C820AC /* BSPaymentScreenUITestHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

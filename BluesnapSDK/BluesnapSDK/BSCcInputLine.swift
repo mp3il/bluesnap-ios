@@ -188,8 +188,8 @@ public class BSCcInputLine: BSBaseTextInput {
     internal var expTextField : UITextField = UITextField()
     internal var cvvTextField : UITextField = UITextField()
     private var ccnAnimationLabel : UILabel = UILabel()
-    internal var expErrorLabel : UILabel?
-    internal var cvvErrorLabel : UILabel?
+    internal var expErrorLabel: UILabel?
+    internal var cvvErrorLabel: UILabel?
     private var nextButton : UIButton = UIButton()
     private var showNextButton = false
 
@@ -424,6 +424,12 @@ public class BSCcInputLine: BSBaseTextInput {
         
         super.buildElements()
         
+        self.textField.accessibilityIdentifier = "CcTextField"
+        self.expTextField.accessibilityIdentifier = "ExpTextField"
+        self.cvvTextField.accessibilityIdentifier = "CvvTextField"
+        ccnAnimationLabel.accessibilityIdentifier = "last4digitsLabel"
+        nextButton.accessibilityIdentifier = "NextButton"
+
         self.textField.delegate = self
         self.addSubview(expTextField)
         self.expTextField.delegate = self
@@ -616,6 +622,7 @@ public class BSCcInputLine: BSBaseTextInput {
         
         if expErrorLabel == nil {
             expErrorLabel = UILabel()
+            expErrorLabel!.accessibilityIdentifier = "ExpErrorLabel"
             initErrorLabel(errorLabel: expErrorLabel)
         }
         showErrorByField(field: self.expTextField, errorLabel: expErrorLabel, errorText: errorText)
@@ -627,6 +634,7 @@ public class BSCcInputLine: BSBaseTextInput {
         
         if cvvErrorLabel == nil {
             cvvErrorLabel = UILabel()
+            cvvErrorLabel!.accessibilityIdentifier = "CvvErrorLabel"
             initErrorLabel(errorLabel: cvvErrorLabel)
         }
         showErrorByField(field: self.cvvTextField, errorLabel: cvvErrorLabel, errorText: errorText)

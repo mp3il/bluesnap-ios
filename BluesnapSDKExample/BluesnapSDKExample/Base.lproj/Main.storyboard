@@ -50,6 +50,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Hna-Cr-jnR">
                                         <rect key="frame" x="163" y="14" width="51" height="31"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="WithShippingSwitch"/>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Full billing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8V-G4-lWL" userLabel="Full billing">
                                         <rect key="frame" x="14" y="52" width="135" height="21"/>
@@ -59,6 +60,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xkv-uS-lPt" userLabel="Full Billing Switch">
                                         <rect key="frame" x="163" y="47" width="51" height="31"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="FullBillingSwitch"/>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sqi-jc-dUs" userLabel="With Email">
                                         <rect key="frame" x="14" y="85" width="135" height="21"/>
@@ -71,6 +73,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u0H-Xe-vin" userLabel="with Email Switch">
                                         <rect key="frame" x="163" y="80" width="51" height="31"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="WithEmailSwitch"/>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOS-3A-GN6">
                                         <rect key="frame" x="14" y="134.5" width="109" height="23"/>
@@ -80,6 +83,7 @@
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="20" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1E4-kM-4oY">
                                         <rect key="frame" x="128" y="131" width="84" height="30"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="AmountField"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="84" id="BlH-PY-OJs"/>
                                         </constraints>
@@ -88,6 +92,7 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dMR-1J-U5n">
                                         <rect key="frame" x="220" y="131" width="147" height="30"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="CurrencyButton"/>
                                         <state key="normal" title="USD">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -103,6 +108,7 @@
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AB2-QV-u38">
                                         <rect key="frame" x="128" y="169" width="84" height="30"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="TaxField"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
@@ -115,6 +121,7 @@
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TAo-mM-qRo">
                                         <rect key="frame" x="13" y="207" width="349" height="105"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="CheckoutButton"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="105" id="hg7-UI-ey7"/>
                                         </constraints>
@@ -208,6 +215,7 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Checkmark" translatesAutoresizingMaskIntoConstraints="NO" id="SZe-k1-CoZ">
                                         <rect key="frame" x="61" y="31" width="253" height="253"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="SuccessImage"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="253" id="Gkz-xr-BmH"/>
                                             <constraint firstAttribute="height" constant="253" id="Mvw-xm-SzO"/>
@@ -215,12 +223,14 @@
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Success!" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3N-It-HEB">
                                         <rect key="frame" x="95" y="303" width="184" height="53"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="SuccessLabel"/>
                                         <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="45"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NTs-3n-r0Y">
                                         <rect key="frame" x="0.0" y="448" width="375" height="155"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="TryAgainButton"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="155" id="9YT-Qf-rkb"/>
                                             <constraint firstAttribute="width" constant="375" id="dDp-Gx-8c0"/>
@@ -232,6 +242,7 @@
                                     </button>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Something went wrong" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KfV-UR-b1h">
                                         <rect key="frame" x="109" y="374" width="158" height="18"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ErrorDescLabel"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -239,6 +250,7 @@
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="TIc-eV-eUb">
                                         <rect key="frame" x="20" y="409" width="335" height="48"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ErrorTextView"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

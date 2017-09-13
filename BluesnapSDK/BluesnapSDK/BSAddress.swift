@@ -18,14 +18,16 @@ import Foundation
  */
 @objc public class BSBaseAddressDetails: NSObject {
     
-    public override init() {}
-    
     public var name : String! = ""
     public var address : String?
     public var city : String?
     public var zip : String?
     public var country : String?
     public var state : String?
+    
+    public override init() {
+        super.init()
+    }
     
     public func getSplitName() -> (firstName: String, lastName: String)? {
         return BSStringUtils.splitName(name)
@@ -37,9 +39,20 @@ import Foundation
  */
 @objc public class BSBillingAddressDetails : BSBaseAddressDetails, NSCopying {
     
+    public var email : String?
+
     public override init() { super.init() }
     
-    public var email : String?
+    public init(email: String?, name: String!, address: String?, city: String?, zip: String?, country: String?, state: String?) {
+        super.init()
+        self.email = email
+        self.name = name
+        self.address = address
+        self.city = city
+        self.zip = zip
+        self.country = country
+        self.state = state
+    }
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSBillingAddressDetails()
@@ -59,9 +72,20 @@ import Foundation
  */
 @objc public class BSShippingAddressDetails : BSBaseAddressDetails, NSCopying {
     
+    public var phone : String?
+    
     public override init() { super.init() }
     
-    public var phone : String?
+    public init(phone: String?, name: String!, address: String?, city: String?, zip: String?, country: String?, state: String?) {
+        super.init()
+        self.phone = phone
+        self.name = name
+        self.address = address
+        self.city = city
+        self.zip = zip
+        self.country = country
+        self.state = state
+    }
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSShippingAddressDetails()

@@ -28,8 +28,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         paymentRequest in
         print("purchaseFunc should be overridden")
     }
-    fileprivate var updateTaxFunc : ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?
-    fileprivate var countryManager = BSCountryManager()
+    fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
+    fileprivate var countryManager = BSCountryManager.getInstance()
     
     // MARK: - Outlets
     
@@ -52,8 +52,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     @IBOutlet weak var zipTopConstraint: NSLayoutConstraint!
     
     // MARK: init
-    
-    public func initScreen(paymentRequest : BSCcPaymentRequest!, fullBilling: Bool, withEmail: Bool, withShipping: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!)->Void, updateTaxFunc: ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?) {
+
+    public func initScreen(paymentRequest: BSCcPaymentRequest!, fullBilling: Bool, withEmail: Bool, withShipping: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void, updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
         
         self.firstTime = true
         self.firstTimeShipping = true
@@ -373,7 +373,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
     
     private func updateAmounts() {
-        
+
         if self.ccInputLine.ccnIsOpen {
             subtotalAndTaxDetailsView.isHidden = true
         } else {
@@ -433,7 +433,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }
 
     private func updateZipByCountry(countryCode : String) {
-        
+
         let hideZip = BSCountryManager.getInstance().countryHasNoZip(countryCode: countryCode)
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: true)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
@@ -494,7 +494,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     // MARK: button actions
     
     @IBAction func shippingSameAsBillingValueChanged(_ sender: Any) {
-        
+
         callUpdateTax(ifSameAsBilling: true, ifNotSameAsBilling: true)
         updateAmounts()
     }
@@ -502,9 +502,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     private func callUpdateTax(ifSameAsBilling: Bool, ifNotSameAsBilling: Bool) {
 
         if updateTaxFunc != nil && self.withShipping {
-            var country : String = ""
-            var state : String?
-            var callFunc : Bool = false
+            var country: String = ""
+            var state: String?
+            var callFunc: Bool = false
             if ifSameAsBilling && isShippingSameAsBilling() {
                 country = paymentRequest.billingDetails.country!
                 state = paymentRequest.billingDetails.state
