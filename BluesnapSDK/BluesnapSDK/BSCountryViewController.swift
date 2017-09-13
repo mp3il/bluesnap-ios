@@ -20,14 +20,13 @@ class BSCountryViewController : BSBaseListController {
         countryCode, countryName in
         NSLog("Country \(countryCode):\(countryName) was selected")
     }
-    fileprivate var countryManager : BSCountryManager!
     
     
     // MARK: init
     
-    func initCountries(selectedCode: String!, countryManager : BSCountryManager!, updateFunc : @escaping (String, String)->Void) {
+    func initCountries(selectedCode: String!, updateFunc : @escaping (String, String)->Void) {
         
-        self.countryManager = countryManager
+        let countryManager = BSCountryManager.getInstance()
         self.updateFunc = updateFunc
         if let countryName = countryManager.getCountryName(countryCode: selectedCode) {
             self.selectedItem = (name: countryName, code: selectedCode)

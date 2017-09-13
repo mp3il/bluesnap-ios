@@ -15,8 +15,8 @@ public protocol DictionaryConvertible {
 
 extension DictionaryConvertible {
 
-    public func toJSON() -> Data {
-        return try! JSONSerialization.data(withJSONObject: self.toDictionary(), options: JSONSerialization.WritingOptions.prettyPrinted);
+    public func toJSON() throws -> Data {
+        return try JSONSerialization.data(withJSONObject: self.toDictionary(), options: JSONSerialization.WritingOptions.prettyPrinted);
     }
 }
 

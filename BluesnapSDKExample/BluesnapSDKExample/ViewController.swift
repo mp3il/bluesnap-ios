@@ -73,7 +73,7 @@ class ViewController: UIViewController {
 	@IBAction func convertButtonAction(_ sender: UIButton) {
         
         resultTextView.text = ""
-        
+
         // Override the navigation name, so that the next screen navigation item will say "Cancel"
         let backItem = UIBarButtonItem()
         backItem.title = "Cancel"
@@ -149,9 +149,7 @@ class ViewController: UIViewController {
         initialData.withShipping = withShippingSwitch.isOn
         initialData.fullBilling = fullBillingSwitch.isOn
         initialData.withEmail = withEmailSwitch.isOn
-        
-        // If you have the shopper details, you can supply initial values like this:
-        //setInitialShopperDetails()
+        initialData.updateTaxFunc = self.updateTax
     }
     
     /**
@@ -229,7 +227,28 @@ class ViewController: UIViewController {
         }
     }
     
-    
+    /**
+        This function is called to recalculate the tax amoutn based on the country/state.
+        In this example we give tax only to US states, with 5% for all states, except NY which has 8%.
+    */
+    func updateTax(_ shippingCountry : String,
+                       _ shippingState : String?,
+                       _ priceDetails : BSPriceDetails) -> Void {
+
+        var taxPercent : Double = 0
+        if shippingCountry.uppercased() == "US" {
+            taxPercent = 5
+            if let state = shippingState {
+                if state == "NY" {
+                    taxPercent = 8
+                }
+            }
+        }
+        let newTax = priceDetails.amount * taxPercent / 100.0
+        NSLog("Changing tax amount from \(priceDetails.taxAmount) to \(newTax)")
+        priceDetails.taxAmount = newTax
+    }
+
     private func showThankYouScreen(errorText: String?) {
         
         // Show thank you screen (ThankYouViewController)
@@ -249,9 +268,9 @@ class ViewController: UIViewController {
         NSLog(" amount=\(paymentRequest.getAmount() ?? 0.0)")
         NSLog(" tax=\(paymentRequest.getTaxAmount() ?? 0.0)")
         NSLog(" currency=\(paymentRequest.getCurrency() ?? "")")
-        NSLog(" payment type= \(paymentRequest.paymentType)")
         
         if let paymentRequest = paymentRequest as? BSCcPaymentRequest {
+            NSLog(" payment type= Credit Card")
             if let billingDetails = paymentRequest.getBillingDetails() {
                 NSLog("Result Data: Name:\(billingDetails.name ?? "")")
                 if let zip = billingDetails.zip {
@@ -279,9 +298,11 @@ class ViewController: UIViewController {
             }
             
         } else if let _ = paymentRequest as? BSApplePayPaymentRequest {
+            NSLog(" payment type= Apple Pay")
             NSLog("No extra data")
             
         } else if let paymentRequest = paymentRequest as? BSPayPalPaymentRequest {
+            NSLog(" payment type= Pay Pal")
             NSLog("PayPal invoice ID:\(paymentRequest.payPalInvoiceId ?? "")")
         }
         NSLog("--------------------------------------------------------")

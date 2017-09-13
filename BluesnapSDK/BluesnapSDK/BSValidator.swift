@@ -56,6 +56,7 @@ import Foundation
     class func validateEmail(ignoreIfEmpty: Bool, input: BSInputLine, addressDetails: BSBillingAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        input.setValue(newValue)
         if let addressDetails = addressDetails {
             addressDetails.email = newValue
         }
@@ -75,10 +76,11 @@ import Foundation
         return result
     }
     
-    // no validation yet, tyhis is just a preparation
+    // no validation yet, this is just a preparation
     class func validatePhone(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSShippingAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        input.setValue(newValue)
         if let addressDetails = addressDetails {
             addressDetails.phone = newValue
         }
@@ -88,6 +90,7 @@ import Foundation
     class func validateStreet(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        input.setValue(newValue)
         if let addressDetails = addressDetails {
             addressDetails.address = newValue
         }
@@ -136,7 +139,7 @@ import Foundation
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count < 2) {
+        } else if (newValue.characters.count != 2) {
             result = false
         } else {
             result = true
@@ -152,8 +155,8 @@ import Foundation
     class func validateZip(ignoreIfEmpty : Bool, input: BSInputLine, addressDetails: BSBaseAddressDetails?) -> Bool {
         
         var result : Bool = true
-        let newValue1 : String = input.getValue() ?? ""
-        let newValue : String = newValue1.trimmingCharacters(in: .whitespaces)
+        let newValue = input.getValue()?.trimmingCharacters(in: .whitespaces) ?? ""
+        input.setValue(newValue)
         if let addressDetails = addressDetails {
             addressDetails.zip = newValue
         }
@@ -179,10 +182,11 @@ import Foundation
         var result : Bool = true
         if ((ignoreIfEmpty || input.isHidden) && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count < 2) {
+        } else if (newValue.characters.count != 2) {
             result = false
         } else {
-            result = true
+            let stateName = BSCountryManager.getInstance().getStateName(countryCode: addressDetails?.country ?? "", stateCode: addressDetails?.state ?? "")
+            result = stateName != nil
         }
         if result {
             input.hideError()
@@ -340,12 +344,13 @@ import Foundation
         sender.text = input
     }
     
-    class func updateState(addressDetails: BSBaseAddressDetails!, countryManager: BSCountryManager, stateInputLine: BSInputLine) {
+    class func updateState(addressDetails: BSBaseAddressDetails!, stateInputLine: BSInputLine) {
         
         let selectedCountryCode = addressDetails.country ?? ""
         let selectedStateCode = addressDetails.state ?? ""
         var hideState : Bool = true
         stateInputLine.setValue("")
+        let countryManager = BSCountryManager.getInstance()
         if countryManager.countryHasStates(countryCode: selectedCountryCode) {
             hideState = false
             if let stateName = countryManager.getStateName(countryCode: selectedCountryCode, stateCode: selectedStateCode){

@@ -41,6 +41,9 @@
 		FD68145D1F38762E00FAE1ED /* BSCcPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD68145C1F38762E00FAE1ED /* BSCcPayment.swift */; };
 		FD68145F1F38769300FAE1ED /* BSPayPalPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD68145E1F38769300FAE1ED /* BSPayPalPayment.swift */; };
 		FD6814621F40419C00FAE1ED /* BSLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD6814641F40419C00FAE1ED /* BSLocalizable.strings */; };
+		FD9197431F49630E008C266A /* BSApiManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9197421F49630E008C266A /* BSApiManagerTests.swift */; };
+		FD9197451F496C04008C266A /* BSStringUtilssTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9197441F496C04008C266A /* BSStringUtilssTests.swift */; };
+		FD9197471F49B649008C266A /* BSValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9197461F49B649008C266A /* BSValidatorTests.swift */; };
 		FDA0772D1EAC8EAE0045E920 /* BSCountryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */; };
 		FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */; };
 		FDA077311EAC94CF0045E920 /* BSCountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */; };
@@ -100,6 +103,9 @@
 		FD68145E1F38769300FAE1ED /* BSPayPalPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPayPalPayment.swift; sourceTree = "<group>"; };
 		FD6814661F4041B000FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/BSLocalizable.strings; sourceTree = "<group>"; };
 		FD91973D1F44667E008C266A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BSLocalizable.strings; sourceTree = "<group>"; };
+		FD9197421F49630E008C266A /* BSApiManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiManagerTests.swift; sourceTree = "<group>"; };
+		FD9197441F496C04008C266A /* BSStringUtilssTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStringUtilssTests.swift; sourceTree = "<group>"; };
+		FD9197461F49B649008C266A /* BSValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSValidatorTests.swift; sourceTree = "<group>"; };
 		FDA0772C1EAC8EAE0045E920 /* BSCountryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryManager.swift; sourceTree = "<group>"; };
 		FDA0772E1EAC91990045E920 /* BSCountryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryViewController.swift; sourceTree = "<group>"; };
 		FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCountryTableViewCell.swift; sourceTree = "<group>"; };
@@ -168,6 +174,9 @@
 			isa = PBXGroup;
 			children = (
 				2D374F2E1E880E7300AE2A81 /* BluesnapSDKTests.swift */,
+				FD9197421F49630E008C266A /* BSApiManagerTests.swift */,
+				FD9197441F496C04008C266A /* BSStringUtilssTests.swift */,
+				FD9197461F49B649008C266A /* BSValidatorTests.swift */,
 				2D374F301E880E7300AE2A81 /* Info.plist */,
 			);
 			path = BluesnapSDKTests;
@@ -403,6 +412,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D374F2F1E880E7300AE2A81 /* BluesnapSDKTests.swift in Sources */,
+				FD9197451F496C04008C266A /* BSStringUtilssTests.swift in Sources */,
+				FD9197431F49630E008C266A /* BSApiManagerTests.swift in Sources */,
+				FD9197471F49B649008C266A /* BSValidatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

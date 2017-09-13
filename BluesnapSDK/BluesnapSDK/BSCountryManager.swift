@@ -11,7 +11,7 @@ import Foundation
 @objc public class BSCountryManager: NSObject {
     
     public static let US_COUNTRY_CODE: String = "US"
-    
+
     fileprivate static let instance = BSCountryManager()
     fileprivate var countryCodes : [String] = []
     fileprivate let COUNTRY_STATES : [String : [String : String]] = [
@@ -132,7 +132,7 @@ import Foundation
     open class func getInstance() -> BSCountryManager {
         return instance
     }
-    
+
     func initCountryCodes() {
         
         countryCodes = NSLocale.isoCountryCodes

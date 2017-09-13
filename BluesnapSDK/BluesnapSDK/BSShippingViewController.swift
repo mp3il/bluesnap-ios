@@ -17,6 +17,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     fileprivate var paymentRequest : BSCcPaymentRequest!
     fileprivate var payText : String!
     fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
+    fileprivate var updateTaxFunc : ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?
     fileprivate var countryManager : BSCountryManager!
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     fileprivate var firstTime : Bool = true
@@ -36,13 +37,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: init
     
-    func initScreen(paymentRequest : BSCcPaymentRequest!, payText : String!,submitPaymentFields : @escaping () -> Void, countryManager : BSCountryManager!, firstTime: Bool) {
+    func initScreen(paymentRequest : BSCcPaymentRequest!, payText : String!,submitPaymentFields : @escaping () -> Void, firstTime: Bool, updateTaxFunc: ((_ shippingCountry : String, _ shippingState : String?, _ priceDetails : BSPriceDetails) -> Void)?) {
         
         self.paymentRequest = paymentRequest
         self.payText = payText
         self.submitPaymentFields = submitPaymentFields
-        self.countryManager = countryManager
         self.firstTime = firstTime
+        self.updateTaxFunc = updateTaxFunc
     }
     
     // MARK: Keyboard functions
@@ -152,10 +153,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             let countryCode = paymentRequest.getShippingDetails()?.country ?? ""
             updateZipByCountry(countryCode: countryCode)
             updateFlagImage(countryCode: countryCode)
-            updateState()
             payUIButton.setTitle(payText, for: UIControlState())
-            
-            updateTexts()
         }
         if firstTime {
             firstTime = false
@@ -165,6 +163,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             zipInputLine.hideError()
             cityInputLine.hideError()
             stateInputLine.hideError()
+            updateTexts()
+            updateState()
+            updateAmounts()
         }
     }
     
@@ -303,7 +304,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         BSViewsManager.showStateList(
             inNavigationController: self.navigationController,
             animated: true,
-            countryManager: countryManager,
             addressDetails: paymentRequest.getShippingDetails()!,
             updateFunc: updateWithNewState)
     }
@@ -314,7 +314,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
-            countryManager: countryManager,
             selectedCountryCode: selectedCountryCode,
             updateFunc: updateWithNewCountry)
     }
@@ -343,21 +342,23 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }*/
     
-    private func updateTexts() {
+    private func updateAmounts() {
         
-        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Shipping_Screen)
-        
+        subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
         let toCurrency = paymentRequest.getCurrency() ?? ""
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
         let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
-        
+    }
+
+    private func updateTexts() {
+
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Shipping_Screen)
         self.nameInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Name)
         self.phoneInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Phone)
         self.streetInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Street)
         self.cityInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_City)
         self.stateInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_State)
-        
         self.nameInputLine.placeHolder = BSLocalizedStrings.getString(BSLocalizedString.Placeholder_Name)
     }
     
@@ -368,6 +369,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             updateZipByCountry(countryCode: countryCode)
         }
         updateFlagImage(countryCode: countryCode)
+        if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
+            updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
+            updateAmounts()
+        }
     }
     
     private func updateFlagImage(countryCode : String) {
@@ -380,7 +385,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func updateZipByCountry(countryCode: String) {
         
-        let hideZip = self.countryManager.countryHasNoZip(countryCode: countryCode)
+        let hideZip = BSCountryManager.getInstance().countryHasNoZip(countryCode: countryCode)
         
         self.zipInputLine.labelText = BSValidator.getZipLabelText(countryCode: countryCode, forBilling: false)
         self.zipInputLine.fieldKeyboardType = BSValidator.getZipKeyboardType(countryCode: countryCode)
@@ -392,7 +397,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func updateState() {
         
-        BSValidator.updateState(addressDetails: paymentRequest.getShippingDetails()!, countryManager: countryManager, stateInputLine: stateInputLine)
+        BSValidator.updateState(addressDetails: paymentRequest.getShippingDetails()!, stateInputLine: stateInputLine)
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
@@ -401,6 +406,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             shippingDetails.state = stateCode
         }
         self.stateInputLine.setValue(stateName)
+        if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
+            updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
+            updateAmounts()
+        }
     }
     
     private func updateZipFieldLocation() {

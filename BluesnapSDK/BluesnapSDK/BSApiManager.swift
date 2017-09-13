@@ -637,27 +637,30 @@ import Foundation
             NSLog("Error - result data is empty")
             return .unknown
         }
+        var isTokenExpired = false
         if (errStr == "EXPIRED_TOKEN") {
             resultError = .expiredToken
-            notifyTokenExpired()
+            isTokenExpired = true
         } else if (errStr == "INVALID_CC_NUMBER") {
             resultError = .invalidCcNumber
         } else if (errStr == "INVALID_CVV") {
             resultError = .invalidCvv
         } else if (errStr == "INVALID_EXP_DATE") {
             resultError = .invalidExpDate
-        } else if (errStr == "TOKEN_WAS_ALREADY_USED_FOR_APPLEֹֹֹֹ_PAY") {
-            resultError = .usedTokenApplePay
-        } else if (errStr == "TOKEN_WAS_ALREADY_USED_FOR_CC") {
-            resultError = .usedTokenForCC
+        } else if (BSStringUtils.startsWith(theString: errStr ?? "", subString: "TOKEN_WAS_ALREADY_USED_FOR_")) {
+            resultError = .tokenAlreadyUsed
+            isTokenExpired = true
         } else if (errStr == "PAYPAL_UNSUPPORTED_CURRENCY") {
             resultError = .paypalUnsupportedCurrency
         } else if (errStr == "TOKEN_NOT_FOUND") {
             resultError = .tokenNotFound
-            notifyTokenExpired()
+            isTokenExpired = true
         } else if httpStatusCode == 401 {
             // unauthorized - this happens in the getRates, where the result is ubreadable HTML
             resultError = .tokenNotFound
+            isTokenExpired = true
+        }
+        if isTokenExpired {
             notifyTokenExpired()
         }
         
