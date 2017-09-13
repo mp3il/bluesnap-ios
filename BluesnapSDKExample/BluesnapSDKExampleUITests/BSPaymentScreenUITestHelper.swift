@@ -120,7 +120,7 @@ class BSPaymentScreenUITestHelper {
             // zip should be hidden only for country that does not have zip; label also changes according to country
             let expectedZipLabelText = (billingDetails.country == "US") ? "Billing Zip" : "Postal Code"
             let zipShouldBeVisible = !BSCountryManager.getInstance().countryHasNoZip(countryCode: billingDetails.country ?? "")
-            checkInput(input: zipInput, expectedExists: zipShouldBeVisible, expectedValue: initialData.billingDetails?.zip ?? "", expectedLabelText: expectedZipLabelText)
+            checkInput(input: zipInput, expectedExists: zipShouldBeVisible, expectedValue: billingDetails.zip ?? "", expectedLabelText: expectedZipLabelText)
             if let countryCode = billingDetails.country {
                 // check country image - this does not work, don;t know how to access the image
                 //let countryFlagButton = getInputImageButtonElement(nameInput)

@@ -62,15 +62,86 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
         let _ = checkPayButton(app: app, expectedPayText: "Pay $ 30.50")
-
+        
         paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: false)
         let payButton = checkPayButton(app: app, expectedPayText: "Shipping >")
         
         payButton.tap()
         
-        //TODO: fill shipping details and click pay
+        let _ = fillShippingDetails(app: app, initialData: initialData, shippingDetails: getDummyShippingDetails())
+        let shippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 30.50")
         
-        //checkResult(app: app, expectedSuccessText:  "Success!")
+        shippingPayButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    func testFlowFullBillingWithShippingWithEmailNostate() {
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: true, amount: 20, taxAmount: 1, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let billingDetails = getDummyBillingDetails()
+        billingDetails.country = "IL"
+        billingDetails.state = nil
+        let paymentHelper = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: billingDetails)
+        
+        paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
+        let _ = checkPayButton(app: app, expectedPayText: "Pay $ 21.00")
+        
+        paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: false)
+        let payButton = checkPayButton(app: app, expectedPayText: "Shipping >")
+        
+        payButton.tap()
+        
+        let shippingDetails = getDummyShippingDetails()
+        shippingDetails.country = "GB"
+        shippingDetails.state = nil
+        let _ = fillShippingDetails(app: app, initialData: initialData, shippingDetails: shippingDetails)
+        let shippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 21.00")
+        
+        shippingPayButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
+        
+        print("done")
+    }
+    
+    func testFlowFullBillingWithShippingWithEmailNoZip() {
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: true, amount: 20, taxAmount: 1, currency: "USD")
+        
+        gotoPaymentScreen(app: app, initialData: initialData)
+        
+        let billingDetails = getDummyBillingDetails()
+        billingDetails.country = "GH"
+        billingDetails.state = nil
+        let paymentHelper = fillBillingDetails(app: app, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: billingDetails)
+        
+        paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
+        let _ = checkPayButton(app: app, expectedPayText: "Pay $ 21.00")
+        
+        paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: false)
+        let payButton = checkPayButton(app: app, expectedPayText: "Shipping >")
+        
+        payButton.tap()
+        
+        let shippingDetails = getDummyShippingDetails()
+        shippingDetails.country = "GH"
+        shippingDetails.state = nil
+        let _ = fillShippingDetails(app: app, initialData: initialData, shippingDetails: shippingDetails)
+        let shippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 21.00")
+        
+        shippingPayButton.tap()
+        
+        checkResult(app: app, expectedSuccessText:  "Success!")
         
         print("done")
     }
@@ -146,7 +217,12 @@ class BluesnapSDKExampleUITests: XCTestCase {
     
     private func checkPayButton(app: XCUIApplication, expectedPayText: String) -> XCUIElement {
         
-        let payButton = app.buttons["PayButton"]
+        return checkAPayButton(app: app, buttonId: "PayButton", expectedPayText: expectedPayText)
+    }
+    
+    private func checkAPayButton(app: XCUIApplication, buttonId: String!, expectedPayText: String) -> XCUIElement {
+        
+        let payButton = app.buttons[buttonId]
         let payButtonText = payButton.label
         assert(expectedPayText == payButtonText)
         return payButton
@@ -156,6 +232,12 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let billingDetails = BSBillingAddressDetails(email: "shevie@gmail.com", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : "CA", state : "ON")
         return billingDetails
+    }
+    
+    private func getDummyShippingDetails() -> BSShippingAddressDetails {
+        
+        let shippingDetails = BSShippingAddressDetails(phone: "12345678", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : "CA", state : "ON")
+        return shippingDetails
     }
     
     private func prepareInitialData(fullBilling: Bool, withShipping: Bool, withEmail: Bool, amount: Double!, taxAmount: Double, currency: String) -> BSInitialData {
@@ -183,6 +265,24 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         // check that the values are in correctly
         initialData.billingDetails = billingDetails
+        paymentHelper.checkInputs(initialData: initialData)
+        
+        return paymentHelper
+    }
+    
+    private func fillShippingDetails(app: XCUIApplication, initialData: BSInitialData, shippingDetails: BSShippingAddressDetails) -> BSShippingScreenUITestHelper {
+        
+        let paymentHelper = BSShippingScreenUITestHelper(app:app)
+        
+        // make sure fields are shown according to configuration
+        initialData.shippingDetails = BSShippingAddressDetails()
+        paymentHelper.checkInputs(initialData: initialData)
+        
+        // fill field values
+        paymentHelper.setFieldValues(shippingDetails: shippingDetails, initialData: initialData)
+        
+        // check that the values are in correctly
+        initialData.shippingDetails = shippingDetails
         paymentHelper.checkInputs(initialData: initialData)
         
         return paymentHelper
