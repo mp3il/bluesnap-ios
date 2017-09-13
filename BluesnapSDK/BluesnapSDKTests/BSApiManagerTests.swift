@@ -18,13 +18,13 @@ class BSApiManagerTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         print("----------------------------------------------------")
     }
-
+    
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         stopListeningForBsTokenExpiration();
         super.tearDown()
     }
-
+    
     //------------------------------------------------------
     // MARK: Is Token Expired
     //------------------------------------------------------
@@ -48,83 +48,83 @@ class BSApiManagerTests: XCTestCase {
     //------------------------------------------------------
     // MARK: PayPal
     //------------------------------------------------------
-
+    
     func testGetPayPalToken() {
-
+        
         listenForBsTokenExpiration(expected: false)
         createToken()
-
+        
         let initialData = BSInitialData()
         initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
         let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
-
+        
         let semaphore = DispatchSemaphore(value: 0)
-
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
-
+        
+        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
+            
             XCTAssertNil(resultError)
             print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
             semaphore.signal()
         })
-
+        
         semaphore.wait()
     }
-
+    
     func testGetPayPalTokenWithInvalidToken() {
-
+        
         listenForBsTokenExpiration(expected: false)
         let bsToken = getInvalidToken()
         BSApiManager.setBsToken(bsToken: bsToken)
-
+        
         let initialData = BSInitialData()
         initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
         let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
-
+        
         let semaphore = DispatchSemaphore(value: 0)
-
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
-
+        
+        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
+            
             XCTAssertNotNil(resultError)
             print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
             semaphore.signal()
         })
-
+        
         semaphore.wait()
     }
-
+    
     func testGetPayPalTokenWithExpiredToken() {
-
+        
         listenForBsTokenExpiration(expected: true)
         let bsToken = getExpiredToken()
         BSApiManager.setBsToken(bsToken: bsToken)
-
+        
         let initialData = BSInitialData()
         initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
         let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
-
+        
         let semaphore = DispatchSemaphore(value: 0)
-
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
-
+        
+        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
+            
             XCTAssertNotNil(resultError)
             print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
             semaphore.signal()
         })
-
+        
         semaphore.wait()
         self.waitForExpiredTokenEvent()
     }
 
-
+    
     //------------------------------------------------------
     // MARK: Supported Payment Methods
     //------------------------------------------------------
 
     func testGetSupportedPaymentMethods() {
-
+        
         listenForBsTokenExpiration(expected: false)
         createToken()
-
+        
         do {
             let supportedPaymentMethods = try BSApiManager.getSupportedPaymentMethods()
             print(supportedPaymentMethods)
@@ -143,7 +143,7 @@ class BSApiManagerTests: XCTestCase {
             fatalError()
         }
     }
-
+    
     //------------------------------------------------------
     // MARK: Currency rates
     //------------------------------------------------------
@@ -151,7 +151,7 @@ class BSApiManagerTests: XCTestCase {
     func testGetTokenAndCurrencies() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-
+        
         listenForBsTokenExpiration(expected: false)
         createToken()
         
@@ -203,19 +203,19 @@ class BSApiManagerTests: XCTestCase {
     //------------------------------------------------------
     // MARK: Submit CC details
     //------------------------------------------------------
-
+    
     func testSubmitCCDetailsSuccess() {
-
+        
         listenForBsTokenExpiration(expected: false)
         createToken()
-
+        
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
-
+        
         BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
-
+            
             XCTAssert(error == nil, "error: \(error)")
             let ccType = result.ccType
             let last4 = result.last4Digits

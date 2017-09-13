@@ -71,8 +71,8 @@ class BluesnapSDKTests: XCTestCase {
 
         submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
     }
-
-
+    
+    
     //------------------------------------------------------
     // MARK: getCurrencyRates
     //------------------------------------------------------
