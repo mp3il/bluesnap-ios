@@ -71,65 +71,70 @@ import Foundation
     /**
         Return a list of currencies and their rates from BlueSnap server
     */
-    static func getCurrencyRates() -> BSCurrencies? {
+    static func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
 
         let bsToken = getBsToken()
 
         if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
             let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
             if (diff > TIME_DIFF_TO_RELOAD) {
-                return bsCurrencies
+                completion(bsCurrencies, nil)
             }
         }
 
-        let domain: String! = bsToken!.serverUrl
-        let urlStr = domain + "services/2/tokenized-services/rates"
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        //request.timeoutInterval = 60
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        BSApiCaller.getCurrencyRates(bsToken: bsToken, completion: {
+            resultCurrencies, resultError in
+            if let error = resultError {
+                print("got error \(error)")
+                if error == .unAuthorised {
+                    
+                    // notify expiration and try again
+                    notifyTokenExpired()
+                    
+                    // wait for new token
+                    let semaphore = DispatchSemaphore(value: 0)
+                    waitForNewToken(oldToken: bsToken, count: 0, semaphore: semaphore)
+                    semaphore.wait()
+                    
+                    // try again
+                    BSApiCaller.getCurrencyRates(bsToken: bsToken, completion: { resultCurrencies, resultError in
 
-        // fire request
-
-        var resultError: BSErrors?
-        let semaphore = DispatchSemaphore(value: 0)
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response, error) in
-            if let error = error {
-                let errorType = type(of: error)
-                NSLog("error getting BS currencies - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                resultError = .unknown
+                        if resultError == nil {
+                            bsCurrencies = resultCurrencies
+                            self.lastCurrencyFetchDate = Date()
+                        }
+                        completion(bsCurrencies, resultError)
+                    })
+                    
                 } else {
-            let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode:Int = (httpResponse?.statusCode) {
-                if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                    let tmp = parseCurrenciesJSON(data: data)
-                    if tmp != nil {
-                        bsCurrencies = tmp
-                        self.lastCurrencyFetchDate = Date()
-                    } else {
-                        resultError = .unknown
-                    }
-                } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-                    resultError = parseError(data: data, httpStatusCode: httpStatusCode)
-                } else {
-                    resultError = .unknown
-                    NSLog("Http error getting BS currencies; HTTP status = \(httpStatusCode)")
+                        completion(bsCurrencies, resultError)
                 }
-           } else {
-                resultError = .unknown
-                NSLog("Http error getting BS currencies response")}
+            } else {
+                bsCurrencies = resultCurrencies
+                self.lastCurrencyFetchDate = Date()
+                completion(bsCurrencies, resultError)
             }
-            defer {
-                semaphore.signal()
-            }
-        }
-        task.resume()
-        semaphore.wait()
-
-        return bsCurrencies
+        })
     }
 
+    static func waitForNewToken(oldToken: BSToken?, count : Int, semaphore: DispatchSemaphore) {
+        
+        if oldToken == getBsToken() && count < 10 {
+            
+            print("Waiting for token; count=\(count)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                waitForNewToken(oldToken: oldToken, count: count+1, semaphore: semaphore)
+            }
+        } else {
+            semaphore.signal()
+        }
+    }
+    
+    func delayWithSeconds(seconds: Double, completion: @escaping () -> ()) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            completion()
+        }
+    }
 
     /**
      Submit CC details to BlueSnap server
@@ -497,44 +502,7 @@ import Foundation
         return result
     }
 
-    private static func parseCurrenciesJSON(data: Data?) -> BSCurrencies? {
 
-        var resultData: BSCurrencies?
-        if let data = data {
-            do {
-                // Parse the result JSOn object
-                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    var currencies: [BSCurrency] = []
-                    if let currencyName = json["baseCurrencyName"] as? String
-                    , let currencyCode = json["baseCurrency"] as? String {
-                        let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: 1.0)
-                        currencies.append(bsCurrency)
-                    }
-                    if let exchangeRatesArr = json["exchangeRate"] as? [[String: Any]] {
-                        for exchangeRateItem in exchangeRatesArr {
-                            if let currencyName = exchangeRateItem["quoteCurrencyName"] as? String
-                            , let currencyCode = exchangeRateItem["quoteCurrency"] as? String
-                            , let currencyRate = exchangeRateItem["conversionRate"] as? Double {
-                                let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: currencyRate)
-                                currencies.append(bsCurrency)
-                            }
-                        }
-                    }
-                    currencies = currencies.sorted {
-                        $0.name < $1.name
-                    }
-                    resultData = BSCurrencies(currencies: currencies)
-                } else {
-                    NSLog("Error parsing BS currency rates")
-                }
-            } catch let error as NSError {
-                NSLog("Error parsing BS currency rates: \(error.localizedDescription)")
-            }
-        } else {
-            NSLog("No BS currency data exists")
-        }
-        return resultData
-    }
 
     
     private static func parsePaymentMethodsJSON(data: Data?) -> [String] {

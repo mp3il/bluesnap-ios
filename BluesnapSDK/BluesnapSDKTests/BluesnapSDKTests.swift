@@ -77,28 +77,26 @@ class BluesnapSDKTests: XCTestCase {
     // MARK: getCurrencyRates
     //------------------------------------------------------
 
-    func testGetTokenAndCurrencies() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+//    func testGetTokenAndCurrencies() {
+//
+//        createToken()
+//        
+//        var bsCurrencies : BSCurrencies?
+//        do {
+//            bsCurrencies = try BlueSnapSDK.getCurrencyRates()
+//        } catch let error {
+//            print("Got wrong error \(error.localizedDescription)")
+//            fatalError()
+//        }
+//        XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+//        
+//        let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+//        NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+//        
+//        let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+//        NSLog("EUR currency rate is: \(eurCurrencyRate)")
+//    }
         
-        createToken()
-        
-        var bsCurrencies : BSCurrencies?
-        do {
-            bsCurrencies = try BlueSnapSDK.getCurrencyRates()
-        } catch let error {
-            print("Got wrong error \(error.localizedDescription)")
-            fatalError()
-        }
-        XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-        
-        let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-        NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
-        
-        let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-        NSLog("EUR currency rate is: \(eurCurrencyRate)")
-    }
-
     //------------------------------------------------------
     // MARK: private functions
     //------------------------------------------------------

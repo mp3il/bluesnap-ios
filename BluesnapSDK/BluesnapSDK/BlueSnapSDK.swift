@@ -76,8 +76,8 @@ import PassKit
      - parameters:
      - throws BSErrors
      */
-    open class func getCurrencyRates() -> BSCurrencies? {
-        let result = BSApiManager.getCurrencyRates()
+    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+        let result = BSApiManager.getCurrencyRates(completion: completion)
         return result
     }
 

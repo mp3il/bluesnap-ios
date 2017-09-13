@@ -150,11 +150,13 @@ class BSViewsManager {
             currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
         }
         
-        if currencyScreen.initCurrencies(currencyCode: selectedCurrencyCode, updateFunc: updateFunc) {
-            inNavigationController.pushViewController(currencyScreen, animated: animated)
-        } else {
-            errorFunc()
-        }
+        currencyScreen.initCurrencies(
+            currencyCode: selectedCurrencyCode,
+            updateFunc: updateFunc,
+            completion: { currencies in
+                inNavigationController.pushViewController(currencyScreen, animated: animated)
+            }
+        )
     }
 
     

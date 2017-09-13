@@ -28,5 +28,6 @@ public enum BSErrors : Error {
     case expiredToken
     case tokenNotFound
     case tokenAlreadyUsed
+    case unAuthorised
     case unknown
 }
