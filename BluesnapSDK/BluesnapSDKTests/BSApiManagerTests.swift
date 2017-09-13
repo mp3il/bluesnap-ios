@@ -27,6 +27,26 @@ class BSApiManagerTests: XCTestCase {
     }
     
     //------------------------------------------------------
+    // MARK: Is Token Expired
+    //------------------------------------------------------
+    func testIsTokenExpiredExpectsFalse() {
+        
+        createToken()
+        
+        let result = BSApiManager.isTokenExpired()
+        assert(result == false)
+    }
+    
+    func testIsTokenExpiredExpectsTrue() {
+        
+        let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
+        BlueSnapSDK.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
+        
+        let result = BSApiManager.isTokenExpired()
+        assert(result == true)
+    }
+    
+    //------------------------------------------------------
     // MARK: PayPal
     //------------------------------------------------------
     

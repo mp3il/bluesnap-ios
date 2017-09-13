@@ -298,6 +298,59 @@ import Foundation
     }
 
     // MARK: Private functions
+    
+    static func isTokenExpired() -> Bool {
+        
+        // create request
+        let bsToken = getBsToken()
+        let domain: String! = bsToken!.serverUrl
+        // If you want to test expired token, use this:
+        //let urlStr = domain + TOKENIZED_SERVICE + "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
+        let urlStr = domain + TOKENIZED_SERVICE + bsToken!.getTokenStr()
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "PUT"
+        do {
+            let requestBody = ["dummy":"check:"]
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
+        } catch let error {
+            NSLog("Error serializing CC details: \(error.localizedDescription)")
+        }
+        //request.timeoutInterval = 60
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        
+        // fire request
+        
+        var result: Bool = false
+        var resultError: BSErrors?
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            var resultData: [String:String] = [:]
+            if let error = error {
+                let errorType = type(of: error)
+                NSLog("error submitting to check if token is expired - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
+                return
+            }
+            let httpResponse = response as? HTTPURLResponse
+            if let httpStatusCode: Int = (httpResponse?.statusCode) {
+                if httpStatusCode == 400 {
+                    let errStr = extractError(data: data)
+                    result = errStr == "EXPIRED_TOKEN" || errStr == "TOKEN_NOT_FOUND"
+                }
+            } else {
+                NSLog("Error getting response from BS on check if token is expired")
+            }
+            defer {
+                semaphore.signal()
+            }
+        }
+        task.resume()
+        semaphore.wait()
+        
+        return result
+    }
 
     private static func submitPaymentDetails(requestBody: [String: String],
                                              parseFunction: @escaping (Int, Data?) -> ([String:String],BSErrors?),
@@ -606,9 +659,7 @@ import Foundation
         return (resultData, resultError)
     }
 
-    private static func parseError(data: Data?, httpStatusCode: Int) -> BSErrors {
-        
-        var resultError : BSErrors = .invalidInput
+    private static func extractError(data: Data?) -> String {
         
         var errStr : String?
         if let data = data {
@@ -635,8 +686,15 @@ import Foundation
             }
         } else {
             NSLog("Error - result data is empty")
-            return .unknown
         }
+        return errStr ?? ""
+    }
+    
+    private static func parseError(data: Data?, httpStatusCode: Int) -> BSErrors {
+        
+        var resultError : BSErrors = .invalidInput
+        let errStr : String? = extractError(data: data)
+        
         var isTokenExpired = false
         if (errStr == "EXPIRED_TOKEN") {
             resultError = .expiredToken
