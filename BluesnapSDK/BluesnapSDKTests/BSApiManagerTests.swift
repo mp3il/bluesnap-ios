@@ -12,7 +12,8 @@ import XCTest
 class BSApiManagerTests: XCTestCase {
     
     private var tokenExpiredExpectation : XCTestExpectation?
-    
+    private var tokenWasRecreated = false
+
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -30,10 +31,17 @@ class BSApiManagerTests: XCTestCase {
     //------------------------------------------------------
     func testIsTokenExpiredExpectsFalse() {
         
-        createToken()
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
         
-        let result = BSApiManager.isTokenExpired()
-        assert(result == false)
+            NSLog("token str=\(token!.getTokenStr())")
+
+            let result = BSApiManager.isTokenExpired(completion: { isExpired in
+                assert(isExpired == false)
+                semaphore.signal()
+            })
+        })
+        semaphore.wait()
     }
     
     func testIsTokenExpiredExpectsTrue() {
@@ -41,8 +49,12 @@ class BSApiManagerTests: XCTestCase {
         let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
         BlueSnapSDK.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
         
-        let result = BSApiManager.isTokenExpired()
-        assert(result == true)
+        let semaphore = DispatchSemaphore(value: 0)
+        let result = BSApiManager.isTokenExpired(completion: { isExpired in
+            assert(isExpired == true)
+            semaphore.signal()
+        })
+        semaphore.wait()
     }
     
     //------------------------------------------------------
@@ -51,8 +63,48 @@ class BSApiManagerTests: XCTestCase {
     
     func testGetPayPalToken() {
         
-        listenForBsTokenExpiration(expected: false)
-        createToken()
+        
+        let initialData = BSInitialData()
+        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        createToken(completion: { token, error in
+            BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
+                
+                XCTAssertNil(resultError)
+                print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+                semaphore.signal()
+            })
+        })
+        
+        semaphore.wait()
+    }
+    
+    func testGetPayPalTokenWithInvalidTokenNoRegeneration() {
+        
+        createExpiredTokenNoRegeneration()
+        let initialData = BSInitialData()
+        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
+            
+            XCTAssertNotNil(resultError)
+            assert(resultError == BSErrors.unAuthorised)
+            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+    }
+    
+    func testGetPayPalTokenWithExpiredToken() {
+        
+        createExpiredTokenWithRegeneration()
         
         let initialData = BSInitialData()
         initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
@@ -64,50 +116,8 @@ class BSApiManagerTests: XCTestCase {
             
             XCTAssertNil(resultError)
             print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
-            semaphore.signal()
-        })
-        
-        semaphore.wait()
-    }
-    
-    func testGetPayPalTokenWithInvalidToken() {
-        
-        listenForBsTokenExpiration(expected: false)
-        let bsToken = getInvalidToken()
-        BSApiManager.setBsToken(bsToken: bsToken)
-        
-        let initialData = BSInitialData()
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
-        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
             
-            XCTAssertNotNil(resultError)
-            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
-            semaphore.signal()
-        })
-        
-        semaphore.wait()
-    }
-    
-    func testGetPayPalTokenWithExpiredToken() {
-        
-        listenForBsTokenExpiration(expected: true)
-        let bsToken = getExpiredToken()
-        BSApiManager.setBsToken(bsToken: bsToken)
-        
-        let initialData = BSInitialData()
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
-        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
-            
-            XCTAssertNotNil(resultError)
-            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            assert(self.tokenWasRecreated == true)
             semaphore.signal()
         })
         
@@ -148,39 +158,49 @@ class BSApiManagerTests: XCTestCase {
     // MARK: Currency rates
     //------------------------------------------------------
 
+    // test get currencies with a valid token
     func testGetTokenAndCurrencies() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        listenForBsTokenExpiration(expected: false)
-        createToken()
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+        
+            BSApiManager.getCurrencyRates(completion: { bsCurrencies, errors in
+                
+                XCTAssertNil(errors, "Got errors while trying to get currencies")
+                XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+                
+                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+                XCTAssertNotNil(gbpCurrency)
+                NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+                
+                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+                XCTAssertNotNil(eurCurrencyRate)
+                NSLog("EUR currency rate is: \(eurCurrencyRate)")
+                
+                semaphore.signal()
+            })
+        })
+        semaphore.wait()
+    }
+    
+    // test get currencies with an expired valid token and no proper re-generation
+    func testGetCurrenciesWithExpiredTokenNoRegeneration() {
+        
+        createExpiredTokenNoRegeneration()
         
         let semaphore = DispatchSemaphore(value: 0)
         BSApiManager.getCurrencyRates(completion: { bsCurrencies, errors in
             
-            XCTAssertNil(errors, "Got errors while trying to get currencies")
-            XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-        
-            let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-            NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
-        
-            let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-            NSLog("EUR currency rate is: \(eurCurrencyRate)")
-            
+            XCTAssert(errors == BSErrors.unAuthorised)
             semaphore.signal()
         })
         semaphore.wait()
     }
     
-    func testGetCurrenciesWithExpiredToken() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    // test get currencies with an expired valid token and a proper re-generation
+    func testGetCurrenciesWithExpiredTokenWithRegeneration() {
         
-        //listenForBsTokenExpiration(expected: true)
-        //NotificationCenter.default.addObserver(self, selector: #selector(createToken), name: Notification.Name.bsTokenExpirationNotification, object: nil)
-
-        let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
-        BlueSnapSDK.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
+        createExpiredTokenWithRegeneration()
         
         let semaphore = DispatchSemaphore(value: 0)
         BSApiManager.getCurrencyRates(completion: { bsCurrencies, errors in
@@ -189,11 +209,14 @@ class BSApiManagerTests: XCTestCase {
             XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
             
             let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+            XCTAssertNotNil(gbpCurrency)
             NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
             
             let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+            XCTAssertNotNil(eurCurrencyRate)
             NSLog("EUR currency rate is: \(eurCurrencyRate)")
             
+            XCTAssert(self.tokenWasRecreated == true)
             semaphore.signal()
         })
         semaphore.wait()
@@ -332,17 +355,19 @@ class BSApiManagerTests: XCTestCase {
         })
     }
     
-    func createToken() {
+    func createToken() -> BSToken {
         
         do {
             let token = try BSApiManager.createSandboxBSToken()
             NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
             BSApiManager.setBsToken(bsToken: token)
+            return token!
         } catch let error {
             print("Got error \(error.localizedDescription)")
             fatalError()
         }
     }
+    
     
 //    private func getCurrencies() -> BSCurrencies! {
 //        
@@ -368,12 +393,12 @@ class BSApiManagerTests: XCTestCase {
      */
     func listenForBsTokenExpiration(expected: Bool) {
 
-        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
-        if expected {
-            tokenExpiredExpectation = expectation(description: "Token Expired expectation")
-        } else {
-            tokenExpiredExpectation = nil
-        }
+//        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
+//        if expected {
+//            tokenExpiredExpectation = expectation(description: "Token Expired expectation")
+//        } else {
+//            tokenExpiredExpectation = nil
+//        }
     }
 
     /**
@@ -407,4 +432,38 @@ class BSApiManagerTests: XCTestCase {
         }
     }
 
+    /**
+    Create token in async manner
+     */
+    func createToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        
+        BSApiManager.createSandboxBSToken(completion: { bsToken, error in
+            
+            XCTAssertNil(error)
+            XCTAssertNotNil(bsToken)
+            BlueSnapSDK.setBsToken(bsToken: bsToken)
+            completion(bsToken, error)
+        })
+    }
+    
+    func createExpiredTokenNoRegeneration() {
+        
+        let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
+        BlueSnapSDK.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
+        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: { completion in
+            NSLog("*** Not recreating token!!!")
+            completion(nil, nil)
+        })
+    }
+    
+    func createExpiredTokenWithRegeneration() {
+        tokenWasRecreated = false
+        let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
+        BSApiManager.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
+        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: { completion in
+            NSLog("*** Recreating token!!!")
+            self.tokenWasRecreated = true
+            BSApiManager.createSandboxBSToken(completion: completion)
+        })
+    }
 }

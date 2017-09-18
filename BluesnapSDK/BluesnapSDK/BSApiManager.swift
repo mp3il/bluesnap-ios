@@ -20,9 +20,9 @@ import Foundation
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
     // every hour (interval should be negative, and in seconds)
-    internal static let PAYPAL_SERVICE = "services/2/tokenized-services/paypal-token?amount="
+//    internal static let PAYPAL_SERVICE = "services/2/tokenized-services/paypal-token?amount="
     internal static let TOKENIZED_SERVICE = "services/2/payment-fields-tokens/"
-    internal static let PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2"
+//    internal static let PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2"
 
     // MARK: private properties
     internal static var bsCurrencies: BSCurrencies?
@@ -30,6 +30,10 @@ import Foundation
     internal static var lastCurrencyFetchDate: Date?
     internal static var lastSupportedPaymentMethodsFetchDate: Date?
     internal static var apiToken: BSToken?
+    internal static var apiGenerateTokenFunc: (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void = { completion in
+        NSLog("no token regeneration method was supplied")
+        completion(nil, BSErrors.invalidInput)
+    }
 
     // MARK: bsToken setter/getter
 
@@ -38,6 +42,14 @@ import Foundation
     */
     static func setBsToken(bsToken: BSToken!) {
         apiToken = bsToken
+    }
+
+    /**
+     Set the token re-generation method to be used for BS API when token expires
+     */
+    open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void) {
+        
+        apiGenerateTokenFunc = generateTokenFunc
     }
 
     /**
@@ -54,12 +66,12 @@ import Foundation
 
     // MARK: Main functions
 
-    /**
-        Use this method only in tests to get a token for sandbox
+    /** TODO: delete this function
+     Use this method only in tests to get a token for sandbox
      - throws BSErrors.unknown in case of some server error
-    */
+     */
     static func createSandboxBSToken() throws -> BSToken? {
-
+        
         do {
             let result = try createBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS)
             return result
@@ -67,7 +79,15 @@ import Foundation
             throw error
         }
     }
-
+    
+    /**
+     Use this method only in tests to get a token for sandbox
+     */
+    static func createSandboxBSToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        
+        createBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: completion)
+    }
+    
     /**
         Return a list of currencies and their rates from BlueSnap server
     */
@@ -85,30 +105,22 @@ import Foundation
         BSApiCaller.getCurrencyRates(bsToken: bsToken, completion: {
             resultCurrencies, resultError in
             if let error = resultError {
-                print("got error \(error)")
                 if error == .unAuthorised {
-                    
-                    // notify expiration and try again
-                    notifyTokenExpired()
-                    
-                    // wait for new token
-                    let semaphore = DispatchSemaphore(value: 0)
-                    waitForNewToken(oldToken: bsToken, count: 0, semaphore: semaphore)
-                    semaphore.wait()
-                    
-                    // try again
-                    BSApiCaller.getCurrencyRates(bsToken: bsToken, completion: { resultCurrencies, resultError in
-
-                        if resultError == nil {
-                            bsCurrencies = resultCurrencies
-                            self.lastCurrencyFetchDate = Date()
-                        }
-                        completion(bsCurrencies, resultError)
+                    // regenerate Token and try again
+                    regenerateToken(executeAfter: { _ in
+                        BSApiCaller.getCurrencyRates(bsToken: getBsToken(), completion: { resultCurrencies2, resultError2 in
+                            
+                            if resultError2 == nil {
+                                bsCurrencies = resultCurrencies2
+                                self.lastCurrencyFetchDate = Date()
+                            }
+                            completion(bsCurrencies, resultError2)
+                        })
                     })
-                    
                 } else {
-                        completion(bsCurrencies, resultError)
+                    completion(bsCurrencies, resultError)
                 }
+                
             } else {
                 bsCurrencies = resultCurrencies
                 self.lastCurrencyFetchDate = Date()
@@ -117,24 +129,6 @@ import Foundation
         })
     }
 
-    static func waitForNewToken(oldToken: BSToken?, count : Int, semaphore: DispatchSemaphore) {
-        
-        if oldToken == getBsToken() && count < 10 {
-            
-            print("Waiting for token; count=\(count)")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                waitForNewToken(oldToken: oldToken, count: count+1, semaphore: semaphore)
-            }
-        } else {
-            semaphore.signal()
-        }
-    }
-    
-    func delayWithSeconds(seconds: Double, completion: @escaping () -> ()) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            completion()
-        }
-    }
 
     /**
      Submit CC details to BlueSnap server
@@ -254,107 +248,82 @@ import Foundation
     /**
      Create PayPal token on BlueSnap server and get back the URL for redirect
      */
+    
     static func createPayPalToken(paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
         DispatchQueue.global().async {
-            
             let bsToken = getBsToken()
             
-            let domain: String! = bsToken!.serverUrl
-            var urlStr = domain + PAYPAL_SERVICE  + "\(paymentRequest.getAmount() ?? 0)" + "&currency=" + paymentRequest.getCurrency()
-            if withShipping {
-                urlStr += PAYPAL_SHIPPING
-            }
+            BSApiCaller.createPayPalToken(bsToken: bsToken, paymentRequest: paymentRequest, withShipping: withShipping, completion: {
+                resultToken, resultError in
+                if let error = resultError {
+                    if error == .unAuthorised {
+                        // regenerate Token and try again
+                        regenerateToken(executeAfter: { _ in
+                            BSApiCaller.createPayPalToken(bsToken: getBsToken(), paymentRequest: paymentRequest, withShipping: withShipping, completion: { resultToken2, resultError2 in
+                                
+                                completion(resultToken2, resultError2)
+                            })
+                        })
+                    } else {
+                        completion(resultToken, resultError)
+                    }
+                    
+                } else {
+                    completion(resultToken, resultError)
+                }
+            })
+        }
+    }
 
-            NSLog("Calling \(urlStr)")
+
+    // MARK: Private functions
+    
+    static func isTokenExpired(completion: @escaping (Bool) -> Void) {
+        
+        if let bsToken = getBsToken() {
             
+            // create request
+            let urlStr = bsToken.serverUrl + TOKENIZED_SERVICE + bsToken.getTokenStr()
             let url = NSURL(string: urlStr)!
             var request = NSMutableURLRequest(url: url as URL)
+            request.httpMethod = "PUT"
+            do {
+                let requestBody = ["dummy":"check:"]
+                request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
+            } catch let error {
+                NSLog("Error serializing CC details: \(error.localizedDescription)")
+            }
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+            
             
             // fire request
             
-            var resultToken: String?
-            var resultError: BSErrors?
-            
+            var result: Bool = false
             let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+                var resultData: [String:String] = [:]
                 if let error = error {
                     let errorType = type(of: error)
-                    NSLog("error submitting BS Payment details - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                    completion(nil, .unknown)
+                    NSLog("error submitting to check if token is expired - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
                     return
                 }
                 let httpResponse = response as? HTTPURLResponse
                 if let httpStatusCode: Int = (httpResponse?.statusCode) {
-                    (resultToken, resultError) = parsePayPalTokenResponse(httpStatusCode: httpStatusCode, data: data)
+                    if httpStatusCode == 400 {
+                        let errStr = extractError(data: data)
+                        result = errStr == "EXPIRED_TOKEN" || errStr == "TOKEN_NOT_FOUND"
+                    }
                 } else {
-                    NSLog("Error getting response from BS on submitting Payment details")
+                    NSLog("Error getting response from BS on check if token is expired")
                 }
                 defer {
-                    completion(resultToken, resultError)
+                    completion(result)
                 }
             }
             task.resume()
-            // This notification is because once we use the token for PayPal - it cannot be used again
-            //notifyTokenExpired()
+        } else {
+            completion(true)
         }
-        
-    }
-
-    // MARK: Private functions
-    
-    static func isTokenExpired() -> Bool {
-        
-        // create request
-        let bsToken = getBsToken()
-        let domain: String! = bsToken!.serverUrl
-        // If you want to test expired token, use this:
-        //let urlStr = domain + TOKENIZED_SERVICE + "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
-        let urlStr = domain + TOKENIZED_SERVICE + bsToken!.getTokenStr()
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        request.httpMethod = "PUT"
-        do {
-            let requestBody = ["dummy":"check:"]
-            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
-        } catch let error {
-            NSLog("Error serializing CC details: \(error.localizedDescription)")
-        }
-        //request.timeoutInterval = 60
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        
-        // fire request
-        
-        var result: Bool = false
-        var resultError: BSErrors?
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            var resultData: [String:String] = [:]
-            if let error = error {
-                let errorType = type(of: error)
-                NSLog("error submitting to check if token is expired - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                return
-            }
-            let httpResponse = response as? HTTPURLResponse
-            if let httpStatusCode: Int = (httpResponse?.statusCode) {
-                if httpStatusCode == 400 {
-                    let errStr = extractError(data: data)
-                    result = errStr == "EXPIRED_TOKEN" || errStr == "TOKEN_NOT_FOUND"
-                }
-            } else {
-                NSLog("Error getting response from BS on check if token is expired")
-            }
-            defer {
-                semaphore.signal()
-            }
-        }
-        task.resume()
-        semaphore.wait()
-        
-        return result
     }
 
     private static func submitPaymentDetails(requestBody: [String: String],
@@ -409,39 +378,6 @@ import Foundation
         }
     }
 
-    private static func parsePayPalTokenResponse(httpStatusCode: Int, data: Data?) -> (String?, BSErrors?) {
-        
-        var resultToken: String?
-        var resultError: BSErrors?
-        
-        if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-            resultToken = ""
-            
-            if let data = data {
-                do {
-                    // Parse the result JSOn object
-                    if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                        resultToken = json["paypalUrl"] as? String
-                    } else {
-                        NSLog("Error parsing BS result on getting PayPal Token")
-                    }
-                } catch let error as NSError {
-                    NSLog("Error parsing BS result on getting PayPal Token: \(error.localizedDescription)")
-                }
-            } else {
-                resultError = .unknown
-                NSLog("No data in BS result on getting PayPal Token")
-            }
-
-            
-        } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
-            resultError = parseError(data: data, httpStatusCode: httpStatusCode)
-        } else {
-            NSLog("Http error getting PayPal Token from BS; HTTP status = \(httpStatusCode)")
-            resultError = .unknown
-        }
-        return (resultToken, resultError)
-    }
     
     // parseFunction: @escaping (BSBasePaymentRequest, Int, Data?) -> BSErrors?
     private static func parseCCResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
@@ -593,6 +529,66 @@ import Foundation
     }
 
     /**
+     Get BlueSnap Token from BlueSnap server
+     Normally you will not do this from the app.
+     
+     - parameters:
+     - domain: look at BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
+     - user: username
+     - password: password
+     - throws BSErrors.invalidInput if user/pass are incorrect, BSErrors.unknown otherwise
+     */
+    internal static func createBSToken(domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        
+        // create request
+        let authorization = getBasicAuth(user: user, password: password)
+        let urlStr = domain + "services/2/payment-fields-tokens"
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        //request.timeoutInterval = 60
+        request.setValue("text/xml", forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
+        request.setValue("0", forHTTPHeaderField: "Content-Length")
+        
+        // fire request
+        
+        var result: BSToken?
+        var resultError: BSErrors?
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            if let error = error {
+                let errorType = type(of: error)
+                NSLog("error getting BSToken - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
+                resultError = .unknown
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode: Int = (httpResponse?.statusCode) {
+                    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+                        result = extractTokenFromResponse(httpResponse: httpResponse, domain: domain)
+                        if result == nil {
+                            resultError = .unknown
+                        }
+                    } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+                        NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                        resultError = .invalidInput
+                    } else {
+                        resultError = .unknown
+                        NSLog("Http error getting BSToken; http status = \(httpStatusCode)")
+                    }
+                } else {
+                    resultError = .unknown
+                    NSLog("Http error getting response for BSToken")
+                }
+            }
+            defer {
+                completion(result, resultError)
+            }
+        }
+        task.resume()
+    }
+    
+
+    /**
      Build the basic authentication header from username/password
      - parameters:
      - user: username
@@ -605,11 +601,11 @@ import Foundation
         return "Basic \(base64LoginStr)"
     }
 
-    private static func notifyTokenExpired() {
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.bsTokenExpirationNotification, object: nil)
-        }
-    }
+//    private static func notifyTokenExpired() {
+//        DispatchQueue.main.async {
+//            NotificationCenter.default.post(name: Notification.Name.bsTokenExpirationNotification, object: nil)
+//        }
+//    }
 
     private static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
 
@@ -687,7 +683,7 @@ import Foundation
             isTokenExpired = true
         }
         if isTokenExpired {
-            notifyTokenExpired()
+            //notifyTokenExpired()
         }
         
         return resultError
@@ -714,5 +710,15 @@ import Foundation
         })
     }
 
+    static internal func regenerateToken(executeAfter: @escaping () -> Void) {
+        
+        NSLog("Regenrating new token instead of \(apiToken?.getTokenStr() ?? "")")
+        apiGenerateTokenFunc({newToken, error in
+            if let newToken = newToken {
+                setBsToken(bsToken: newToken)
+            }
+            executeAfter()
+        })
+    }
 
 }

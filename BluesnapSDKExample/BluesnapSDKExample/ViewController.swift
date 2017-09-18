@@ -340,7 +340,7 @@ class ViewController: UIViewController {
     */
     func listenForBsTokenExpiration() {
         
-        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
     }
     
     /**

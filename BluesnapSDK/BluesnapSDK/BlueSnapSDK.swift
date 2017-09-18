@@ -22,15 +22,26 @@ import PassKit
     
     /**
      Set the token used for BS API
-     This needs to be done before calling any of the methods below, and also if you catch notification 
-     for token expired
+     This needs to be done before calling any of the methods below
      
      - parameters:
      - bsToken: BlueSnap token, should be fresh and valid
-    */
+     */
     open class func setBsToken(bsToken : BSToken!) {
         
         BSApiManager.setBsToken(bsToken: bsToken)
+    }
+    
+    /**
+     Set the token re-generation method to be used for BS API when token expires
+     This needs to be done before calling any of the methods below
+     
+     - parameters:
+     - bsToken: BlueSnap token, should be fresh and valid
+     */
+    open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: (BSToken?, BSErrors?) -> Void) -> Void) {
+        
+        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
     }
 
     /**

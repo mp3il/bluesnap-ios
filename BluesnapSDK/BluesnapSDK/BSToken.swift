@@ -31,11 +31,3 @@ import Foundation
         return self.serverUrl
     }
 }
-
-/**
- This is the notification that gets thrown when the SDK recognizes that the token has expired
- */
-public extension Notification.Name {
-    
-    static let bsTokenExpirationNotification = Notification.Name("bsTokenExpirationNotification")
-}
