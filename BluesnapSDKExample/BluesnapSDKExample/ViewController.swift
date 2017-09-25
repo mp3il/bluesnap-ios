@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     
     fileprivate var bsToken : BSToken?
     fileprivate var initialData: BSInitialData! = BSInitialData()
-    fileprivate var firstTime : Bool = true
+    fileprivate var hideCoverView : Bool = false
     final fileprivate let LOADING_MESSAGE = "Loading, please wait"
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
     
@@ -56,10 +56,9 @@ class ViewController: UIViewController {
         
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
-        if !firstTime {
+        if hideCoverView {
             coverAllView.isHidden = true
-        } else {
-            firstTime = false
+            hideCoverView = true
         }
     }
 	
@@ -91,6 +90,7 @@ class ViewController: UIViewController {
 
         coverAllLabel.text = PROCESSING_MESSAGE
         coverAllView.isHidden = false
+        hideCoverView = true
         
         DispatchQueue.main.async {
             // open the purchase screen
@@ -107,6 +107,7 @@ class ViewController: UIViewController {
         
         coverAllLabel.text = LOADING_MESSAGE
         coverAllView.isHidden = false
+        hideCoverView = true
         
         DispatchQueue.main.async {
             self.fillInitialData()
@@ -218,6 +219,7 @@ class ViewController: UIViewController {
             return // no need to complete purchase via BlueSnap API
         }
         
+        hideCoverView = false
         coverAllView.isHidden = false
         coverAllLabel.text = PROCESSING_MESSAGE
        
@@ -268,6 +270,7 @@ class ViewController: UIViewController {
             NSLog("An error occurred trying to create BLS transaction.\n\n\(errorText)")
             showThankYouScreen(errorText: errorText)
         }
+        hideCoverView = true
     }
     
     /**
@@ -369,11 +372,9 @@ class ViewController: UIViewController {
         
         BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
         generateAndSetBsToken(completion: { resultToken, errors in
-            self.bsToken = resultToken
-            BlueSnapSDK.setBsToken(bsToken: self.bsToken)
-            NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
             DispatchQueue.main.async {
                 self.coverAllView.isHidden = true
+                self.hideCoverView = true
             }
         })
     }
@@ -391,7 +392,6 @@ class ViewController: UIViewController {
             BlueSnapSDK.setBsToken(bsToken: self.bsToken)
             NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
             DispatchQueue.main.async {
-                self.coverAllView.isHidden = true
                 completion(resultToken, errors)
             }
         })
