@@ -339,7 +339,7 @@ class BSApiManagerTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BSApiManager.submitCcn(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            BSApiManager.submitCcn(ccNumber: ccn, completion: {
                 (result, error) in
                 
                 XCTAssert(error == nil, "error: \(error)")
@@ -358,26 +358,30 @@ class BSApiManagerTests: XCTestCase {
 
     func testSubmitCCNError() {
 
-        listenForBsTokenExpiration(expected: false)
-        createToken()
-
         let ccn = "4111"
-        BSApiManager.submitCcn(ccNumber: ccn, completion: {
-            (result, error) in
-            XCTAssert(error == BSErrors.invalidCcNumber, "error: \(error) should have been BSErrors.invalidCcNumber")
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+            BSApiManager.submitCcn(ccNumber: ccn, completion: {
+                (result, error) in
+                XCTAssert(error == BSErrors.invalidCcNumber, "error: \(error) should have been BSErrors.invalidCcNumber")
+                semaphore.signal()
+            })
         })
-    }
+        semaphore.wait()
+   }
 
     func testSubmitEmptyCCNError() {
 
-        listenForBsTokenExpiration(expected: false)
-        createToken()
-
         let ccn = ""
-        BSApiManager.submitCcn(ccNumber: ccn, completion: {
-            (result, error) in
-            XCTAssert(error == BSErrors.invalidCcNumber, "error: \(error) should have been BSErrors.invalidCcNumber")
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+            BSApiManager.submitCcn(ccNumber: ccn, completion: {
+                (result, error) in
+                XCTAssert(error == BSErrors.invalidCcNumber, "error: \(error) should have been BSErrors.invalidCcNumber")
+                semaphore.signal()
+            })
         })
+        semaphore.wait()
     }
 
     //------------------------------------------------------
