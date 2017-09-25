@@ -381,6 +381,8 @@ import Foundation
                 resultError = .invalidExpDate
             } else if (BSStringUtils.startsWith(theString: errStr ?? "", subString: "TOKEN_WAS_ALREADY_USED_FOR_")) {
                 resultError = .tokenAlreadyUsed
+            } else if httpStatusCode == 403 && errStr == "Unauthorized" {
+                resultError = .tokenAlreadyUsed // PayPal
             } else if (errStr == "PAYPAL_UNSUPPORTED_CURRENCY") {
                 resultError = .paypalUnsupportedCurrency
             } else if (errStr == "TOKEN_NOT_FOUND") {

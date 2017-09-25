@@ -42,7 +42,6 @@ class ViewController: UIViewController {
         //NSLog("Kount Init");
         //BlueSnapSDK.KountInit();
         
-        initBsToken()
         setApplePayIdentifier()
 
         resultTextView.text = ""
@@ -54,6 +53,9 @@ class ViewController: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
         
+        if bsToken == nil {
+            initBsToken()
+        }
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
         if hideCoverView {
@@ -208,6 +210,7 @@ class ViewController: UIViewController {
      In a real app, you would send the checkout details to your app server, which then would call BlueSnap API
      to execute the purchase.
      In this sample app we do it client-to-server, but this is not the way to do it in a real app.
+     Note that after a transaction was created with the token, you need to clear it or generate a new one for the next transaction.
     */
     
     private func completePurchase(paymentRequest: BSBasePaymentRequest!) {
@@ -297,6 +300,9 @@ class ViewController: UIViewController {
 
     private func showThankYouScreen(errorText: String?) {
         
+        // clear the used token
+        bsToken = nil
+        
         // Show thank you screen (ThankYouViewController)
         if let thankYouScreen = storyboard?.instantiateViewController(withIdentifier: "ThankYouViewController") as? ThankYouViewController {
             thankYouScreen.errorText = errorText
@@ -370,6 +376,7 @@ class ViewController: UIViewController {
         // To simulate expired token use:
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
+        self.coverAllView.isHidden = false
         BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
         generateAndSetBsToken(completion: { resultToken, errors in
             DispatchQueue.main.async {

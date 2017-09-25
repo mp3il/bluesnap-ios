@@ -27,6 +27,7 @@ import Foundation
     internal static var lastCurrencyFetchDate: Date?
     internal static var lastSupportedPaymentMethodsFetchDate: Date?
     internal static var apiToken: BSToken?
+    internal static var payPalToken : String?
     internal static var apiGenerateTokenFunc: (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void = { completion in
         NSLog("no token regeneration method was supplied")
         DispatchQueue.main.async {
@@ -41,6 +42,7 @@ import Foundation
     */
     static func setBsToken(bsToken: BSToken!) {
         apiToken = bsToken
+        payPalToken = nil
     }
 
     /**
@@ -239,6 +241,11 @@ import Foundation
     
     static func createPayPalToken(paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
+        if (payPalToken != nil) {
+            completion(payPalToken, nil)
+            return
+        }
+        
         DispatchQueue.global().async {
             let bsToken = getBsToken()
             
@@ -255,6 +262,7 @@ import Foundation
                             regenerateToken(executeAfter: { _ in
                                 BSApiCaller.createPayPalToken(bsToken: getBsToken(), paymentRequest: paymentRequest, withShipping: withShipping, completion: { resultToken2, resultError2 in
                                     
+                                    payPalToken = resultToken2
                                     DispatchQueue.main.async {
                                         completion(resultToken2, resultError2)
                                     }
@@ -268,6 +276,7 @@ import Foundation
                     })
                     
                 } else {
+                    payPalToken = resultToken
                     DispatchQueue.main.async {
                         completion(resultToken, resultError)
                     }
