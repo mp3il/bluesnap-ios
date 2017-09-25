@@ -48,36 +48,13 @@ class BSStartViewController: UIViewController {
         self.navigationController!.isNavigationBarHidden = false
 
         // Hide/show the buttons and position them automatically
+        hideShowElements(showPayPal: false, showApplePay: false)
+        BSApiManager.getSupportedPaymentMethods(completion: {supportedPaymentMethods, errors in
         
-        let showPayPal = showPayPalButton()
-        let showApplePay = showApplePayButton()
-        let numSections = (showPayPal && showApplePay) ? 3 : (!showPayPal && !showApplePay) ? 1 : 2
-        let sectionY : CGFloat = (centeredView.frame.height / CGFloat(numSections+1)).rounded()
-        
-        if showApplePay {
-            orLabel.isHidden = false
-            applePayButton.isHidden = false
-            applePayButton.center.y = sectionY
-            orLabel.center.y = (sectionY*1.5).rounded()
-            ccnButton.center.y = sectionY*2
-        } else {
-            orLabel.isHidden = true
-            applePayButton.isHidden = true
-        }
-        if showPayPal {
-            or2Label.isHidden = false
-            payPalButton.isHidden = false
-            if showApplePay {
-                or2Label.center.y = (sectionY*2.5).rounded()
-                payPalButton.center.y = sectionY*3
-            } else {
-                or2Label.center.y = (sectionY*1.5).rounded()
-                payPalButton.center.y = sectionY*2
-            }
-        } else {
-            or2Label.isHidden = true
-            payPalButton.isHidden = true
-        }
+            let showPayPal = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: supportedPaymentMethods)
+            let showApplePay = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks).canMakePayments
+            self.hideShowElements(showPayPal: showPayPal, showApplePay: showApplePay)
+        })
         
         // Localize strings
         let localizedOr = BSLocalizedStrings.getString(BSLocalizedString.Label_Or)
@@ -85,6 +62,7 @@ class BSStartViewController: UIViewController {
         or2Label.text = localizedOr
         self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Type)
     }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -177,6 +155,39 @@ class BSStartViewController: UIViewController {
 
     // Mark: private functions
 
+    
+    private func hideShowElements(showPayPal: Bool, showApplePay: Bool) {
+        
+        let numSections = (showPayPal && showApplePay) ? 3 : (!showPayPal && !showApplePay) ? 1 : 2
+        let sectionY : CGFloat = (centeredView.frame.height / CGFloat(numSections+1)).rounded()
+        
+        if showApplePay {
+            orLabel.isHidden = false
+            applePayButton.isHidden = false
+            applePayButton.center.y = sectionY
+            orLabel.center.y = (sectionY*1.5).rounded()
+            ccnButton.center.y = sectionY*2
+        } else {
+            orLabel.isHidden = true
+            applePayButton.isHidden = true
+        }
+        if showPayPal {
+            or2Label.isHidden = false
+            payPalButton.isHidden = false
+            if showApplePay {
+                or2Label.center.y = (sectionY*2.5).rounded()
+                payPalButton.center.y = sectionY*3
+            } else {
+                or2Label.center.y = (sectionY*1.5).rounded()
+                payPalButton.center.y = sectionY*2
+            }
+        } else {
+            or2Label.isHidden = true
+            payPalButton.isHidden = true
+        }
+    }
+    
+    
     private func animateToPaymentScreen(completion: ((Bool) -> Void)!) {
 
         let moveUpBy = self.centeredView.frame.minY + self.ccnButton.frame.minY - 48
@@ -188,19 +199,6 @@ class BSStartViewController: UIViewController {
         })
     }
 
-    private func showApplePayButton() -> Bool {
-
-        let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
-        return applePaySupported.canMakePayments
-    }
-    
-    private func showPayPalButton() -> Bool {
-        
-        if BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal) {
-            return true
-        }
-        return false
-    }
     
     private func paypalUrlListener(url: String) -> Bool {
         

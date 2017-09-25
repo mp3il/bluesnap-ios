@@ -22,7 +22,6 @@ class BSApiManagerTests: XCTestCase {
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        stopListeningForBsTokenExpiration();
         super.tearDown()
     }
     
@@ -34,9 +33,9 @@ class BSApiManagerTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
         
-            NSLog("token str=\(token!.getTokenStr())")
+            NSLog("testIsTokenExpiredExpectsFalse; token str=\(token!.getTokenStr())")
 
-            let result = BSApiManager.isTokenExpired(completion: { isExpired in
+            let result = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
                 assert(isExpired == false)
                 semaphore.signal()
             })
@@ -47,10 +46,11 @@ class BSApiManagerTests: XCTestCase {
     func testIsTokenExpiredExpectsTrue() {
         
         let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
-        BlueSnapSDK.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
+        let token = BSToken(tokenStr: expiredToken, isProduction: false)
+        BlueSnapSDK.setBsToken(bsToken: token)
         
         let semaphore = DispatchSemaphore(value: 0)
-        let result = BSApiManager.isTokenExpired(completion: { isExpired in
+        let result = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
             assert(isExpired == true)
             semaphore.signal()
         })
@@ -74,7 +74,7 @@ class BSApiManagerTests: XCTestCase {
             BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
                 
                 XCTAssertNil(resultError)
-                print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+                NSLog("*** testGetPayPalToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
                 semaphore.signal()
             })
         })
@@ -95,7 +95,9 @@ class BSApiManagerTests: XCTestCase {
             
             XCTAssertNotNil(resultError)
             assert(resultError == BSErrors.unAuthorised)
-            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            NSLog("*** testGetPayPalTokenWithInvalidTokenNoRegeneration; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            
+            assert(self.tokenWasRecreated == false)
             semaphore.signal()
         })
         
@@ -115,44 +117,70 @@ class BSApiManagerTests: XCTestCase {
         BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
             
             XCTAssertNil(resultError)
-            print("*** Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            NSLog("*** testGetPayPalTokenWithExpiredToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
             
             assert(self.tokenWasRecreated == true)
             semaphore.signal()
         })
         
         semaphore.wait()
-        self.waitForExpiredTokenEvent()
     }
 
     
     //------------------------------------------------------
     // MARK: Supported Payment Methods
     //------------------------------------------------------
-
+    
     func testGetSupportedPaymentMethods() {
         
-        listenForBsTokenExpiration(expected: false)
-        createToken()
+        let semaphore = DispatchSemaphore(value: 0)
         
-        do {
-            let supportedPaymentMethods = try BSApiManager.getSupportedPaymentMethods()
-            print(supportedPaymentMethods)
-            // again, see we don't go to the server
-            let supportedPaymentMethods2 = try BSApiManager.getSupportedPaymentMethods()
-            print(supportedPaymentMethods2)
-            // check that CC and ApplePay are supported
-            let ccIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.CreditCard)
-            XCTAssertTrue(ccIsSupported)
-            let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay)
-            XCTAssertTrue(applePayIsSupported)
-            let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(BSPaymentType.PayPal)
-            XCTAssertTrue(payPalIsSupported)
-        } catch let error {
-            print("Got wrong error \(error.localizedDescription)")
-            fatalError()
-        }
+        createToken(completion: { token, error in
+            BSApiManager.getSupportedPaymentMethods(completion: { resultPaymentMethods, resultError in
+                
+                XCTAssertNil(resultError)
+                NSLog("*** testGetSupportedPaymentMethods; Test result: resultPaymentMethods=\(resultPaymentMethods ?? []), resultError= \(resultError)")
+                
+                // check that CC and ApplePay are supported
+                let ccIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.CreditCard, supportedPaymentMethods: resultPaymentMethods)
+                XCTAssertTrue(ccIsSupported)
+                let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: resultPaymentMethods)
+                XCTAssertTrue(applePayIsSupported)
+                let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: resultPaymentMethods)
+                XCTAssertTrue(payPalIsSupported)
+
+                semaphore.signal()
+            })
+        })
+        
+        semaphore.wait()
     }
+    
+    func testGetSupportedPaymentMethodsWithExpiredToken() {
+        
+        createExpiredTokenWithRegeneration()
+
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        BSApiManager.getSupportedPaymentMethods(completion: { resultPaymentMethods, resultError in
+            
+            XCTAssertNil(resultError)
+            NSLog("*** testGetSupportedPaymentMethodsWithExpiredToken; Test result: resultPaymentMethods=\(resultPaymentMethods ?? []), resultError= \(resultError)")
+            
+            // check that CC and ApplePay are supported
+            let ccIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.CreditCard, supportedPaymentMethods: resultPaymentMethods)
+            XCTAssertTrue(ccIsSupported)
+            let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: resultPaymentMethods)
+            XCTAssertTrue(applePayIsSupported)
+            let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: resultPaymentMethods)
+            XCTAssertTrue(payPalIsSupported)
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+    }
+
     
     //------------------------------------------------------
     // MARK: Currency rates
@@ -171,11 +199,11 @@ class BSApiManagerTests: XCTestCase {
                 
                 let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
                 XCTAssertNotNil(gbpCurrency)
-                NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
                 
                 let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
                 XCTAssertNotNil(eurCurrencyRate)
-                NSLog("EUR currency rate is: \(eurCurrencyRate)")
+                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
                 
                 semaphore.signal()
             })
@@ -210,11 +238,11 @@ class BSApiManagerTests: XCTestCase {
             
             let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
             XCTAssertNotNil(gbpCurrency)
-            NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+            NSLog("testGetCurrenciesWithExpiredTokenWithRegeneration; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
             
             let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
             XCTAssertNotNil(eurCurrencyRate)
-            NSLog("EUR currency rate is: \(eurCurrencyRate)")
+            NSLog("testGetCurrenciesWithExpiredTokenWithRegeneration; EUR currency rate is: \(eurCurrencyRate)")
             
             XCTAssert(self.tokenWasRecreated == true)
             semaphore.signal()
@@ -229,13 +257,39 @@ class BSApiManagerTests: XCTestCase {
     
     func testSubmitCCDetailsSuccess() {
         
-        listenForBsTokenExpiration(expected: false)
-        createToken()
+        let ccn = "4111 1111 1111 1111"
+        let cvv = "111"
+        let exp = "10/2020"
+
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+            
+            BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+                (result, error) in
+                
+                XCTAssert(error == nil, "error: \(error)")
+                let ccType = result.ccType
+                let last4 = result.last4Digits
+                let country = result.ccIssuingCountry
+                NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
+                assert(last4 == "1111", "last4 should be 1111")
+                assert(ccType == "VISA", "CC Type should be VISA")
+                assert(country == "US", "country should be US")
+                semaphore.signal()
+            })
+        })
+        semaphore.wait()
+    }
+    
+    func testSubmitCCDetailsSuccessWithExpiredToken() {
         
+        createExpiredTokenWithRegeneration()
+
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
         
+        let semaphore = DispatchSemaphore(value: 0)
         BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
@@ -247,43 +301,59 @@ class BSApiManagerTests: XCTestCase {
             assert(last4 == "1111", "last4 should be 1111")
             assert(ccType == "VISA", "CC Type should be VISA")
             assert(country == "US", "country should be US")
+            XCTAssert(self.tokenWasRecreated == true)
+            semaphore.signal()
         })
+        semaphore.wait()
     }
 
-    func testSubmitCCDetailsError() {
-
-        listenForBsTokenExpiration(expected: false)
-        createToken()
-
+    func testSubmitCCDetailsErrorInvalidCcNumber() {
+        
         submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSErrors.invalidCcNumber)
-        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSErrors.invalidCvv)
-        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSErrors.invalidExpDate)
-        submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
+    }
+    
+    func testSubmitCCDetailsErrorEmptyCcNumber() {
+        
+        submitCCDetailsExpectError(ccn: "", cvv: "111", exp: "12/2020", expectedError: BSErrors.invalidCcNumber)
+    }
+    
+    func testSubmitCCDetailsErrorInvalidCvv() {
+        
+        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "3", exp: "12/2020", expectedError: BSErrors.invalidCvv)
+    }
+    
+    func testSubmitCCDetailsErrorInvalidExp() {
+        
+        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "1220", expectedError: BSErrors.invalidExpDate)
     }
 
+    
     //------------------------------------------------------
     // MARK: Submit CCN
     //------------------------------------------------------
 
     func testSubmitCCNSuccess() {
 
-        listenForBsTokenExpiration(expected: false)
-        createToken()
-
         let ccn = "4111 1111 1111 1111"
-
-        BSApiManager.submitCcn(ccNumber: ccn, completion: {
-            (result, error) in
-
-            XCTAssert(error == nil, "error: \(error)")
-            let ccType = result.ccType
-            let last4 = result.last4Digits
-            let country = result.ccIssuingCountry
-            NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
-            assert(last4 == "1111", "last4 should be 1111")
-            assert(ccType == "VISA", "CC Type should be VISA")
-            assert(country == "US", "country should be US")
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+            
+            BSApiManager.submitCcn(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+                (result, error) in
+                
+                XCTAssert(error == nil, "error: \(error)")
+                let ccType = result.ccType
+                let last4 = result.last4Digits
+                let country = result.ccIssuingCountry
+                NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
+                assert(last4 == "1111", "last4 should be 1111")
+                assert(ccType == "VISA", "CC Type should be VISA")
+                assert(country == "US", "country should be US")
+                semaphore.signal()
+            })
         })
+        semaphore.wait()
     }
 
     func testSubmitCCNError() {
@@ -315,25 +385,25 @@ class BSApiManagerTests: XCTestCase {
     //------------------------------------------------------
 
 
-    func testGetTokenWithBadCredentials() {
-
-        listenForBsTokenExpiration(expected: false)
-        do {
-            let _ = try BSApiManager.createBSToken(domain: BSApiManager.BS_SANDBOX_DOMAIN, user: "dummy", password: "dummypass")
-            print("We should have crashed here")
-            fatalError()
-        } catch let error as BSErrors {
-            if error == BSErrors.invalidInput {
-                print("Got the correct error")
-            } else {
-                print("Got wrong error \(error.localizedDescription)")
-                fatalError()
-            }
-        } catch let error {
-            print("Got wrong error \(error.localizedDescription)")
-            fatalError()
-        }
-    }
+//    func testGetTokenWithBadCredentials() {
+//
+//        listenForBsTokenExpiration(expected: false)
+//        do {
+//            let _ = try BSApiManager.createBSToken(domain: BSApiManager.BS_SANDBOX_DOMAIN, user: "dummy", password: "dummypass")
+//            print("We should have crashed here")
+//            fatalError()
+//        } catch let error as BSErrors {
+//            if error == BSErrors.invalidInput {
+//                print("Got the correct error")
+//            } else {
+//                print("Got wrong error \(error.localizedDescription)")
+//                fatalError()
+//            }
+//        } catch let error {
+//            print("Got wrong error \(error.localizedDescription)")
+//            fatalError()
+//        }
+//    }
 
 
     //------------------------------------------------------
@@ -342,95 +412,39 @@ class BSApiManagerTests: XCTestCase {
 
     private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
 
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
-            (result, error) in
-
-            if let error = error {
-                XCTAssertEqual(error, expectedError)
-                NSLog("Got the right error!")
-            } else {
-                XCTAssert(false, "Should have thrown error")
-            }
-            self.waitForExpiredTokenEvent()
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+            
+            BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+                (result, error) in
+                
+                if let error = error {
+                    XCTAssertEqual(error, expectedError)
+                    NSLog("Got the right error!")
+                } else {
+                    XCTAssert(false, "Should have thrown error")
+                }
+                semaphore.signal()
+            })
         })
+        semaphore.wait()
     }
     
-    func createToken() -> BSToken {
-        
-        do {
-            let token = try BSApiManager.createSandboxBSToken()
-            NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
-            BSApiManager.setBsToken(bsToken: token)
-            return token!
-        } catch let error {
-            print("Got error \(error.localizedDescription)")
-            fatalError()
-        }
-    }
-    
-    
-//    private func getCurrencies() -> BSCurrencies! {
-//        
-//        do {
-//            let bsCurrencies = try BSApiManager.getCurrencyRates()
-//            return bsCurrencies!
-//        } catch let error {
-//            print("Got wrong error \(error.localizedDescription)")
-//            fatalError()
+
+//    /**
+//     Called by the observer to the token expired event sent by BlueSnap SDK.
+//     Here we fullfil the expectation if there is one, or fail in case this was not supposed to happen.
+//     */
+//    func bsTokenExpired() {
+//
+//        NSLog("Got BS token expiration notification!")
+//        if let tokenExpiredExpectation = tokenExpiredExpectation {
+//            tokenExpiredExpectation.fulfill()
+//        } else {
+//            assertionFailure("Got unexpected token expiration")
 //        }
 //    }
-    
-    private func getExpiredToken() -> BSToken {
-        return BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", isProduction: false)
-    }
-
-    private func getInvalidToken() -> BSToken {
-        return BSToken(tokenStr: "aaaa", isProduction: false)
-    }
-
-    /**
-     Add observer to the token expired event sent by BlueSnap SDK.
-     */
-    func listenForBsTokenExpiration(expected: Bool) {
-
-//        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
-//        if expected {
-//            tokenExpiredExpectation = expectation(description: "Token Expired expectation")
-//        } else {
-//            tokenExpiredExpectation = nil
-//        }
-    }
-
-    /**
-     Remove observer to the token expired event sent by BlueSnap SDK.
-     */
-    private func stopListeningForBsTokenExpiration() {
-
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    /**
-     Called by the observer to the token expired event sent by BlueSnap SDK.
-     Here we fullfil the expectation if there is one, or fail in case this was not supposed to happen.
-     */
-    func bsTokenExpired() {
-
-        NSLog("Got BS token expiration notification!")
-        if let tokenExpiredExpectation = tokenExpiredExpectation {
-            tokenExpiredExpectation.fulfill()
-        } else {
-            assertionFailure("Got unexpected token expiration")
-        }
-    }
-
-    private func waitForExpiredTokenEvent() {
-        if tokenExpiredExpectation != nil {
-            waitForExpectations(timeout: 0.1, handler: {
-                error in
-                assert(error == nil, "No error should happen here")
-            })
-        }
-    }
+//
 
     /**
     Create token in async manner

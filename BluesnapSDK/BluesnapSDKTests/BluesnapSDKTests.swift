@@ -37,40 +37,40 @@ class BluesnapSDKTests: XCTestCase {
     // MARK: submitCcDetails
     //------------------------------------------------------
     
-    func testSubmitCCDetailsSuccess() {
- 
-        createToken()
-
-        let ccn = "4111 1111 1111 1111"
-        let cvv = "111"
-        let exp = "10/2020"
-
-        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
-            (result, error) in
-            
-            XCTAssert(error == nil, "error: \(error)")
-            let ccType = result.ccType
-            let last4 = result.last4Digits
-            let country = result.ccIssuingCountry
-            NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
-       })
-    }
-    
-    func testSubmitCCDetailsError() {
-        
-        createToken()
-        
-        submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSErrors.invalidCcNumber)
-        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSErrors.invalidCvv)
-        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSErrors.invalidExpDate)
-    }
-    
-    func testSubmitEmptyCCDetailsError() {
-        
-        createToken()
-
-        submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
-    }
+//    func testSubmitCCDetailsSuccess() {
+// 
+//        createToken()
+//
+//        let ccn = "4111 1111 1111 1111"
+//        let cvv = "111"
+//        let exp = "10/2020"
+//
+//        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+//            (result, error) in
+//            
+//            XCTAssert(error == nil, "error: \(error)")
+//            let ccType = result.ccType
+//            let last4 = result.last4Digits
+//            let country = result.ccIssuingCountry
+//            NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
+//       })
+//    }
+//    
+//    func testSubmitCCDetailsError() {
+//        
+//        createToken()
+//        
+//        submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSErrors.invalidCcNumber)
+//        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSErrors.invalidCvv)
+//        submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "111", exp: "22/2020", expectedError: BSErrors.invalidExpDate)
+//    }
+//    
+//    func testSubmitEmptyCCDetailsError() {
+//        
+//        createToken()
+//
+//        submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
+//    }
     
     
     //------------------------------------------------------
@@ -101,30 +101,30 @@ class BluesnapSDKTests: XCTestCase {
     // MARK: private functions
     //------------------------------------------------------
     
-    private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
+//    private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
+//
+//        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+//            (result, error) in
+//            
+//            if let error = error {
+//                XCTAssertEqual(error, expectedError)
+//                NSLog("Got the right error!")
+//            } else {
+//                XCTAssert(false, "Should have thrown error")
+//            }
+//        })
+//    }
 
-        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
-            (result, error) in
-            
-            if let error = error {
-                XCTAssertEqual(error, expectedError)
-                NSLog("Got the right error!")
-            } else {
-                XCTAssert(false, "Should have thrown error")
-            }
-        })
-    }
-
-    private func createToken() {
-        
-        do {
-            let token = try BSApiManager.createSandboxBSToken()
-            NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
-            BSApiManager.setBsToken(bsToken: token)
-        } catch let error {
-            print("Got error \(error.localizedDescription)")
-            fatalError()
-        }
-    }
+//    private func createToken() {
+//        
+//        do {
+//            let token = try BSApiManager.createSandboxBSToken()
+//            NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
+//            BSApiManager.setBsToken(bsToken: token)
+//        } catch let error {
+//            print("Got error \(error.localizedDescription)")
+//            fatalError()
+//        }
+//    }
     
 }

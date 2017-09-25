@@ -88,8 +88,7 @@ import PassKit
      - throws BSErrors
      */
     open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
-        let result = BSApiManager.getCurrencyRates(completion: completion)
-        return result
+        BSApiManager.getCurrencyRates(completion: completion)
     }
 
     /**
@@ -130,17 +129,32 @@ import PassKit
         //KDataCollector.shared().environment = KEnvironment.test
     }
     
+    static func getSupportedPaymentMethods(completion: @escaping ([String]?, BSErrors?) -> Void) {
+        
+        BSApiManager.getSupportedPaymentMethods(completion: completion)
+    }
+
     /**
     Check if ApplePay is available
     */
     open class func applePaySupported(supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
         
-        if BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay) {
-            if #available(iOS 10, *) {
+        if #available(iOS 10, *) {
+            
+            var isSupportedByBS = false
+            let semaphore = DispatchSemaphore(value: 0)
+            BSApiManager.getSupportedPaymentMethods(completion: { paymentMethods, resultError in
+                isSupportedByBS = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: paymentMethods)
+                semaphore.signal()
+            })
+            semaphore.wait()
+    
+            if isSupportedByBS {
                 return (PKPaymentAuthorizationController.canMakePayments(),
                         PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
             }
         }
+
         return (canMakePayments: false, canSetupCards: false)
     }
 
@@ -148,28 +162,24 @@ import PassKit
     // MARK: Utility functions for quick testing
     
     /**
-     Returns token for BlueSnap Sandbox environment; useful for tests.
+     Create token for BlueSnap Sandbox environment; useful for tests.
      In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
     */
-    open class func createSandboxTestToken() throws -> BSToken? {
-        do {
-            return try BSApiManager.createSandboxBSToken()
-        } catch let error {
-            throw error
-        }
+    open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        BSApiManager.createSandboxBSToken(completion: completion)
     }
 
-    /**
-    Objective C helper method for returning sandbox token
-    */
-    @objc open class func createSandboxTestTokenOrNil() -> BSToken? {
-        do {
-            return try BSApiManager.createSandboxBSToken()!
-        } catch let error {
-            NSLog("Error creating token: \(error.localizedDescription)")
-            return nil
-        }
-    }
+//    /**
+//    Objective C helper method for returning sandbox token
+//    */
+//    @objc open class func createSandboxTestTokenOrNil() -> BSToken? {
+//        do {
+//            return try BSApiManager.createSandboxBSToken()!
+//        } catch let error {
+//            NSLog("Error creating token: \(error.localizedDescription)")
+//            return nil
+//        }
+//    }
 
 
     open class func setApplePayMerchantIdentifier(merchantId: String!) -> String? {

@@ -38,7 +38,6 @@ class ViewController: UIViewController {
         
         generateAndSetBsToken()
         setApplePayIdentifier()
-        listenForBsTokenExpiration()
 
         resultTextView.text = ""
         
@@ -308,6 +307,11 @@ class ViewController: UIViewController {
         NSLog("--------------------------------------------------------")
     }
     
+    
+    func setApplePayIdentifier() {
+        _ = BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
+    }
+
     // MARK: BS Token functions
     
     /**
@@ -316,34 +320,17 @@ class ViewController: UIViewController {
      */
     func generateAndSetBsToken() {
         
-        do {
-            //// simulate expired token for first time
-            //let simulateTokenExpired = bsToken == nil
-            bsToken = try BlueSnapSDK.createSandboxTestToken()
-            //if simulateTokenExpired {
-            //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
-            //}
-            BlueSnapSDK.setBsToken(bsToken: bsToken)
-        } catch {
-            NSLog("Error: Failed to get BS token")
-            fatalError()
-        }
-        NSLog("Got BS token= \(bsToken!.getTokenStr())")
-    }
-
-    func setApplePayIdentifier() {
-        _ = BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
-    }
-    
-    /**
-     Add observer to the token expired event sent by BlueSnap SDK.
-    */
-    func listenForBsTokenExpiration() {
+        // To simulate expired token use:
+        //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(bsTokenExpired), name: Notification.Name.bsTokenExpirationNotification, object: nil)
+        BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
+            self.bsToken = resultToken
+            BlueSnapSDK.setBsToken(bsToken: self.bsToken)
+            NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
+        })
     }
     
-    /**
+     /**
      Called by the observer to the token expired event sent by BlueSnap SDK.
      Here we generate and set a new token, so that when the user tries again, the action will succeed.
      */
