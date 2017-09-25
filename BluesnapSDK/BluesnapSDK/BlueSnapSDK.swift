@@ -39,7 +39,7 @@ import PassKit
      - parameters:
      - bsToken: BlueSnap token, should be fresh and valid
      */
-    open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: (BSToken?, BSErrors?) -> Void) -> Void) {
+    open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void) {
         
         BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
     }
@@ -61,10 +61,15 @@ import PassKit
         
         adjustInitialData(initialData: initialData)
         
-        BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
-                                          animated: animated,
-                                          initialData: initialData,
-                                          purchaseFunc: purchaseFunc)
+        BSApiManager.getSupportedPaymentMethods(completion: {methods, error in
+            DispatchQueue.main.async {
+                BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
+                                               animated: animated,
+                                               initialData: initialData,
+                                               supportedPaymentMethods: methods,
+                                               purchaseFunc: purchaseFunc)
+            }
+        })
     }
     
     /**
@@ -137,18 +142,12 @@ import PassKit
     /**
     Check if ApplePay is available
     */
-    open class func applePaySupported(supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
+    open class func applePaySupported(supportedPaymentMethods: [String]?,
+                                      supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
         
         if #available(iOS 10, *) {
             
-            var isSupportedByBS = false
-            let semaphore = DispatchSemaphore(value: 0)
-            BSApiManager.getSupportedPaymentMethods(completion: { paymentMethods, resultError in
-                isSupportedByBS = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: paymentMethods)
-                semaphore.signal()
-            })
-            semaphore.wait()
-    
+            let isSupportedByBS = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: supportedPaymentMethods)
             if isSupportedByBS {
                 return (PKPaymentAuthorizationController.canMakePayments(),
                         PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));

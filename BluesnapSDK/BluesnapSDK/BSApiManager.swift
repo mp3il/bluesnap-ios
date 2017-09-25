@@ -29,7 +29,9 @@ import Foundation
     internal static var apiToken: BSToken?
     internal static var apiGenerateTokenFunc: (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void = { completion in
         NSLog("no token regeneration method was supplied")
-        completion(nil, BSErrors.invalidInput)
+        DispatchQueue.main.async {
+            completion(nil, BSErrors.invalidInput)
+        }
     }
 
     // MARK: bsToken functions
@@ -83,13 +85,18 @@ import Foundation
         if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
             let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
             if (diff > TIME_DIFF_TO_RELOAD) {
-                completion(bsCurrencies, nil)
+                DispatchQueue.main.async {
+                    completion(bsCurrencies, nil)
+                }
+                return
             }
         }
 
+        NSLog("BlueSnap; getCurrencyRates")
         BSApiCaller.getCurrencyRates(bsToken: bsToken, completion: {
             resultCurrencies, resultError in
             
+            NSLog("BlueSnap; getCurrencyRates completion")
             if resultError == .unAuthorised {
                 BSApiCaller.isTokenExpired(bsToken: bsToken, completion: { isExpired in
                     if isExpired {
@@ -101,11 +108,15 @@ import Foundation
                                     bsCurrencies = resultCurrencies2
                                     self.lastCurrencyFetchDate = Date()
                                 }
-                                completion(bsCurrencies, resultError2)
+                                DispatchQueue.main.async {
+                                    completion(bsCurrencies, resultError2)
+                                }
                             })
                         })
                     } else {
-                        completion(bsCurrencies, resultError)
+                        DispatchQueue.main.async {
+                            completion(bsCurrencies, resultError)
+                        }
                     }
                 })
                 
@@ -114,7 +125,9 @@ import Foundation
                     bsCurrencies = resultCurrencies
                     self.lastCurrencyFetchDate = Date()
                 }
-                completion(bsCurrencies, resultError)
+                DispatchQueue.main.async {
+                    completion(bsCurrencies, resultError)
+                }
             }
         })
     }
@@ -158,29 +171,40 @@ import Foundation
         if let lastSupportedPaymentMethodsFetchDate = lastSupportedPaymentMethodsFetchDate, let supportedPaymentMethods = supportedPaymentMethods {
             let diff = lastSupportedPaymentMethodsFetchDate.timeIntervalSinceNow as Double // interval in seconds
             if (diff > TIME_DIFF_TO_RELOAD) {
-                completion(supportedPaymentMethods, nil)
+                DispatchQueue.main.async {
+                    completion(supportedPaymentMethods, nil)
+                }
+                return
             }
         }
         
+        NSLog("BlueSnap; getSupportedPaymentMethods")
         BSApiCaller.getSupportedPaymentMethods(bsToken: bsToken, completion: {
             resultSupportedPaymentMethods, resultError in
             
+            NSLog("BlueSnap; getSupportedPaymentMethods completion")
             if resultError == .unAuthorised {
                 BSApiCaller.isTokenExpired(bsToken: bsToken, completion: { isExpired in
                     if isExpired {
                         // regenerate Token and try again
                         regenerateToken(executeAfter: { _ in
+                            NSLog("BlueSnap; getSupportedPaymentMethods retry")
                             BSApiCaller.getSupportedPaymentMethods(bsToken: getBsToken(), completion: { resultSupportedPaymentMethods2, resultError2 in
                                 
+                                NSLog("BlueSnap; getSupportedPaymentMethods retry completion")
                                 if resultError2 == nil {
                                     supportedPaymentMethods = resultSupportedPaymentMethods2
                                     self.lastSupportedPaymentMethodsFetchDate = Date()
                                 }
-                                completion(supportedPaymentMethods, resultError2)
+                                DispatchQueue.main.async {
+                                    completion(supportedPaymentMethods, resultError2)
+                                }
                             })
                         })
                     } else {
-                        completion(supportedPaymentMethods, resultError)
+                        DispatchQueue.main.async {
+                            completion(supportedPaymentMethods, resultError)
+                        }
                     }
                 })
                 
@@ -189,7 +213,9 @@ import Foundation
                     supportedPaymentMethods = resultSupportedPaymentMethods
                     self.lastSupportedPaymentMethodsFetchDate = Date()
                 }
-                completion(supportedPaymentMethods, resultError)
+                DispatchQueue.main.async {
+                    completion(supportedPaymentMethods, resultError)
+                }
             }
         })
     }
@@ -216,25 +242,35 @@ import Foundation
         DispatchQueue.global().async {
             let bsToken = getBsToken()
             
+            NSLog("BlueSnap; createPayPalToken")
             BSApiCaller.createPayPalToken(bsToken: bsToken, paymentRequest: paymentRequest, withShipping: withShipping, completion: {
                 resultToken, resultError in
+                NSLog("BlueSnap; createPayPalToken completion")
                 if resultError == .unAuthorised {
+                    NSLog("BlueSnap; createPayPalToken retry")
                     BSApiCaller.isTokenExpired(bsToken: bsToken, completion: { isExpired in
+                        NSLog("BlueSnap; createPayPalToken retry completion")
                         if isExpired {
                             // regenerate Token and try again
                             regenerateToken(executeAfter: { _ in
                                 BSApiCaller.createPayPalToken(bsToken: getBsToken(), paymentRequest: paymentRequest, withShipping: withShipping, completion: { resultToken2, resultError2 in
                                     
-                                    completion(resultToken2, resultError2)
+                                    DispatchQueue.main.async {
+                                        completion(resultToken2, resultError2)
+                                    }
                                 })
                             })
                         } else {
-                            completion(resultToken, resultError)
+                            DispatchQueue.main.async {
+                                completion(resultToken, resultError)
+                            }
                         }
                     })
                     
                 } else {
-                    completion(resultToken, resultError)
+                    DispatchQueue.main.async {
+                        completion(resultToken, resultError)
+                    }
                 }
             })
         }
@@ -272,35 +308,47 @@ import Foundation
         ]
         BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseApplePayResponse, completion: { resultData, error in
             if let error = error {
-                completion(resultData, error)
+                DispatchQueue.main.async {
+                    completion(resultData, error)
+                }
                 debugPrint(error.localizedDescription)
                 return
             }
-            completion(resultData, nil)
+            DispatchQueue.main.async {
+                completion(resultData, nil)
+            }
         })
     }
 
     static internal func regenerateToken(executeAfter: @escaping () -> Void) {
         
-        NSLog("Regenrating new token instead of \(apiToken?.getTokenStr() ?? "")")
-        apiGenerateTokenFunc({newToken, error in
-            if let newToken = newToken {
-                setBsToken(bsToken: newToken)
-            }
-            executeAfter()
-        })
+        DispatchQueue.main.async {
+            NSLog("Regenrating new token instead of \(apiToken?.getTokenStr() ?? "")")
+            apiGenerateTokenFunc({newToken, error in
+                if let newToken = newToken {
+                    setBsToken(bsToken: newToken)
+                }
+                DispatchQueue.main.async {
+                    executeAfter()
+                }
+            })
+        }
     }
 
     
     private static func submitCcDetails(requestBody: [String:String], completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
         
+        NSLog("BlueSnap; submitCcDetails")
         BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: { resultData, error in
             
+            NSLog("BlueSnap; submitCcDetails completion")
             if error == BSErrors.expiredToken || error == BSErrors.tokenNotFound {
                 // regenerate Token and try again
+                NSLog("BlueSnap; submitCcDetails retry")
                 regenerateToken(executeAfter: { _ in
                     BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: { resultData2, error2 in
                         
+                        NSLog("BlueSnap; submitCcDetails retry completion")
                         fillCcDetailsAndComplete(resultData: resultData2, error: error2, completion: completion)
                     })
                 })
@@ -314,14 +362,18 @@ import Foundation
         
         let ccDetails = BSCcDetails()
         if let error = error {
-            completion(ccDetails, error)
+            DispatchQueue.main.async {
+                completion(ccDetails, error)
+            }
             debugPrint(error.localizedDescription)
             return
         }
         ccDetails.ccIssuingCountry = resultData["ccIssuingCountry"]
         ccDetails.ccType = resultData["ccType"]
         ccDetails.last4Digits = resultData["last4Digits"]
-        completion(ccDetails, nil)
+        DispatchQueue.main.async {
+            completion(ccDetails, nil)
+        }
     }
 
 }

@@ -14,6 +14,7 @@ class BSStartViewController: UIViewController {
     // MARK: - private properties
 
     var initialData : BSInitialData!
+    internal var supportedPaymentMethods: [String]?
     internal var purchaseFunc: (BSBasePaymentRequest!) -> Void = {
         paymentRequest in
         print("purchaseFunc should be overridden")
@@ -34,9 +35,10 @@ class BSStartViewController: UIViewController {
 
     // MARK: init
     
-    func initScreen(initialData: BSInitialData!, purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void) {
+    func initScreen(initialData: BSInitialData!, supportedPaymentMethods: [String]?, purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void) {
         
         self.initialData = initialData
+        self.supportedPaymentMethods = supportedPaymentMethods
         self.purchaseFunc = purchaseFunc
     }
     
@@ -48,13 +50,9 @@ class BSStartViewController: UIViewController {
         self.navigationController!.isNavigationBarHidden = false
 
         // Hide/show the buttons and position them automatically
-        hideShowElements(showPayPal: false, showApplePay: false)
-        BSApiManager.getSupportedPaymentMethods(completion: {supportedPaymentMethods, errors in
-        
-            let showPayPal = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: supportedPaymentMethods)
-            let showApplePay = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks).canMakePayments
-            self.hideShowElements(showPayPal: showPayPal, showApplePay: showApplePay)
-        })
+        let showPayPal = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: supportedPaymentMethods)
+        let showApplePay = BlueSnapSDK.applePaySupported(supportedPaymentMethods: supportedPaymentMethods, supportedNetworks: BlueSnapSDK.applePaySupportedNetworks).canMakePayments
+        self.hideShowElements(showPayPal: showPayPal, showApplePay: showApplePay)
         
         // Localize strings
         let localizedOr = BSLocalizedStrings.getString(BSLocalizedString.Label_Or)
@@ -73,7 +71,7 @@ class BSStartViewController: UIViewController {
 
     @IBAction func applePayClick(_ sender: Any) {
 
-        let applePaySupported = BlueSnapSDK.applePaySupported(supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
+        let applePaySupported = BlueSnapSDK.applePaySupported(supportedPaymentMethods: supportedPaymentMethods, supportedNetworks: BlueSnapSDK.applePaySupportedNetworks)
 
         if (!applePaySupported.canMakePayments) {
             let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Apple_Pay, message: BSLocalizedString.Error_Not_available_on_this_device)

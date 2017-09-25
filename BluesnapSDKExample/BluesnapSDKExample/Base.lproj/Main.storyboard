@@ -130,6 +130,23 @@
                                             <action selector="convertButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Th1-YS-TgR"/>
                                         </connections>
                                     </button>
+                                    <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cco-GN-tEP">
+                                        <rect key="frame" x="0.0" y="-5" width="375" height="588"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading, please wait..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5gd-cl-sWV">
+                                                <rect key="frame" x="0.0" y="280" width="375" height="29"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="5gd-cl-sWV" firstAttribute="centerY" secondItem="cco-GN-tEP" secondAttribute="centerY" id="Dww-Ok-kT3"/>
+                                            <constraint firstItem="5gd-cl-sWV" firstAttribute="centerX" secondItem="cco-GN-tEP" secondAttribute="centerX" id="Z78-it-7Jr"/>
+                                            <constraint firstItem="5gd-cl-sWV" firstAttribute="width" secondItem="cco-GN-tEP" secondAttribute="width" id="dss-yk-i1a"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -142,11 +159,14 @@
                                     <constraint firstItem="TAo-mM-qRo" firstAttribute="centerX" secondItem="gtG-Zk-3aB" secondAttribute="centerX" id="69i-NP-UqW"/>
                                     <constraint firstAttribute="bottom" secondItem="TT4-Lq-e8Y" secondAttribute="bottom" constant="10" id="6b5-3K-Jgu"/>
                                     <constraint firstItem="TT4-Lq-e8Y" firstAttribute="leading" secondItem="gtG-Zk-3aB" secondAttribute="leading" constant="20" symbolic="YES" id="7XM-tc-oVh"/>
+                                    <constraint firstItem="cco-GN-tEP" firstAttribute="height" secondItem="gtG-Zk-3aB" secondAttribute="height" id="AIh-UF-mnC"/>
+                                    <constraint firstItem="cco-GN-tEP" firstAttribute="top" secondItem="gtG-Zk-3aB" secondAttribute="top" constant="-5" id="CG6-tx-BsU"/>
                                     <constraint firstItem="1E4-kM-4oY" firstAttribute="top" secondItem="sqi-jc-dUs" secondAttribute="bottom" constant="25" id="GnC-aJ-5N3"/>
                                     <constraint firstItem="sqi-jc-dUs" firstAttribute="leading" secondItem="gtG-Zk-3aB" secondAttribute="leading" constant="14" id="GpH-f3-TsK"/>
                                     <constraint firstItem="AB2-QV-u38" firstAttribute="baseline" secondItem="uPH-f5-LxL" secondAttribute="firstBaseline" id="HUC-7K-URT"/>
                                     <constraint firstItem="TAo-mM-qRo" firstAttribute="top" secondItem="AB2-QV-u38" secondAttribute="bottom" constant="8" id="J4e-vl-a9u"/>
                                     <constraint firstItem="xkv-uS-lPt" firstAttribute="top" secondItem="Hna-Cr-jnR" secondAttribute="bottom" constant="2" id="Md8-kH-5Ju"/>
+                                    <constraint firstItem="cco-GN-tEP" firstAttribute="leading" secondItem="gtG-Zk-3aB" secondAttribute="leading" id="OW1-2K-3BQ"/>
                                     <constraint firstItem="xkv-uS-lPt" firstAttribute="trailing" secondItem="1E4-kM-4oY" secondAttribute="trailing" id="QWn-vD-UHb"/>
                                     <constraint firstItem="RTe-GM-YPU" firstAttribute="centerY" secondItem="Hna-Cr-jnR" secondAttribute="centerY" id="TGW-c5-Dal"/>
                                     <constraint firstItem="dMR-1J-U5n" firstAttribute="leading" secondItem="1E4-kM-4oY" secondAttribute="trailing" constant="8" symbolic="YES" id="UA1-CN-zDu"/>
@@ -166,6 +186,7 @@
                                     <constraint firstItem="iOS-3A-GN6" firstAttribute="trailing" secondItem="uPH-f5-LxL" secondAttribute="trailing" id="n6X-oH-Y2y"/>
                                     <constraint firstItem="l8V-G4-lWL" firstAttribute="leading" secondItem="iOS-3A-GN6" secondAttribute="leading" id="obF-P1-goG"/>
                                     <constraint firstItem="sqi-jc-dUs" firstAttribute="top" secondItem="l8V-G4-lWL" secondAttribute="bottom" constant="12" id="sGi-kW-dpx"/>
+                                    <constraint firstItem="cco-GN-tEP" firstAttribute="width" secondItem="gtG-Zk-3aB" secondAttribute="width" id="taK-Xq-GBV"/>
                                     <constraint firstItem="1E4-kM-4oY" firstAttribute="leading" secondItem="AB2-QV-u38" secondAttribute="leading" id="wia-CI-ql2"/>
                                     <constraint firstItem="uPH-f5-LxL" firstAttribute="centerY" secondItem="AB2-QV-u38" secondAttribute="centerY" id="yjz-9k-r7M"/>
                                     <constraint firstAttribute="trailing" secondItem="TT4-Lq-e8Y" secondAttribute="trailing" constant="20" symbolic="YES" id="yxv-OD-JSG"/>
@@ -185,6 +206,8 @@
                     <navigationItem key="navigationItem" title="BlueSnap IOS SDK Example App" id="Wrn-am-caX"/>
                     <connections>
                         <outlet property="convertButton" destination="TAo-mM-qRo" id="fgb-9J-9ff"/>
+                        <outlet property="coverAllLabel" destination="5gd-cl-sWV" id="0ut-Ch-cnk"/>
+                        <outlet property="coverAllView" destination="cco-GN-tEP" id="n6f-jP-Kui"/>
                         <outlet property="currencyButton" destination="dMR-1J-U5n" id="565-Jx-enD"/>
                         <outlet property="fullBillingSwitch" destination="xkv-uS-lPt" id="ufh-bw-LTe"/>
                         <outlet property="resultTextView" destination="TT4-Lq-e8Y" id="feq-X1-fla"/>

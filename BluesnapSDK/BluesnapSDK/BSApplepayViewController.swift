@@ -50,7 +50,9 @@ extension BSStartViewController : PaymentOperationDelegate {
 
         paymentOperation.completionBlock = {[weak op = paymentOperation] in
             NSLog("PK payment completion \(op?.error.debugDescription ?? "No op")")
-            completion(op?.error)
+            DispatchQueue.main.async {
+                completion(op?.error)
+            }
         };
 
         //Send the payment operation via queue
@@ -64,7 +66,9 @@ extension BSStartViewController : PaymentOperationDelegate {
     }
 
     func validate(payment: PKPayment, completion: @escaping (PaymentValidationResult) -> Void) {
-        completion(.valid);
+        DispatchQueue.main.async {
+            completion(.valid);
+        }
     }
 
     func send(paymentInformation: BSApplePayInfo, completion: @escaping (BSErrors?) -> Void) {
@@ -73,25 +77,36 @@ extension BSStartViewController : PaymentOperationDelegate {
             //print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
             BSApiManager.submitApplepayData(data: jsonData, completion: { (result, error) in
                 if let error = error {
-                    completion(error)
+                    DispatchQueue.main.async {
+                        completion(error)
+                    }
                     debugPrint(error.localizedDescription)
                     return
                 }
-                completion(nil) // no result from BS on 200
+                DispatchQueue.main.async {
+                    completion(nil) // no result from BS on 200
+                }
             }
             )
         } else {
             NSLog("PaymentInformation parse error")
-            completion(BSErrors.applePayOperationError)
+            DispatchQueue.main.async {
+                completion(BSErrors.applePayOperationError)
+            }
             return
         }
     }
 
     func didSelectPaymentMethod(method: PKPaymentMethod, completion: @escaping ([PKPaymentSummaryItem]) -> Void) {
-        completion(self.paymentSummaryItems);
+        DispatchQueue.main.async {
+            completion(self.paymentSummaryItems);
+        }
     }
+    
     func didSelectShippingContact(contact: PKContact, completion: @escaping (PKPaymentAuthorizationStatus, [PKShippingMethod], [PKPaymentSummaryItem]) -> Void) {
-        completion(.success, [], self.paymentSummaryItems);
+        DispatchQueue.main.async {
+            completion(.success, [], self.paymentSummaryItems);
+        }
     }
 }
 

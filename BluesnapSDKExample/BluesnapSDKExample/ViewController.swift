@@ -19,11 +19,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var fullBillingSwitch: UISwitch!
     @IBOutlet weak var withEmailSwitch: UISwitch!
+    @IBOutlet weak var coverAllView: UIView!
+    @IBOutlet weak var coverAllLabel: UILabel!
     
     // MARK: private properties
     
     fileprivate var bsToken : BSToken?
     fileprivate var initialData: BSInitialData! = BSInitialData()
+    fileprivate var firstTime : Bool = true
+    final fileprivate let LOADING_MESSAGE = "Loading, please wait"
+    final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
+    
  
 	// MARK: - UIViewController's methods
 	
@@ -36,7 +42,7 @@ class ViewController: UIViewController {
         //NSLog("Kount Init");
         //BlueSnapSDK.KountInit();
         
-        generateAndSetBsToken()
+        initBsToken()
         setApplePayIdentifier()
 
         resultTextView.text = ""
@@ -50,6 +56,11 @@ class ViewController: UIViewController {
         
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
+        if !firstTime {
+            coverAllView.isHidden = true
+        } else {
+            firstTime = false
+        }
     }
 	
 	// MARK: - Dismiss keyboard
@@ -78,24 +89,36 @@ class ViewController: UIViewController {
         backItem.title = "Cancel"
         navigationItem.backBarButtonItem = backItem
 
-        // open the purchase screen
-        fillInitialData()
-        BlueSnapSDK.showCheckoutScreen(
-            inNavigationController: self.navigationController,
-            animated: true,
-            initialData: initialData,
-            purchaseFunc: completePurchase)
-	}
+        coverAllLabel.text = PROCESSING_MESSAGE
+        coverAllView.isHidden = false
+        
+        DispatchQueue.main.async {
+            // open the purchase screen
+            self.fillInitialData()
+            BlueSnapSDK.showCheckoutScreen(
+                inNavigationController: self.navigationController,
+                animated: true,
+                initialData: self.initialData,
+                purchaseFunc: self.completePurchase)
+        }
+    }
 	
 	@IBAction func currencyButtonAction(_ sender: UIButton) {
         
-        fillInitialData()
-        BlueSnapSDK.showCurrencyList(
-            inNavigationController: self.navigationController,
-            animated: true,
-            selectedCurrencyCode: initialData.priceDetails.currency,
-            updateFunc: updateViewWithNewCurrency,
-            errorFunc: { self.showErrorAlert(message: "Failed to display currency List, please try again") })
+        coverAllLabel.text = LOADING_MESSAGE
+        coverAllView.isHidden = false
+        
+        DispatchQueue.main.async {
+            self.fillInitialData()
+            BlueSnapSDK.showCurrencyList(
+                inNavigationController: self.navigationController,
+                animated: true,
+                selectedCurrencyCode: self.initialData.priceDetails.currency,
+                updateFunc: self.updateViewWithNewCurrency,
+                errorFunc: {
+                    self.showErrorAlert(message: "Failed to display currency List, please try again")
+            })
+        }
 	}
 	
 	// MARK: - UIPopoverPresentationControllerDelegate
@@ -195,27 +218,48 @@ class ViewController: UIViewController {
             return // no need to complete purchase via BlueSnap API
         }
         
+        coverAllView.isHidden = false
+        coverAllLabel.text = PROCESSING_MESSAGE
+       
         // The creation of BlueSnap Demo transaction here should be done in the merchant server!!!
         // This is just for demo purposes
-        
-        let demo = DemoTreansactions()
-        var result: (success: Bool, data: String?) = (false, nil)
-        if let applePayPaymentRequest = paymentRequest as? BSApplePayPaymentRequest {
-            
-            result = demo.createApplePayTransaction(paymentRequest: applePayPaymentRequest, bsToken: bsToken!)
-            logResultDetails(result, paymentRequest: applePayPaymentRequest)
-            
-        } else if let ccPaymentRequest = paymentRequest as? BSCcPaymentRequest {
-            
-            let ccDetails = ccPaymentRequest.ccDetails
-            print("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
-            print("CC type: \(ccDetails.ccType ?? "")")
-            print("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
-            result = demo.createCreditCardTransaction(paymentRequest: ccPaymentRequest, bsToken: bsToken!)
-            logResultDetails(result, paymentRequest: ccPaymentRequest)
+        DispatchQueue.main.async {
+            let demo = DemoTreansactions()
+            var result: (success: Bool, data: String?) = (false, nil)
+            if let applePayPaymentRequest = paymentRequest as? BSApplePayPaymentRequest {
+                
+                demo.createApplePayTransaction(
+                    paymentRequest: applePayPaymentRequest,
+                    bsToken: self.bsToken!,
+                    completion: { success, data in
+                        result.data = data
+                        result.success = success
+                        self.logResultDetails(result: result, paymentRequest: applePayPaymentRequest)
+                        self.showThankYouScreen(result)
+                })
+                
+            } else if let ccPaymentRequest = paymentRequest as? BSCcPaymentRequest {
+                
+                let ccDetails = ccPaymentRequest.ccDetails
+                NSLog("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
+                NSLog("CC type: \(ccDetails.ccType ?? "")")
+                NSLog("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
+                demo.createCreditCardTransaction(
+                    paymentRequest: ccPaymentRequest,
+                    bsToken: self.bsToken!,
+                    completion: { success, data in
+                        result.data = data
+                        result.success = success
+                        self.logResultDetails(result: result, paymentRequest: ccPaymentRequest)
+                        self.showThankYouScreen(result)
+                })
+            }
         }
-        
+    }
+    
+    func showThankYouScreen(_ result: (success: Bool, data: String?)) {
         // Show success/fail screen
+        NSLog("- - - - - - - - - - - - - -")
         if result.success == true {
             NSLog("BLS transaction created Successfully!\n\n\(result.data!)")
             showThankYouScreen(errorText: nil)
@@ -259,7 +303,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func logResultDetails(_ result : (success:Bool, data: String?), paymentRequest: BSBasePaymentRequest!) {
+    private func logResultDetails(result: (success:Bool, data: String?), paymentRequest: BSBasePaymentRequest!) {
         
         NSLog("--------------------------------------------------------")
         NSLog("Result success: \(result.success)")
@@ -318,26 +362,39 @@ class ViewController: UIViewController {
      Create a test BS token and set it in BlueSnapSDK.
      In a real app, you would get the token from your app server.
      */
-    func generateAndSetBsToken() {
+    func initBsToken() {
         
         // To simulate expired token use:
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
+        
+        BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
+        generateAndSetBsToken(completion: { resultToken, errors in
+            self.bsToken = resultToken
+            BlueSnapSDK.setBsToken(bsToken: self.bsToken)
+            NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
+            DispatchQueue.main.async {
+                self.coverAllView.isHidden = true
+            }
+        })
+    }
+    
+     /**
+     Called by the BlueSnapSDK when token expired error is recognized.
+     Here we generate and set a new token, so that when the action re-tries, it will succeed.
+     */
+    func generateAndSetBsToken(completion: @escaping (_ token: BSToken?, _ error: BSErrors?)->Void) {
+        
+        NSLog("Got BS token expiration notification!")
         
         BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
             self.bsToken = resultToken
             BlueSnapSDK.setBsToken(bsToken: self.bsToken)
             NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
+            DispatchQueue.main.async {
+                self.coverAllView.isHidden = true
+                completion(resultToken, errors)
+            }
         })
-    }
-    
-     /**
-     Called by the observer to the token expired event sent by BlueSnap SDK.
-     Here we generate and set a new token, so that when the user tries again, the action will succeed.
-     */
-    func bsTokenExpired() {
-        
-        NSLog("Got BS token expiration notification!")
-        generateAndSetBsToken()
     }
 }
 

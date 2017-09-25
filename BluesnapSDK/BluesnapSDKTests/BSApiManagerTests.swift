@@ -435,21 +435,6 @@ class BSApiManagerTests: XCTestCase {
     }
     
 
-//    /**
-//     Called by the observer to the token expired event sent by BlueSnap SDK.
-//     Here we fullfil the expectation if there is one, or fail in case this was not supposed to happen.
-//     */
-//    func bsTokenExpired() {
-//
-//        NSLog("Got BS token expiration notification!")
-//        if let tokenExpiredExpectation = tokenExpiredExpectation {
-//            tokenExpiredExpectation.fulfill()
-//        } else {
-//            assertionFailure("Got unexpected token expiration")
-//        }
-//    }
-//
-
     /**
     Create token in async manner
      */

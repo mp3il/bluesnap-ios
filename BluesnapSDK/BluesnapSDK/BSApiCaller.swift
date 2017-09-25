@@ -45,7 +45,9 @@ import Foundation
         
         var result: BSToken?
         var resultError: BSErrors?
+        NSLog("BlueSnap; createBSToken")
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            NSLog("BlueSnap; createBSToken completion")
             if let error = error {
                 let errorType = type(of: error)
                 NSLog("error getting BSToken - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
@@ -71,7 +73,9 @@ import Foundation
                 }
             }
             defer {
-                completion(result, resultError)
+                DispatchQueue.main.async {
+                    completion(result, resultError)
+                }
             }
         }
         task.resume()
@@ -107,7 +111,9 @@ import Foundation
                 }
             }
             defer {
-                completion(resultCurrencies, resultError)
+                DispatchQueue.main.async {
+                    completion(resultCurrencies, resultError)
+                }
             }
         }
         task.resume()
@@ -145,7 +151,9 @@ import Foundation
                 }
             }
             defer {
-                completion(resultToken, resultError)
+                DispatchQueue.main.async {
+                    completion(resultToken, resultError)
+                }
             }
         }
         task.resume()
@@ -181,7 +189,9 @@ import Foundation
                 }
             }
             defer {
-                completion(supportedPaymentMethods, resultError)
+                DispatchQueue.main.async {
+                    completion(supportedPaymentMethods, resultError)
+                }
             }
         }
         task.resume()
@@ -219,7 +229,9 @@ import Foundation
             if let error = error {
                 let errorType = type(of: error)
                 NSLog("error submitting BS Payment details - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                completion(resultData, .unknown)
+                DispatchQueue.main.async {
+                    completion(resultData, .unknown)
+                }
                 return
             }
             let httpResponse = response as? HTTPURLResponse
@@ -229,7 +241,9 @@ import Foundation
                 NSLog("Error getting response from BS on submitting Payment details")
             }
             defer {
-                completion(resultData, resultError)
+                DispatchQueue.main.async {
+                    completion(resultData, resultError)
+                }
             }
         }
         task.resume()
@@ -335,12 +349,16 @@ import Foundation
                     NSLog("Error getting response from BS on check if token is expired")
                 }
                 defer {
-                    completion(result)
+                    DispatchQueue.main.async {
+                        completion(result)
+                    }
                 }
             }
             task.resume()
         } else {
-            completion(true)
+            DispatchQueue.main.async {
+                completion(true)
+            }
         }
     }
 
