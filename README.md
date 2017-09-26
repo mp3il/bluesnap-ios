@@ -667,10 +667,11 @@ Parameter:
 ### createSandboxTestToken
 Returns a token for BlueSnap Sandbox environment; useful for tests.
 In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose your API credentials.
+The completion function will be called once we get a result from the server; it will receive either a token or an error.
 
 Signature:
 
-    open class func getSandboxTestToken() throws -> BSToken?
+    open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void)
 
 ## Handling token expiration
 You will need to supply a callback function to the BlueSnapSDK, with the following signature:
@@ -739,11 +740,10 @@ This function returns a list of currencies and their rates from BlueSnap.
 
 Signature:
 
-    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) throws -> BSCurrencies?
+    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void)
     
 Parameters:
 - completion: after the data is fetched, this function will be called with optional currency data and optional error
-- throws `BSApiErrors`
  
 ##### showCurrencyList
 If you're using the Standard Checkout Flow, you can use this function to take advantage of our currency selection screen, allowing the user to select a new currency to pay in. To see an example of calling this function, see ViewController.swift of the demo app. 
