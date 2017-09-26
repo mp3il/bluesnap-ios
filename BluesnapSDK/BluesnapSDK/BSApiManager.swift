@@ -45,6 +45,8 @@ import Foundation
 
     /**
      Set the token re-generation method to be used for BS API when token expires
+     - parameters:
+     - completion: function to be called after token is generated; will receive optional token and optional error
      */
     open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void) {
         
@@ -65,6 +67,8 @@ import Foundation
     
     /**
      Use this method only in tests to get a token for sandbox
+     - parameters:
+     - completion: function to be called after token is generated; will receive optional token and optional error
      */
     static func createSandboxBSToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
@@ -77,6 +81,8 @@ import Foundation
     
     /**
         Return a list of currencies and their rates from BlueSnap server
+     - parameters:
+     - completion: function to be called after data is received; will receive optional currency data and optional error
     */
     static func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
 
@@ -155,6 +161,8 @@ import Foundation
 
     /**
      Fetch a list of merchant-supported payment methods from BlueSnap server
+     - parameters:
+     - completion: function to be called after data is fetched; will receive optional string list and optional error
      */
     static func getSupportedPaymentMethods(completion: @escaping ([String]?, BSErrors?) -> Void) {
         
@@ -219,8 +227,12 @@ import Foundation
     
     /**
      Create PayPal token on BlueSnap server and get back the URL for redirect
+     - parameters:
+     - bsToken: a token for BlueSnap tokenized services
+     - paymentRequest: details of the purchase: specifically amount and currency are used
+     - withShipping: setting for the PayPal flow - do we want to request shipping details from the shopper
+     - completion: a callback function to be called once the PayPal token is fetched; receives optional PayPal Token string data and optional error
      */
-    
     static func createPayPalToken(paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
         if (payPalToken != nil) {
@@ -272,7 +284,7 @@ import Foundation
      - domain: look at BSApiManager BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
      - user: username
      - password: password
-     - throws BSErrors.invalidInput if user/pass are incorrect, BSErrors.unknown otherwise
+     - completion: function to be called after result is fetched; will receive optional token and optional error
      */
     internal static func createBSToken(domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         

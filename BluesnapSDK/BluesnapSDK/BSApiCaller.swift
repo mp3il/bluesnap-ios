@@ -26,7 +26,7 @@ import Foundation
      - domain: look at BSApiManager BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
      - user: username
      - password: password
-     - throws BSErrors.invalidInput if user/pass are incorrect, BSErrors.unknown otherwise
+     - completion: callback function for after the token is created; recfeives optional token and optional error
      */
     internal static func createBSToken(domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
@@ -81,6 +81,9 @@ import Foundation
 
     /**
      Return a list of currencies and their rates from BlueSnap server
+     - parameters:
+     - bsToken: a token for BlueSnap tokenized services
+     - completion: a callback function to be called once the data is fetched; receives optional currency data and optional error
      */
     static func getCurrencyRates(bsToken: BSToken!, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
         
@@ -115,6 +118,14 @@ import Foundation
         task.resume()
     }
     
+    /**
+     Calls BlueSnap server to create a PayPal token
+     - parameters:
+     - bsToken: a token for BlueSnap tokenized services
+     - paymentRequest: details of the purchase: specifically amount and currency are used
+     - withShipping: setting for the PayPal flow - do we want to request shipping details from the shopper
+     - completion: a callback function to be called once the PayPal token is fetched; receives optional PayPal Token string data and optional error
+    */
     static func createPayPalToken(bsToken: BSToken!, paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
         var urlStr = bsToken.serverUrl + PAYPAL_SERVICE  + "\(paymentRequest.getAmount() ?? 0)" + "&currency=" + paymentRequest.getCurrency()
@@ -156,6 +167,9 @@ import Foundation
     
     /**
      Fetch a list of merchant-supported payment methods from BlueSnap server
+     - parameters:
+     - bsToken: a token for BlueSnap tokenized services
+     - completion: a callback function to be called once the data is fetched; receives optional payment method list and optional error
      */
     static func getSupportedPaymentMethods(bsToken: BSToken!, completion: @escaping ([String]?, BSErrors?) -> Void) {
         
@@ -282,7 +296,7 @@ import Foundation
     }
     
     
-    static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
+    internal static func parseApplePayResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
         
         let resultData: [String:String] = [:]
         var resultError: BSErrors?
@@ -299,6 +313,10 @@ import Foundation
     }
 
     
+    /**
+     This function checks if a token is expired by trying to submit payment fields,
+     then checking the response.
+    */
     static func isTokenExpired(bsToken: BSToken?, completion: @escaping (Bool) -> Void) {
         
         if let bsToken = bsToken {

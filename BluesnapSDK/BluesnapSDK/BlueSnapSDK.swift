@@ -37,7 +37,7 @@ import PassKit
      This needs to be done before calling any of the methods below
      
      - parameters:
-     - bsToken: BlueSnap token, should be fresh and valid
+     - generateTokenFunc: callback function for generating a new token
      */
     open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void) {
         
@@ -90,7 +90,7 @@ import PassKit
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
-     - throws BSErrors
+     - completion: after the data is fetched, this function will be called with optional currency data and optional error
      */
     open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
         BSApiManager.getCurrencyRates(completion: completion)
@@ -134,6 +134,11 @@ import PassKit
         //KDataCollector.shared().environment = KEnvironment.test
     }
     
+    /**
+     Fetch the merchant's supported Payment Methods
+     - parameters:
+     - completion: function to call once the data is fetched; will receive optional list of strings that are the payment methods, and optional error.
+    */
     static func getSupportedPaymentMethods(completion: @escaping ([String]?, BSErrors?) -> Void) {
         
         BSApiManager.getSupportedPaymentMethods(completion: completion)
@@ -163,6 +168,8 @@ import PassKit
     /**
      Create token for BlueSnap Sandbox environment; useful for tests.
      In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
+     - parameters:
+     - completion: function to be called once we have the server result; will receive optional token and optional error
     */
     open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
         BSApiManager.createSandboxBSToken(completion: completion)
