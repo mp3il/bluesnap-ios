@@ -137,9 +137,7 @@ class BluesnapSDKTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertNotNil(bsToken)
             BlueSnapSDK.setBsToken(bsToken: bsToken)
-            DispatchQueue.main.async {
-                completion(bsToken, error)
-            }
+            completion(bsToken, error)
         })
     }
     

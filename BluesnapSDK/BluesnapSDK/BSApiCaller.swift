@@ -73,9 +73,7 @@ import Foundation
                 }
             }
             defer {
-                DispatchQueue.main.async {
-                    completion(result, resultError)
-                }
+                completion(result, resultError)
             }
         }
         task.resume()
@@ -111,9 +109,7 @@ import Foundation
                 }
             }
             defer {
-                DispatchQueue.main.async {
-                    completion(resultCurrencies, resultError)
-                }
+                completion(resultCurrencies, resultError)
             }
         }
         task.resume()
@@ -151,9 +147,7 @@ import Foundation
                 }
             }
             defer {
-                DispatchQueue.main.async {
-                    completion(resultToken, resultError)
-                }
+                completion(resultToken, resultError)
             }
         }
         task.resume()
@@ -189,9 +183,7 @@ import Foundation
                 }
             }
             defer {
-                DispatchQueue.main.async {
-                    completion(supportedPaymentMethods, resultError)
-                }
+                completion(supportedPaymentMethods, resultError)
             }
         }
         task.resume()
@@ -229,9 +221,7 @@ import Foundation
             if let error = error {
                 let errorType = type(of: error)
                 NSLog("error submitting BS Payment details - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    completion(resultData, .unknown)
-                }
+                completion(resultData, .unknown)
                 return
             }
             let httpResponse = response as? HTTPURLResponse
@@ -241,9 +231,7 @@ import Foundation
                 NSLog("Error getting response from BS on submitting Payment details")
             }
             defer {
-                DispatchQueue.main.async {
-                    completion(resultData, resultError)
-                }
+                completion(resultData, resultError)
             }
         }
         task.resume()
@@ -349,16 +337,12 @@ import Foundation
                     NSLog("Error getting response from BS on check if token is expired")
                 }
                 defer {
-                    DispatchQueue.main.async {
-                        completion(result)
-                    }
+                    completion(result)
                 }
             }
             task.resume()
         } else {
-            DispatchQueue.main.async {
-                completion(true)
-            }
+            completion(true)
         }
     }
 

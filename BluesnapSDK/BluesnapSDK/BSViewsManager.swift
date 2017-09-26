@@ -161,7 +161,9 @@ class BSViewsManager {
                 currencyCode: selectedCurrencyCode,
                 currencies: currencies!,
                 updateFunc: updateFunc)
-            inNavigationController.pushViewController(currencyScreen, animated: animated)
+            DispatchQueue.main.async {
+                inNavigationController.pushViewController(currencyScreen, animated: animated)
+            }
         })
     }
 

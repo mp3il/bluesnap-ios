@@ -30,9 +30,7 @@ import Foundation
     internal static var payPalToken : String?
     internal static var apiGenerateTokenFunc: (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void = { completion in
         NSLog("no token regeneration method was supplied")
-        DispatchQueue.main.async {
-            completion(nil, BSErrors.invalidInput)
-        }
+        completion(nil, BSErrors.invalidInput)
     }
 
     // MARK: bsToken functions
@@ -87,9 +85,7 @@ import Foundation
         if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
             let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
             if (diff > TIME_DIFF_TO_RELOAD) {
-                DispatchQueue.main.async {
-                    completion(bsCurrencies, nil)
-                }
+                completion(bsCurrencies, nil)
                 return
             }
         }
@@ -110,15 +106,11 @@ import Foundation
                                     bsCurrencies = resultCurrencies2
                                     self.lastCurrencyFetchDate = Date()
                                 }
-                                DispatchQueue.main.async {
-                                    completion(bsCurrencies, resultError2)
-                                }
+                                completion(bsCurrencies, resultError2)
                             })
                         })
                     } else {
-                        DispatchQueue.main.async {
-                            completion(bsCurrencies, resultError)
-                        }
+                        completion(bsCurrencies, resultError)
                     }
                 })
                 
@@ -127,9 +119,7 @@ import Foundation
                     bsCurrencies = resultCurrencies
                     self.lastCurrencyFetchDate = Date()
                 }
-                DispatchQueue.main.async {
-                    completion(bsCurrencies, resultError)
-                }
+                completion(bsCurrencies, resultError)
             }
         })
     }
@@ -173,9 +163,7 @@ import Foundation
         if let lastSupportedPaymentMethodsFetchDate = lastSupportedPaymentMethodsFetchDate, let supportedPaymentMethods = supportedPaymentMethods {
             let diff = lastSupportedPaymentMethodsFetchDate.timeIntervalSinceNow as Double // interval in seconds
             if (diff > TIME_DIFF_TO_RELOAD) {
-                DispatchQueue.main.async {
-                    completion(supportedPaymentMethods, nil)
-                }
+                completion(supportedPaymentMethods, nil)
                 return
             }
         }
@@ -198,15 +186,11 @@ import Foundation
                                     supportedPaymentMethods = resultSupportedPaymentMethods2
                                     self.lastSupportedPaymentMethodsFetchDate = Date()
                                 }
-                                DispatchQueue.main.async {
-                                    completion(supportedPaymentMethods, resultError2)
-                                }
+                                completion(supportedPaymentMethods, resultError2)
                             })
                         })
                     } else {
-                        DispatchQueue.main.async {
-                            completion(supportedPaymentMethods, resultError)
-                        }
+                        completion(supportedPaymentMethods, resultError)
                     }
                 })
                 
@@ -215,9 +199,7 @@ import Foundation
                     supportedPaymentMethods = resultSupportedPaymentMethods
                     self.lastSupportedPaymentMethodsFetchDate = Date()
                 }
-                DispatchQueue.main.async {
-                    completion(supportedPaymentMethods, resultError)
-                }
+                completion(supportedPaymentMethods, resultError)
             }
         })
     }
@@ -263,23 +245,17 @@ import Foundation
                                 BSApiCaller.createPayPalToken(bsToken: getBsToken(), paymentRequest: paymentRequest, withShipping: withShipping, completion: { resultToken2, resultError2 in
                                     
                                     payPalToken = resultToken2
-                                    DispatchQueue.main.async {
-                                        completion(resultToken2, resultError2)
-                                    }
+                                    completion(resultToken2, resultError2)
                                 })
                             })
                         } else {
-                            DispatchQueue.main.async {
-                                completion(resultToken, resultError)
-                            }
+                            completion(resultToken, resultError)
                         }
                     })
                     
                 } else {
                     payPalToken = resultToken
-                    DispatchQueue.main.async {
-                        completion(resultToken, resultError)
-                    }
+                    completion(resultToken, resultError)
                 }
             })
         }
@@ -317,31 +293,23 @@ import Foundation
         ]
         BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseApplePayResponse, completion: { resultData, error in
             if let error = error {
-                DispatchQueue.main.async {
-                    completion(resultData, error)
-                }
+                completion(resultData, error)
                 debugPrint(error.localizedDescription)
                 return
             }
-            DispatchQueue.main.async {
-                completion(resultData, nil)
-            }
+            completion(resultData, nil)
         })
     }
 
     static internal func regenerateToken(executeAfter: @escaping () -> Void) {
         
-        DispatchQueue.main.async {
-            NSLog("Regenrating new token instead of \(apiToken?.getTokenStr() ?? "")")
-            apiGenerateTokenFunc({newToken, error in
-                if let newToken = newToken {
-                    setBsToken(bsToken: newToken)
-                }
-                DispatchQueue.main.async {
-                    executeAfter()
-                }
-            })
-        }
+        NSLog("Regenrating new token instead of \(apiToken?.getTokenStr() ?? "")")
+        apiGenerateTokenFunc({newToken, error in
+            if let newToken = newToken {
+                setBsToken(bsToken: newToken)
+            }
+            executeAfter()
+        })
     }
 
     
@@ -371,18 +339,14 @@ import Foundation
         
         let ccDetails = BSCcDetails()
         if let error = error {
-            DispatchQueue.main.async {
-                completion(ccDetails, error)
-            }
+            completion(ccDetails, error)
             debugPrint(error.localizedDescription)
             return
         }
         ccDetails.ccIssuingCountry = resultData["ccIssuingCountry"]
         ccDetails.ccType = resultData["ccType"]
         ccDetails.last4Digits = resultData["last4Digits"]
-        DispatchQueue.main.async {
-            completion(ccDetails, nil)
-        }
+        completion(ccDetails, nil)
     }
 
 }
