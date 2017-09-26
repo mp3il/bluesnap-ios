@@ -350,7 +350,7 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 
 2. To accept Apple Pay payments, initialize your Apple Pay Merchant ID in the SDK by calling `BlueSnapSDK.setApplePayMerchantIdentifier`. In the demo app, see the `setApplePayIdentifier` function.
 
-3. Add a callback function for token expiration notification, to be called at by BlueSnap SDK. In the demo app, check out the `listenForBsTokenExpiration` function to see how this is handled. 
+3. Add a callback function for token regeneration, to be called by BlueSnap SDK. In the demo app, check out the `initBsToken` function to see how this is handled. 
 
 4. Initialize the input to the checkout flow by creating an instance of `BSInitialData` and filling the parts you may know already of the user (by setting `shippingDetails` & `billingDetails`), and the fields you wish to require from the user (by setting `withShipping`, `fullBilling`, & `withEmail`). 
 
