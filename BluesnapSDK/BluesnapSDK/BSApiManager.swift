@@ -306,7 +306,7 @@ import Foundation
         BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseApplePayResponse, completion: { resultData, error in
             if let error = error {
                 completion(resultData, error)
-                debugPrint(error.localizedDescription)
+                debugPrint(error.description())
                 return
             }
             completion(resultData, nil)
@@ -352,7 +352,7 @@ import Foundation
         let ccDetails = BSCcDetails()
         if let error = error {
             completion(ccDetails, error)
-            debugPrint(error.localizedDescription)
+            debugPrint(error.description())
             return
         }
         ccDetails.ccIssuingCountry = resultData["ccIssuingCountry"]

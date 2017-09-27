@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum BSErrors : Error {
+@objc public enum BSErrors : Int {
     
     // CC
     case invalidCcNumber
@@ -30,4 +30,41 @@ public enum BSErrors : Error {
     case tokenAlreadyUsed
     case unAuthorised
     case unknown
+    
+    func description() -> String {
+        switch self {
+            
+        case .invalidCcNumber:
+            return "invalidCcNumber";
+        case .invalidCvv:
+            return "invalidCvv";
+        case .invalidExpDate:
+            return "invalidExpDate";
+            
+        case .cantMakePaymentError:
+            return "cantMakePaymentError";
+        case .applePayOperationError:
+            return "applePayOperationError";
+        case .applePayCanceled:
+            return "applePayCanceled";
+
+        case .paypalUnsupportedCurrency:
+            return "paypalUnsupportedCurrency";
+
+        case .invalidInput:
+            return "invalidInput";
+        case .expiredToken:
+            return "expiredToken";
+        case .tokenNotFound:
+            return "tokenNotFound";
+        case .tokenAlreadyUsed:
+            return "tokenAlreadyUsed";
+        case .unAuthorised:
+            return "unAuthorised";
+
+        default:
+            return "unknown";
+        }
+    }
+
 }

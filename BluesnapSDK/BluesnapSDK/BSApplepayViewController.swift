@@ -80,7 +80,7 @@ extension BSStartViewController : PaymentOperationDelegate {
                     DispatchQueue.main.async {
                         completion(error)
                     }
-                    debugPrint(error.localizedDescription)
+                    debugPrint(error.description())
                     return
                 }
                 DispatchQueue.main.async {
