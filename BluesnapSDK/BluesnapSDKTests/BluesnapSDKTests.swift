@@ -39,26 +39,27 @@ class BluesnapSDKTests: XCTestCase {
     
     func testSubmitCCDetailsSuccess() {
  
-        createToken()
-
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
 
-        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
-            (result, error) in
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
             
-            XCTAssert(error == nil, "error: \(error)")
-            let ccType = result.ccType
-            let last4 = result.last4Digits
-            let country = result.ccIssuingCountry
-            NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
-       })
+            BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
+                
+                XCTAssert(error == nil, "error: \(error)")
+                let ccType = result.ccType
+                let last4 = result.last4Digits
+                let country = result.ccIssuingCountry
+                NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
+                semaphore.signal()
+            })
+        })
+        semaphore.wait()
     }
     
     func testSubmitCCDetailsError() {
-        
-        createToken()
         
         submitCCDetailsExpectError(ccn: "4111", cvv: "111", exp: "12/2020", expectedError: BSErrors.invalidCcNumber)
         submitCCDetailsExpectError(ccn: "4111111111111111", cvv: "1", exp: "12/2020", expectedError: BSErrors.invalidCvv)
@@ -67,66 +68,77 @@ class BluesnapSDKTests: XCTestCase {
     
     func testSubmitEmptyCCDetailsError() {
         
-        createToken()
-
         submitCCDetailsExpectError(ccn: "", cvv: "", exp: "", expectedError: BSErrors.invalidCcNumber)
     }
-
-
+    
+    
     //------------------------------------------------------
     // MARK: getCurrencyRates
     //------------------------------------------------------
 
+    // test get currencies with a valid token
     func testGetTokenAndCurrencies() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-
-        createToken()
-
-        var bsCurrencies: BSCurrencies?
-        do {
-            bsCurrencies = try BlueSnapSDK.getCurrencyRates()
-        } catch let error {
-            print("Got wrong error \(error.localizedDescription)")
-            fatalError()
-        }
-        XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-
-        let gbpCurrency: BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-        NSLog("GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
-
-        let eurCurrencyRate: Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-        NSLog("EUR currency rate is: \(eurCurrencyRate)")
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
+            
+            BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
+                
+                XCTAssertNil(errors, "Got errors while trying to get currencies")
+                XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+                
+                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+                XCTAssertNotNil(gbpCurrency)
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+                
+                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+                XCTAssertNotNil(eurCurrencyRate)
+                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                
+                semaphore.signal()
+            })
+        })
+        semaphore.wait()
     }
-
+    
+        
     //------------------------------------------------------
     // MARK: private functions
     //------------------------------------------------------
     
     private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
-
-        BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
-            (result, error) in
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        createToken(completion: { token, error in
             
-            if let error = error {
-                XCTAssertEqual(error, expectedError)
-                NSLog("Got the right error!")
-            } else {
-                XCTAssert(false, "Should have thrown error")
-            }
+            BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+                (result, error) in
+                
+                if let error = error {
+                    XCTAssertEqual(error, expectedError)
+                    NSLog("Got the right error!")
+                } else {
+                    XCTAssert(false, "Should have thrown error")
+                }
+                semaphore.signal()
+            })
         })
+        semaphore.wait()
     }
 
-    private func createToken() {
+
+    /**
+     Create token in async manner
+     */
+    func createToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        do {
-            let token = try BSApiManager.createSandboxBSToken()
-            NSLog("Token: \(token?.tokenStr) @ \(token?.serverUrl)")
-            BSApiManager.setBsToken(bsToken: token)
-        } catch let error {
-            print("Got error \(error.localizedDescription)")
-            fatalError()
-        }
+        BlueSnapSDK.createSandboxTestToken(completion: { bsToken, error in
+            
+            XCTAssertNil(error)
+            XCTAssertNotNil(bsToken)
+            BlueSnapSDK.setBsToken(bsToken: bsToken)
+            completion(bsToken, error)
+        })
     }
     
 }

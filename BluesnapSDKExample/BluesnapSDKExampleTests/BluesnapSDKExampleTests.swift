@@ -26,27 +26,34 @@ class BluesnapSDKExampleTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        do {
-            let token = try BlueSnapSDK.createSandboxTestToken()
+        let semaphore = DispatchSemaphore(value: 0)
+        BlueSnapSDK.createSandboxTestToken(completion: { token, error in
+            
             XCTAssertNotNil(token, "Failed to get token")
             NSLog("Token: \(token?.getTokenStr() ?? "")")
             
             BlueSnapSDK.setBsToken(bsToken: token)
             
-            let bsCurrencies = BlueSnapSDK.getCurrencyRates()
-            XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-            
-            let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-            NSLog("GBP currency name is: \(gbpCurrency.getName()), and its rate is \(gbpCurrency.getRate())")
-            
-            let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-            NSLog("EUR currency rate is: \(eurCurrencyRate)")
-        } catch let error {
-            NSLog("Error: \(error.localizedDescription)")
-            fatalError()
-        }
+            BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
+                
+                XCTAssertNil(errors, "Got errors while trying to get currencies")
+                XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+                
+                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+                XCTAssertNotNil(gbpCurrency)
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.getName()), its rate is \(gbpCurrency.getRate())")
+                
+                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+                XCTAssertNotNil(eurCurrencyRate)
+                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                
+                semaphore.signal()
+            })
+        })
+
+        semaphore.wait()
     }
-    
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

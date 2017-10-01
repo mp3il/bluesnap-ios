@@ -27,18 +27,15 @@ class BSCurrenciesViewController: BSBaseListController {
     /**
      init the screen variables, re-load rates
      */
-    func initCurrencies(currencyCode: String, updateFunc : @escaping (BSCurrency?, BSCurrency?)->Void) -> Bool {
+    func initCurrencies(currencyCode : String,
+                        currencies : BSCurrencies,
+                        updateFunc : @escaping (BSCurrency?, BSCurrency?)->Void) {
         
-        if let tmp = BSApiManager.getCurrencyRates() {
-            bsCurrencies = tmp
-            self.updateFunc = updateFunc
-            if let bsCurrency = tmp.getCurrencyByCode(code: currencyCode) {
-                self.selectedItem = (name: bsCurrency.getName(), code: bsCurrency.getCode())
-                oldSelectedItem = self.selectedItem
-            }
-            return true
-        } else {
-            return false
+        self.updateFunc = updateFunc
+        self.bsCurrencies = currencies
+        if let bsCurrency = currencies.getCurrencyByCode(code: currencyCode) {
+            self.selectedItem = (name: bsCurrency.getName(), code: bsCurrency.getCode())
+            self.oldSelectedItem = self.selectedItem
         }
     }
     

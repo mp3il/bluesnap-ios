@@ -22,15 +22,26 @@ import PassKit
     
     /**
      Set the token used for BS API
-     This needs to be done before calling any of the methods below, and also if you catch notification 
-     for token expired
+     This needs to be done before calling any of the methods below
      
      - parameters:
      - bsToken: BlueSnap token, should be fresh and valid
-    */
+     */
     open class func setBsToken(bsToken : BSToken!) {
         
         BSApiManager.setBsToken(bsToken: bsToken)
+    }
+    
+    /**
+     Set the token re-generation method to be used for BS API when token expires
+     This needs to be done before calling any of the methods below
+     
+     - parameters:
+     - generateTokenFunc: callback function for generating a new token
+     */
+    open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void) {
+        
+        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
     }
 
     /**
@@ -50,10 +61,15 @@ import PassKit
         
         adjustInitialData(initialData: initialData)
         
-        BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
-                                          animated: animated,
-                                          initialData: initialData,
-                                          purchaseFunc: purchaseFunc)
+        BSApiManager.getSupportedPaymentMethods(completion: {methods, error in
+            DispatchQueue.main.async {
+                BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
+                                               animated: animated,
+                                               initialData: initialData,
+                                               supportedPaymentMethods: methods,
+                                               purchaseFunc: purchaseFunc)
+            }
+        })
     }
     
     /**
@@ -74,11 +90,10 @@ import PassKit
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
-     - throws BSErrors
+     - completion: after the data is fetched, this function will be called with optional currency data and optional error
      */
-    open class func getCurrencyRates() -> BSCurrencies? {
-        let result = BSApiManager.getCurrencyRates()
-        return result
+    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+        BSApiManager.getCurrencyRates(completion: completion)
     }
 
     /**
@@ -120,16 +135,30 @@ import PassKit
     }
     
     /**
+     Fetch the merchant's supported Payment Methods
+     - parameters:
+     - completion: function to call once the data is fetched; will receive optional list of strings that are the payment methods, and optional error.
+    */
+    static func getSupportedPaymentMethods(completion: @escaping ([String]?, BSErrors?) -> Void) {
+        
+        BSApiManager.getSupportedPaymentMethods(completion: completion)
+    }
+
+    /**
     Check if ApplePay is available
     */
-    open class func applePaySupported(supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
+    open class func applePaySupported(supportedPaymentMethods: [String]?,
+                                      supportedNetworks: [PKPaymentNetwork]) -> (canMakePayments: Bool, canSetupCards: Bool) {
         
-        if BSApiManager.isSupportedPaymentMethod(BSPaymentType.ApplePay) {
-            if #available(iOS 10, *) {
+        if #available(iOS 10, *) {
+            
+            let isSupportedByBS = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: supportedPaymentMethods)
+            if isSupportedByBS {
                 return (PKPaymentAuthorizationController.canMakePayments(),
                         PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks));
             }
         }
+
         return (canMakePayments: false, canSetupCards: false)
     }
 
@@ -137,28 +166,26 @@ import PassKit
     // MARK: Utility functions for quick testing
     
     /**
-     Returns token for BlueSnap Sandbox environment; useful for tests.
+     Create token for BlueSnap Sandbox environment; useful for tests.
      In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
+     - parameters:
+     - completion: function to be called once we have the server result; will receive optional token and optional error
     */
-    open class func createSandboxTestToken() throws -> BSToken? {
-        do {
-            return try BSApiManager.createSandboxBSToken()
-        } catch let error {
-            throw error
-        }
+    open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        BSApiManager.createSandboxBSToken(completion: completion)
     }
 
-    /**
-    Objective C helper method for returning sandbox token
-    */
-    @objc open class func createSandboxTestTokenOrNil() -> BSToken? {
-        do {
-            return try BSApiManager.createSandboxBSToken()!
-        } catch let error {
-            NSLog("Error creating token: \(error.localizedDescription)")
-            return nil
-        }
-    }
+//    /**
+//    Objective C helper method for returning sandbox token
+//    */
+//    @objc open class func createSandboxTestTokenOrNil() -> BSToken? {
+//        do {
+//            return try BSApiManager.createSandboxBSToken()!
+//        } catch let error {
+//            NSLog("Error creating token: \(error.localizedDescription)")
+//            return nil
+//        }
+//    }
 
 
     open class func setApplePayMerchantIdentifier(merchantId: String!) -> String? {

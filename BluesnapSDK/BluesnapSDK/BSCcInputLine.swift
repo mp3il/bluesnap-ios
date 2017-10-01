@@ -340,12 +340,16 @@ public class BSCcInputLine: BSBaseTextInput {
                             self.showError(BSValidator.ccnInvalidMessage)
                         } else {
                             let message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Validation_Error)
-                            self.delegate?.showAlert(message)
+                            DispatchQueue.main.async {
+                                self.delegate?.showAlert(message)
+                            }
                         }
                     } else {
                         self.cardType = ccDetails.ccType ?? ""
                     }
-                    self.delegate?.didCheckCreditCard(ccDetails: ccDetails, error: error)
+                    DispatchQueue.main.async {
+                        self.delegate?.didCheckCreditCard(ccDetails: ccDetails, error: error)
+                    }
                 })
             })
         }
@@ -374,18 +378,25 @@ public class BSCcInputLine: BSBaseTextInput {
                     self.showCvvError(BSValidator.cvvInvalidMessage)
                 } else if (error == .expiredToken) {
                     let message = BSLocalizedStrings.getString(BSLocalizedString.Error_Cc_Submit_Token_expired)
-                    self.delegate?.showAlert(message)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(message)
+                    }
                 } else if (error == .tokenNotFound) {
                     let message = BSLocalizedStrings.getString(BSLocalizedString.Error_Cc_Submit_Token_not_found)
-                    self.delegate?.showAlert(message)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(message)
+                    }
                 } else {
                     NSLog("Unexpected error submitting Payment Fields to BS")
                     let message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Submit_Error)
-                    self.delegate?.showAlert(message)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(message)
+                    }
                 }
             }
-            
-            self.delegate?.didSubmitCreditCard(ccDetails: ccDetails, error: error)
+            DispatchQueue.main.async {
+                self.delegate?.didSubmitCreditCard(ccDetails: ccDetails, error: error)
+            }
         })
     }
 

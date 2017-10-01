@@ -22,10 +22,9 @@ class DemoTreansactions {
 
 
     func createApplePayTransaction(paymentRequest: BSApplePayPaymentRequest!,
-                                   bsToken: BSToken!) -> (success: Bool, data: String?) {
+                                   bsToken: BSToken!,
+                                   completion: @escaping (_ success: Bool, _ data: String?) -> Void) {
 
-        // let name = paymentRequest.getBillingDetails().getSplitName()!
-        //"card-transaction" : [
         let requestBody = [
                 "recurringTransaction": "ECOMMERCE",
                 "softDescriptor": "MobileSDKtest",
@@ -34,7 +33,6 @@ class DemoTreansactions {
                 "currency": "\(paymentRequest.getCurrency()!)",
                 "pfToken": "\(bsToken.getTokenStr()!)"
         ] as [String: Any]
-        // ]
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
 
@@ -55,8 +53,8 @@ class DemoTreansactions {
 
         var result: (success: Bool, data: String?) = (success: false, data: nil)
 
-        let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            
             if let error = error {
                 NSLog("error calling create transaction: \(error.localizedDescription)")
             } else {
@@ -75,18 +73,19 @@ class DemoTreansactions {
                 }
             }
             defer {
-                semaphore.signal()
+                DispatchQueue.main.async {
+                    completion(result.success, result.data)
+                }
             }
         }
         task.resume()
-        semaphore.wait()
-        return result
     }
 
 
     func createCreditCardTransaction(
         paymentRequest: BSCcPaymentRequest!,
-        bsToken: BSToken!) -> (success:Bool, data: String?) {
+        bsToken: BSToken!,
+        completion: @escaping (_ success: Bool, _ data: String?)->Void) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!
         
@@ -126,7 +125,6 @@ class DemoTreansactions {
         
         var result : (success:Bool, data: String?) = (success:false, data: nil)
         
-        let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             if let error = error {
                 NSLog("error calling create transaction: \(error.localizedDescription)")
@@ -146,17 +144,18 @@ class DemoTreansactions {
                 }
             }
             defer {
-                semaphore.signal()
+                DispatchQueue.main.async {
+                    completion(result.success, result.data)
+                }
             }
         }
         task.resume()
-        semaphore.wait()
-        return result
     }
     
     func createCreditCardTransactionWithXml(
         paymentRequest: BSCcPaymentRequest!,
-        bsToken: BSToken!) -> (success:Bool, data: String?) {
+        bsToken: BSToken!,
+        completion: @escaping (_ success:Bool, _ data: String?)->Void) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!
         let bodyStart: String = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
@@ -187,7 +186,6 @@ class DemoTreansactions {
         
         var result : (success:Bool, data: String?) = (success:false, data: nil)
         
-        let semaphore = DispatchSemaphore(value: 0)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             if let error = error {
                 NSLog("error calling create transaction: \(error.localizedDescription)")
@@ -207,12 +205,12 @@ class DemoTreansactions {
                 }
             }
             defer {
-                semaphore.signal()
+                DispatchQueue.main.async {
+                    completion(result.success, result.data)
+                }
             }
         }
         task.resume()
-        semaphore.wait()
-        return result
     }
 
     /**

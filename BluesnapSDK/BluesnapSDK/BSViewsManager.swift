@@ -62,6 +62,7 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         initialData : BSInitialData!,
+        supportedPaymentMethods: [String]?,
         purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if startScreen == nil {
@@ -70,7 +71,7 @@ class BSViewsManager {
             startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
         }
 
-        startScreen.initScreen(initialData: initialData, purchaseFunc: purchaseFunc)
+        startScreen.initScreen(initialData: initialData, supportedPaymentMethods: supportedPaymentMethods, purchaseFunc: purchaseFunc)
 
         inNavigationController.pushViewController(startScreen, animated: animated)
     }
@@ -144,17 +145,26 @@ class BSViewsManager {
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
         errorFunc: @escaping ()->Void) {
         
-        if currencyScreen == nil {
-            let bundle = BSViewsManager.getBundle()
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
-            currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
-        }
-        
-        if currencyScreen.initCurrencies(currencyCode: selectedCurrencyCode, updateFunc: updateFunc) {
-            inNavigationController.pushViewController(currencyScreen, animated: animated)
-        } else {
-            errorFunc()
-        }
+        BSApiManager.getCurrencyRates(completion: { currencies, errors in
+            
+            if errors != nil || currencies == nil {
+                NSLog("Failed to fetch currency rates from BlueSnap server")
+                errorFunc()
+                return
+            }
+            if currencyScreen == nil {
+                let bundle = BSViewsManager.getBundle()
+                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+                currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
+            }
+            currencyScreen.initCurrencies(
+                currencyCode: selectedCurrencyCode,
+                currencies: currencies!,
+                updateFunc: updateFunc)
+            DispatchQueue.main.async {
+                inNavigationController.pushViewController(currencyScreen, animated: animated)
+            }
+        })
     }
 
     
