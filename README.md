@@ -114,8 +114,8 @@ Initialize the SDK by passing `bsToken` to the [`setBsToken`](#setbstoken) funct
 BlueSnapSDK.setBsToken(bsToken: bsToken)
 ```
 
-> **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase. <br>
-> **Tip**: Supply a function that regenerates a new token; set it in BlueSnapSDK by calling `BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)`. You can see how we do it in the demo app: The helper function `generateAndSetBsToken` will be called by BlueSnapSDK when needed; it should generate a new token and set it, then call the completion function sent as a parameter. 
+> **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase.<br>
+> **Tip**: Supply the SDK with a callback function to handle token expiration. See [Handling token expiration](#handling-token-expiration)
 
 → If you're using the Standard Checkout Flow, then continue on to the next section. <br>
 → If you're using the Custom Checkout Flow, then jump down to [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow). 
@@ -350,7 +350,7 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 
 2. To accept Apple Pay payments, initialize your Apple Pay Merchant ID in the SDK by calling `BlueSnapSDK.setApplePayMerchantIdentifier`. In the demo app, see the `setApplePayIdentifier` function.
 
-3. Add a callback function for token regeneration, to be called by BlueSnap SDK. In the demo app, check out the `initBsToken` function to see how this is handled. 
+3. Set a callback function in the `BlueSnapSDK` class to handle token expiration. In the demo app, check out the `initBsToken` function to see how this is handled. 
 
 4. Initialize the input to the checkout flow by creating an instance of `BSInitialData` and filling the parts you may know already of the user (by setting `shippingDetails` & `billingDetails`), and the fields you wish to require from the user (by setting `withShipping`, `fullBilling`, & `withEmail`). 
 
@@ -358,8 +358,7 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 
 6. Call `BlueSnapSDK.showCheckoutScreen` with`purchaseFunc` and its other [parameters](#showcheckoutscreen) to launch the checkout UI for the user. 
 
-> **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling [`BlueSnapSDK.showCurrencyList`](#showcurrencylist) with its associated parameters. 
- 
+> **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling [`BlueSnapSDK.showCurrencyList`](#showcurrencylist) with its associated parameters. <br>
  > **Important**: All transaction calls are for demonstration purposes only. These calls should be made from your server. 
 
 # Reference
@@ -587,6 +586,13 @@ This class inherits from `BSBasePaymentRequest`, and it holds the data collected
 ## Main functionality - BlueSnapSDK class
 The class BlueSnapSDK holds main the functions that you'll utilize. In this section, we'll go through each function contained in this class. 
 
+### setApplePayMerchantIdentifier 
+If you are using the Standard Checkout Flow and would like to accept Apple Pay payments, then calling this function with your Apple Pay Merchant ID initializes it in the SDK. Please note that this function should be called prior to calling `BlueSnapSDK.showCheckoutScreen`.
+
+Signature: 
+
+    open class func setApplePayMerchantIdentifier(merchantId: String!) -> String?
+
 ### setBsToken
 This function sets the token received from sending a server-to-server POST request to BlueSnap. It must be set at the beginning of the flow (in both the Standard and Custom Checkout Flows) with a valid token obtained from your server. For more information, see [Generating a token for the transaction](#generating-a-token-for-the-transaction).
 
@@ -597,18 +603,11 @@ Signature:
 The token expires after 60 minutes or after the transaction is complete (whichever comes first), so be sure to generate a new one for each purchase. 
 
 ### setGenerateBsTokenFunc
-This function sets the callback function that creates a new token when the current one is expired. It must be set at the beginning of the flow (in both the Standard and Custom Checkout Flows). 
+This function sets the callback function that creates a new token when the current one is expired. It must be set at the beginning of the flow (in both the Standard and Custom Checkout Flows). For more information, see [Handling token expiration](#handling-token-expiration). 
 
 Signature:
 
     open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void)
-
-### setApplePayMerchantIdentifier 
-If you are using the Standard Checkout Flow and would like to accept Apple Pay payments, then calling this function with your Apple Pay Merchant ID initializes it in the SDK. Please note that this function should be called prior to calling `BlueSnapSDK.showCheckoutScreen`.
-
-Signature: 
-
-    open class func setApplePayMerchantIdentifier(merchantId: String!) -> String?
 
 ### showCheckoutScreen
 This is the main function for the Standard Checkout Flow (you'll call it after calling `setBsToken` with the token you generated). Once you call `showCheckoutScreen`, the SDK starts the checkout flow of choosing the payment method and collecting the user's details.
@@ -674,19 +673,22 @@ Signature:
     open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void)
 
 ## Handling token expiration
-You will need to supply a callback function to the BlueSnapSDK, with the following signature:
+To handle token expiration, supply the `BlueSnapSDK` class with a function for it to call when the token expires.
+
+Your callback function should have the following signature. In the demo app, this function is called `generateAndSetBsToken`. 
 
     func generateAndSetBsToken(completion: @escaping (_ token: BSToken?, _ error: BSErrors?)->Void)
 
-If you look at the demo app in ViewController.swift, you will see a function by this name that handles the token regeneration at the bottom of the file. 
-You need to set this callback in the BlueSnap SDK by calling `BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)`
-If BlueSnapSDK recognizes token expiration, it will call this callback function, and upon completion will re-try the original action, so for the end user (besides waiting a little longer) the action is transparent.
+Your function should do the following to resolve the token expiration. 
+1. Call your server to generate a new BlueSnap token.
+2. Initialize the token in the SDK by calling `BlueSnapSDK.setBsToken`.
+3. Call the completion function passed as a parameter. If this is not done, the original action will not be able to complete successfully with the new token.
 
-* this function will be called by BlueSnapSDK when needed
-* this function needs to call your app server to generate a new BlueSnap token, and then set it by calling `BlueSnapSDK.setBsToken`
-* this function will have to call the completion function passed as parameter, otherwise the original action will not be able to complete successfully with the new token.
+To set your callback in the SDK, call `setGenerateBsTokenFunc`.
 
-
+```java
+BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
+```
 
 ## Helper Classes
 These helper classes provide additional functionality you can take advantage of, such as string valiations and currency conversions. 
@@ -782,4 +784,4 @@ BSBaseTextInput is a UIView that holds a text field and optional image; you can 
 BSInputLine is a UIView that holds a label, text field and optional image; you can customize almost every part of it.
 
 ### BSCcInputLine
-BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV); besides a cool look & feel it also handles its own validations and submits the secured data to the BlueSnap, so that your application does not have to handle it.BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
+BSCcInputLine is a UIView that holds the credit card fields (Cc number, expiration date and CVV). Besides a cool look and feel, it also handles its own validations and submits the secured data to the BlueSnap, so that your application does not have to handle it.
