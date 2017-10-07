@@ -15,7 +15,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: private properties
     fileprivate var paymentRequest : BSCcPaymentRequest!
-    fileprivate var payText : String!
     fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager : BSCountryManager!
@@ -37,10 +36,9 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: init
 
-    func initScreen(paymentRequest: BSCcPaymentRequest!, payText: String!, submitPaymentFields: @escaping () -> Void, firstTime: Bool, updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
+    func initScreen(paymentRequest: BSCcPaymentRequest!, submitPaymentFields: @escaping () -> Void, firstTime: Bool, updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
         
         self.paymentRequest = paymentRequest
-        self.payText = payText
         self.submitPaymentFields = submitPaymentFields
         self.firstTime = firstTime
         self.updateTaxFunc = updateTaxFunc
@@ -153,7 +151,6 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             let countryCode = paymentRequest.getShippingDetails()?.country ?? ""
             updateZipByCountry(countryCode: countryCode)
             updateFlagImage(countryCode: countryCode)
-            payUIButton.setTitle(payText, for: UIControlState())
         }
         if firstTime {
             firstTime = false
@@ -349,6 +346,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
         let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
+        
+        let amount = subtotalAmount + taxAmount
+        let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
+        let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
+        let payText = String(format: payFormat, currencyCode, CGFloat(amount))
+        payUIButton.setTitle(payText, for: UIControlState())
     }
 
     private func updateTexts() {
@@ -369,6 +372,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             updateZipByCountry(countryCode: countryCode)
         }
         updateFlagImage(countryCode: countryCode)
+        updateState()
         if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
             updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
             updateAmounts()
