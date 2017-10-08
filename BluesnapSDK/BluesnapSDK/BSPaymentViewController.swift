@@ -382,7 +382,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
 
         let toCurrency = paymentRequest.getCurrency() ?? ""
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
-        let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
+        let taxAmount = paymentRequest.getTaxAmount() ?? 0.0
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
         let amount = subtotalAmount + taxAmount
@@ -414,7 +414,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
             }
         }
-        shippingScreen.initScreen(paymentRequest: paymentRequest, payText: self.payButtonText, submitPaymentFields: submitPaymentFields, firstTime: firstTimeShipping, updateTaxFunc: updateTaxFunc)
+        shippingScreen.initScreen(paymentRequest: paymentRequest, submitPaymentFields: submitPaymentFields, firstTime: firstTimeShipping, updateTaxFunc: updateTaxFunc)
         firstTimeShipping = false
         self.navigationController?.pushViewController(self.shippingScreen, animated: true)
     }

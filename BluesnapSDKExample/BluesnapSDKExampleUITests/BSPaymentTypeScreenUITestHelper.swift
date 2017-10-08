@@ -31,6 +31,11 @@ class BSPaymentTypeScreenUITestHelper {
     
     func checkPaymentTypes(expectedApplePay: Bool, expectedPayPal: Bool, expectedCC: Bool) {
         
+        // check visibility of CC button
+        let ccButton = getCcButtonElement()
+        let ccButtonIsVisible = ccButton.exists
+        assert(ccButtonIsVisible == expectedCC)
+
         // check visibility of ApplePay button
         let applePayButton = getApplePayButtonElement()
         let applePayButtonIsVisible = applePayButton.exists //&& applePayButton.isEnabled && applePayButton.isHittable
@@ -40,11 +45,6 @@ class BSPaymentTypeScreenUITestHelper {
         let payPalButton = getPayPalButtonElement()
         let payPalButtonIsVisible = payPalButton.exists
         assert(payPalButtonIsVisible == expectedPayPal)
-        
-        // check visibility of CC button
-        let ccButton = getCcButtonElement()
-        let ccButtonIsVisible = ccButton.exists
-        assert(ccButtonIsVisible == expectedCC)
     }
 
 }

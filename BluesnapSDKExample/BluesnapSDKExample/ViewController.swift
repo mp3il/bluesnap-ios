@@ -29,6 +29,8 @@ class ViewController: UIViewController {
     fileprivate var hideCoverView : Bool = false
     final fileprivate let LOADING_MESSAGE = "Loading, please wait"
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
+    final fileprivate let initialShippingCoutry = "US"
+    final fileprivate let initialShippingState = "MA"
     
  
 	// MARK: - UIViewController's methods
@@ -62,6 +64,7 @@ class ViewController: UIViewController {
             coverAllView.isHidden = true
             hideCoverView = true
         }
+        amountValueDidChange(valueTextField)
     }
 	
 	// MARK: - Dismiss keyboard
@@ -142,7 +145,7 @@ class ViewController: UIViewController {
         initialData.billingDetails = BSBillingAddressDetails(email: "john@gmail.com", name: "John Doe", address: "333 elm st", city: "New York", zip: "532464", country: "US", state: "MA")
 
         if withShippingSwitch.isOn {
-            initialData.shippingDetails = BSShippingAddressDetails(phone: "972-528-9999999", name: "Mary Doe", address: "333 elm st", city: "Boston", zip: "111222", country: "US", state: "MA")
+            initialData.shippingDetails = BSShippingAddressDetails(phone: "972-528-9999999", name: "Mary Doe", address: "333 elm st", city: "Boston", zip: "111222", country: initialShippingCoutry, state: initialShippingState)
         }
     }
     
@@ -277,6 +280,29 @@ class ViewController: UIViewController {
     }
     
     /**
+    Called when value is typed in the amount field; this function is used to auto-calculate the tax value
+     */
+    @IBAction func amountValueDidChange(_ sender: UITextField) {
+        
+        let amount = (valueTextField.text! as NSString).doubleValue
+        if (amount > 0 && withShippingSwitch.isOn) {
+            let currency = currencyButton.titleLabel?.text ?? "USD"
+            let priceDetails = BSPriceDetails(amount: amount, taxAmount: 0, currency: currency)
+            updateTax(initialShippingCoutry, initialShippingState, priceDetails)
+            taxTextField.text = "\(priceDetails.taxAmount ?? 0)"
+        } else {
+            taxTextField.text = "0"
+        }
+    }
+    
+    /**
+     Called when the "with shipping" switch changes, to re-calculate the tax
+    */
+    @IBAction func withShippingValueChanged(_ sender: UISwitch) {
+        amountValueDidChange(valueTextField)
+    }
+    
+    /**
         This function is called to recalculate the tax amoutn based on the country/state.
         In this example we give tax only to US states, with 5% for all states, except NY which has 8%.
     */
@@ -292,6 +318,8 @@ class ViewController: UIViewController {
                     taxPercent = 8
                 }
             }
+        } else if shippingCountry.uppercased() == "CA" {
+            taxPercent = 1
         }
         let newTax = priceDetails.amount * taxPercent / 100.0
         NSLog("Changing tax amount from \(priceDetails.taxAmount) to \(newTax)")
