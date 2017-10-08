@@ -26,10 +26,10 @@ public enum BSPaymentType : String {
     var priceDetails: BSPriceDetails!
     
     // These fields hold the original amounts in USD, to keep precision in case of currency change
-    internal var originalAmount : Double! = 0.0
-    internal var originalTaxAmount : Double! = 0.0
-    internal var originalRate : Double?
-        
+    internal var originalAmount: NSNumber! = 0.0
+    internal var originalTaxAmount: NSNumber! = 0.0
+    internal var originalRate: NSNumber?
+    
     internal init(initialData: BSInitialData) {
         super.init()
         self.priceDetails = initialData.priceDetails.copy() as! BSPriceDetails
@@ -47,27 +47,27 @@ public enum BSPaymentType : String {
         
         if originalRate == nil {
             if let oldCurrency = oldCurrency {
-                originalRate = oldCurrency.getRate() ?? 1.0
+                originalRate = NSNumber.init(value: oldCurrency.getRate() ?? 1.0)
             } else {
                 originalRate = 1.0
             }
         }
         if let newCurrency = newCurrency {
             self.priceDetails.currency = newCurrency.code
-            let newRate = newCurrency.getRate() / originalRate!
-            self.priceDetails.amount = originalAmount * newRate
-            self.priceDetails.taxAmount = originalTaxAmount * newRate
+            let newRate = newCurrency.getRate() / Double.init((originalRate?.doubleValue)!)
+            self.priceDetails.amount = NSNumber.init(value: originalAmount.doubleValue * newRate)
+            self.priceDetails.taxAmount = NSNumber.init(value: originalTaxAmount.doubleValue * newRate)
         }
     }
     
     // MARK: getters and setters
     
     public func getAmount() -> Double! {
-        return priceDetails.amount
+        return priceDetails.amount.doubleValue
     }
     
     public func getTaxAmount() -> Double! {
-        return priceDetails.taxAmount
+        return priceDetails.taxAmount.doubleValue
     }
     
     public func getCurrency() -> String! {
@@ -80,20 +80,27 @@ public enum BSPaymentType : String {
  price details: amount, tax and currency
  */
 @objc public class BSPriceDetails : NSObject, NSCopying {
-    
-    public var amount : Double! = 0.0
-    public var taxAmount : Double! = 0.0
+
+    public var amount: NSNumber! = 0.0
+    public var taxAmount: NSNumber! = 0.0
     public var currency : String! = "USD"
-    
-    public init(amount : Double!, taxAmount : Double!, currency : String?) {
-        super.init()
+
+
+    @objc public func setDetailsWithAmount(amount: NSNumber!, taxAmount: NSNumber!, currency: NSString?) {
         self.amount = amount
         self.taxAmount = taxAmount
+        self.currency = currency as! String
+    }
+
+    public init(amount: Double!, taxAmount: Double!, currency: String?) {
+        super.init()
+        self.amount = NSNumber.init(value: amount)
+        self.taxAmount = NSNumber.init(value: taxAmount)
         self.currency = currency ?? "USD"
     }
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
+        let copy = BSPriceDetails(amount: amount.doubleValue, taxAmount: taxAmount.doubleValue, currency: currency)
         return copy
     }
 }

@@ -23,6 +23,10 @@ import Foundation
     public func getRate() -> Double! {
         return self.rate
     }
+
+    public func getRateNSNumber() -> NSNumber {
+        return NSNumber.init(value: self.rate)
+    }
     
 }
 
@@ -34,8 +38,8 @@ import Foundation
         
         self.currencies = currencies
     }
-    
-    public func getCurrencyByCode(code : String!) -> BSCurrency? {
+
+    @objc public func getCurrencyByCode(code: String!) -> BSCurrency? {
         
         for currency in currencies {
             if currency.code == code {
@@ -54,7 +58,12 @@ import Foundation
         }
         return nil
     }
-    
+
+    @objc public func getCurrencyRateByCurrencyCode(code: String!) -> NSNumber? {
+
+        return NSNumber.init(value: (getCurrencyByCode(code: code)?.rate)!)
+    }
+
     public func getCurrencyRateByCurrencyCode(code : String!) -> Double? {
         
         return getCurrencyByCode(code: code)?.rate
