@@ -16,8 +16,8 @@ extension BSStartViewController : PaymentOperationDelegate {
     func applePayPressed(_ sender: Any, completion: @escaping (BSErrors?) -> Void) {
 
         let priceDetails = initialData.priceDetails!
-        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: priceDetails.taxAmount), type: .final)
-        let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: priceDetails.amount), type: .final)
+        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: priceDetails.taxAmount.doubleValue), type: .final)
+        let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: priceDetails.amount.doubleValue), type: .final)
 
         paymentSummaryItems = [tax, total];
 
