@@ -188,21 +188,21 @@ class ViewController: UIViewController {
         
         if let priceDetails = initialData.priceDetails {
             if let newCurrency = newCurrency {
-                var oldRate : Double = 1.0
+                var oldRate: NSNumber! = 1.0
                 if let oldCurrency = oldCurrency {
-                    oldRate = oldCurrency.getRate() ?? 1.0
+                    oldRate = oldCurrency.getRateNSNumber()
                 }
                 // convert the prices back to $
-                priceDetails.amount = priceDetails.amount / oldRate
-                priceDetails.taxAmount = priceDetails.taxAmount / oldRate
+                priceDetails.amount = priceDetails.amount.doubleValue / oldRate.doubleValue as NSNumber
+                priceDetails.taxAmount = priceDetails.taxAmount.doubleValue / oldRate.doubleValue as NSNumber
                 
                 priceDetails.currency = newCurrency.getCode()
-                priceDetails.amount = priceDetails.amount * newCurrency.getRate()
-                priceDetails.taxAmount = priceDetails.taxAmount * newCurrency.getRate()
+                priceDetails.amount = priceDetails.amount.doubleValue * newCurrency.getRateNSNumber().doubleValue as NSNumber
+                priceDetails.taxAmount = priceDetails.taxAmount.doubleValue * newCurrency.getRateNSNumber().doubleValue as NSNumber
             }
-            
-            valueTextField.text = String(priceDetails.amount)
-            taxTextField.text = String(priceDetails.taxAmount)
+
+            valueTextField.text = String(describing: priceDetails.amount)
+            taxTextField.text = String(describing: priceDetails.taxAmount)
             currencyButton.titleLabel?.text = priceDetails.currency
         }
     }
@@ -310,7 +310,7 @@ class ViewController: UIViewController {
                        _ shippingState : String?,
                        _ priceDetails : BSPriceDetails) -> Void {
 
-        var taxPercent : Double = 0
+        var taxPercent: NSNumber = 0
         if shippingCountry.uppercased() == "US" {
             taxPercent = 5
             if let state = shippingState {
@@ -321,7 +321,7 @@ class ViewController: UIViewController {
         } else if shippingCountry.uppercased() == "CA" {
             taxPercent = 1
         }
-        let newTax = priceDetails.amount * taxPercent / 100.0
+        let newTax: NSNumber = priceDetails.amount.doubleValue * taxPercent.doubleValue / 100.0 as NSNumber
         NSLog("Changing tax amount from \(priceDetails.taxAmount) to \(newTax)")
         priceDetails.taxAmount = newTax
     }
