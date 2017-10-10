@@ -158,17 +158,25 @@ class DemoTreansactions {
         completion: @escaping (_ success:Bool, _ data: String?)->Void) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!
+        let fraudSessionId :String  = paymentRequest.fraudSessionID!
         let bodyStart: String = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
             "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
             "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
             "<soft-descriptor>MobileSDK</soft-descriptor>" +
             "<amount>\(paymentRequest.getAmount()!)</amount>" +
         "<currency>\(paymentRequest.getCurrency()!)</currency>"
+
+        let fraudInfoXML :String = "<transaction-fraud-info>" +
+                "<fraud-session-id>" + fraudSessionId + "</fraud-session-id>" +
+                "</transaction-fraud-info>"
+
+
         let bodyMiddle: String = "<card-holder-info>" +
             "<first-name>\(name.firstName)</first-name>" +
             "<last-name>\(name.lastName)</last-name>" +
         "</card-holder-info>"
-        let bodyEnd: String = "</card-transaction>"
+
+        let bodyEnd: String = "</card-transaction>" + fraudInfoXML
         let requestBody: String = bodyStart + bodyMiddle + "<pf-token>\(bsToken.getTokenStr()!)</pf-token>" + bodyEnd
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
