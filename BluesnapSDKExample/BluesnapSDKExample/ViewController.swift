@@ -31,9 +31,9 @@ class ViewController: UIViewController {
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
     final fileprivate let initialShippingCoutry = "US"
     final fileprivate let initialShippingState = "MA"
-    
- 
-	// MARK: - UIViewController's methods
+
+
+    // MARK: - UIViewController's methods
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -41,8 +41,8 @@ class ViewController: UIViewController {
 		registerTapToHideKeyboard()
         
         //Init Kount
-        //NSLog("Kount Init");
-        //BlueSnapSDK.KountInit();
+        NSLog("Kount Init");
+        BlueSnapSDK.KountInit(kountMid: nil,customfraudSessionID: nil);
         
         setApplePayIdentifier()
 

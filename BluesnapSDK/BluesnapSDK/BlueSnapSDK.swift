@@ -17,6 +17,8 @@ import PassKit
         .masterCard,
         .visa
     ]
+    static fileprivate var fraudSessionID = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+
 
     // MARK: SDK functions
     
@@ -122,16 +124,26 @@ import PassKit
      - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
      - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction
     */
-    open class func KountInit(kountMid: Int?, fraudSessionID : String!) {
+    open class func KountInit(kountMid: Int?, customfraudSessionID : String?) {
+
+        
+        if customfraudSessionID != nil {
+            BlueSnapSDK.fraudSessionID = customfraudSessionID!
+        }
         //// Configure the Data Collector
-        //
         //KDataCollector.shared().debug = true
-        // TODO Set your Merchant ID
-        //KDataCollector.shared().merchantID = kountMid ?? 700000
-        // TODO Set the location collection configuration
+        KDataCollector.shared().merchantID = kountMid ?? 700000
+        // TODO Set the location collection configuration - Optional
         //KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
-        // For a released app, you'll want to set this to KEnvironment.Production
-        //KDataCollector.shared().environment = KEnvironment.test
+        KDataCollector.shared().environment = KEnvironment.production
+        NSLog("Kount session: \(BlueSnapSDK.fraudSessionID )")
+        KDataCollector.shared().collect(forSession: BlueSnapSDK.fraudSessionID) { (sessionID, success, error) in
+            if success {
+                NSLog("Kount collection success")
+            } else {
+                NSLog("Kount collection failed")
+            }
+        }
     }
     
     /**
@@ -213,6 +225,7 @@ import PassKit
         if initialData.billingDetails!.country ?? "" == "" {
             initialData.billingDetails!.country = defaultCountry
         }
+        initialData.fraudSessionId = BlueSnapSDK.fraudSessionID
     }
     
 }

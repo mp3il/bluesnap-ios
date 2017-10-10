@@ -35,7 +35,8 @@ import Foundation
     public var ccDetails: BSCcDetails = BSCcDetails()
     public var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
     public var shippingDetails : BSShippingAddressDetails?
-    
+    public var fraudSessionID: String?
+
     public override init(initialData: BSInitialData) {
         super.init(initialData: initialData)
         if let billingDetails = initialData.billingDetails {
@@ -44,6 +45,7 @@ import Foundation
         if let shippingDetails = initialData.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
         }
+        self.fraudSessionID = initialData.fraudSessionId!
     }
     
     public func getBillingDetails() -> BSBillingAddressDetails! {
