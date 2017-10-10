@@ -120,6 +120,14 @@ BlueSnapSDK.setBsToken(bsToken: bsToken)
 → If you're using the Standard Checkout Flow, then continue on to the next section. <br>
 → If you're using the Custom Checkout Flow, then jump down to [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow). 
 
+## Initializing the SDK with Fraud checking infratructure
+
+After you have set the token by calling BlueSnapSDK.setBsToken as explained above, you need to call BlueSnapSDK.KountInit(). BlueSnap uses Kount for its excellent fraud detection; this call sends the device information to Kount, so that the later purchase call will be connected to the device data. This is important for fraud detection, because it adds a lot of user data to the purchase, which helps in profiling for fraud.
+The method takes 2 parameters, both optional:
+* kountMid: int? - if you are configured as Enterprise in the BlueSnap fraud settings, you will need to pass your kount MID here; otherwise pass nil.
+* customFraudSessionId: String? - this is the identifier you will later send to BlueSnap in the purchase call; you can generate it yourself, or pass nil and the SDK will generate a unique one for you. 
+
+
 # Implementing Standard Checkout Flow
 This section will cover the following topics: 
 * [Configuring Apple Pay (optional)](#configuring-apple-pay-optional)
@@ -312,7 +320,8 @@ curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 	"softDescriptor": "Mobile SDK test", 
 	"amount": 25.00, 
 	"currency": "USD", 
-	"pfToken": "ae76939fab7275cbfd657495eb8c4d0654e52e704c112170fa61f4127a34bf64_"
+	"pfToken": "ae76939fab7275cbfd657495eb8c4d0654e52e704c112170fa61f4127a34bf64_",
+	"transactionFraudInfo": ["fraudSessionId": "B04C4B2B6BED427284ECE2F1F870466C"],
 }'
 ```
 If successful, the response HTTP status code is 200 OK. Visit our [API Reference](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) for more details. 
@@ -334,6 +343,7 @@ curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 	"amount": 25.00, 
 	"currency": "USD",
 	"pfToken": "812f6ee706e463d3276e3abeb21fa94072e40695ed423ddac244409b3b652eff_",
+	"transactionFraudInfo": ["fraudSessionId": "B04C4B2B6BED427284ECE2F1F870466C"],
 	"cardHolderInfo": {
 		  "firstName": "Jane",
 		  "lastName": "Shopper", 
@@ -348,15 +358,17 @@ The demo app shows how to use the basic functionality of the Standard Checkout F
 
 1. Get a token from BlueSnap's server. Please note that you need to do this in your server-side implementation, so you don't expose your BlueSnap API credentials in your app. In the demo app, we create a token from BlueSnap Sandbox environment with dummy credentials. Call `BlueSnapSDK.setBsToken` to initialize it in the SDK.
 
-2. To accept Apple Pay payments, initialize your Apple Pay Merchant ID in the SDK by calling `BlueSnapSDK.setApplePayMerchantIdentifier`. In the demo app, see the `setApplePayIdentifier` function.
+2. Call `BlueSnapSDK.initKount` to initialize the fraud detection.
 
-3. Set a callback function in the `BlueSnapSDK` class to handle token expiration. In the demo app, check out the `initBsToken` function to see how this is handled. 
+3. To accept Apple Pay payments, initialize your Apple Pay Merchant ID in the SDK by calling `BlueSnapSDK.setApplePayMerchantIdentifier`. In the demo app, see the `setApplePayIdentifier` function.
 
-4. Initialize the input to the checkout flow by creating an instance of `BSInitialData` and filling the parts you may know already of the user (by setting `shippingDetails` & `billingDetails`), and the fields you wish to require from the user (by setting `withShipping`, `fullBilling`, & `withEmail`). 
+4. Set a callback function in the `BlueSnapSDK` class to handle token expiration. In the demo app, check out the `initBsToken` function to see how this is handled. 
 
-5. Define your `purchaseFunc` callback to call your application's server to complete the purchase (see [Defining your callback function](#defining-your-callback-function) for the logic of this function).
+5. Initialize the input to the checkout flow by creating an instance of `BSInitialData` and filling the parts you may know already of the user (by setting `shippingDetails` & `billingDetails`), and the fields you wish to require from the user (by setting `withShipping`, `fullBilling`, & `withEmail`). 
 
-6. Call `BlueSnapSDK.showCheckoutScreen` with`purchaseFunc` and its other [parameters](#showcheckoutscreen) to launch the checkout UI for the user. 
+6. Define your `purchaseFunc` callback to call your application's server to complete the purchase (see [Defining your callback function](#defining-your-callback-function) for the logic of this function).
+
+7. Call `BlueSnapSDK.showCheckoutScreen` with`purchaseFunc` and its other [parameters](#showcheckoutscreen) to launch the checkout UI for the user. 
 
 > **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling [`BlueSnapSDK.showCurrencyList`](#showcurrencylist) with its associated parameters. <br>
  > **Important**: All transaction calls are for demonstration purposes only. These calls should be made from your server. 
@@ -489,9 +501,7 @@ The central data structure is this class (and its derived classes), which holds 
 
     public class BSBasePaymentRequest : NSObject {
         
-        // determines the request type: CC, Apple Pay, PayPal, etc.
-        public var paymentType : BSPaymentType!
-
+        var fraudSessionId: String?
         var priceDetails: BSPriceDetails!
         
         // These fields hold the original amounts in USD, to keep precision in case of currency change
@@ -502,6 +512,11 @@ The central data structure is this class (and its derived classes), which holds 
         internal init(initialData: BSInitialData) {
             ...
         }
+	
+	// Returns the fraud session ID used in kountInit()
+    	public func getFraudSessionId() -> String? {
+        	return fraudSessionId;
+    	}
         
         // MARK: Change currency methods
         
