@@ -1,45 +1,45 @@
-/* 
-  Localizable.strings - DEFAULT (English)
-  BluesnapSDK
-
-  Created by Shevie Chen on 13/08/2017.
-  Copyright © 2017 Bluesnap. All rights reserved.
-*/
+/*
+ Localizable.strings - DEFAULT (German)
+ BluesnapSDK
+ 
+ Created by Shevie Chen on 13/08/2017.
+ Copyright Â© 2017 Bluesnap. All rights reserved.
+ */
 
 /* ------- General ------- */
 
 /* When shopwing error alert, a single button lets you close it, and this is the text in that button */
 "Alert_OK_Button_Text" = "OK";
 /* On numeric keyboards we add a "done" button to close them */
-"Keyboard_Done_Button_Text" = "Erledigt";
+"Keyboard_Done_Button_Text" = "Fertig";
 
 /* ------- BSCcInputLine ------- */
 
 /* General error while submitting CC to validate credit card */
-"Error_General_CC_Validation_Error" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+"Error_General_CC_Validation_Error" = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal.";
 /* Token expired error while submitting CC details to BlueSnap server */
-"Error_Cc_Submit_Token_expired" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+"Error_Cc_Submit_Token_expired" = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal.";
 /* Token not found error while submitting CC details to BlueSnap server */
-"Error_Cc_Submit_Token_not_found" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+"Error_Cc_Submit_Token_not_found" = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal.";
 /* General error while submitting CC details to BlueSnap server */
-"Error_General_CC_Submit_Error" = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+"Error_General_CC_Submit_Error" = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal.";
 
 /* ------- Validation errors ------- */
 
 /* Invalid credit card number - shown in the CC component below the field */
 "Error_Invalid_CCN" = "Ungültige Kartennummer";
 /* Invalid CVV - shown in the CC component below the field */
-"Error_Invalid_CVV" = "Ungültiger Lebenslauf";
+"Error_Invalid_CVV" = "Ungültige KPN";
 /* Invalid expiration month - if the month is not 01-12 - shown in the CC component below the field */
 "Error_Invalid_ExpMonth" = "Ungültiger Monat";
 /* Invalid expiration is in the past - if the expiration date has passed already - shown in the CC component below the field */
-"Error_Invalid_ExpIsInThePast" = "Datum vergangen";
+"Error_Invalid_ExpIsInThePast" = "Datum liegt in der Vergangenheit";
 /* Invalid expiration date - for general invalid expiration date - shown in the CC component below the field */
 "Error_Invalid_EXP" = "Ungültiges Datum";
 /* Invalid Name - should contain first and last name - shown in the Payment/shipping screen below the field */
-"Error_Invalid_Name" = "Vor- und Nachname erforderlich";
+"Error_Invalid_Name" = "Geben Sie einen Vornamen und einen Nachnamen ein";
 /* Invalid Email - shown in the Payment screen below the field */
-"Error_Invalid_Email" = "Ungültige E-Mail";
+"Error_Invalid_Email" = "Ungültige Email";
 /* Invalid street - shown in the Payment/shipping screen below the field */
 "Error_Invalid_Street" = "Ungültige Straße";
 /* Invalid City - shown in the Payment/shipping screen below the field */
@@ -49,16 +49,16 @@
 /* Invalid State - when state is missing for a country that has states - shown in the Payment/shipping screen below the field */
 "Error_Invalid_State" = "Ungültiger Staat";
 /* Invalid Zip code - used in US - shown in the Payment/shipping screen below the field */
-"Error_Invalid_ZipCode" = "Ungültige Postleitzahl";
+"Error_Invalid_ZipCode" = "Ungültiger Zip-Code";
 /* Invalid Postal code - used outside US - shown in the Payment/shipping screen below the field */
 "Error_Invalid_PostalCode" = "Ungültige Postleitzahl";
 
 /* ------- Zip/Postal code labels ------- */
 
 /* How to call billing zip code in the US */
-"Label_Billing_Zip" = "Postleitzahl";
+"Label_Billing_Zip" = "Rechnungs-Zip";
 /* How to call shipping zip code in the US */
-"Label_Shipping_Zip" = "Postleitzahl";
+"Label_Shipping_Zip" = "Versand-Zip";
 /* How to call billing/shipping zip code outside the US */
 "Label_Postal_Code" = "Postleitzahl";
 
@@ -75,21 +75,21 @@
 /* ------- Pay Pal functionality ------- */
 
 /* Title of alert popup when showing one of the errors below */
-"Error_Title_PayPal" = "PayPal Fehler";
+"Error_Title_PayPal" = "PayPal-Fehler";
 /* Error in alert pop-up when we get this error from PayPal while trying to start the flow*/
-"Error_PayPal_Currency_Not_Supported" = "Diese Währung wird von PayPal nicht unterstützt";
+"Error_PayPal_Currency_Not_Supported" = "Diese Währung wird nicht von  PayPal unterstützt";
 /* Error in alert pop-up when we get an unknown error from PayPal while trying to start the flow*/
-"Error_General_PayPal_error" = "Kann nicht mit PayPal verbunden werden";
+"Error_General_PayPal_error" = "Verbindung zu PayPal unmöglich";
 
 /* ------- Apple Pay functionality ------- */
 
 /* Title of error popup for Apple Pay errors */
 "Error_Title_Apple_Pay" = "Apple Pay";
 /* Various Apple Pay errors */
-"Error_Not_available_on_this_device" = "Nicht verfügbar auf diesem Gerät";
-"Error_No_cards_set" = "Keine Karten gesetzt";
-"Error_Setup_error" = "Kann nicht mit Apple Pay verbunden werden. Bitte wählen Sie eine andere Zahlungsmethode.";
-"Error_General_ApplePay_error" = "Kann nicht mit Apple Pay verbunden werden";
+"Error_Not_available_on_this_device" = "Nicht auf diesem Gerät verfügbar";
+"Error_No_cards_set" = "Keine Karten eingestellt";
+"Error_Setup_error" = "Verbindung zu Apple Pay unmöglich. Bitte wählen Sie eine andere Zahlungsart.";
+"Error_General_ApplePay_error" = "Verbindung zu Apple Pay unmöglich";
 
 
 /* ------- (CC) Payment screen ------- */
@@ -97,7 +97,7 @@
 /* Title of alert popup when showing an error */
 "Error_Title_Payment" = "Hoppla";
 /* Error in alert pop-up when we get an unknown error in the Payment screen */
-"Error_General_Payment_error" = "Ein Fehler ist aufgetreten; bitte versuche es erneut";
+"Error_General_Payment_error" = "Ein Fehler ist aufgetreten; bitte versuchen Sie es noch einmal";
 
 /* Title of Payment screen (where you fill billing details) */
 "Title_Payment_Screen" = "Zahlung";
@@ -111,21 +111,21 @@
 /* Label for the City field in the payment and shipping screens */
 "Label_City" = "Stadt";
 /* Label for the State field in the payment and shipping screens */
-"Label_State" = "Bundesland";
+"Label_State" = "Staat";
 
 /* Placeholder for the Name field in the payment and shipping screens (this is what you see in gray if the field is empty) */
-"Placeholder_Name" = "John Doe";
+"Placeholder_Name" = "Max Mustermann";
 
 /* Label for subtotal amount (bottom right above the pay button) in Billing/Shipping screen */
 "Label_Subtotal_Amount" = "Zwischensumme:";
 /* Label for tax amount (bottom right above the pay button) in Billing/Shipping screen */
 "Label_Tax_Amount" = "Steuer:";
 /* Label for the "Shipping same as billing" switch in the payment screens */
-"Label_Shipping_Same_As_Billing" = "Versand gleich wie Abrechnung";
+"Label_Shipping_Same_As_Billing" = "Versandadresse wie Rechnungsadresse";
 
 
 /* The format of the Pay button text: the word Pay and then the currency and then the amount with a 2 digit precision */
-"Payment_Pay_Button_Format" = "Zahlen %@ %.2f";
+"Payment_Pay_Button_Format" = "Bezahlen %@ %.2f";
 /* The format of the Subtotal/Tax amount label: the currency and then the amount with a 2 digit precision */
 "Payment_subtotal_and_tax_format" = "%@%.2f";
 /* The text of the Pay button in the Payment screen in case we have shipping */
@@ -137,7 +137,7 @@
 /* This menu item leads to the currency selection screen */
 "Menu_Item_Currency" = "Währung";
 /* This menu item closes the menu */
-"Menu_Item_Cancel" = "Stornieren";
+"Menu_Item_Cancel" = "Schließen";
 
 
 /* ------- Labels for shipping screens ------- */
@@ -151,12 +151,10 @@
 /* ------- List screens ------- */
 
 /* Title of currency list screen */
-"Title_Currency_Screen" = "Währung wählen";
+"Title_Currency_Screen" = "Wählen Sie eine Währung";
 
 /* Title of currency list screen */
-"Title_Country_Screen" = "Land auswählen";
+"Title_Country_Screen" = "Wählen Sie ein Land";
 
 /* Title of currency list screen */
-"Title_State_Screen" = "Staat wählen";
-
-
+"Title_State_Screen" = "Wählen Sie einen Staat";
