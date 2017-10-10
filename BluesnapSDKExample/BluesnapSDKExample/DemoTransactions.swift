@@ -25,13 +25,15 @@ class DemoTreansactions {
                                    bsToken: BSToken!,
                                    completion: @escaping (_ success: Bool, _ data: String?) -> Void) {
 
+        let fraudSessionId: String = paymentRequest.getFraudSessionId() ?? ""
         let requestBody = [
                 "recurringTransaction": "ECOMMERCE",
                 "softDescriptor": "MobileSDKtest",
                 "cardTransactionType": "AUTH_CAPTURE",
                 "amount": "\(paymentRequest.getAmount()!)",
                 "currency": "\(paymentRequest.getCurrency()!)",
-                "pfToken": "\(bsToken.getTokenStr()!)"
+                "pfToken": "\(bsToken.getTokenStr()!)",
+                "transactionFraudInfo": ["fraudSessionId": fraudSessionId]
         ] as [String: Any]
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
@@ -96,6 +98,7 @@ class DemoTreansactions {
         if let zip = paymentRequest.getBillingDetails().zip {
             cardHolderInfo["zip"] = "\(zip)"
         }
+        let fraudSessionId: String = paymentRequest.getFraudSessionId() ?? ""
         let requestBody = [
             "amount": "\(paymentRequest.getAmount()!)",
             "recurringTransaction": "ECOMMERCE",
@@ -103,7 +106,8 @@ class DemoTreansactions {
             "cardHolderInfo": cardHolderInfo,
             "currency": "\(paymentRequest.getCurrency()!)",
             "cardTransactionType": "AUTH_CAPTURE",
-            "pfToken": "\(bsToken.getTokenStr()!)"
+            "pfToken": "\(bsToken.getTokenStr()!)",
+            "transactionFraudInfo": ["fraudSessionId": fraudSessionId]
         ] as [String : Any]
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
@@ -158,18 +162,20 @@ class DemoTreansactions {
         completion: @escaping (_ success:Bool, _ data: String?)->Void) {
         
         let name = paymentRequest.getBillingDetails().getSplitName()!
-        let fraudSessionId :String  = paymentRequest.fraudSessionID!
         let bodyStart: String = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
             "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
             "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
             "<soft-descriptor>MobileSDK</soft-descriptor>" +
             "<amount>\(paymentRequest.getAmount()!)</amount>" +
         "<currency>\(paymentRequest.getCurrency()!)</currency>"
+        
+        var fraudInfoXML : String = ""
+        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
 
-        let fraudInfoXML :String = "<transaction-fraud-info>" +
+            fraudInfoXML = "<transaction-fraud-info>" +
                 "<fraud-session-id>" + fraudSessionId + "</fraud-session-id>" +
                 "</transaction-fraud-info>"
-
+        }
 
         let bodyMiddle: String = "<card-holder-info>" +
             "<first-name>\(name.firstName)</first-name>" +

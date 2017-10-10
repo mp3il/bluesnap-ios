@@ -25,6 +25,7 @@ class ViewController: UIViewController {
     // MARK: private properties
     
     fileprivate var bsToken : BSToken?
+    fileprivate var shouldInitKount = true
     fileprivate var initialData: BSInitialData! = BSInitialData()
     fileprivate var hideCoverView : Bool = false
     final fileprivate let LOADING_MESSAGE = "Loading, please wait"
@@ -39,10 +40,6 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		
 		registerTapToHideKeyboard()
-        
-        //Init Kount
-        NSLog("Kount Init");
-        BlueSnapSDK.KountInit(kountMid: nil,customfraudSessionID: nil);
         
         setApplePayIdentifier()
 
@@ -407,6 +404,14 @@ class ViewController: UIViewController {
         self.coverAllView.isHidden = false
         BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
         generateAndSetBsToken(completion: { resultToken, errors in
+            
+            //Init Kount
+            if (self.shouldInitKount) {
+                self.shouldInitKount = false
+                NSLog("Kount Init");
+                BlueSnapSDK.KountInit(kountMid: nil, customFraudSessionId: nil);
+            }
+
             DispatchQueue.main.async {
                 self.coverAllView.isHidden = true
                 self.hideCoverView = true

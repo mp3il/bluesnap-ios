@@ -17,7 +17,7 @@ import PassKit
         .masterCard,
         .visa
     ]
-    static fileprivate var fraudSessionID = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+    static fileprivate var fraudSessionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
 
 
     // MARK: SDK functions
@@ -124,20 +124,26 @@ import PassKit
      - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
      - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction
     */
-    open class func KountInit(kountMid: Int?, customfraudSessionID : String?) {
+    open class func KountInit(kountMid: Int?, customFraudSessionId : String?) {
 
         
-        if customfraudSessionID != nil {
-            BlueSnapSDK.fraudSessionID = customfraudSessionID!
+        if customFraudSessionId != nil {
+            BlueSnapSDK.fraudSessionId = customFraudSessionId!
         }
+        
         //// Configure the Data Collector
         //KDataCollector.shared().debug = true
         KDataCollector.shared().merchantID = kountMid ?? 700000
         // TODO Set the location collection configuration - Optional
         //KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
-        KDataCollector.shared().environment = KEnvironment.production
-        NSLog("Kount session: \(BlueSnapSDK.fraudSessionID )")
-        KDataCollector.shared().collect(forSession: BlueSnapSDK.fraudSessionID) { (sessionID, success, error) in
+        
+        if BSApiManager.isProductionToken() {
+            KDataCollector.shared().environment = KEnvironment.production
+        } else {
+            KDataCollector.shared().environment = KEnvironment.test
+        }
+        NSLog("Kount session ID: \(BlueSnapSDK.fraudSessionId)")
+        KDataCollector.shared().collect(forSession: BlueSnapSDK.fraudSessionId) { (sessionID, success, error) in
             if success {
                 NSLog("Kount collection success")
             } else {
@@ -225,7 +231,7 @@ import PassKit
         if initialData.billingDetails!.country ?? "" == "" {
             initialData.billingDetails!.country = defaultCountry
         }
-        initialData.fraudSessionId = BlueSnapSDK.fraudSessionID
+        initialData.fraudSessionId = BlueSnapSDK.fraudSessionId
     }
     
 }

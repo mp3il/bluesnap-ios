@@ -23,6 +23,7 @@ public enum BSPaymentType : String {
  */
 @objc public class BSBasePaymentRequest : NSObject {
     
+    var fraudSessionId: String?
     var priceDetails: BSPriceDetails!
     
     // These fields hold the original amounts in USD, to keep precision in case of currency change
@@ -36,6 +37,11 @@ public enum BSPaymentType : String {
         self.originalAmount = priceDetails.amount
         self.originalTaxAmount = priceDetails.taxAmount ?? 0.0
         self.originalRate = nil
+        self.fraudSessionId = initialData.fraudSessionId
+    }
+    
+    public func getFraudSessionId() -> String? {
+        return fraudSessionId;
     }
     
     // MARK: Change currency methods
@@ -89,7 +95,7 @@ public enum BSPaymentType : String {
     @objc public func setDetailsWithAmount(amount: NSNumber!, taxAmount: NSNumber!, currency: NSString?) {
         self.amount = amount
         self.taxAmount = taxAmount
-        self.currency = currency as! String
+        self.currency = currency! as String
     }
 
     public init(amount: Double!, taxAmount: Double!, currency: String?) {
