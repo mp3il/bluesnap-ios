@@ -125,7 +125,7 @@ BlueSnapSDK.setBsToken(bsToken: bsToken)
 
 After you have set the token by calling BlueSnapSDK.setBsToken as explained above, you need to call BlueSnapSDK.KountInit(). BlueSnap uses Kount for its excellent fraud detection; this call sends the device information to Kount, so that the later purchase call will be connected to the device data. This is important for fraud detection, because it adds a lot of user data to the purchase, which helps in profiling for fraud.
 The method takes 2 parameters, both optional:
-* kountMid: int? - if you are configured as Enterprise in the BlueSnap fraud settings, you will need to pass your kount MID here; otherwise pass nil.
+* kountMid: NSNumber? - if you are configured as Enterprise in the BlueSnap fraud settings, you will need to pass your kount MID here; otherwise pass nil.
 * customFraudSessionId: String? - this is the identifier you will later send to BlueSnap in the purchase call; you can generate it yourself, or pass nil and the SDK will generate a unique one for you. 
 
 

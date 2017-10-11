@@ -17,7 +17,7 @@ import PassKit
         .masterCard,
         .visa
     ]
-    static fileprivate var fraudSessionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+    static internal var fraudSessionId : String?
 
 
     // MARK: SDK functions
@@ -126,9 +126,10 @@ import PassKit
     */
     @objc open class func KountInit(kountMid: NSNumber? , customFraudSessionId : String?) {
 
-        
         if customFraudSessionId != nil {
             BlueSnapSDK.fraudSessionId = customFraudSessionId!
+        } else {
+            BlueSnapSDK.fraudSessionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
         }
         
         //// Configure the Data Collector
@@ -146,12 +147,14 @@ import PassKit
         } else {
             KDataCollector.shared().environment = KEnvironment.test
         }
-        NSLog("Kount session ID: \(BlueSnapSDK.fraudSessionId)")
-        KDataCollector.shared().collect(forSession: BlueSnapSDK.fraudSessionId) { (sessionID, success, error) in
-            if success {
-                NSLog("Kount collection success")
-            } else {
-                NSLog("Kount collection failed")
+        NSLog("Kount session ID: \(BlueSnapSDK.fraudSessionId ?? "")")
+        if let fraudSessionId = BlueSnapSDK.fraudSessionId {
+            KDataCollector.shared().collect(forSession: fraudSessionId) { (sessionID, success, error) in
+                if success {
+                    NSLog("Kount collection success")
+                } else {
+                    NSLog("Kount collection failed")
+                }
             }
         }
     }
@@ -235,7 +238,6 @@ import PassKit
         if initialData.billingDetails!.country ?? "" == "" {
             initialData.billingDetails!.country = defaultCountry
         }
-        initialData.fraudSessionId = BlueSnapSDK.fraudSessionId
     }
     
 }

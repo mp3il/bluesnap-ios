@@ -25,16 +25,17 @@ class DemoTreansactions {
                                    bsToken: BSToken!,
                                    completion: @escaping (_ success: Bool, _ data: String?) -> Void) {
 
-        let fraudSessionId: String = paymentRequest.getFraudSessionId() ?? ""
-        let requestBody = [
+        var requestBody = [
                 "recurringTransaction": "ECOMMERCE",
                 "softDescriptor": "MobileSDKtest",
                 "cardTransactionType": "AUTH_CAPTURE",
                 "amount": "\(paymentRequest.getAmount()!)",
                 "currency": "\(paymentRequest.getCurrency()!)",
                 "pfToken": "\(bsToken.getTokenStr()!)",
-                "transactionFraudInfo": ["fraudSessionId": fraudSessionId]
         ] as [String: Any]
+        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+            requestBody["transactionFraudInfo"] = ["fraudSessionId": fraudSessionId]
+        }
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
 
@@ -98,8 +99,7 @@ class DemoTreansactions {
         if let zip = paymentRequest.getBillingDetails().zip {
             cardHolderInfo["zip"] = "\(zip)"
         }
-        let fraudSessionId: String = paymentRequest.getFraudSessionId() ?? ""
-        let requestBody = [
+        var requestBody = [
             "amount": "\(paymentRequest.getAmount()!)",
             "recurringTransaction": "ECOMMERCE",
             "softDescriptor": "MobileSDKtest",
@@ -107,8 +107,10 @@ class DemoTreansactions {
             "currency": "\(paymentRequest.getCurrency()!)",
             "cardTransactionType": "AUTH_CAPTURE",
             "pfToken": "\(bsToken.getTokenStr()!)",
-            "transactionFraudInfo": ["fraudSessionId": fraudSessionId]
         ] as [String : Any]
+        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+            requestBody["transactionFraudInfo"] = ["fraudSessionId": fraudSessionId]
+        }
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
         

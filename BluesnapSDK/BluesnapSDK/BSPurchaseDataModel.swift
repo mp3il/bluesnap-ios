@@ -37,7 +37,7 @@ public enum BSPaymentType : String {
         self.originalAmount = priceDetails.amount
         self.originalTaxAmount = priceDetails.taxAmount ?? 0.0
         self.originalRate = nil
-        self.fraudSessionId = initialData.fraudSessionId
+        self.fraudSessionId = BlueSnapSDK.fraudSessionId
     }
     
     public func getFraudSessionId() -> String? {
@@ -124,7 +124,7 @@ public enum BSPaymentType : String {
     public var withEmail: Bool = true
     public var withShipping: Bool = false
     public var fullBilling : Bool = false
-    public var fraudSessionId: String?
+    //public var fraudSessionId: String?
     public var priceDetails: BSPriceDetails! = BSPriceDetails(amount: 0, taxAmount: 0, currency: nil)
     
     public var billingDetails : BSBillingAddressDetails?
