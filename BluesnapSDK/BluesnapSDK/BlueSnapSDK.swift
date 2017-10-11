@@ -119,12 +119,12 @@ import PassKit
     }
     
     /**
-     Call Kount SDK to initialize device data collection
+     Call Kount SDK to initialize device data collection in a background thread
      - parameters:
      - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
      - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction
     */
-    open class func KountInit(kountMid: Int?, customFraudSessionId : String?) {
+    @objc open class func KountInit(kountMid: NSNumber? , customFraudSessionId : String?) {
 
         
         if customFraudSessionId != nil {
@@ -133,9 +133,13 @@ import PassKit
         
         //// Configure the Data Collector
         //KDataCollector.shared().debug = true
-        KDataCollector.shared().merchantID = kountMid ?? 700000
-        // TODO Set the location collection configuration - Optional
-        //KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
+        if (kountMid != nil) {
+            KDataCollector.shared().merchantID = kountMid!.intValue
+        } else {
+            KDataCollector.shared().merchantID = 700000
+        }
+        // Optional Set the location collection configuration
+        KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.passive
         
         if BSApiManager.isProductionToken() {
             KDataCollector.shared().environment = KEnvironment.production
