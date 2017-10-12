@@ -129,7 +129,7 @@ Initialize the fraud prevention capabilities of the SDK by calling `BlueSnapSDK.
 # Implementing Standard Checkout Flow
 This section will cover the following topics: 
 * [Configuring Apple Pay (optional)](#configuring-apple-pay-optional)
-* [Defining your checkout settings & callback function](#defining-your-checkout-settings-callback-function)
+* [Defining your checkout settings & callback function](#defining-your-checkout-settings--callback-function)
 * [Launching checkout UI](#launching-checkout-ui)
 
 ## Configuring Apple Pay (optional)
