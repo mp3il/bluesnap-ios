@@ -231,8 +231,12 @@ class BluesnapSDKExampleUITests: XCTestCase {
      
     private func checkResult(app: XCUIApplication, expectedSuccessText: String) {
         
-        wait(for: 3)
         let successLabel = app.staticTexts["SuccessLabel"]
+        
+        let exists = NSPredicate(format: "exists == 1")
+        expectation(for: exists, evaluatedWith: successLabel, handler: nil)
+        waitForExpectations(timeout: 15, handler: nil)
+        
         let labelText: String = successLabel.label
         assert(labelText == expectedSuccessText)
     }
@@ -318,7 +322,12 @@ class BluesnapSDKExampleUITests: XCTestCase {
         app.buttons["CheckoutButton"].tap()
         
         // wait for payment type screen to load
-        wait(for: 2)
+        
+        let ccButton = paymentTypeHelper.getCcButtonElement()
+        
+        let exists = NSPredicate(format: "exists == 1")
+        expectation(for: exists, evaluatedWith: ccButton, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
         
         // make sure payment type buttons are visible
         paymentTypeHelper.checkPaymentTypes(expectedApplePay: true, expectedPayPal: true, expectedCC: true)
@@ -363,17 +372,17 @@ class BluesnapSDKExampleUITests: XCTestCase {
     }
 }
 
-extension XCTestCase {
-    
-    func wait(for duration: TimeInterval) {
-        let waitExpectation = expectation(description: "Waiting")
-        
-        let when = DispatchTime.now() + duration
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            waitExpectation.fulfill()
-        }
-        
-        // We use a buffer here to avoid flakiness with Timer on CI
-        waitForExpectations(timeout: duration + 0.5)
-    }
-}
+//extension XCTestCase {
+//    
+//    func wait(for duration: TimeInterval) {
+//        let waitExpectation = expectation(description: "Waiting")
+//        
+//        let when = DispatchTime.now() + duration
+//        DispatchQueue.main.asyncAfter(deadline: when) {
+//            waitExpectation.fulfill()
+//        }
+//        
+//        // We use a buffer here to avoid flakiness with Timer on CI
+//        waitForExpectations(timeout: duration + 0.5)
+//    }
+//}
