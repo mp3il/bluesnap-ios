@@ -25,14 +25,17 @@ class DemoTreansactions {
                                    bsToken: BSToken!,
                                    completion: @escaping (_ success: Bool, _ data: String?) -> Void) {
 
-        let requestBody = [
+        var requestBody = [
                 "recurringTransaction": "ECOMMERCE",
                 "softDescriptor": "MobileSDKtest",
                 "cardTransactionType": "AUTH_CAPTURE",
                 "amount": "\(paymentRequest.getAmount()!)",
                 "currency": "\(paymentRequest.getCurrency()!)",
-                "pfToken": "\(bsToken.getTokenStr()!)"
+                "pfToken": "\(bsToken.getTokenStr()!)",
         ] as [String: Any]
+        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+            requestBody["transactionFraudInfo"] = ["fraudSessionId": fraudSessionId]
+        }
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
 
@@ -96,15 +99,18 @@ class DemoTreansactions {
         if let zip = paymentRequest.getBillingDetails().zip {
             cardHolderInfo["zip"] = "\(zip)"
         }
-        let requestBody = [
+        var requestBody = [
             "amount": "\(paymentRequest.getAmount()!)",
             "recurringTransaction": "ECOMMERCE",
             "softDescriptor": "MobileSDKtest",
             "cardHolderInfo": cardHolderInfo,
             "currency": "\(paymentRequest.getCurrency()!)",
             "cardTransactionType": "AUTH_CAPTURE",
-            "pfToken": "\(bsToken.getTokenStr()!)"
+            "pfToken": "\(bsToken.getTokenStr()!)",
         ] as [String : Any]
+        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+            requestBody["transactionFraudInfo"] = ["fraudSessionId": fraudSessionId]
+        }
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()
         
@@ -164,11 +170,21 @@ class DemoTreansactions {
             "<soft-descriptor>MobileSDK</soft-descriptor>" +
             "<amount>\(paymentRequest.getAmount()!)</amount>" +
         "<currency>\(paymentRequest.getCurrency()!)</currency>"
+        
+        var fraudInfoXML : String = ""
+        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+
+            fraudInfoXML = "<transaction-fraud-info>" +
+                "<fraud-session-id>" + fraudSessionId + "</fraud-session-id>" +
+                "</transaction-fraud-info>"
+        }
+
         let bodyMiddle: String = "<card-holder-info>" +
             "<first-name>\(name.firstName)</first-name>" +
             "<last-name>\(name.lastName)</last-name>" +
         "</card-holder-info>"
-        let bodyEnd: String = "</card-transaction>"
+
+        let bodyEnd: String = "</card-transaction>" + fraudInfoXML
         let requestBody: String = bodyStart + bodyMiddle + "<pf-token>\(bsToken.getTokenStr()!)</pf-token>" + bodyEnd
         print("requestBody= \(requestBody)")
         let authorization = getBasicAuth()

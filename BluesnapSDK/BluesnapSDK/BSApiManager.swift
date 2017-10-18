@@ -75,6 +75,11 @@ import Foundation
         createBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: completion)
     }
     
+    static func isProductionToken() -> Bool {
+        
+        let bsToken = getBsToken()
+        return bsToken?.serverUrl == BS_PRODUCTION_DOMAIN
+    }
     
     // MARK: Main functions
     

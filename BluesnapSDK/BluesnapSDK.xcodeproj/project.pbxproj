@@ -12,8 +12,12 @@
 		2D374F491E880EF100AE2A81 /* BSCurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */; };
 		2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F411E880EF100AE2A81 /* BSToken.swift */; };
 		2D374F4D1E880EF100AE2A81 /* BlueSnapSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */; };
+		2D779B821F8CABBA003E889A /* Kount in Resources */ = {isa = PBXBuildFile; fileRef = 2D779B811F8CABBA003E889A /* Kount */; };
 		2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DADB9D71EC31F3200C1A2D2 /* BlueSnap.storyboard */; };
+		2DBB606B1F8CB8F800E80254 /* libKountDataCollector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBB606A1F8CB8F800E80254 /* libKountDataCollector.a */; };
 		2DD7F11D1E8828B2002C5571 /* BluesnapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D374F201E880E7200AE2A81 /* BluesnapSDK.framework */; };
+		DEB03A9C85F648C1BCBDEC42 /* Kount-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = DEB84D43DE95794744F74D97 /* Kount-Bridging-Header.h */; };
+		DEB2956B373F197BF3547EC7 /* KDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBEC07006625D7C0FFAF7B2 /* KDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEB2DD0B164B99C6E7DE417C /* BSApplepayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */; };
 		DEB3C8BC3806435452EEB052 /* BSApplepayOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */; };
 		DEBAC1114FFA55F1852DCB78 /* BSPKContactExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */; };
@@ -74,11 +78,15 @@
 		2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyModel.swift; sourceTree = "<group>"; };
 		2D374F411E880EF100AE2A81 /* BSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSToken.swift; sourceTree = "<group>"; };
 		2D374F421E880EF100AE2A81 /* BlueSnapSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueSnapSDK.swift; sourceTree = "<group>"; };
+		2D779B811F8CABBA003E889A /* Kount */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Kount; sourceTree = SOURCE_ROOT; };
 		2DADB9D81EC31F4200C1A2D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BlueSnap.storyboard; sourceTree = "<group>"; };
+		2DBB606A1F8CB8F800E80254 /* libKountDataCollector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKountDataCollector.a; sourceTree = "<group>"; };
 		DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayPayment.swift; sourceTree = "<group>"; };
 		DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayViewController.swift; sourceTree = "<group>"; };
+		DEB84D43DE95794744F74D97 /* Kount-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Kount-Bridging-Header.h"; sourceTree = "<group>"; };
 		DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayOperation.swift; sourceTree = "<group>"; };
 		DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPKContactExtention.swift; sourceTree = "<group>"; };
+		DEBEC07006625D7C0FFAF7B2 /* KDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDataCollector.h; sourceTree = "<group>"; };
 		FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseTextInput.swift; sourceTree = "<group>"; };
 		FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcInputLine.swift; sourceTree = "<group>"; };
 		FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrenciesViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DBB606B1F8CB8F800E80254 /* libKountDataCollector.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +188,8 @@
 		2D374F221E880E7200AE2A81 /* BluesnapSDK */ = {
 			isa = PBXGroup;
 			children = (
+				2DBB606A1F8CB8F800E80254 /* libKountDataCollector.a */,
+				2D779B811F8CABBA003E889A /* Kount */,
 				FD4750B91EF7D62000E5DFBC /* Helpers */,
 				FD4750B61EF2A0AE00E5DFBC /* CustomControls */,
 				FD17062F1E93727D00552A35 /* Screens */,
@@ -190,6 +201,8 @@
 				2D374F241E880E7200AE2A81 /* Info.plist */,
 				FD6814641F40419C00FAE1ED /* BSLocalizable.strings */,
 				FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */,
+				DEBEC07006625D7C0FFAF7B2 /* KDataCollector.h */,
+				DEB84D43DE95794744F74D97 /* Kount-Bridging-Header.h */,
 			);
 			path = BluesnapSDK;
 			sourceTree = "<group>";
@@ -284,6 +297,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D374F311E880E7300AE2A81 /* BluesnapSDK.h in Headers */,
+				DEB2956B373F197BF3547EC7 /* KDataCollector.h in Headers */,
+				DEB03A9C85F648C1BCBDEC42 /* Kount-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +413,7 @@
 			files = (
 				FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */,
 				FD6814621F40419C00FAE1ED /* BSLocalizable.strings in Resources */,
+				2D779B821F8CABBA003E889A /* Kount in Resources */,
 				2DADB9D51EC31F3200C1A2D2 /* BlueSnap.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -638,6 +654,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Kount",
+					"$(PROJECT_DIR)/BluesnapSDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluesnap.BluesnapSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -664,6 +681,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Kount",
+					"$(PROJECT_DIR)/BluesnapSDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluesnap.BluesnapSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";

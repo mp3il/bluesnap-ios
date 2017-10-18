@@ -35,7 +35,7 @@ import Foundation
     public var ccDetails: BSCcDetails = BSCcDetails()
     public var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
     public var shippingDetails : BSShippingAddressDetails?
-    
+
     public override init(initialData: BSInitialData) {
         super.init(initialData: initialData)
         if let billingDetails = initialData.billingDetails {
