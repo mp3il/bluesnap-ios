@@ -541,7 +541,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     internal func setKeyboardType() {
         
         textField.keyboardType = fieldKeyboardType
-        if fieldKeyboardType == .numberPad {
+        if fieldKeyboardType == .numberPad || fieldKeyboardType == .phonePad {
             self.setNumericKeyboard()
         } else {
             self.removeNumericKeyboard()
