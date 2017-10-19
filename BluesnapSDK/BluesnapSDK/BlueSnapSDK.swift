@@ -17,6 +17,8 @@ import PassKit
         .masterCard,
         .visa
     ]
+    static internal var fraudSessionId : String?
+
 
     // MARK: SDK functions
     
@@ -117,21 +119,44 @@ import PassKit
     }
     
     /**
-     Call Kount SDK to initialize device data collection
+     Call Kount SDK to initialize device data collection in a background thread
      - parameters:
      - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
      - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction
     */
-    open class func KountInit(kountMid: Int?, fraudSessionID : String!) {
+    @objc open class func KountInit(kountMid: NSNumber? , customFraudSessionId : String?) {
+
+        if customFraudSessionId != nil {
+            BlueSnapSDK.fraudSessionId = customFraudSessionId!
+        } else {
+            BlueSnapSDK.fraudSessionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        }
+        
         //// Configure the Data Collector
-        //
         //KDataCollector.shared().debug = true
-        // TODO Set your Merchant ID
-        //KDataCollector.shared().merchantID = kountMid ?? 700000
-        // TODO Set the location collection configuration
-        //KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.requestPermission
-        // For a released app, you'll want to set this to KEnvironment.Production
-        //KDataCollector.shared().environment = KEnvironment.test
+        if (kountMid != nil) {
+            KDataCollector.shared().merchantID = kountMid!.intValue
+        } else {
+            KDataCollector.shared().merchantID = 700000
+        }
+        // Optional Set the location collection configuration
+        KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.passive
+        
+        if BSApiManager.isProductionToken() {
+            KDataCollector.shared().environment = KEnvironment.production
+        } else {
+            KDataCollector.shared().environment = KEnvironment.test
+        }
+        NSLog("Kount session ID: \(BlueSnapSDK.fraudSessionId ?? "")")
+        if let fraudSessionId = BlueSnapSDK.fraudSessionId {
+            KDataCollector.shared().collect(forSession: fraudSessionId) { (sessionID, success, error) in
+                if success {
+                    NSLog("Kount collection success")
+                } else {
+                    NSLog("Kount collection failed")
+                }
+            }
+        }
     }
     
     /**
