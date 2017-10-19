@@ -53,6 +53,11 @@ class BSShippingScreenUITestHelper {
         return input.buttons["ImageButton"]
     }
 
+    func closeKeyboard() {
+        nameInput.tap()
+        app.keyboards.buttons["Done"].tap()
+    }
+
     // check visibility of inputs - make sure fields are shown according to configuration
     func checkInputs(initialData: BSInitialData) {
         

@@ -67,6 +67,10 @@ class BSPaymentScreenUITestHelper {
         return input.buttons["ImageButton"]
     }
 
+    func closeKeyboard() {
+        nameInput.tap()
+        app.keyboards.buttons["Done"].tap()
+    }
 
     // fill CC details 
     func setCcDetails(isOpen: Bool, ccn: String, exp: String, cvv: String) {
@@ -140,7 +144,7 @@ class BSPaymentScreenUITestHelper {
         }
     }
     
-    func setFieldValues(billingDetails: BSBillingAddressDetails, initialData: BSInitialData) {
+    func setFieldValues(billingDetails: BSBillingAddressDetails, initialData: BSInitialData, ignoreCountry: Bool? = false) {
     
         setInputValue(input: nameInput, value: billingDetails.name ?? "")
         if initialData.withEmail {
@@ -151,11 +155,13 @@ class BSPaymentScreenUITestHelper {
             setInputValue(input: cityInput, value: billingDetails.city ?? "")
             setInputValue(input: streetInput, value: billingDetails.address ?? "")
         }
-        if let countryCode = billingDetails.country {
-            setCountry(countryCode: countryCode)
-            if initialData.fullBilling {
-                if let stateCode = billingDetails.state {
-                    setState(countryCode: countryCode, stateCode: stateCode)
+        if ignoreCountry == false {
+            if let countryCode = billingDetails.country {
+                setCountry(countryCode: countryCode)
+                if initialData.fullBilling {
+                    if let stateCode = billingDetails.state {
+                        setState(countryCode: countryCode, stateCode: stateCode)
+                    }
                 }
             }
         }
