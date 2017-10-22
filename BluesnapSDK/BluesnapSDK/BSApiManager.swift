@@ -15,9 +15,12 @@ import Foundation
     // MARK: Constants
 
     internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
-    internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/" // "https://us-qa-fct02.bluesnap.com/"
-    internal static let BS_SANDBOX_TEST_USER = "sdkuser"
-    internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
+    //internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/" // "https://us-qa-fct02.bluesnap.com/"
+    //internal static let BS_SANDBOX_TEST_USER = "sdkuser"
+    //internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
+    internal static let BS_SANDBOX_DOMAIN = "https://us-qa-fct02.bluesnap.com/"
+    internal static let BS_SANDBOX_TEST_USER = "HostedPapi"
+    internal static let BS_SANDBOX_TEST_PASS = "Plimus12345"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
     // every hour (interval should be negative, and in seconds)
  
@@ -68,11 +71,12 @@ import Foundation
     /**
      Use this method only in tests to get a token for sandbox
      - parameters:
+     - shopperId: optional shopper ID for returbning shopper
      - completion: function to be called after token is generated; will receive optional token and optional error
      */
-    static func createSandboxBSToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
+    static func createSandboxBSToken(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        createBSToken(domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: completion)
+        createBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: completion)
     }
     
     static func isProductionToken() -> Bool {
@@ -83,6 +87,34 @@ import Foundation
     
     // MARK: Main functions
     
+    /**
+     Return a list of currencies and their rates from BlueSnap server
+     - parameters:
+     - completion: function to be called after data is received; will receive optional currency data and optional error
+     */
+    static func getSdkData(completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
+        
+        let bsToken = getBsToken()
+        
+        NSLog("BlueSnap; getSdkData")
+        BSApiCaller.getSdkData(bsToken: bsToken, completion: {
+            sdkData, resultError in
+            
+            NSLog("BlueSnap; getSdkData completion")
+            if resultError == .unAuthorised {
+                
+                // regenerate Token and try again
+                regenerateToken(executeAfter: { _ in
+                    BSApiCaller.getSdkData(bsToken: getBsToken(), completion: { sdkData2, resultError2 in
+                        
+                        completion(sdkData2, resultError2)
+                    })
+                })
+            } else {
+                completion(sdkData, resultError)
+            }
+        })
+    }
     
     /**
         Return a list of currencies and their rates from BlueSnap server
@@ -291,9 +323,9 @@ import Foundation
      - password: password
      - completion: function to be called after result is fetched; will receive optional token and optional error
      */
-    internal static func createBSToken(domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+    internal static func createBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        BSApiCaller.createBSToken(domain: domain, user: user, password: password, completion: completion)
+        BSApiCaller.createBSToken(shopperId: shopperId, domain: domain, user: user, password: password, completion: completion)
     }
 
  

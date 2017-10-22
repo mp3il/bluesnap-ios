@@ -197,7 +197,18 @@ import PassKit
      - completion: function to be called once we have the server result; will receive optional token and optional error
     */
     open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
-        BSApiManager.createSandboxBSToken(completion: completion)
+        BSApiManager.createSandboxBSToken(shopperId: nil, completion: completion)
+    }
+    
+    /**
+     Create token for BlueSnap Sandbox environment; useful for tests.
+     In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose the username/password
+     - parameters:
+     - shopperId: for returning shopper
+     - completion: function to be called once we have the server result; will receive optional token and optional error
+     */
+    open class func createSandboxTestTokenWithShopperId(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        BSApiManager.createSandboxBSToken(shopperId: shopperId, completion: completion)
     }
 
 //    /**

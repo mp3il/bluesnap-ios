@@ -58,6 +58,38 @@ class BSApiManagerTests: XCTestCase {
     }
     
     //------------------------------------------------------
+    // MARK: SDK Data
+    //------------------------------------------------------
+    
+    // test get SDk Data with a valid token
+    func testGetSdkData() {
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        let shopperId : Int? = 22208751
+        createTokenWithShopperId(shopperId: shopperId, completion: { token, error in
+            
+            BSApiManager.getSdkData(completion: { sdkData, errors in
+                
+                XCTAssertNil(errors, "Got errors while trying to get currencies")
+                XCTAssertNotNil(sdkData, "Failed to get sdk data")
+                
+                print(sdkData)
+                
+//                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+//                XCTAssertNotNil(gbpCurrency)
+//                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+//                
+//                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+//                XCTAssertNotNil(eurCurrencyRate)
+//                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                
+                semaphore.signal()
+            })
+        })
+        semaphore.wait()
+    }
+
+    //------------------------------------------------------
     // MARK: PayPal
     //------------------------------------------------------
     
@@ -440,7 +472,12 @@ class BSApiManagerTests: XCTestCase {
      */
     func createToken(completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        BSApiManager.createSandboxBSToken(completion: { bsToken, error in
+        createTokenWithShopperId(shopperId: nil, completion: completion)
+    }
+    
+    func createTokenWithShopperId(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        
+        BSApiManager.createSandboxBSToken(shopperId: shopperId, completion: { bsToken, error in
             
             XCTAssertNil(error)
             XCTAssertNotNil(bsToken)
@@ -466,7 +503,7 @@ class BSApiManagerTests: XCTestCase {
         BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: { completion in
             NSLog("*** Recreating token!!!")
             self.tokenWasRecreated = true
-            BSApiManager.createSandboxBSToken(completion: completion)
+            BSApiManager.createSandboxBSToken(shopperId: nil, completion: completion)
         })
     }
 }

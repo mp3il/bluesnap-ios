@@ -17,8 +17,10 @@ import BluesnapSDK
 
 class DemoTreansactions {
     
-    static let BS_SANDBOX_TEST_USER : String  = "sdkuser"
-    static let BS_SANDBOX_TEST_PASS : String  = "SDKuser123"
+    //static let BS_SANDBOX_TEST_USER : String  = "sdkuser"
+    //static let BS_SANDBOX_TEST_PASS : String  = "SDKuser123"
+    static let BS_SANDBOX_TEST_USER = "HostedPapi"
+    static let BS_SANDBOX_TEST_PASS = "Plimus12345"
 
 
     func createApplePayTransaction(paymentRequest: BSApplePayPaymentRequest!,

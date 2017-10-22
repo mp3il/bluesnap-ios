@@ -18,6 +18,88 @@ import Foundation
     internal static let PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2"
     internal static let TOKENIZED_SERVICE = "services/2/payment-fields-tokens/"
 
+    
+    /**
+     Fetch all the initial data required for the SDK from BlueSnap server:
+     - BlueSnap Kount MID
+     - Exchange rates
+     - Returning shopper data
+     - Supported Payment methods
+     
+     - parameters:
+     - bsToken: a token for BlueSnap tokenized services
+     - completion: a callback function to be called once the data is fetched; receives optional data and optional error
+     */
+    static func getSdkData(bsToken: BSToken!, completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
+        
+        let urlStr = bsToken.serverUrl + "services/2/tokenized-services/sdk-init"
+        let url = NSURL(string: urlStr)!
+        var request = NSMutableURLRequest(url: url as URL)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        
+        // fire request
+        
+        var sdkData: BSSdkData?
+        var resultError: BSErrors?
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response, error) in
+            if let error = error {
+                let errorType = type(of: error)
+                NSLog("error getting supportedPaymentMethods - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
+                resultError = .unknown
+            } else {
+                let httpStatusCode:Int? = (response as? HTTPURLResponse)?.statusCode
+                if (httpStatusCode != nil && httpStatusCode! >= 200 && httpStatusCode! <= 299) {
+                    (sdkData, resultError) = parseSdkDataJSON(data: data)
+                } else {
+                    resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
+                }
+            }
+            defer {
+                completion(sdkData, resultError)
+            }
+        }
+        task.resume()
+    }
+    
+    private static func parseSdkDataJSON(data: Data?) -> (BSSdkData?, BSErrors?) {
+        
+        var resultData: BSSdkData?
+        var resultError: BSErrors?
+        
+        if let data = data {
+            do {
+                // Parse the result JSOn object
+                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                    
+                    resultData = BSSdkData()
+                    if let kountMID = json["kountMerchantId"] as? Int {
+                        resultData?.kountMID = kountMID
+                    }
+                    if let rates = json["rates"] as? [String: AnyObject] {
+                        let currencies = parseCurrenciesJSON(json: rates)
+                        resultData?.currencyRates = currencies
+                    }
+                    if let shopper = json["shopper"] as? [String: AnyObject] {
+                        let shopper = parseShopperJSON(json: shopper)
+                        resultData?.returningShopper = shopper
+                    }
+                } else {
+                    resultError = .unknown
+                    NSLog("Error parsing BS currency rates")
+                }
+            } catch let error as NSError {
+                resultError = .unknown
+                NSLog("Error parsing BS currency rates: \(error.localizedDescription)")
+            }
+        } else {
+            resultError = .unknown
+            NSLog("No BS currency data exists")
+        }
+        return (resultData, resultError)
+    }
+    
+
     /**
      Get BlueSnap Token from BlueSnap server
      Normally you will not do this from the app.
@@ -28,11 +110,14 @@ import Foundation
      - password: password
      - completion: callback function for after the token is created; recfeives optional token and optional error
      */
-    internal static func createBSToken(domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+    internal static func createBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
         // create request
         let authorization = getBasicAuth(user: user, password: password)
-        let urlStr = domain + "services/2/payment-fields-tokens"
+        var urlStr = domain + "services/2/payment-fields-tokens"
+        if let shopperId = shopperId {
+            urlStr = urlStr + "?shopperId=\(shopperId)"
+        }
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         request.httpMethod = "POST"
@@ -106,7 +191,7 @@ import Foundation
             } else {
                 let httpStatusCode:Int? = (response as? HTTPURLResponse)?.statusCode
                 if (httpStatusCode != nil && httpStatusCode! >= 200 && httpStatusCode! <= 299) {
-                    (resultCurrencies, resultError) = parseCurrenciesJSON(data: data)
+                    (resultCurrencies, resultError) = parseCurrenciesData(data: data)
                 } else {
                     resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
                 }
@@ -431,7 +516,7 @@ import Foundation
         return errStr ?? ""
     }
 
-    private static func parseCurrenciesJSON(data: Data?) -> (BSCurrencies?, BSErrors?) {
+    private static func parseCurrenciesData(data: Data?) -> (BSCurrencies?, BSErrors?) {
         
         var resultData: BSCurrencies?
         var resultError: BSErrors?
@@ -440,26 +525,7 @@ import Foundation
             do {
                 // Parse the result JSOn object
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    var currencies: [BSCurrency] = []
-                    if let currencyName = json["baseCurrencyName"] as? String
-                        , let currencyCode = json["baseCurrency"] as? String {
-                        let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: 1.0)
-                        currencies.append(bsCurrency)
-                    }
-                    if let exchangeRatesArr = json["exchangeRate"] as? [[String: Any]] {
-                        for exchangeRateItem in exchangeRatesArr {
-                            if let currencyName = exchangeRateItem["quoteCurrencyName"] as? String
-                                , let currencyCode = exchangeRateItem["quoteCurrency"] as? String
-                                , let currencyRate = exchangeRateItem["conversionRate"] as? Double {
-                                let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: currencyRate)
-                                currencies.append(bsCurrency)
-                            }
-                        }
-                    }
-                    currencies = currencies.sorted {
-                        $0.name < $1.name
-                    }
-                    resultData = BSCurrencies(currencies: currencies)
+                    resultData = parseCurrenciesJSON(json: json)
                 } else {
                     resultError = .unknown
                     NSLog("Error parsing BS currency rates")
@@ -475,6 +541,149 @@ import Foundation
         return (resultData, resultError)
     }
     
+    private static func parseCurrenciesJSON(json: [String: AnyObject]) -> BSCurrencies {
+        
+        var currencies: [BSCurrency] = []
+        if let currencyName = json["baseCurrencyName"] as? String
+            , let currencyCode = json["baseCurrency"] as? String {
+            let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: 1.0)
+            currencies.append(bsCurrency)
+        }
+        if let exchangeRatesArr = json["exchangeRate"] as? [[String: Any]] {
+            for exchangeRateItem in exchangeRatesArr {
+                if let currencyName = exchangeRateItem["quoteCurrencyName"] as? String
+                    , let currencyCode = exchangeRateItem["quoteCurrency"] as? String
+                    , let currencyRate = exchangeRateItem["conversionRate"] as? Double {
+                    let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: currencyRate)
+                    currencies.append(bsCurrency)
+                }
+            }
+        }
+        currencies = currencies.sorted {
+            $0.name < $1.name
+        }
+        return BSCurrencies(currencies: currencies)
+    }
+    
+    private static func parseShopperJSON(json: [String: AnyObject]) -> BSReturningShopperData {
+        
+        var shopper = BSReturningShopperData()
+        if let firstName = json["firstName"] as? String
+            , let lastName = json["lastName"] as? String {
+            shopper.name = firstName + " " + lastName
+        }
+        if let email = json["email"] as? String {
+            shopper.email = email
+        }
+        if let country = json["country"] as? String {
+            shopper.countryCode = country
+        }
+        if let state = json["state"] as? String {
+            shopper.stateCode = state
+        }
+        if let address = json["address"] as? String {
+            shopper.address = address
+        }
+        if let address2 = json["address2"] as? String {
+            if (shopper.address == nil) {
+                shopper.address = address2
+            } else {
+                shopper.address = shopper.address! + " " + address2
+            }
+        }
+        if let city = json["city"] as? String {
+            shopper.city = city
+        }
+        if let zip = json["zip"] as? String {
+            shopper.zip = zip
+        }
+        if let phone = json["phone"] as? String {
+            shopper.phone = phone
+        }
+        if let shipping = json["shippingContactInfo"] as? [String: AnyObject] {
+            let shippingDetails = BSShippingAddressDetails()
+            if let firstName = shipping["firstName"] as? String
+                , let lastName = shipping["lastName"] as? String {
+                shippingDetails.name = firstName + " " + lastName
+            }
+            if let country = shipping["country"] as? String {
+                shopper.countryCode = country
+            }
+            if let state = shipping["state"] as? String {
+                shopper.stateCode = state
+            }
+            if let address = shipping["address1"] as? String {
+                shopper.address = address
+            }
+            if let address2 = shipping["address2"] as? String {
+                if (shopper.address == nil) {
+                    shopper.address = address2
+                } else {
+                    shopper.address = shopper.address! + " " + address2
+                }
+            }
+            if let city = shipping["city"] as? String {
+                shopper.city = city
+            }
+            if let zip = shipping["zip"] as? String {
+                shopper.zip = zip
+            }
+            if let phone = shipping["phone"] as? String {
+                shopper.phone = phone
+            }
+        }
+        if let paymentSources = json["paymentSources"] as? [String: AnyObject] {
+            if let creditCardInfo = paymentSources["creditCardInfo"] as? [[String: AnyObject]] {
+                for ccDetailsJson in creditCardInfo {
+                    let ccDetails = BSExistingCcDetails()
+                    shopper.existingCreditCards.append(ccDetails)
+                    if let billingContactInfo = ccDetailsJson["billingContactInfo"] as? [String: AnyObject] {
+                        ccDetails.billingDetails = BSBillingAddressDetails()
+                        if let firstName = billingContactInfo["firstName"] as? String
+                            , let lastName = billingContactInfo["lastName"] as? String {
+                            ccDetails.billingDetails?.name = firstName + " " + lastName
+                        }
+                        if let country = billingContactInfo["country"] as? String {
+                            shopper.countryCode = country
+                        }
+                        if let state = billingContactInfo["state"] as? String {
+                            shopper.stateCode = state
+                        }
+                        if let address = billingContactInfo["address1"] as? String {
+                            shopper.address = address
+                        }
+                        if let address2 = billingContactInfo["address2"] as? String {
+                            if (shopper.address == nil) {
+                                shopper.address = address2
+                            } else {
+                                shopper.address = shopper.address! + " " + address2
+                            }
+                        }
+                        if let city = billingContactInfo["city"] as? String {
+                            shopper.city = city
+                        }
+                        if let zip = billingContactInfo["zip"] as? String {
+                            shopper.zip = zip
+                        }
+                    }
+                    if let creditCardJson = ccDetailsJson["creditCard"] as? [String: AnyObject] {
+                        if let cardLastFourDigits = creditCardJson["cardLastFourDigits"] as? String {
+                            ccDetails.last4Digits = cardLastFourDigits
+                        }
+                        if let cardType = creditCardJson["cardType"] as? String {
+                            ccDetails.cardType = cardType
+                        }
+                        if let expirationMonth = creditCardJson["expirationMonth"] as? String, let expirationYear = creditCardJson["expirationYear"] as? String {
+                            ccDetails.expirationMonth = expirationMonth
+                            ccDetails.expirationYear = expirationYear
+                        }
+                    }
+                }
+            }
+        }
+        return shopper
+    }
+
     private static func parsePayPalTokenJSON(data: Data?) -> (String?, BSErrors?) {
         
         var resultToken: String?
