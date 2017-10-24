@@ -73,15 +73,55 @@ class BSApiManagerTests: XCTestCase {
                 XCTAssertNil(errors, "Got errors while trying to get currencies")
                 XCTAssertNotNil(sdkData, "Failed to get sdk data")
                 
-                print(sdkData)
+                XCTAssertEqual(700000, sdkData?.kountMID)
                 
-//                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-//                XCTAssertNotNil(gbpCurrency)
-//                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
-//                
-//                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-//                XCTAssertNotNil(eurCurrencyRate)
-//                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                let bsCurrencies = sdkData?.currencyRates
+                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+                XCTAssertNotNil(gbpCurrency)
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+                
+                let shopper = sdkData?.returningShopper
+                XCTAssertNotNil(shopper, "Failed to get shopper")
+                XCTAssertEqual("Hosted Token", shopper?.name)
+                XCTAssertEqual("london", shopper?.city)
+                XCTAssertEqual("CA", shopper?.stateCode)
+                XCTAssertEqual("123456", shopper?.zip)
+                XCTAssertEqual("us", shopper?.countryCode)
+                XCTAssertEqual("ios_test@gmail.com", shopper?.email)
+                XCTAssertEqual("blue lane 21", shopper?.address)
+                let shipping = shopper?.shippingDetails!
+                XCTAssertEqual("Shevie Chen", shipping?.name)
+                XCTAssertEqual("Zoran", shipping?.city)
+                XCTAssertEqual("MA", shipping?.state)
+                XCTAssertEqual("us", shipping?.country)
+                XCTAssertEqual("4282300", shipping?.zip)
+                XCTAssertEqual("58 Hailan st", shipping?.address)
+                XCTAssertEqual("1800808080", shopper?.phone)
+
+                if let existingCreditCards = shopper?.existingCreditCards {
+                    let ccDetails: BSExistingCcDetails = existingCreditCards[0]
+                    XCTAssertEqual("1111", ccDetails.last4Digits)
+                    XCTAssertEqual("VISA", ccDetails.cardType)
+                    XCTAssertEqual("10", ccDetails.expirationMonth)
+                    XCTAssertEqual("2018", ccDetails.expirationYear)
+                    let billing = ccDetails.billingDetails
+                    XCTAssertEqual("Hosted Token", billing?.name)
+                    XCTAssertEqual("london", billing?.city)
+                    XCTAssertEqual("CA", billing?.state)
+                    XCTAssertEqual("us", billing?.country)
+                    XCTAssertEqual("123456", billing?.zip)
+                    XCTAssertEqual("blue lane 21", billing?.address)
+                } else {
+                    XCTFail("No cc in shopper")
+                }
+                
+                let supportedPaymentMethods = sdkData?.supportedPaymentMethods
+                let ccIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.CreditCard, supportedPaymentMethods: supportedPaymentMethods)
+                XCTAssertTrue(ccIsSupported)
+                let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: supportedPaymentMethods)
+                XCTAssertFalse(applePayIsSupported)
+                let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: supportedPaymentMethods)
+                XCTAssertFalse(payPalIsSupported)
                 
                 semaphore.signal()
             })

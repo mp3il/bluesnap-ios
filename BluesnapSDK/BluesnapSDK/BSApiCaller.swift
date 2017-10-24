@@ -84,6 +84,11 @@ import Foundation
                         let shopper = parseShopperJSON(json: shopper)
                         resultData?.returningShopper = shopper
                     }
+                    if let supportedPaymentMethods = json["supportedPaymentMethods"] as? [String: AnyObject] {
+                        let methods = parsePaymentMethodsJSON(json: supportedPaymentMethods)
+                        resultData?.supportedPaymentMethods = methods
+                    }
+
                 } else {
                     resultError = .unknown
                     NSLog("Error parsing BS currency rates")
@@ -276,7 +281,7 @@ import Foundation
             } else {
                 let httpStatusCode:Int? = (response as? HTTPURLResponse)?.statusCode
                 if (httpStatusCode != nil && httpStatusCode! >= 200 && httpStatusCode! <= 299) {
-                    (supportedPaymentMethods, resultError) = parsePaymentMethodsJSON(data: data)
+                    (supportedPaymentMethods, resultError) = parsePaymentMethodsData(data: data)
                 } else {
                     resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
                 }
@@ -602,6 +607,7 @@ import Foundation
         }
         if let shipping = json["shippingContactInfo"] as? [String: AnyObject] {
             let shippingDetails = BSShippingAddressDetails()
+            shopper.shippingDetails = shippingDetails
             if let firstName = shipping["firstName"] as? String
                 , let lastName = shipping["lastName"] as? String {
                 shippingDetails.name = firstName + " " + lastName
@@ -644,26 +650,26 @@ import Foundation
                             ccDetails.billingDetails?.name = firstName + " " + lastName
                         }
                         if let country = billingContactInfo["country"] as? String {
-                            shopper.countryCode = country
+                            ccDetails.billingDetails?.country = country
                         }
                         if let state = billingContactInfo["state"] as? String {
-                            shopper.stateCode = state
+                            ccDetails.billingDetails?.state = state
                         }
                         if let address = billingContactInfo["address1"] as? String {
-                            shopper.address = address
+                            ccDetails.billingDetails?.address = address
                         }
                         if let address2 = billingContactInfo["address2"] as? String {
                             if (shopper.address == nil) {
-                                shopper.address = address2
+                                ccDetails.billingDetails?.address = address2
                             } else {
-                                shopper.address = shopper.address! + " " + address2
+                                ccDetails.billingDetails?.address = shopper.address! + " " + address2
                             }
                         }
                         if let city = billingContactInfo["city"] as? String {
-                            shopper.city = city
+                            ccDetails.billingDetails?.city = city
                         }
                         if let zip = billingContactInfo["zip"] as? String {
-                            shopper.zip = zip
+                            ccDetails.billingDetails?.zip = zip
                         }
                     }
                     if let creditCardJson = ccDetailsJson["creditCard"] as? [String: AnyObject] {
@@ -710,7 +716,7 @@ import Foundation
         return (resultToken, resultError)
     }
     
-    private static func parsePaymentMethodsJSON(data: Data?) -> ([String]?, BSErrors?)  {
+    private static func parsePaymentMethodsData(data: Data?) -> ([String]?, BSErrors?)  {
         
         var resultArr: [String]?
         var resultError: BSErrors?
@@ -718,9 +724,7 @@ import Foundation
             do {
                 // Parse the result JSOn object
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    if let arr = json["paymentMethods"] as? [String] {
-                        resultArr = arr
-                    }
+                    resultArr = parsePaymentMethodsJSON(json: json)
                 } else {
                     resultError = .unknown
                     NSLog("Error parsing BS Supported Payment Methods")
@@ -734,6 +738,15 @@ import Foundation
             NSLog("No BS Supported Payment Methods data exists")
         }
         return (resultArr, resultError)
+    }
+    
+    private static func parsePaymentMethodsJSON(json: [String: AnyObject]) -> [String]?  {
+        
+        var resultArr: [String]?
+        if let arr = json["paymentMethods"] as? [String] {
+            resultArr = arr
+        }
+         return resultArr
     }
     
     private static func extractTokenFromResponse(httpResponse: HTTPURLResponse?, domain: String!) -> BSToken? {
