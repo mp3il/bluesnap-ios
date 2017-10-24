@@ -62,7 +62,6 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         initialData : BSInitialData!,
-        supportedPaymentMethods: [String]?,
         purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
         if startScreen == nil {
@@ -71,7 +70,7 @@ class BSViewsManager {
             startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
         }
 
-        startScreen.initScreen(initialData: initialData, supportedPaymentMethods: supportedPaymentMethods, purchaseFunc: purchaseFunc)
+        startScreen.initScreen(initialData: initialData, supportedPaymentMethods: BSApiManager.supportedPaymentMethods, purchaseFunc: purchaseFunc)
 
         inNavigationController.pushViewController(startScreen, animated: animated)
     }

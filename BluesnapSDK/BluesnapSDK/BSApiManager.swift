@@ -107,10 +107,26 @@ import Foundation
                 regenerateToken(executeAfter: { _ in
                     BSApiCaller.getSdkData(bsToken: getBsToken(), completion: { sdkData2, resultError2 in
                         
+                        if resultError2 == nil {
+                            self.lastCurrencyFetchDate = Date()
+                            self.lastSupportedPaymentMethodsFetchDate = Date()
+                        }
+                        if let sdkData = sdkData2 {
+                            self.bsCurrencies = sdkData.currencyRates
+                            self.supportedPaymentMethods = sdkData.supportedPaymentMethods
+                        }
                         completion(sdkData2, resultError2)
                     })
                 })
             } else {
+                if resultError == nil {
+                    self.lastCurrencyFetchDate = Date()
+                    self.lastSupportedPaymentMethodsFetchDate = Date()
+                }
+                if let sdkData = sdkData {
+                    self.bsCurrencies = sdkData.currencyRates
+                    self.supportedPaymentMethods = sdkData.supportedPaymentMethods
+                }
                 completion(sdkData, resultError)
             }
         })

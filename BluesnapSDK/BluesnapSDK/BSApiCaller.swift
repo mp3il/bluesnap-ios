@@ -572,7 +572,7 @@ import Foundation
     
     private static func parseShopperJSON(json: [String: AnyObject]) -> BSReturningShopperData {
         
-        var shopper = BSReturningShopperData()
+        let shopper = BSReturningShopperData()
         if let firstName = json["firstName"] as? String
             , let lastName = json["lastName"] as? String {
             shopper.name = firstName + " " + lastName
@@ -613,29 +613,29 @@ import Foundation
                 shippingDetails.name = firstName + " " + lastName
             }
             if let country = shipping["country"] as? String {
-                shopper.countryCode = country
+                shippingDetails.country = country
             }
             if let state = shipping["state"] as? String {
-                shopper.stateCode = state
+                shippingDetails.state = state
             }
             if let address = shipping["address1"] as? String {
-                shopper.address = address
+                shippingDetails.address = address
             }
             if let address2 = shipping["address2"] as? String {
                 if (shopper.address == nil) {
-                    shopper.address = address2
+                    shippingDetails.address = address2
                 } else {
-                    shopper.address = shopper.address! + " " + address2
+                    shippingDetails.address = shopper.address! + " " + address2
                 }
             }
             if let city = shipping["city"] as? String {
-                shopper.city = city
+                shippingDetails.city = city
             }
             if let zip = shipping["zip"] as? String {
-                shopper.zip = zip
+                shippingDetails.zip = zip
             }
             if let phone = shipping["phone"] as? String {
-                shopper.phone = phone
+                shippingDetails.phone = phone
             }
         }
         if let paymentSources = json["paymentSources"] as? [String: AnyObject] {

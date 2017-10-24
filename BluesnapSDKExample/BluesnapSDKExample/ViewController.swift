@@ -97,7 +97,9 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             // open the purchase screen
             self.fillInitialData()
-            BlueSnapSDK.showCheckoutScreen(
+            BlueSnapSDK.initStandardCheckoutFlow(
+                bsToken: self.bsToken,
+                generateTokenFunc: self.generateAndSetBsToken,
                 inNavigationController: self.navigationController,
                 animated: true,
                 initialData: self.initialData,
@@ -402,7 +404,6 @@ class ViewController: UIViewController {
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
         self.coverAllView.isHidden = false
-        BlueSnapSDK.setGenerateBsTokenFunc(generateTokenFunc: generateAndSetBsToken)
         generateAndSetBsToken(completion: { resultToken, errors in
             
             //Init Kount

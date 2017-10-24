@@ -23,8 +23,50 @@ import PassKit
     // MARK: SDK functions
     
     /**
+     Inititalize and start the BlueSnap checkout flow
+     
+     - parameters:
+     - bsToken: BlueSnap token, should be fresh and valid
+     - generateTokenFunc: callback function for generating a new token
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+     - initialData: initial payment details + flow settings
+     - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
+     */
+    open class func initStandardCheckoutFlow(
+        bsToken : BSToken!,
+        generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void,
+        inNavigationController: UINavigationController!,
+        animated: Bool,
+        initialData : BSInitialData!,
+        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
+        
+        BSApiManager.setBsToken(bsToken: bsToken)
+        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
+        
+        BSApiManager.getSdkData(completion: { sdkData, error in
+        
+            if let error = error {
+                NSLog("Failed to fetch data for Bluesnap SDK")
+                return
+            }
+            
+            adjustInitialData(initialData: initialData)
+            
+            DispatchQueue.main.async {
+                BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
+                                               animated: animated,
+                                               initialData: initialData,
+                                               purchaseFunc: purchaseFunc)
+            }
+
+        })
+        
+    }
+    
+    /**
      Set the token used for BS API
-     This needs to be done before calling any of the methods below
+     This needs to be done when generating a new token (after token expiration)
      
      - parameters:
      - bsToken: BlueSnap token, should be fresh and valid
@@ -32,46 +74,6 @@ import PassKit
     open class func setBsToken(bsToken : BSToken!) {
         
         BSApiManager.setBsToken(bsToken: bsToken)
-    }
-    
-    /**
-     Set the token re-generation method to be used for BS API when token expires
-     This needs to be done before calling any of the methods below
-     
-     - parameters:
-     - generateTokenFunc: callback function for generating a new token
-     */
-    open class func setGenerateBsTokenFunc(generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void) {
-        
-        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
-    }
-
-    /**
-     Start the check-out flow, where the shopper payment details are entered.
-     
-     - parameters:
-     - inNavigationController: your viewController's navigationController (to be able to navigate back)
-     - animated: how to navigate to the new screen
-     - initialData: initial payment details + flow settings
-     - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
-     */
-    open class func showCheckoutScreen(
-        inNavigationController: UINavigationController!,
-        animated: Bool,
-        initialData : BSInitialData!,
-        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
-        
-        adjustInitialData(initialData: initialData)
-        
-        BSApiManager.getSupportedPaymentMethods(completion: {methods, error in
-            DispatchQueue.main.async {
-                BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
-                                               animated: animated,
-                                               initialData: initialData,
-                                               supportedPaymentMethods: methods,
-                                               purchaseFunc: purchaseFunc)
-            }
-        })
     }
     
     /**
