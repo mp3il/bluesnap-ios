@@ -113,14 +113,13 @@
 		D4C1F041334E92065E9D2639 /* Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		DD1DA5729FE41DCDE3370A44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A1D0EF03F84A1CE191C991 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		FD461F601F42E3A90050F0FD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FD08882D1FA9E5B2001EED4C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD50228E1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentTypeScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
 		FD68146E1F405EAD00FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD89AB631EB6038600A1B257 /* DemoTransactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoTransactions.swift; sourceTree = "<group>"; };
-		FD9197341F443A8A008C266A /* de */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = de; path = de.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYouViewController.swift; sourceTree = "<group>"; };
 		FDF8D73E1F7A76B300CE19A5 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FDF8D73F1F7A76F000CE19A5 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -369,7 +368,6 @@
 			knownRegions = (
 				en,
 				Base,
-				de,
 				sq,
 				bg,
 				"zh-Hans",
@@ -392,6 +390,7 @@
 				es,
 				sv,
 				tr,
+				de,
 			);
 			mainGroup = 2D4E27761E8808A700C56C46;
 			productRefGroup = 2D4E27801E8808A700C56C46 /* Products */;
@@ -512,7 +511,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				2D4E27871E8808A700C56C46 /* Base */,
-				FD9197341F443A8A008C266A /* de */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -529,7 +527,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				FD68146E1F405EAD00FAE1ED /* Base */,
-				FD461F601F42E3A90050F0FD /* de */,
 				FDF8D73E1F7A76B300CE19A5 /* sq */,
 				FDF8D73F1F7A76F000CE19A5 /* bg */,
 				FDF8D7401F7A770A00CE19A5 /* zh-Hans */,
@@ -552,6 +549,7 @@
 				FDF8D7511F7A783F00CE19A5 /* es */,
 				FDF8D7521F7A784800CE19A5 /* sv */,
 				FDF8D7531F7A785000CE19A5 /* tr */,
+				FD08882D1FA9E5B2001EED4C /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

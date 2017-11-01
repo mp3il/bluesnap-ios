@@ -125,9 +125,9 @@
 
 
 /* The format of the Pay button text: the word Pay and then the currency and then the amount with a 2 digit precision */
-"Payment_Pay_Button_Format" = "Pagar %.2f %@";
+"Payment_Pay_Button_Format" = "Pagar %@%.2f";
 /* The format of the Subtotal/Tax amount label: the currency and then the amount with a 2 digit precision */
-"Payment_subtotal_and_tax_format" = "%.2f %@";
+"Payment_subtotal_and_tax_format" = "%@%.2f";
 /* The text of the Pay button in the Payment screen in case we have shipping */
 "Payment_Shipping_Button" = "Envío >";
 
