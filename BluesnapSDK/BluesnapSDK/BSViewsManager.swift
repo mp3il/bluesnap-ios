@@ -267,23 +267,26 @@ class BSViewsManager {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
-        let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
-            if let paymentRequest = paymentRequest {
-                BSViewsManager.showCurrencyList(
-                    inNavigationController: inNavigationController,
-                    animated: true,
-                    selectedCurrencyCode: paymentRequest.getCurrency(),
-                    updateFunc: updateCurrencyFunc,
-                    errorFunc: errorFunc)
+        // Add change currency menu item
+        if paymentRequest?.getCurrency() ?? "USD" == "USD" {
+            // patch for base currency - do not allow changing currency if the base is not USD
+            let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
+            let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
+                if let paymentRequest = paymentRequest {
+                    BSViewsManager.showCurrencyList(
+                        inNavigationController: inNavigationController,
+                        animated: true,
+                        selectedCurrencyCode: paymentRequest.getCurrency(),
+                        updateFunc: updateCurrencyFunc,
+                        errorFunc: errorFunc)
+                }
             }
+            menu.addAction(currencyMenuOption)
         }
         
+        // Add Cancel menu item
         let cancelMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Cancel)
         let cancelMenuOption = UIAlertAction(title: cancelMenuTitle, style: UIAlertActionStyle.cancel, handler: nil)
-        
-        // relate actions to controllers
-        menu.addAction(currencyMenuOption)
         menu.addAction(cancelMenuOption)
         
         //presentViewController(otherAlert, animated: true, completion: nil)

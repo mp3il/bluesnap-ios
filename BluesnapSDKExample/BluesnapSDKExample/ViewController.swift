@@ -200,8 +200,8 @@ class ViewController: UIViewController {
                 priceDetails.taxAmount = priceDetails.taxAmount.doubleValue * newCurrency.getRateNSNumber().doubleValue as NSNumber
             }
 
-            valueTextField.text = String(describing: priceDetails.amount)
-            taxTextField.text = String(describing: priceDetails.taxAmount)
+            valueTextField.text = String(format: "%.2f", CGFloat(priceDetails.amount ?? 0))
+            taxTextField.text = String(format: "%.2f", CGFloat(priceDetails.taxAmount ?? 0))
             currencyButton.titleLabel?.text = priceDetails.currency
         }
     }
