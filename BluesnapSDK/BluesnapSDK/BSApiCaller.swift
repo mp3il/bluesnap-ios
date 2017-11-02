@@ -175,9 +175,9 @@ import Foundation
      - bsToken: a token for BlueSnap tokenized services
      - completion: a callback function to be called once the data is fetched; receives optional currency data and optional error
      */
-    static func getCurrencyRates(bsToken: BSToken!, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+    static func getCurrencyRates(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
         
-        let urlStr = bsToken.serverUrl + "services/2/tokenized-services/rates"
+        let urlStr = bsToken.serverUrl + "services/2/tokenized-services/rates?base-currency=" + (baseCurrency ?? "USD")
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -549,10 +549,12 @@ import Foundation
     private static func parseCurrenciesJSON(json: [String: AnyObject]) -> BSCurrencies {
         
         var currencies: [BSCurrency] = []
+        var baseCurrency = "USD"
         if let currencyName = json["baseCurrencyName"] as? String
             , let currencyCode = json["baseCurrency"] as? String {
             let bsCurrency = BSCurrency(name: currencyName, code: currencyCode, rate: 1.0)
             currencies.append(bsCurrency)
+            baseCurrency = currencyCode
         }
         if let exchangeRatesArr = json["exchangeRate"] as? [[String: Any]] {
             for exchangeRateItem in exchangeRatesArr {
@@ -567,7 +569,7 @@ import Foundation
         currencies = currencies.sorted {
             $0.name < $1.name
         }
-        return BSCurrencies(currencies: currencies)
+        return BSCurrencies(baseCurrency: baseCurrency, currencies: currencies)
     }
     
     private static func parseShopperJSON(json: [String: AnyObject]) -> BSReturningShopperData {

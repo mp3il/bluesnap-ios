@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
     final fileprivate let initialShippingCoutry = "US"
     final fileprivate let initialShippingState = "MA"
+    final fileprivate let baseCurrency = "USD"
 
 
     // MARK: - UIViewController's methods
@@ -118,7 +119,7 @@ class ViewController: UIViewController {
             BlueSnapSDK.showCurrencyList(
                 inNavigationController: self.navigationController,
                 animated: true,
-                selectedCurrencyCode: self.initialData.priceDetails.currency,
+                selectedCurrencyCode: self.initialData.priceDetails.currency, baseCurrency: self.baseCurrency,
                 updateFunc: self.updateViewWithNewCurrency,
                 errorFunc: {
                     self.showErrorAlert(message: "Failed to display currency List, please try again")

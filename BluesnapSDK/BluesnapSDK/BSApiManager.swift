@@ -27,7 +27,6 @@ import Foundation
     // MARK: private properties
     internal static var bsCurrencies: BSCurrencies?
     internal static var supportedPaymentMethods: [String]?
-    internal static var lastCurrencyFetchDate: Date?
     internal static var lastSupportedPaymentMethodsFetchDate: Date?
     internal static var apiToken: BSToken?
     internal static var payPalToken : String?
@@ -108,11 +107,9 @@ import Foundation
                     BSApiCaller.getSdkData(bsToken: getBsToken(), completion: { sdkData2, resultError2 in
                         
                         if resultError2 == nil {
-                            self.lastCurrencyFetchDate = Date()
                             self.lastSupportedPaymentMethodsFetchDate = Date()
                         }
                         if let sdkData = sdkData2 {
-                            self.bsCurrencies = sdkData.currencyRates
                             self.supportedPaymentMethods = sdkData.supportedPaymentMethods
                         }
                         completion(sdkData2, resultError2)
@@ -120,7 +117,6 @@ import Foundation
                 })
             } else {
                 if resultError == nil {
-                    self.lastCurrencyFetchDate = Date()
                     self.lastSupportedPaymentMethodsFetchDate = Date()
                 }
                 if let sdkData = sdkData {
@@ -135,14 +131,15 @@ import Foundation
     /**
         Return a list of currencies and their rates from BlueSnap server
      - parameters:
+     - baseCurrency: optional base currency code; default is USD
      - completion: function to be called after data is received; will receive optional currency data and optional error
     */
-    static func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+    static func getCurrencyRates(baseCurrency: String?, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
 
         let bsToken = getBsToken()
 
-        if let lastCurrencyFetchDate = lastCurrencyFetchDate, let _ = bsCurrencies {
-            let diff = lastCurrencyFetchDate.timeIntervalSinceNow as Double // interval in seconds
+        if let bsCurrencies = self.bsCurrencies {
+            let diff = bsCurrencies.getCreationDate().timeIntervalSinceNow as Double // interval in seconds
             if (diff > TIME_DIFF_TO_RELOAD) {
                 completion(bsCurrencies, nil)
                 return
@@ -150,33 +147,25 @@ import Foundation
         }
 
         NSLog("BlueSnap; getCurrencyRates")
-        BSApiCaller.getCurrencyRates(bsToken: bsToken, completion: {
+        BSApiCaller.getCurrencyRates(bsToken: bsToken, baseCurrency: baseCurrency, completion: {
             resultCurrencies, resultError in
             
             NSLog("BlueSnap; getCurrencyRates completion")
             if resultError == .unAuthorised {
-                BSApiCaller.isTokenExpired(bsToken: bsToken, completion: { isExpired in
-                    if isExpired {
-                        // regenerate Token and try again
-                        regenerateToken(executeAfter: { _ in
-                            BSApiCaller.getCurrencyRates(bsToken: getBsToken(), completion: { resultCurrencies2, resultError2 in
-                                
-                                if resultError2 == nil {
-                                    bsCurrencies = resultCurrencies2
-                                    self.lastCurrencyFetchDate = Date()
-                                }
-                                completion(bsCurrencies, resultError2)
-                            })
-                        })
-                    } else {
-                        completion(bsCurrencies, resultError)
-                    }
+                // Assume token expired: regenerate Token and try again
+                regenerateToken(executeAfter: { _ in
+                    BSApiCaller.getCurrencyRates(bsToken: getBsToken(), baseCurrency: baseCurrency, completion: { resultCurrencies2, resultError2 in
+                        
+                        if resultError2 == nil {
+                            bsCurrencies = resultCurrencies2
+                        }
+                        completion(bsCurrencies, resultError2)
+                    })
                 })
-                
+            
             } else {
                 if (resultError == nil) {
                     bsCurrencies = resultCurrencies
-                    self.lastCurrencyFetchDate = Date()
                 }
                 completion(bsCurrencies, resultError)
             }

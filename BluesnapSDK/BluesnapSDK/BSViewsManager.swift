@@ -134,6 +134,7 @@ class BSViewsManager {
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
+     - baseCurrency: optional string with the base currency code, default is USD
      - updateFunc: callback; will be called each time a new value is selected
      - errorFunc: callback; will be called if we fail to get the currencies
      */
@@ -141,10 +142,11 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
+        baseCurrency: String?,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
         errorFunc: @escaping ()->Void) {
         
-        BSApiManager.getCurrencyRates(completion: { currencies, errors in
+        BSApiManager.getCurrencyRates(baseCurrency: baseCurrency, completion: { currencies, errors in
             
             if errors != nil || currencies == nil {
                 NSLog("Failed to fetch currency rates from BlueSnap server")
@@ -268,21 +270,19 @@ class BSViewsManager {
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
         // Add change currency menu item
-        if paymentRequest?.getCurrency() ?? "USD" == "USD" {
-            // patch for base currency - do not allow changing currency if the base is not USD
-            let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
-            let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
-                if let paymentRequest = paymentRequest {
-                    BSViewsManager.showCurrencyList(
-                        inNavigationController: inNavigationController,
-                        animated: true,
-                        selectedCurrencyCode: paymentRequest.getCurrency(),
-                        updateFunc: updateCurrencyFunc,
-                        errorFunc: errorFunc)
-                }
+        let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
+        let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
+            if let paymentRequest = paymentRequest {
+                BSViewsManager.showCurrencyList(
+                    inNavigationController: inNavigationController,
+                    animated: true,
+                    selectedCurrencyCode: paymentRequest.getCurrency(),
+                    baseCurrency: paymentRequest.getBaseCurrency(),
+                    updateFunc: updateCurrencyFunc,
+                    errorFunc: errorFunc)
             }
-            menu.addAction(currencyMenuOption)
         }
+        menu.addAction(currencyMenuOption)
         
         // Add Cancel menu item
         let cancelMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Cancel)

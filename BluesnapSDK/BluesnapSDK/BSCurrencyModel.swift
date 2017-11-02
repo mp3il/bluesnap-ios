@@ -32,13 +32,20 @@ import Foundation
 
 @objc public class BSCurrencies: NSObject {
     
+    internal var baseCurrency : String = "USD"
+    internal var creationDate : Date = Date()
     internal var currencies : [BSCurrency] = []
 
-    internal init(currencies : [BSCurrency]) {
+    internal init(baseCurrency: String, currencies : [BSCurrency]) {
         
+        self.baseCurrency = baseCurrency
         self.currencies = currencies
     }
 
+    func getCreationDate() -> Date {
+        return creationDate
+    }
+    
     @objc public func getCurrencyByCode(code: String!) -> BSCurrency? {
         
         for currency in currencies {

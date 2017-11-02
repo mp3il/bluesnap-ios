@@ -53,9 +53,9 @@ class BSCurrenciesViewController: BSBaseListController {
             filteredItems = self.bsCurrencies
         } else if let bsCurrencies = self.bsCurrencies {
             let filtered = bsCurrencies.currencies.filter{(x) -> Bool in (x.name.uppercased().range(of:searchText.uppercased())) != nil }
-            filteredItems = BSCurrencies(currencies: filtered)
+            filteredItems = BSCurrencies(baseCurrency: bsCurrencies.baseCurrency, currencies: filtered)
         } else {
-            filteredItems = BSCurrencies(currencies: [])
+            filteredItems = BSCurrencies(baseCurrency: "USD", currencies: [])
         }
         generateGroups()
         self.tableView.reloadData()

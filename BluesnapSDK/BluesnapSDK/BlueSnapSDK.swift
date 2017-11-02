@@ -94,10 +94,11 @@ import PassKit
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
+     - baseCurrency: optional base currency code; default is USD
      - completion: after the data is fetched, this function will be called with optional currency data and optional error
      */
-    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
-        BSApiManager.getCurrencyRates(completion: completion)
+    open class func getCurrencyRates(baseCurrency: String?, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+        BSApiManager.getCurrencyRates(baseCurrency: baseCurrency, completion: completion)
     }
 
     /**
@@ -107,6 +108,7 @@ import PassKit
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
+     - baseCurrency: optional base currency code (for conversion rates), default is USD
      - updateFunc: callback; will be called each time a new value is selected
      - errorFunc: callback; will be called if we fail to get the currencies
      */
@@ -114,10 +116,11 @@ import PassKit
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
+        baseCurrency: String?,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
         errorFunc: @escaping()->Void) {
         
-        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc, errorFunc: errorFunc)
+        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, baseCurrency: baseCurrency, updateFunc: updateFunc, errorFunc: errorFunc)
     }
     
     /**
