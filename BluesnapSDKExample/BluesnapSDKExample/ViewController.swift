@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     final fileprivate let initialShippingCoutry = "US"
     final fileprivate let initialShippingState = "MA"
     final fileprivate let baseCurrency = "USD"
+    final fileprivate let applePayMerchantIdentifier = "merchant.com.example.bluesnap"
 
 
     // MARK: - UIViewController's methods
@@ -42,8 +43,6 @@ class ViewController: UIViewController {
 		
 		registerTapToHideKeyboard()
         
-        setApplePayIdentifier()
-
         resultTextView.text = ""
         
         // Example of using BSImageLibrary
@@ -386,10 +385,7 @@ class ViewController: UIViewController {
         NSLog("--------------------------------------------------------")
     }
     
-    
-    func setApplePayIdentifier() {
-        _ = BlueSnapSDK.setApplePayMerchantIdentifier(merchantId: "merchant.com.example.bluesnap")
-    }
+
 
     // MARK: BS Token functions
     
@@ -413,6 +409,7 @@ class ViewController: UIViewController {
                     generateTokenFunc: self.generateAndSetBsToken,
                     initKount: self.shouldInitKount,
                     fraudSessionId: nil,
+                    applePayMerchantIdentifier: self.applePayMerchantIdentifier,
                     baseCurrency: self.baseCurrency,
                     completion: { error in
                         DispatchQueue.main.async {

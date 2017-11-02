@@ -38,6 +38,7 @@ import PassKit
         generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void,
         initKount: Bool,
         fraudSessionId: String?,
+        applePayMerchantIdentifier: String?,
         baseCurrency : String?,
         completion: @escaping (BSErrors?)->Void) {
         
@@ -54,6 +55,9 @@ import PassKit
             if let sdkData = sdkData {
                 if initKount {
                     KountInit(kountMid: sdkData.kountMID! as NSNumber, customFraudSessionId: fraudSessionId)
+                }
+                if let applePayMerchantIdentifier = applePayMerchantIdentifier {
+                    BSApplePayConfiguration.setIdentifier(merchantId: applePayMerchantIdentifier)
                 }
                 completion(nil)
             } else {
@@ -133,46 +137,6 @@ import PassKit
         BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc, errorFunc: errorFunc)
     }
     
-    /**
-     Call Kount SDK to initialize device data collection in a background thread
-     - parameters:
-     - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
-     - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction
-    */
-    @objc open class func KountInit(kountMid: NSNumber? , customFraudSessionId : String?) {
-
-        if customFraudSessionId != nil {
-            BlueSnapSDK.fraudSessionId = customFraudSessionId!
-        } else {
-            BlueSnapSDK.fraudSessionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
-        }
-        
-        //// Configure the Data Collector
-        //KDataCollector.shared().debug = true
-        if (kountMid != nil) {
-            KDataCollector.shared().merchantID = kountMid!.intValue
-        } else {
-            KDataCollector.shared().merchantID = 700000
-        }
-        // Optional Set the location collection configuration
-        KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.passive
-        
-        if BSApiManager.isProductionToken() {
-            KDataCollector.shared().environment = KEnvironment.production
-        } else {
-            KDataCollector.shared().environment = KEnvironment.test
-        }
-        NSLog("Kount session ID: \(BlueSnapSDK.fraudSessionId ?? "")")
-        if let fraudSessionId = BlueSnapSDK.fraudSessionId {
-            KDataCollector.shared().collect(forSession: fraudSessionId) { (sessionID, success, error) in
-                if success {
-                    NSLog("Kount collection success")
-                } else {
-                    NSLog("Kount collection failed")
-                }
-            }
-        }
-    }
     
     /**
      Fetch the merchant's supported Payment Methods
@@ -238,14 +202,50 @@ import PassKit
 //        }
 //    }
 
-
-    open class func setApplePayMerchantIdentifier(merchantId: String!) -> String? {
-        BSApplePayConfiguration.setIdentifier(merchantId: merchantId)
-        return "OK"
-    }
     
     // MARK: Private functions
     
+    /**
+     Call Kount SDK to initialize device data collection in a background thread
+     - parameters:
+     - kountMid: if you have your own Kount MID, send it here; otherwise leave empty
+     - fraudSessionID: this unique ID per shopper should be sent later to BlueSnap when creating the transaction
+     */
+    private static func KountInit(kountMid: NSNumber? , customFraudSessionId : String?) {
+        
+        if customFraudSessionId != nil {
+            BlueSnapSDK.fraudSessionId = customFraudSessionId!
+        } else {
+            BlueSnapSDK.fraudSessionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        }
+        
+        //// Configure the Data Collector
+        //KDataCollector.shared().debug = true
+        if (kountMid != nil) {
+            KDataCollector.shared().merchantID = kountMid!.intValue
+        } else {
+            KDataCollector.shared().merchantID = 700000
+        }
+        // Optional Set the location collection configuration
+        KDataCollector.shared().locationCollectorConfig = KLocationCollectorConfig.passive
+        
+        if BSApiManager.isProductionToken() {
+            KDataCollector.shared().environment = KEnvironment.production
+        } else {
+            KDataCollector.shared().environment = KEnvironment.test
+        }
+        NSLog("Kount session ID: \(BlueSnapSDK.fraudSessionId ?? "")")
+        if let fraudSessionId = BlueSnapSDK.fraudSessionId {
+            KDataCollector.shared().collect(forSession: fraudSessionId) { (sessionID, success, error) in
+                if success {
+                    NSLog("Kount collection success")
+                } else {
+                    NSLog("Kount collection failed")
+                }
+            }
+        }
+    }
+
     private class func adjustInitialData(initialData: BSInitialData!) {
         
         let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
