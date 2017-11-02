@@ -23,45 +23,70 @@ import PassKit
     // MARK: SDK functions
     
     /**
-     Inititalize and start the BlueSnap checkout flow
+     Inititalize BlueSnap SDK - this function must be called before any other function in the SDK
      
      - parameters:
      - bsToken: BlueSnap token, should be fresh and valid
      - generateTokenFunc: callback function for generating a new token
+     - initKount: true if you want to initialize the Kount device data collection for fraud (recommended: True)
+     - fraudSessionId: a unique ID (up to 32 characters) for the shopper session - optional (if empty, a new oine is generated)
+     - baseCurrency: base currency code for currency rate calculations
+     - completion: callback; will be called when the init process is done. Only then can you proceed to call other functions in the SDK
+     */
+    open class func initBluesnap(
+        bsToken : BSToken!,
+        generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void,
+        initKount: Bool,
+        fraudSessionId: String?,
+        baseCurrency : String?,
+        completion: @escaping (BSErrors?)->Void) {
+        
+        BSApiManager.setBsToken(bsToken: bsToken)
+        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
+        
+        BSApiManager.getSdkData(baseCurrency: baseCurrency, completion: { sdkData, error in
+        
+            if let error = error {
+                NSLog("Failed to fetch data for Bluesnap SDK. error: \(error)")
+                return
+            }
+            
+            if let sdkData = sdkData {
+                if initKount {
+                    KountInit(kountMid: sdkData.kountMID! as NSNumber, customFraudSessionId: fraudSessionId)
+                }
+                completion(nil)
+            } else {
+                completion(BSErrors.unknown)
+            }
+
+        })
+        
+    }
+    
+    /**
+     Start the BlueSnap checkout flow
+     
+     - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - initialData: initial payment details + flow settings
      - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
-    open class func initStandardCheckoutFlow(
-        bsToken : BSToken!,
-        generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void,
+    open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
         initialData : BSInitialData!,
         purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
         
-        BSApiManager.setBsToken(bsToken: bsToken)
-        BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
+        adjustInitialData(initialData: initialData)
         
-        BSApiManager.getSdkData(completion: { sdkData, error in
-        
-            if let error = error {
-                NSLog("Failed to fetch data for Bluesnap SDK")
-                return
-            }
-            
-            adjustInitialData(initialData: initialData)
-            
-            DispatchQueue.main.async {
-                BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
-                                               animated: animated,
-                                               initialData: initialData,
-                                               purchaseFunc: purchaseFunc)
-            }
-
-        })
-        
+        DispatchQueue.main.async {
+            BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
+                                           animated: animated,
+                                           initialData: initialData,
+                                           purchaseFunc: purchaseFunc)
+        }
     }
     
     /**
@@ -94,11 +119,10 @@ import PassKit
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
-     - baseCurrency: optional base currency code; default is USD
      - completion: after the data is fetched, this function will be called with optional currency data and optional error
      */
-    open class func getCurrencyRates(baseCurrency: String?, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
-        BSApiManager.getCurrencyRates(baseCurrency: baseCurrency, completion: completion)
+    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+        BSApiManager.getCurrencyRates(completion: completion)
     }
 
     /**
@@ -108,7 +132,6 @@ import PassKit
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
-     - baseCurrency: optional base currency code (for conversion rates), default is USD
      - updateFunc: callback; will be called each time a new value is selected
      - errorFunc: callback; will be called if we fail to get the currencies
      */
@@ -116,11 +139,10 @@ import PassKit
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        baseCurrency: String?,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
         errorFunc: @escaping()->Void) {
         
-        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, baseCurrency: baseCurrency, updateFunc: updateFunc, errorFunc: errorFunc)
+        BSViewsManager.showCurrencyList(inNavigationController: inNavigationController, animated: animated, selectedCurrencyCode: selectedCurrencyCode, updateFunc: updateFunc, errorFunc: errorFunc)
     }
     
     /**

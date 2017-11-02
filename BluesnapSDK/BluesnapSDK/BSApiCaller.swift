@@ -28,11 +28,12 @@ import Foundation
      
      - parameters:
      - bsToken: a token for BlueSnap tokenized services
+     - baseCurrency: optional base currency for currency rates; default = USD
      - completion: a callback function to be called once the data is fetched; receives optional data and optional error
      */
-    static func getSdkData(bsToken: BSToken!, completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
+    static func getSdkData(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
         
-        let urlStr = bsToken.serverUrl + "services/2/tokenized-services/sdk-init"
+        let urlStr = bsToken.serverUrl + "services/2/tokenized-services/sdk-init?base-currency=" + (baseCurrency ?? "USD")
         let url = NSURL(string: urlStr)!
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

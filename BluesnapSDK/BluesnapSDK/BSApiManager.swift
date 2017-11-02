@@ -89,14 +89,15 @@ import Foundation
     /**
      Return a list of currencies and their rates from BlueSnap server
      - parameters:
+     - baseCurrency: optional base currency for currency rates; default = USD
      - completion: function to be called after data is received; will receive optional currency data and optional error
      */
-    static func getSdkData(completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
+    static func getSdkData(baseCurrency: String?, completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
         
         let bsToken = getBsToken()
         
         NSLog("BlueSnap; getSdkData")
-        BSApiCaller.getSdkData(bsToken: bsToken, completion: {
+        BSApiCaller.getSdkData(bsToken: bsToken, baseCurrency: baseCurrency, completion: {
             sdkData, resultError in
             
             NSLog("BlueSnap; getSdkData completion")
@@ -104,7 +105,7 @@ import Foundation
                 
                 // regenerate Token and try again
                 regenerateToken(executeAfter: { _ in
-                    BSApiCaller.getSdkData(bsToken: getBsToken(), completion: { sdkData2, resultError2 in
+                    BSApiCaller.getSdkData(bsToken: getBsToken(), baseCurrency: baseCurrency, completion: { sdkData2, resultError2 in
                         
                         if resultError2 == nil {
                             self.lastSupportedPaymentMethodsFetchDate = Date()
@@ -131,10 +132,9 @@ import Foundation
     /**
         Return a list of currencies and their rates from BlueSnap server
      - parameters:
-     - baseCurrency: optional base currency code; default is USD
      - completion: function to be called after data is received; will receive optional currency data and optional error
     */
-    static func getCurrencyRates(baseCurrency: String?, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
+    static func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
 
         let bsToken = getBsToken()
 
@@ -147,6 +147,7 @@ import Foundation
         }
 
         NSLog("BlueSnap; getCurrencyRates")
+        let baseCurrency = self.bsCurrencies?.baseCurrency
         BSApiCaller.getCurrencyRates(bsToken: bsToken, baseCurrency: baseCurrency, completion: {
             resultCurrencies, resultError in
             

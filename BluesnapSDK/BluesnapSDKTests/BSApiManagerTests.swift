@@ -65,10 +65,14 @@ class BSApiManagerTests: XCTestCase {
     func testGetSdkData() {
         
         let semaphore = DispatchSemaphore(value: 0)
-        let shopperId : Int? = 22208751
+        let shopperId : Int? = 22061813 //22208751
         createTokenWithShopperId(shopperId: shopperId, completion: { token, error in
             
-            BSApiManager.getSdkData(completion: { sdkData, errors in
+            if let error = error {
+                fatalError("Create Token with shopper ID failed. error: \(error)")
+            }
+            
+            BSApiManager.getSdkData(baseCurrency: nil, completion: { sdkData, errors in
                 
                 XCTAssertNil(errors, "Got errors while trying to get currencies")
                 XCTAssertNotNil(sdkData, "Failed to get sdk data")
@@ -82,35 +86,38 @@ class BSApiManagerTests: XCTestCase {
                 
                 let shopper = sdkData?.returningShopper
                 XCTAssertNotNil(shopper, "Failed to get shopper")
-                XCTAssertEqual("Hosted Token", shopper?.name)
-                XCTAssertEqual("london", shopper?.city)
+                XCTAssertEqual("Slim Aklij", shopper?.name)
+                XCTAssertEqual("Sixty", shopper?.city)
                 XCTAssertEqual("CA", shopper?.stateCode)
-                XCTAssertEqual("123456", shopper?.zip)
+                XCTAssertEqual("123123", shopper?.zip)
                 XCTAssertEqual("us", shopper?.countryCode)
-                XCTAssertEqual("ios_test@gmail.com", shopper?.email)
-                XCTAssertEqual("blue lane 21", shopper?.address)
-                let shipping = shopper?.shippingDetails!
+                XCTAssertEqual("A@n.cin", shopper?.email)
+                XCTAssertEqual("strings", shopper?.address)
+                
+                let shipping = shopper?.shippingDetails
+                XCTAssertNil(shipping)
+                /*let shipping = shopper?.shippingDetails!
                 XCTAssertEqual("Shevie Chen", shipping?.name)
                 XCTAssertEqual("Zoran", shipping?.city)
                 XCTAssertEqual("MA", shipping?.state)
                 XCTAssertEqual("us", shipping?.country)
                 XCTAssertEqual("4282300", shipping?.zip)
                 XCTAssertEqual("58 Hailan st", shipping?.address)
-                XCTAssertEqual("1800808080", shopper?.phone)
+                XCTAssertEqual(nil, shopper?.phone)*/
 
                 if let existingCreditCards = shopper?.existingCreditCards {
                     let ccDetails: BSExistingCcDetails = existingCreditCards[0]
                     XCTAssertEqual("1111", ccDetails.last4Digits)
                     XCTAssertEqual("VISA", ccDetails.cardType)
-                    XCTAssertEqual("10", ccDetails.expirationMonth)
-                    XCTAssertEqual("2018", ccDetails.expirationYear)
+                    XCTAssertEqual("11", ccDetails.expirationMonth)
+                    XCTAssertEqual("2022", ccDetails.expirationYear)
                     let billing = ccDetails.billingDetails
-                    XCTAssertEqual("Hosted Token", billing?.name)
-                    XCTAssertEqual("london", billing?.city)
+                    XCTAssertEqual("Slim Aklij", billing?.name)
+                    XCTAssertEqual("Sixty", billing?.city)
                     XCTAssertEqual("CA", billing?.state)
                     XCTAssertEqual("us", billing?.country)
-                    XCTAssertEqual("123456", billing?.zip)
-                    XCTAssertEqual("blue lane 21", billing?.address)
+                    XCTAssertEqual("123123", billing?.zip)
+                    XCTAssertEqual("strings", billing?.address)
                 } else {
                     XCTFail("No cc in shopper")
                 }
@@ -119,9 +126,9 @@ class BSApiManagerTests: XCTestCase {
                 let ccIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.CreditCard, supportedPaymentMethods: supportedPaymentMethods)
                 XCTAssertTrue(ccIsSupported)
                 let applePayIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.ApplePay, supportedPaymentMethods: supportedPaymentMethods)
-                XCTAssertFalse(applePayIsSupported)
+                XCTAssertTrue(applePayIsSupported)
                 let payPalIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.PayPal, supportedPaymentMethods: supportedPaymentMethods)
-                XCTAssertFalse(payPalIsSupported)
+                XCTAssertTrue(payPalIsSupported)
                 
                 semaphore.signal()
             })

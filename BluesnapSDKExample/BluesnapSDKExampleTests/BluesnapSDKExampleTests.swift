@@ -32,23 +32,26 @@ class BluesnapSDKExampleTests: XCTestCase {
             XCTAssertNotNil(token, "Failed to get token")
             NSLog("Token: \(token?.getTokenStr() ?? "")")
             
-            BlueSnapSDK.setBsToken(bsToken: token)
+            BlueSnapSDK.initBluesnap(bsToken: token, generateTokenFunc: self.generateAndSetBsToken, initKount: false, fraudSessionId: nil, baseCurrency: nil, completion: { error in
             
-            BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
-                
-                XCTAssertNil(errors, "Got errors while trying to get currencies")
-                XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-                
-                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-                XCTAssertNotNil(gbpCurrency)
-                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.getName()), its rate is \(gbpCurrency.getRate())")
-                
-                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-                XCTAssertNotNil(eurCurrencyRate)
-                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
-                
-                semaphore.signal()
+                BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
+                    
+                    XCTAssertNil(errors, "Got errors while trying to get currencies")
+                    XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
+                    
+                    let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+                    XCTAssertNotNil(gbpCurrency)
+                    NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.getName()), its rate is \(gbpCurrency.getRate())")
+                    
+                    let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+                    XCTAssertNotNil(eurCurrencyRate)
+                    NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                    
+                    semaphore.signal()
+                })
+            
             })
+            
         })
 
         semaphore.wait()
@@ -60,5 +63,23 @@ class BluesnapSDKExampleTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
+    
+    /**
+     Called by the BlueSnapSDK when token expired error is recognized.
+     Here we generate and set a new token, so that when the action re-tries, it will succeed.
+     */
+    private func generateAndSetBsToken(completion: @escaping (_ token: BSToken?, _ error: BSErrors?)->Void) {
+        
+        NSLog("Got BS token expiration notification!")
+        
+        BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
+            BlueSnapSDK.setBsToken(bsToken: resultToken)
+            NSLog("Got BS token= \(resultToken?.getTokenStr() ?? "")")
+            DispatchQueue.main.async {
+                completion(resultToken, errors)
+            }
+        })
+    }
+
     
 }

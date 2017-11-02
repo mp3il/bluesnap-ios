@@ -134,7 +134,6 @@ class BSViewsManager {
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - selectedCurrencyCode: 3 characters of the current language code (uppercase)
-     - baseCurrency: optional string with the base currency code, default is USD
      - updateFunc: callback; will be called each time a new value is selected
      - errorFunc: callback; will be called if we fail to get the currencies
      */
@@ -142,11 +141,10 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        baseCurrency: String?,
         updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
         errorFunc: @escaping ()->Void) {
         
-        BSApiManager.getCurrencyRates(baseCurrency: baseCurrency, completion: { currencies, errors in
+        BSApiManager.getCurrencyRates(completion: { currencies, errors in
             
             if errors != nil || currencies == nil {
                 NSLog("Failed to fetch currency rates from BlueSnap server")
@@ -277,7 +275,6 @@ class BSViewsManager {
                     inNavigationController: inNavigationController,
                     animated: true,
                     selectedCurrencyCode: paymentRequest.getCurrency(),
-                    baseCurrency: paymentRequest.getBaseCurrency(),
                     updateFunc: updateCurrencyFunc,
                     errorFunc: errorFunc)
             }

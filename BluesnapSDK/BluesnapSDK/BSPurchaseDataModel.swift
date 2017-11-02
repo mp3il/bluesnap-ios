@@ -79,10 +79,6 @@ public enum BSPaymentType : String {
     public func getCurrency() -> String! {
         return priceDetails.currency
     }
-    
-    public func getBaseCurrency() -> String! {
-        return priceDetails.baseCurrency
-    }
 }
 
 
@@ -94,13 +90,11 @@ public enum BSPaymentType : String {
     public var amount: NSNumber! = 0.0
     public var taxAmount: NSNumber! = 0.0
     public var currency : String! = "USD"
-    public var baseCurrency : String! = "USD"
 
-    @objc public func setDetailsWithAmount(amount: NSNumber!, taxAmount: NSNumber!, currency: NSString?, baseCurrency: NSString?) {
+    @objc public func setDetailsWithAmount(amount: NSNumber!, taxAmount: NSNumber!, currency: NSString?/*, baseCurrency: NSString?*/) {
         self.amount = amount
         self.taxAmount = taxAmount
         self.currency = currency! as String
-        self.baseCurrency = (baseCurrency as String?) ?? "USD"
     }
 
     public init(amount: Double!, taxAmount: Double!, currency: String?) {

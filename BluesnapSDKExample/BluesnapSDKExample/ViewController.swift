@@ -98,9 +98,7 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             // open the purchase screen
             self.fillInitialData()
-            BlueSnapSDK.initStandardCheckoutFlow(
-                bsToken: self.bsToken,
-                generateTokenFunc: self.generateAndSetBsToken,
+            BlueSnapSDK.showCheckoutScreen(
                 inNavigationController: self.navigationController,
                 animated: true,
                 initialData: self.initialData,
@@ -119,7 +117,7 @@ class ViewController: UIViewController {
             BlueSnapSDK.showCurrencyList(
                 inNavigationController: self.navigationController,
                 animated: true,
-                selectedCurrencyCode: self.initialData.priceDetails.currency, baseCurrency: self.baseCurrency,
+                selectedCurrencyCode: self.initialData.priceDetails.currency,
                 updateFunc: self.updateViewWithNewCurrency,
                 errorFunc: {
                     self.showErrorAlert(message: "Failed to display currency List, please try again")
@@ -405,18 +403,24 @@ class ViewController: UIViewController {
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
         self.coverAllView.isHidden = false
-        generateAndSetBsToken(completion: { resultToken, errors in
+        
+        BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
             
-            //Init Kount
-            if (self.shouldInitKount) {
-                self.shouldInitKount = false
-                NSLog("Kount Init");
-                BlueSnapSDK.KountInit(kountMid: nil, customFraudSessionId: nil);
-            }
-
-            DispatchQueue.main.async {
-                self.coverAllView.isHidden = true
-                self.hideCoverView = true
+            if let resultToken = resultToken {
+                BlueSnapSDK.initBluesnap(
+                    bsToken: resultToken,
+                    generateTokenFunc: self.generateAndSetBsToken,
+                    initKount: self.shouldInitKount,
+                    fraudSessionId: nil,
+                    baseCurrency: self.baseCurrency,
+                    completion: { error in
+                        DispatchQueue.main.async {
+                            self.coverAllView.isHidden = true
+                            self.hideCoverView = true
+                        }
+                })
+            } else {
+                NSLog("Failed to obtain Bluesnap Token")
             }
         })
     }
