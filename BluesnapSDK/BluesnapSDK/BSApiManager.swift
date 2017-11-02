@@ -76,7 +76,11 @@ import Foundation
      */
     static func createSandboxBSToken(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        createBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: completion)
+        createBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: { bsToken, bsError in
+            
+            BSApiManager.setBsToken(bsToken: bsToken)
+            completion(bsToken, bsError)
+        })
     }
     
     static func isProductionToken() -> Bool {

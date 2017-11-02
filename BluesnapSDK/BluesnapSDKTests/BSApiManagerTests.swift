@@ -47,7 +47,7 @@ class BSApiManagerTests: XCTestCase {
         
         let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
         let token = BSToken(tokenStr: expiredToken, isProduction: false)
-        BlueSnapSDK.setBsToken(bsToken: token)
+        BSApiManager.setBsToken(bsToken: token)
         
         let semaphore = DispatchSemaphore(value: 0)
         let result = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
@@ -528,7 +528,6 @@ class BSApiManagerTests: XCTestCase {
             
             XCTAssertNil(error)
             XCTAssertNotNil(bsToken)
-            BlueSnapSDK.setBsToken(bsToken: bsToken)
             completion(bsToken, error)
         })
     }
@@ -536,7 +535,7 @@ class BSApiManagerTests: XCTestCase {
     func createExpiredTokenNoRegeneration() {
         
         let expiredToken = "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
-        BlueSnapSDK.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
+        BSApiManager.setBsToken(bsToken: BSToken(tokenStr: expiredToken, isProduction: false))
         BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: { completion in
             NSLog("*** Not recreating token!!!")
             completion(nil, nil)

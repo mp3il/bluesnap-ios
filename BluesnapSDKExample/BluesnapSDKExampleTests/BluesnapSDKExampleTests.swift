@@ -73,7 +73,6 @@ class BluesnapSDKExampleTests: XCTestCase {
         NSLog("Got BS token expiration notification!")
         
         BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
-            BlueSnapSDK.setBsToken(bsToken: resultToken)
             NSLog("Got BS token= \(resultToken?.getTokenStr() ?? "")")
             DispatchQueue.main.async {
                 completion(resultToken, errors)

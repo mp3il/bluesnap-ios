@@ -436,7 +436,6 @@ class ViewController: UIViewController {
         
         BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
             self.bsToken = resultToken
-            BlueSnapSDK.setBsToken(bsToken: self.bsToken)
             NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
             DispatchQueue.main.async {
                 completion(resultToken, errors)

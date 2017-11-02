@@ -21,17 +21,6 @@ class BluesnapSDKTests: XCTestCase {
         super.tearDown()
     }
 
-    //------------------------------------------------------
-    // MARK: setBsToken
-    //------------------------------------------------------
-    func testSetBsToken() {
-
-        let token = BSToken(tokenStr: "aaa", isProduction: false)
-        BlueSnapSDK.setBsToken(bsToken: token)
-
-        XCTAssertEqual(BSApiManager.apiToken, token)
-    }
-
 
     //------------------------------------------------------
     // MARK: submitCcDetails
@@ -136,7 +125,6 @@ class BluesnapSDKTests: XCTestCase {
             
             XCTAssertNil(error)
             XCTAssertNotNil(bsToken)
-            BlueSnapSDK.setBsToken(bsToken: bsToken)
             completion(bsToken, error)
         })
     }
