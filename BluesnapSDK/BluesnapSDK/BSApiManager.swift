@@ -28,6 +28,7 @@ import Foundation
     internal static var bsCurrencies: BSCurrencies?
     internal static var supportedPaymentMethods: [String]?
     internal static var lastSupportedPaymentMethodsFetchDate: Date?
+    internal static var returningShopperData: BSReturningShopperData?
     internal static var apiToken: BSToken?
     internal static var payPalToken : String?
     internal static var apiGenerateTokenFunc: (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void = { completion in
@@ -112,6 +113,8 @@ import Foundation
                         }
                         if let sdkData = sdkData2 {
                             self.supportedPaymentMethods = sdkData.supportedPaymentMethods
+                            self.bsCurrencies = sdkData.currencyRates
+                            self.returningShopperData = sdkData.returningShopper
                         }
                         completion(sdkData2, resultError2)
                     })
@@ -123,6 +126,7 @@ import Foundation
                 if let sdkData = sdkData {
                     self.bsCurrencies = sdkData.currencyRates
                     self.supportedPaymentMethods = sdkData.supportedPaymentMethods
+                    self.returningShopperData = sdkData.returningShopper
                 }
                 completion(sdkData, resultError)
             }

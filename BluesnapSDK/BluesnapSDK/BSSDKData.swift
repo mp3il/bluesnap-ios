@@ -14,9 +14,12 @@ class BSSdkData: NSObject {
     var currencyRates: BSCurrencies?
     var returningShopper: BSReturningShopperData?
     var supportedPaymentMethods: [String]?
+    // TODO: use this top prevent paypal error
     var paypalCurrencies: [String]?
+    // TODO: use these to filter out unsupported CC brands
     var creditCardTypes: [String]?
     var creditCardBrands: [String]?
+    // TODO: use these to replace the static Regexes in the validator
     var creditCardRegex: [String : String]?
 }
 

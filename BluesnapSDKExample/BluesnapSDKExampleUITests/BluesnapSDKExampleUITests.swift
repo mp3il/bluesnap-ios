@@ -375,6 +375,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         // set with Shipping switch = on
         let withShippingSwitch = app.switches["WithShippingSwitch"]
+        waitForElementToExist(element: withShippingSwitch, waitTime: 8)
         let withShippingSwitchValue = (withShippingSwitch.value as? String) ?? "0"
         if (withShippingSwitchValue == "0" && initialData.withShipping) || (withShippingSwitchValue == "1" && !initialData.withShipping) {
             withShippingSwitch.tap()

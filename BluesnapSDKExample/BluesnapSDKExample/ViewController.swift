@@ -407,6 +407,7 @@ class ViewController: UIViewController {
         BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
             
             if let resultToken = resultToken {
+                self.bsToken = resultToken
                 BlueSnapSDK.initBluesnap(
                     bsToken: resultToken,
                     generateTokenFunc: self.generateAndSetBsToken,
