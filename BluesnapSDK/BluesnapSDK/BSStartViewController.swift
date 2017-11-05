@@ -23,14 +23,13 @@ class BSStartViewController: UIViewController {
     var paymentSummaryItems: [PKPaymentSummaryItem] = [];
     internal var activityIndicator : UIActivityIndicatorView?
     internal var payPalPaymentRequest: BSPayPalPaymentRequest!
+    internal var existingCardViews : [BSExistingCcUIView] = []
 
     // MARK: Outlets
 
     @IBOutlet weak var centeredView: UIView!
     @IBOutlet weak var ccnButton: UIButton!
-    @IBOutlet weak var orLabel: UILabel!
     @IBOutlet weak var applePayButton: UIButton!
-    @IBOutlet weak var or2Label: UILabel!
     @IBOutlet weak var payPalButton: UIButton!
 
     // MARK: init
@@ -55,9 +54,6 @@ class BSStartViewController: UIViewController {
         self.hideShowElements(showPayPal: showPayPal, showApplePay: showApplePay)
         
         // Localize strings
-        let localizedOr = BSLocalizedStrings.getString(BSLocalizedString.Label_Or)
-        orLabel.text = localizedOr
-        or2Label.text = localizedOr
         self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Type)
     }
 
@@ -119,7 +115,7 @@ class BSStartViewController: UIViewController {
         backItem.title = BSLocalizedStrings.getString(BSLocalizedString.Navigate_Back_to_payment_type_screen)
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
 
-        animateToPaymentScreen(completion: { animate in
+        animateToPaymentScreen(startY: self.ccnButton.frame.minY, completion: { animate in
             _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, initialData: self.initialData, purchaseFunc: self.purchaseFunc)
         })
     }
@@ -156,39 +152,71 @@ class BSStartViewController: UIViewController {
     
     private func hideShowElements(showPayPal: Bool, showApplePay: Bool) {
         
-        let numSections = (showPayPal && showApplePay) ? 3 : (!showPayPal && !showApplePay) ? 1 : 2
+        var existingCreditCards: [BSExistingCcDetails] = []
+        if let shopper = BSApiManager.returningShopperData {
+            existingCreditCards = shopper.existingCreditCards
+        }
+        let numSections = existingCreditCards.count +
+            ((showPayPal && showApplePay) ? 3 : (!showPayPal && !showApplePay) ? 1 : 2)
+        var sectionNum : CGFloat = 0
         let sectionY : CGFloat = (centeredView.frame.height / CGFloat(numSections+1)).rounded()
         
         if showApplePay {
-            orLabel.isHidden = false
             applePayButton.isHidden = false
-            applePayButton.center.y = sectionY
-            orLabel.center.y = (sectionY*1.5).rounded()
-            ccnButton.center.y = sectionY*2
+            sectionNum = sectionNum + 1
+            applePayButton.center.y = sectionY * sectionNum
         } else {
-            orLabel.isHidden = true
+            
             applePayButton.isHidden = true
         }
+        sectionNum = sectionNum + 1
+        ccnButton.center.y = sectionY * sectionNum
+
         if showPayPal {
-            or2Label.isHidden = false
+            sectionNum = sectionNum + 1
             payPalButton.isHidden = false
-            if showApplePay {
-                or2Label.center.y = (sectionY*2.5).rounded()
-                payPalButton.center.y = sectionY*3
-            } else {
-                or2Label.center.y = (sectionY*1.5).rounded()
-                payPalButton.center.y = sectionY*2
-            }
+            payPalButton.center.y = sectionY * sectionNum
         } else {
-            or2Label.isHidden = true
             payPalButton.isHidden = true
+        }
+        
+        if existingCreditCards.count > 0 && existingCardViews.count == 0 {
+            var tag : Int = 0
+            for existingCreditCard in existingCreditCards {
+                let cardView = BSExistingCcUIView()
+                //cardView.frame = ccnButton.frame
+                self.centeredView.addSubview(cardView)
+                cardView.frame = CGRect(x: 0, y: 0, width: self.ccnButton.frame.width, height: 40)
+                sectionNum = sectionNum + 1
+                cardView.center.y = sectionY * sectionNum
+                cardView.setCc(
+                    ccType: existingCreditCard.cardType ?? "",
+                    last4Digits: existingCreditCard.last4Digits ?? "",
+                    expiration: (existingCreditCard.expirationMonth ?? "") + " / " + (existingCreditCard.expirationYear ?? ""))
+                cardView.resizeElements()
+                cardView.addTarget(self, action: #selector(BSStartViewController.existingCCTouchUpInside(_:)), for: .touchUpInside)
+                cardView.tag = tag
+                tag = tag + 1
+            }
         }
     }
     
+    func existingCCTouchUpInside(_ sender: Any) {
+        
+        if let existingCcUIView = sender as? BSExistingCcUIView, let existingCreditCards = BSApiManager.returningShopperData?.existingCreditCards {
+            let ccIdx = existingCcUIView.tag
+            let cc = existingCreditCards[ccIdx]
+            //NSLog("selected existing CC; last4digits = \(cc.last4Digits ?? ""), card type = \(cc.cardType ?? ""), expiration = \(cc.expirationMonth ?? "") / \(cc.expirationYear ?? "")")
+            animateToPaymentScreen(startY: existingCcUIView.frame.minY, completion: { animate in
+                _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate, initialData: self.initialData, purchaseFunc: self.purchaseFunc)
+            })
+        }
+        
+    }
     
-    private func animateToPaymentScreen(completion: ((Bool) -> Void)!) {
+    private func animateToPaymentScreen(startY: CGFloat, completion: ((Bool) -> Void)!) {
 
-        let moveUpBy = self.centeredView.frame.minY + self.ccnButton.frame.minY - 48
+        let moveUpBy = self.centeredView.frame.minY + startY - 48
         UIView.animate(withDuration: 0.3, animations: {
             self.centeredView.center.y = self.centeredView.center.y - moveUpBy
         }, completion: { animate in

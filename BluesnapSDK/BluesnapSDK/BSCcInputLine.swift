@@ -208,16 +208,6 @@ public class BSCcInputLine: BSBaseTextInput {
     
     // MARK: Constants
 
-    fileprivate let ccImages = [
-        "amex": "amex",
-        "cirrus": "cirrus",
-        "diners": "dinersclub",
-        "discover": "discover",
-        "jcb": "jcb",
-        "maestr_uk": "maestro",
-        "mastercard": "mastercard",
-        "china_union_pay": "unionpay",
-        "visa": "visa"]
     fileprivate let animationDuration = TimeInterval(0.4)
 
     
@@ -913,26 +903,9 @@ public class BSCcInputLine: BSBaseTextInput {
     func updateCcIcon(ccType : String?) {
         
         // change the image in ccIconImage
-        if let image = getCcIconByCardType(ccType: ccType) {
+        if let image = BSImageLibrary.getCcIconByCardType(ccType: ccType) {
             self.image = image
         }
-    }
-    
-    /**
-     This function updates the image that holds the card-type icon according to the chosen card type.
-     Override this if necessary.
-     */
-    func getCcIconByCardType(ccType : String?) -> UIImage? {
-        
-        var imageName : String?
-        if let ccType = ccType?.lowercased() {
-            imageName = ccImages[ccType]
-        }
-        if imageName == nil {
-            imageName = "default"
-            NSLog("ccTypew \(ccType ?? "Empty") does not have an icon")
-        }
-        return BSViewsManager.getImage(imageName: "cc_\(imageName!)")
     }
     
     private func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {

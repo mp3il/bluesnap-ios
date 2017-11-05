@@ -231,7 +231,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     /**
      borderColor (default = a kind of dark gray) determines the border color of the component
      */
-    @IBInspectable var borderColor: UIColor = UIColor(red: 248, green: 248, blue: 248, alpha: 1) {
+    @IBInspectable var borderColor: UIColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1) {
         didSet {
             if designMode {
                 drawBoundsAndShadow()
@@ -670,7 +670,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
             if let fieldCoverButton = fieldCoverButton {
                 fieldCoverButton.backgroundColor = UIColor.clear
                 self.addSubview(fieldCoverButton)
-                fieldCoverButton.addTarget(self, action: #selector(BSInputLine.fieldCoverButtonTouchUpInside(_:)), for: .touchUpInside)
+                fieldCoverButton.addTarget(self, action: #selector(BSBaseTextInput.fieldCoverButtonTouchUpInside(_:)), for: .touchUpInside)
             }
         }
     }

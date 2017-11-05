@@ -26,6 +26,17 @@ public enum BSImageNames : String {
 
 @objc public class BSImageLibrary: NSObject {
     
+    fileprivate static let ccTypeToImageMapping = [
+        "amex": "amex",
+        "cirrus": "cirrus",
+        "diners": "dinersclub",
+        "discover": "discover",
+        "jcb": "jcb",
+        "maestr_uk": "maestro",
+        "mastercard": "mastercard",
+        "china_union_pay": "unionpay",
+        "visa": "visa"]
+
     /**
      Returns the image from BlueSnap SDK
      - parameters:
@@ -45,4 +56,22 @@ public enum BSImageNames : String {
         
         return BSViewsManager.getImage(imageName: countryCode)
     }
+    
+    /**
+     This function updates the image that holds the card-type icon according to the chosen card type.
+     Override this if necessary.
+     */
+    open class func getCcIconByCardType(ccType : String?) -> UIImage? {
+        
+        var imageName : String?
+        if let ccType = ccType?.lowercased() {
+            imageName = ccTypeToImageMapping[ccType]
+        }
+        if imageName == nil {
+            imageName = "default"
+            NSLog("ccTypew \(ccType ?? "Empty") does not have an icon")
+        }
+        return BSViewsManager.getImage(imageName: "cc_\(imageName!)")
+    }
+
 }

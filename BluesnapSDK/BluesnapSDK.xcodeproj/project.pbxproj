@@ -22,6 +22,9 @@
 		DEB3C8BC3806435452EEB052 /* BSApplepayOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */; };
 		DEBAC1114FFA55F1852DCB78 /* BSPKContactExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */; };
 		DEBB1FD893E6CC8FA16D5F60 /* BSApplepayPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB739342E9A635BBD2878B9 /* BSApplepayPayment.swift */; };
+		FD0888311FAB3259001EED4C /* BSExistingCcUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0888301FAB3259001EED4C /* BSExistingCcUIView.swift */; };
+		FD0888351FAB5152001EED4C /* BSBaseBoxWithShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0888341FAB5152001EED4C /* BSBaseBoxWithShadowView.swift */; };
+		FD0888371FAB56A6001EED4C /* BSPaymentTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0888361FAB56A6001EED4C /* BSPaymentTypeView.swift */; };
 		FD0D34321ED2A62A005F03CB /* BSBaseTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */; };
 		FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */; };
 		FD1ACDEB1E9F59B40010C983 /* BSCurrenciesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */; };
@@ -88,6 +91,9 @@
 		DEBB2573B8147400F955D593 /* BSApplepayOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApplepayOperation.swift; sourceTree = "<group>"; };
 		DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPKContactExtention.swift; sourceTree = "<group>"; };
 		DEBEC07006625D7C0FFAF7B2 /* KDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDataCollector.h; sourceTree = "<group>"; };
+		FD0888301FAB3259001EED4C /* BSExistingCcUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSExistingCcUIView.swift; sourceTree = "<group>"; };
+		FD0888341FAB5152001EED4C /* BSBaseBoxWithShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseBoxWithShadowView.swift; sourceTree = "<group>"; };
+		FD0888361FAB56A6001EED4C /* BSPaymentTypeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentTypeView.swift; sourceTree = "<group>"; };
 		FD0D34311ED2A629005F03CB /* BSBaseTextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSBaseTextInput.swift; sourceTree = "<group>"; };
 		FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCcInputLine.swift; sourceTree = "<group>"; };
 		FD1ACDEA1E9F59B40010C983 /* BSCurrenciesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrenciesViewController.swift; sourceTree = "<group>"; };
@@ -277,6 +283,9 @@
 				FD1F7B8C1ECC68A300C22DEB /* BSInputLine.swift */,
 				FD0D34331ED2AB58005F03CB /* BSCcInputLine.swift */,
 				FD461F591F41A99D0050F0FD /* BSSubtotalUIView.swift */,
+				FD0888341FAB5152001EED4C /* BSBaseBoxWithShadowView.swift */,
+				FD0888301FAB3259001EED4C /* BSExistingCcUIView.swift */,
+				FD0888361FAB56A6001EED4C /* BSPaymentTypeView.swift */,
 			);
 			name = CustomControls;
 			sourceTree = "<group>";
@@ -455,6 +464,8 @@
 				FDA0772F1EAC91990045E920 /* BSCountryViewController.swift in Sources */,
 				2D374F4C1E880EF100AE2A81 /* BSToken.swift in Sources */,
 				FD43A0AF1ECC2367000BF7A1 /* BSStartViewController.swift in Sources */,
+				FD0888311FAB3259001EED4C /* BSExistingCcUIView.swift in Sources */,
+				FD0888351FAB5152001EED4C /* BSBaseBoxWithShadowView.swift in Sources */,
 				FD3BD9D21EE7F7DD00486576 /* BSErrors.swift in Sources */,
 				FD0D34341ED2AB58005F03CB /* BSCcInputLine.swift in Sources */,
 				FD6814571F33248000FAE1ED /* BSBaseListController.swift in Sources */,
@@ -467,6 +478,7 @@
 				FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */,
 				FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */,
 				FD5022961F691D9300C820AC /* BSApiCaller.swift in Sources */,
+				FD0888371FAB56A6001EED4C /* BSPaymentTypeView.swift in Sources */,
 				DEB2DD0B164B99C6E7DE417C /* BSApplepayViewController.swift in Sources */,
 				DEBB1FD893E6CC8FA16D5F60 /* BSApplepayPayment.swift in Sources */,
 				DEBAC1114FFA55F1852DCB78 /* BSPKContactExtention.swift in Sources */,

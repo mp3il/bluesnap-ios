@@ -49,14 +49,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="33" y="8" width="278" height="24"/>
+                                                    <rect key="frame" x="32" y="7" width="277" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="311" y="15" width="14" height="13"/>
+                                                    <rect key="frame" x="309" y="15" width="14" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -326,16 +326,8 @@
                                             <action selector="applePayClick:" destination="f14-WO-daN" eventType="touchUpInside" id="MPU-hd-zkw"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xk8-02-9HE">
-                                        <rect key="frame" x="0.0" y="184" width="375" height="12"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="Or1Label"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1a-n9-LUQ" userLabel="Card Number Button">
-                                        <rect key="frame" x="0.0" y="196" width="375" height="143"/>
+                                        <rect key="frame" x="0.0" y="183" width="375" height="143"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="CcButton"/>
@@ -348,16 +340,8 @@
                                             <action selector="ccDetailsClick:" destination="f14-WO-daN" eventType="touchUpInside" id="oDn-h8-X7r"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rmD-vI-h9O">
-                                        <rect key="frame" x="0.0" y="339" width="375" height="12"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="Or2Label"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxD-gL-uXq">
-                                        <rect key="frame" x="0.0" y="339" width="429" height="143"/>
+                                        <rect key="frame" x="0.0" y="327" width="429" height="143"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         <accessibility key="accessibilityConfiguration" identifier="PayPalButton"/>
                                         <state key="normal" title="PayPal" image="paypal_button"/>
@@ -384,8 +368,6 @@
                         <outlet property="applePayButton" destination="y0h-By-eMw" id="mc0-kk-JjP"/>
                         <outlet property="ccnButton" destination="M1a-n9-LUQ" id="bfm-K8-KKo"/>
                         <outlet property="centeredView" destination="FkL-LM-R7b" id="Wre-WY-Jla"/>
-                        <outlet property="or2Label" destination="rmD-vI-h9O" id="ZIV-Fc-JwB"/>
-                        <outlet property="orLabel" destination="Xk8-02-9HE" id="LWy-9d-G0w"/>
                         <outlet property="payPalButton" destination="pxD-gL-uXq" id="QT5-r0-szE"/>
                         <segue destination="GdF-z9-L8H" kind="show" id="1KG-Ig-ECE"/>
                         <segue destination="W0G-M6-3dM" kind="show" id="rfc-7Z-z7N"/>

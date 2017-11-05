@@ -34,6 +34,7 @@ class ViewController: UIViewController {
     final fileprivate let initialShippingState = "MA"
     final fileprivate let baseCurrency = "USD"
     final fileprivate let applePayMerchantIdentifier = "merchant.com.example.bluesnap"
+    final fileprivate let shopperId : Int? = 22061813
 
 
     // MARK: - UIViewController's methods
@@ -400,7 +401,7 @@ class ViewController: UIViewController {
         
         self.coverAllView.isHidden = false
         
-        BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
+        BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperId, completion: { resultToken, errors in
             
             if let resultToken = resultToken {
                 self.bsToken = resultToken
@@ -431,7 +432,7 @@ class ViewController: UIViewController {
         
         NSLog("Got BS token expiration notification!")
         
-        BlueSnapSDK.createSandboxTestToken(completion: { resultToken, errors in
+        BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperId, completion: { resultToken, errors in
             self.bsToken = resultToken
             NSLog("Got BS token= \(self.bsToken?.getTokenStr() ?? "")")
             DispatchQueue.main.async {
