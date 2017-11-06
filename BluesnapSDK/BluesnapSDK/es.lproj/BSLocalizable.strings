@@ -139,10 +139,9 @@
 /* This menu item closes the menu */
 "Menu_Item_Cancel" = "Cancelar";
 
-
 /* ------- Labels for shipping screens ------- */
 
-/* Title of Payment screen (where you fill billing details) */
+/* Title of Shipping screen (where you fill shipping details) */
 "Title_Shipping_Screen" = "Envío";
 
 /* Label for the phone in the shipping screen */
@@ -158,3 +157,14 @@
 
 /* Title of currency list screen */
 "Title_State_Screen" = "Seleccionar estado";
+
+/* ------- Existing CC screen labels ------- */
+
+/* Billing title */
+"Label_Billing" = "Facturación";
+
+/* Shipping title */
+"Label_Shipping" = "Envío";
+
+/* Edit button */
+"Edit_Button_Title" = "Edit";

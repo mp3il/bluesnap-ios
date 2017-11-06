@@ -142,7 +142,7 @@
 
 /* ------- Labels for shipping screens ------- */
 
-/* Title of Payment screen (where you fill billing details) */
+/* Title of Shipping screen (where you fill shipping details) */
 "Title_Shipping_Screen" = "Leverans";
 
 /* Label for the phone in the shipping screen */
@@ -158,3 +158,14 @@
 
 /* Title of currency list screen */
 "Title_State_Screen" = "Välj stat";
+
+/* ------- Existing CC screen labels ------- */
+
+/* Billing title */
+"Label_Billing" = "Fakturering";
+
+/* Shipping title */
+"Label_Shipping" = "Leverans";
+
+/* Edit button */
+"Edit_Button_Title" = "Edit";

@@ -117,4 +117,10 @@ public enum BSLocalizedString : String {
     case Title_Country_Screen
     case Title_State_Screen
     
+    /* ------- Existing CC screen labels ------- */
+
+    case Label_Billing
+    case Label_Shipping
+    case Edit_Button_Title
+    
 }

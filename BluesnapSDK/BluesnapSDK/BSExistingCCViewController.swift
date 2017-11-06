@@ -51,11 +51,12 @@ class BSExistingCCViewController: UIViewController {
         
         existingCcView.setCc(ccType: paymentRequest.existingCcDetails.cardType ?? "", last4Digits: paymentRequest.existingCcDetails.last4Digits ?? "", expiration: paymentRequest.existingCcDetails.getExpiration())
         
-        // TODO: load label translations
-        // billingLabel.text =
-        // shippingLabel.text =
-        // editBillingButton.setTitle("", for: UIControlState())
-        // editShippingButton("", for: UIControlState())
+        // load label translations
+        billingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Billing)
+        shippingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Shipping)
+        let editButtonTitle = BSLocalizedStrings.getString(BSLocalizedString.Edit_Button_Title)
+        editBillingButton.setTitle(editButtonTitle, for: UIControlState())
+        editShippingButton.setTitle(editButtonTitle, for: UIControlState())
         
         // for removing inner padding from text view
         let textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)

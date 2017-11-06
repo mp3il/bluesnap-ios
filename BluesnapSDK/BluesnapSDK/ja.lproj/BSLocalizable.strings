@@ -142,7 +142,7 @@
 
 /* ------- Labels for shipping screens ------- */
 
-/* Title of Payment screen (where you fill billing details) */
+/* Title of Shipping screen (where you fill shipping details) */
 "Title_Shipping_Screen" = "送料";
 
 /* Label for the phone in the shipping screen */
@@ -158,3 +158,14 @@
 
 /* Title of currency list screen */
 "Title_State_Screen" = "州を選択してください";
+
+/* ------- Existing CC screen labels ------- */
+
+/* Billing title */
+"Label_Billing" = "請求書";
+
+/* Shipping title */
+"Label_Shipping" = "送料";
+
+/* Edit button */
+"Edit_Button_Title" = "Edit";
