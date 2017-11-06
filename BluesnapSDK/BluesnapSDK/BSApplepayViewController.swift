@@ -15,49 +15,50 @@ extension BSStartViewController : PaymentOperationDelegate {
 
     func applePayPressed(_ sender: Any, completion: @escaping (BSErrors?) -> Void) {
 
-        let priceDetails = initialData.priceDetails!
-        let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: priceDetails.taxAmount.doubleValue), type: .final)
-        let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: priceDetails.amount.doubleValue), type: .final)
-
-        paymentSummaryItems = [tax, total];
-
-        let pkPaymentRequest = PKPaymentRequest()
-        pkPaymentRequest.paymentSummaryItems = paymentSummaryItems;
-        pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.getIdentifier()
-        pkPaymentRequest.merchantCapabilities = .capability3DS
-        pkPaymentRequest.countryCode = "US"
-        pkPaymentRequest.currencyCode = priceDetails.currency
-
-        if initialData.withShipping {
-            pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
-        }
-        if initialData.fullBilling {
-            pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
-        }
-
-        pkPaymentRequest.supportedNetworks = [
+        if let initialData = BlueSnapSDK.initialData {
+            let priceDetails = initialData.priceDetails!
+            let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: priceDetails.taxAmount.doubleValue), type: .final)
+            let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: priceDetails.amount.doubleValue), type: .final)
+            
+            paymentSummaryItems = [tax, total];
+            
+            let pkPaymentRequest = PKPaymentRequest()
+            pkPaymentRequest.paymentSummaryItems = paymentSummaryItems;
+            pkPaymentRequest.merchantIdentifier = BSApplePayConfiguration.getIdentifier()
+            pkPaymentRequest.merchantCapabilities = .capability3DS
+            pkPaymentRequest.countryCode = "US"
+            pkPaymentRequest.currencyCode = priceDetails.currency
+            
+            if initialData.withShipping {
+                pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
+            }
+            if initialData.fullBilling {
+                pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
+            }
+            
+            pkPaymentRequest.supportedNetworks = [
                 .amex,
                 .discover,
                 .masterCard,
                 .visa
-        ]
-
-
-        // set up the operation with the paymaket request
-        let paymentOperation = PaymentOperation(request: pkPaymentRequest);
-
-        paymentOperation.delegate = self;
-
-        paymentOperation.completionBlock = {[weak op = paymentOperation] in
-            NSLog("PK payment completion \(op?.error.debugDescription ?? "No op")")
-            DispatchQueue.main.async {
-                completion(op?.error)
-            }
-        };
-
-        //Send the payment operation via queue
-        InternalQueue.addOperation(paymentOperation);
-
+            ]
+            
+            
+            // set up the operation with the paymaket request
+            let paymentOperation = PaymentOperation(request: pkPaymentRequest);
+            
+            paymentOperation.delegate = self;
+            
+            paymentOperation.completionBlock = {[weak op = paymentOperation] in
+                NSLog("PK payment completion \(op?.error.debugDescription ?? "No op")")
+                DispatchQueue.main.async {
+                    completion(op?.error)
+                }
+            };
+            
+            //Send the payment operation via queue
+            InternalQueue.addOperation(paymentOperation);
+        }
     }
 
     func setupPressed(sender: AnyObject) {

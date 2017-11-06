@@ -37,7 +37,7 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
      */
     internal func resizeElements() {
         
-        let marginX : CGFloat = 30
+        let marginX : CGFloat = 8
         let marginY : CGFloat = 5
         
         let imageWidth : CGFloat = 35
@@ -46,7 +46,7 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
         let actualHeight : CGFloat = self.frame.height - marginY * 2.0
         let ratioY = actualHeight / imageHeight
         let actualImageWidth : CGFloat = imageWidth * ratioY
-        let actualLableWidth = (self.frame.width - 4 * marginX) / 3
+        let actualLableWidth = (self.frame.width - 4.0 * marginX) / 3
         
         imageView.frame = CGRect(x: marginX, y: marginY, width: actualImageWidth, height: actualHeight)
         

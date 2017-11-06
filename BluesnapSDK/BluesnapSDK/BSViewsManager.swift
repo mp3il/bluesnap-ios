@@ -17,6 +17,7 @@ class BSViewsManager {
     static let currencyScreenStoryboardId = "BSCurrenciesStoryboardId"
     static let startScreenStoryboardId = "BSStartScreenStoryboardId"
     static let purchaseScreenStoryboardId = "BSPaymentScreenStoryboardId"
+    static let existingCcScreenStoryboardId = "BSExistingCcScreenStoryboardId"
     static let countryScreenStoryboardId = "BSCountriesStoryboardId"
     static let stateScreenStoryboardId = "BSStatesStoryboardId"
     static let webScreenStoryboardId = "BSWebViewController"
@@ -56,13 +57,10 @@ class BSViewsManager {
      - paymentRequest: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
      - withShipping: if true, the shopper will be asked to supply shipping details
      - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
-     - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
     open static func showStartScreen(
         inNavigationController: UINavigationController!,
-        animated: Bool,
-        initialData : BSInitialData!,
-        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
+        animated: Bool) {
         
         if startScreen == nil {
             let bundle = BSViewsManager.getBundle()
@@ -70,7 +68,7 @@ class BSViewsManager {
             startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
         }
 
-        startScreen.initScreen(initialData: initialData, supportedPaymentMethods: BSApiManager.supportedPaymentMethods, purchaseFunc: purchaseFunc)
+        startScreen.initScreen()
 
         inNavigationController.pushViewController(startScreen, animated: animated)
     }
@@ -81,26 +79,45 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - paymentRequest: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
-     - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
-     - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
     open class func showCCDetailsScreen(
         inNavigationController: UINavigationController!,
-        animated: Bool,
-        initialData : BSInitialData!,
-        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
+        animated: Bool) {
         
-        if purchaseScreen == nil {
-            let bundle = BSViewsManager.getBundle()
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
-            purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController
+        if let initialData = BlueSnapSDK.initialData {
+            if purchaseScreen == nil {
+                let bundle = BSViewsManager.getBundle()
+                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
+                purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController
+            }
+            
+            let paymentRequest = BSCcPaymentRequest(initialData: initialData)
+            purchaseScreen.initScreen(paymentRequest: paymentRequest)
+            
+            inNavigationController.pushViewController(purchaseScreen, animated: animated)
         }
+    }
+    
+    /**
+     Open the check-out screen for an existing CC, For returning shopper.
+     
+     - parameters:
+     - paymentRequest: returning shopper details in the payment request
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+     */
+    open class func showExistingCCDetailsScreen(
+        paymentRequest: BSExistingCcPaymentRequest!,
+        inNavigationController: UINavigationController!,
+        animated: Bool) {
         
-        let paymentRequest = BSCcPaymentRequest(initialData: initialData)
-        purchaseScreen.initScreen(paymentRequest: paymentRequest, fullBilling: initialData.fullBilling, withEmail: initialData.withEmail, withShipping: initialData.withShipping, purchaseFunc: purchaseFunc, updateTaxFunc: initialData.updateTaxFunc)
-
-        inNavigationController.pushViewController(purchaseScreen, animated: animated)
+        let bundle = BSViewsManager.getBundle()
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
+        let existingCcScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.existingCcScreenStoryboardId) as! BSExistingCCViewController
+        
+        existingCcScreen.initScreen(paymentRequest: paymentRequest)
+        
+        inNavigationController.pushViewController(existingCcScreen, animated: animated)
     }
     
     /**

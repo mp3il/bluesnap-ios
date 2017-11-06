@@ -112,7 +112,7 @@ public enum BSPaymentType : String {
 
 
 /**
-  Class holds initial data for the flow: 
+  Class holds initial or setup data for the flow:
     - Flow flavors (withShipping, withBilling, withEmail)
     - Price details
     - (optional) Shopper details
@@ -122,12 +122,32 @@ public enum BSPaymentType : String {
 
     public var withEmail: Bool = true
     public var withShipping: Bool = false
-    public var fullBilling : Bool = false
-    //public var fraudSessionId: String?
+    public var fullBilling: Bool = false
     public var priceDetails: BSPriceDetails! = BSPriceDetails(amount: 0, taxAmount: 0, currency: nil)
     
-    public var billingDetails : BSBillingAddressDetails?
-    public var shippingDetails : BSShippingAddressDetails?
+    public var billingDetails: BSBillingAddressDetails?
+    public var shippingDetails: BSShippingAddressDetails?
 
+    public var purchaseFunc: (BSBasePaymentRequest!) -> Void
     public var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
+    
+    public init(
+        withEmail: Bool,
+        withShipping: Bool,
+        fullBilling: Bool,
+        priceDetails: BSPriceDetails!,
+        billingDetails: BSBillingAddressDetails?,
+        shippingDetails: BSShippingAddressDetails?,
+        purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void,
+        updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
+        
+        self.withEmail = withEmail
+        self.withShipping = withShipping
+        self.fullBilling = fullBilling
+        self.priceDetails = priceDetails
+        self.billingDetails = billingDetails
+        self.shippingDetails = shippingDetails
+        self.purchaseFunc = purchaseFunc
+        self.updateTaxFunc = updateTaxFunc
+    }
 }

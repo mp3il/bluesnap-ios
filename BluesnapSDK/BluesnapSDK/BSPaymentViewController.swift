@@ -24,10 +24,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     fileprivate var paymentRequest : BSCcPaymentRequest!
-    fileprivate var purchaseFunc: (BSBasePaymentRequest!)->Void = {
-        paymentRequest in
-        print("purchaseFunc should be overridden")
-    }
     fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager = BSCountryManager.getInstance()
     
@@ -53,16 +49,17 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: init
 
-    public func initScreen(paymentRequest: BSCcPaymentRequest!, fullBilling: Bool, withEmail: Bool, withShipping: Bool, purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void, updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
+    public func initScreen(paymentRequest: BSCcPaymentRequest!) {
         
         self.firstTime = true
         self.firstTimeShipping = true
         self.paymentRequest = paymentRequest
-        self.fullBilling = fullBilling
-        self.withEmail = withEmail
-        self.purchaseFunc = purchaseFunc
-        self.withShipping = withShipping //paymentRequest.getShippingDetails() != nil
-        self.updateTaxFunc = updateTaxFunc
+        if let data = BlueSnapSDK.initialData {
+            self.fullBilling = data.fullBilling
+            self.withEmail = data.withEmail
+            self.withShipping = data.withShipping
+            self.updateTaxFunc = data.updateTaxFunc
+        }
     }
     
     // MARK: Keyboard functions
@@ -188,7 +185,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
                 let merchantControllerIndex = viewControllers.count - (inShippingScreen ? 4 : 3)
                 _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
                 // execute callback
-                self.purchaseFunc(self.paymentRequest)
+                BlueSnapSDK.initialData?.purchaseFunc(self.paymentRequest)
             } else {
                 // error
                 if inShippingScreen {

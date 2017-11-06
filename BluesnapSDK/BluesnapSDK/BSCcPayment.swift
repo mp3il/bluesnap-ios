@@ -59,3 +59,72 @@ import Foundation
     }
 }
 
+/**
+ CC details for the purchase
+ */
+@objc public class BSExistingCcPaymentRequest : BSCcPaymentRequest {
+    
+    public var existingCcDetails: BSExistingCcDetails = BSExistingCcDetails()
+    
+    init(initialData: BSInitialData, shopper: BSReturningShopperData!, existingCcDetails: BSExistingCcDetails!) {
+        
+        super.init(initialData: initialData)
+        
+        self.existingCcDetails = existingCcDetails.copy() as! BSExistingCcDetails
+        self.ccDetails.ccType = existingCcDetails.cardType
+        self.ccDetails.last4Digits = existingCcDetails.last4Digits
+        
+        if let ccBillingDetails = existingCcDetails.billingDetails {
+            self.billingDetails = ccBillingDetails.copy() as! BSBillingAddressDetails
+        } else {
+            if let initialBillingDetails = initialData.billingDetails {
+                self.billingDetails = initialBillingDetails.copy() as! BSBillingAddressDetails
+            } else {
+                self.billingDetails = BSBillingAddressDetails()
+            }
+            if let name = shopper.name {
+                billingDetails.name = name
+            }
+            if let email = shopper.email {
+                billingDetails.email = email
+            }
+            if let country = shopper.countryCode {
+                billingDetails.country =  country
+                if let state = shopper.stateCode {
+                    billingDetails.state = state
+                }
+                if let address = shopper.address {
+                    billingDetails.address = address
+                }
+                if let city = shopper.city {
+                    billingDetails.city = city
+                }
+                if let zip = shopper.zip {
+                    billingDetails.zip = zip
+                }
+            }
+        }
+        
+        if initialData.withShipping {
+            if let shopperShippingDetails = shopper.shippingDetails {
+                self.shippingDetails = shopperShippingDetails.copy() as? BSShippingAddressDetails
+            } else if let initialShippingDetails = initialData.shippingDetails {
+                self.shippingDetails = initialShippingDetails.copy() as? BSShippingAddressDetails
+            }
+            if self.shippingDetails?.name == nil || self.shippingDetails?.name == "" {
+                // copy from billing
+                self.shippingDetails!.name = billingDetails.name
+                self.shippingDetails!.country = billingDetails.country
+                self.shippingDetails!.state = billingDetails.state
+                self.shippingDetails!.zip = billingDetails.zip
+                self.shippingDetails!.city = billingDetails.city
+                self.shippingDetails!.address = billingDetails.address
+                self.shippingDetails!.name = billingDetails.name
+            }
+            if let phone = shopper.phone {
+                self.shippingDetails?.phone = phone
+            }
+        }
+    }
+}
+

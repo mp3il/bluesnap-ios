@@ -80,7 +80,7 @@ public class BSBaseBoxWithShadowView: UIControl {
     /**
      shadowOpacity (default = 0.5) determines the opacity the component's shadow
      */
-    @IBInspectable var shadowOpacity: CGFloat = 0.5 {
+    @IBInspectable var shadowOpacity: CGFloat = 0.25 {
         didSet {
             if designMode {
                 setShadowAttributes()

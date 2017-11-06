@@ -18,6 +18,7 @@ import PassKit
         .visa
     ]
     static internal var fraudSessionId : String?
+    static internal var initialData : BSInitialData?
 
 
     // MARK: SDK functions
@@ -75,21 +76,18 @@ import PassKit
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      - initialData: initial payment details + flow settings
-     - purchaseFunc: callback; will be called when the shopper hits "Pay" and all the data is prepared
      */
     open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        initialData : BSInitialData!,
-        purchaseFunc: @escaping (BSBasePaymentRequest!)->Void) {
+        initialData : BSInitialData!) {
         
-        adjustInitialData(initialData: initialData)
+        self.initialData = initialData
+        adjustInitialData()
         
         DispatchQueue.main.async {
             BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
-                                           animated: animated,
-                                           initialData: initialData,
-                                           purchaseFunc: purchaseFunc)
+                                           animated: animated)
         }
     }
     
@@ -246,23 +244,27 @@ import PassKit
         }
     }
 
-    private class func adjustInitialData(initialData: BSInitialData!) {
+    private class func adjustInitialData() {
         
-        let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
-        
-        if initialData.withShipping {
-            if initialData.shippingDetails == nil {
-                initialData.shippingDetails = BSShippingAddressDetails()
+        if let data = initialData {
+            
+            let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
+            
+            if data.withShipping {
+                if data.shippingDetails == nil {
+                    data.shippingDetails = BSShippingAddressDetails()
+                }
+            } else if data.shippingDetails != nil {
+                data.shippingDetails = nil
             }
-        } else if initialData.shippingDetails != nil {
-            initialData.shippingDetails = nil
-        }
-        
-        if initialData.billingDetails == nil {
-            initialData.billingDetails = BSBillingAddressDetails()
-        }
-        if initialData.billingDetails!.country ?? "" == "" {
-            initialData.billingDetails!.country = defaultCountry
+            
+            if data.billingDetails == nil {
+                data.billingDetails = BSBillingAddressDetails()
+            }
+            
+            if data.billingDetails!.country ?? "" == "" {
+                data.billingDetails!.country = defaultCountry
+            }
         }
     }
     

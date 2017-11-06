@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     
     fileprivate var bsToken : BSToken?
     fileprivate var shouldInitKount = true
-    fileprivate var initialData: BSInitialData! = BSInitialData()
+    fileprivate var initialData: BSInitialData?
     fileprivate var hideCoverView : Bool = false
     final fileprivate let LOADING_MESSAGE = "Loading, please wait"
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
@@ -101,8 +101,7 @@ class ViewController: UIViewController {
             BlueSnapSDK.showCheckoutScreen(
                 inNavigationController: self.navigationController,
                 animated: true,
-                initialData: self.initialData,
-                purchaseFunc: self.completePurchase)
+                initialData: self.initialData)
         }
     }
 	
@@ -117,7 +116,7 @@ class ViewController: UIViewController {
             BlueSnapSDK.showCurrencyList(
                 inNavigationController: self.navigationController,
                 animated: true,
-                selectedCurrencyCode: self.initialData.priceDetails.currency,
+                selectedCurrencyCode: self.initialData!.priceDetails.currency,
                 updateFunc: self.updateViewWithNewCurrency,
                 errorFunc: {
                     self.showErrorAlert(message: "Failed to display currency List, please try again")
@@ -140,10 +139,10 @@ class ViewController: UIViewController {
     */
     private func setInitialShopperDetails() {
         
-        initialData.billingDetails = BSBillingAddressDetails(email: "john@gmail.com", name: "John Doe", address: "333 elm st", city: "New York", zip: "532464", country: "US", state: "MA")
+        initialData?.billingDetails = BSBillingAddressDetails(email: "john@gmail.com", name: "John Doe", address: "333 elm st", city: "New York", zip: "532464", country: "US", state: "MA")
 
         if withShippingSwitch.isOn {
-            initialData.shippingDetails = BSShippingAddressDetails(phone: "972-528-9999999", name: "Mary Doe", address: "333 elm st", city: "Boston", zip: "111222", country: initialShippingCoutry, state: initialShippingState)
+            initialData?.shippingDetails = BSShippingAddressDetails(phone: "972-528-9999999", name: "Mary Doe", address: "333 elm st", city: "Boston", zip: "111222", country: initialShippingCoutry, state: initialShippingState)
         }
     }
     
@@ -171,11 +170,11 @@ class ViewController: UIViewController {
         let amount = (valueTextField.text! as NSString).doubleValue
         let taxAmount = (taxTextField.text! as NSString).doubleValue
         let currency = currencyButton.titleLabel?.text ?? "USD"
-        initialData.priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
-        initialData.withShipping = withShippingSwitch.isOn
-        initialData.fullBilling = fullBillingSwitch.isOn
-        initialData.withEmail = withEmailSwitch.isOn
-        initialData.updateTaxFunc = self.updateTax
+        let priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
+        let withShipping = withShippingSwitch.isOn
+        let fullBilling = fullBillingSwitch.isOn
+        let withEmail = withEmailSwitch.isOn
+        initialData = BSInitialData(withEmail: withEmail, withShipping: withShipping, fullBilling: fullBilling, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: self.completePurchase, updateTaxFunc: self.updateTax)
     }
     
     /**
@@ -184,7 +183,7 @@ class ViewController: UIViewController {
     */
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
-        if let priceDetails = initialData.priceDetails {
+        if let priceDetails = initialData?.priceDetails {
             if let newCurrency = newCurrency {
                 var oldRate: NSNumber! = 1.0
                 if let oldCurrency = oldCurrency {
