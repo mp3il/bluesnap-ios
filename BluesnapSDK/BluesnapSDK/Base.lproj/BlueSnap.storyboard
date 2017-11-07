@@ -317,38 +317,69 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FkL-LM-R7b" userLabel="Centered View">
                                 <rect key="frame" x="-27.5" y="22.5" width="375" height="523"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y0h-By-eMw" userLabel="Apple Pay Button">
-                                        <rect key="frame" x="0.0" y="40" width="375" height="143"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="ApplePayButton"/>
-                                        <state key="normal" title="Button" image="apple_pay_button"/>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TxO-8f-A8O" userLabel="ApplePay" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
+                                        <rect key="frame" x="27" y="61" width="320" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ApplePayButton">
+                                            <accessibilityTraits key="traits" button="YES"/>
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="image" keyPath="iconImage" value="apple_pay_button"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="iconWidth">
+                                                <real key="value" value="46"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="iconHeight">
+                                                <real key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="applePayClick:" destination="f14-WO-daN" eventType="touchUpInside" id="MPU-hd-zkw"/>
+                                            <action selector="applePayClick:" destination="f14-WO-daN" eventType="touchUpInside" id="jes-no-Nt4"/>
                                         </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1a-n9-LUQ" userLabel="Card Number Button">
-                                        <rect key="frame" x="0.0" y="183" width="375" height="143"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="CcButton"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Button" image="Card_button">
-                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </state>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tF0-LC-ldx" userLabel="NewCard" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
+                                        <rect key="frame" x="28" y="132" width="320" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="CcButton">
+                                            <accessibilityTraits key="traits" button="YES"/>
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="image" keyPath="iconImage" value="Card_button"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="iconWidth">
+                                                <real key="value" value="103"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="iconHeight">
+                                                <real key="value" value="29"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="ccDetailsClick:" destination="f14-WO-daN" eventType="touchUpInside" id="oDn-h8-X7r"/>
+                                            <action selector="ccDetailsClick:" destination="f14-WO-daN" eventType="touchUpInside" id="k0R-Pl-r2V"/>
                                         </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxD-gL-uXq">
-                                        <rect key="frame" x="0.0" y="327" width="429" height="143"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="PayPalButton"/>
-                                        <state key="normal" title="PayPal" image="paypal_button"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zdE-7E-j3h" userLabel="PayPal" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
+                                        <rect key="frame" x="28" y="203" width="320" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="PayPalButton">
+                                            <accessibilityTraits key="traits" button="YES"/>
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="image" keyPath="iconImage" value="paypal_button"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="iconWidth">
+                                                <real key="value" value="46"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="iconHeight">
+                                                <real key="value" value="13"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="payPalClicked:" destination="f14-WO-daN" eventType="touchUpInside" id="M5K-kF-25T"/>
+                                            <action selector="payPalClicked:" destination="f14-WO-daN" eventType="touchUpInside" id="JrI-yK-9Su"/>
                                         </connections>
-                                    </button>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -365,10 +396,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Payment Type" id="Py8-S0-Quf"/>
                     <connections>
-                        <outlet property="applePayButton" destination="y0h-By-eMw" id="mc0-kk-JjP"/>
-                        <outlet property="ccnButton" destination="M1a-n9-LUQ" id="bfm-K8-KKo"/>
+                        <outlet property="applePayButton" destination="TxO-8f-A8O" id="E6U-6J-j2u"/>
+                        <outlet property="ccnButton" destination="tF0-LC-ldx" id="gA0-9d-nh8"/>
                         <outlet property="centeredView" destination="FkL-LM-R7b" id="Wre-WY-Jla"/>
-                        <outlet property="payPalButton" destination="pxD-gL-uXq" id="QT5-r0-szE"/>
+                        <outlet property="payPalButton" destination="zdE-7E-j3h" id="pAw-hl-jad"/>
                         <segue destination="GdF-z9-L8H" kind="show" id="1KG-Ig-ECE"/>
                         <segue destination="W0G-M6-3dM" kind="show" id="rfc-7Z-z7N"/>
                         <segue destination="Uqu-XD-vmH" kind="show" id="7e7-yj-5Ow"/>
@@ -376,7 +407,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2681" y="-380"/>
+            <point key="canvasLocation" x="2679.375" y="-380.28169014084506"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="Jh7-rO-NOj">
@@ -1092,12 +1123,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Card_button" width="375" height="143"/>
+        <image name="Card_button" width="103" height="29"/>
         <image name="IL" width="28" height="20"/>
-        <image name="apple_pay_button" width="375" height="143"/>
+        <image name="apple_pay_button" width="46" height="30"/>
         <image name="blue_check_mark" width="16" height="13"/>
         <image name="cc_default" width="35" height="21"/>
         <image name="menu_button" width="20" height="16"/>
-        <image name="paypal_button" width="375" height="143"/>
+        <image name="paypal_button" width="46" height="13"/>
     </resources>
 </document>

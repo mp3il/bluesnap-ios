@@ -37,7 +37,9 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
      */
     internal func resizeElements() {
         
-        let marginX : CGFloat = 8
+        let actualWidth = self.frame.width
+        let outerMarginX : CGFloat = actualWidth > 320 ? (40 + (actualWidth - 320)/2.0) : (40 * actualWidth / 320)
+        let marginX : CGFloat = 8 * actualWidth / 320
         let marginY : CGFloat = 5
         
         let imageWidth : CGFloat = 35
@@ -46,15 +48,16 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
         let actualHeight : CGFloat = self.frame.height - marginY * 2.0
         let ratioY = actualHeight / imageHeight
         let actualImageWidth : CGFloat = imageWidth * ratioY
-        let actualLableWidth = (self.frame.width - 4.0 * marginX) / 3
+        let actualLabelsWidth = actualWidth - actualImageWidth - (2.0 * marginX) - (2.0 * outerMarginX)
         
-        imageView.frame = CGRect(x: marginX, y: marginY, width: actualImageWidth, height: actualHeight)
+        imageView.frame = CGRect(x: outerMarginX, y: marginY, width: actualImageWidth, height: actualHeight)
         
-        let last4DigitsX = 2 * marginX + actualImageWidth
-        last4DigitsLabel.frame = CGRect(x: last4DigitsX, y: marginY, width: actualLableWidth, height: actualHeight)
+        let last4DigitsX = outerMarginX + actualImageWidth + marginX
+        last4DigitsLabel.frame = CGRect(x: last4DigitsX, y: marginY, width: actualLabelsWidth * 0.33, height: actualHeight)
         
-        let expirationLabelX = self.frame.width - marginX - actualLableWidth
-        expirationLabel.frame = CGRect(x: expirationLabelX, y: marginY, width: actualLableWidth, height: actualHeight)
+        let expirationLabelWidth = actualLabelsWidth * 0.66
+        let expirationLabelX = self.frame.width - outerMarginX - expirationLabelWidth
+        expirationLabel.frame = CGRect(x: expirationLabelX, y: marginY, width: expirationLabelWidth, height: actualHeight)
         
         coverButton.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
     }
@@ -112,6 +115,9 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
         self.addSubview(self.expirationLabel)
         self.addSubview(self.coverButton)
         //self.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1)
+        
+        expirationLabel.textAlignment = .right
+        last4DigitsLabel.textAlignment = .left
         
         setElementAttributes()
         

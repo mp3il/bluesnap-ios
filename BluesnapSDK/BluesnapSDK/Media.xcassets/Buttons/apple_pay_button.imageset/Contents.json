@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "apple_pay_button.png",
+      "filename" : "applepay_button.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "apple_pay_button@2x.png",
+      "filename" : "applepay_button@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "apple_pay_button@3x.png",
+      "filename" : "applepay_button@3x.png",
       "scale" : "3x"
     }
   ],

@@ -25,9 +25,9 @@ class BSStartViewController: UIViewController {
     // MARK: Outlets
 
     @IBOutlet weak var centeredView: UIView!
-    @IBOutlet weak var ccnButton: UIButton!
-    @IBOutlet weak var applePayButton: UIButton!
-    @IBOutlet weak var payPalButton: UIButton!
+    @IBOutlet weak var ccnButton: BSPaymentTypeView!
+    @IBOutlet weak var applePayButton: BSPaymentTypeView!
+    @IBOutlet weak var payPalButton: BSPaymentTypeView!
 
     // MARK: init
     
@@ -175,12 +175,14 @@ class BSStartViewController: UIViewController {
             payPalButton.isHidden = true
         }
         
+        let newCcRect = self.ccnButton.frame
+        
         if existingCreditCards.count > 0 && existingCardViews.count == 0 {
             var tag : Int = 0
             for existingCreditCard in existingCreditCards {
                 let cardView = BSExistingCcUIView()
                 self.centeredView.addSubview(cardView)
-                cardView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
+                cardView.frame = CGRect(x: newCcRect.minX, y: newCcRect.minY, width: newCcRect.width, height: newCcRect.height)
                 sectionNum = sectionNum + 1
                 cardView.center.y = sectionY * sectionNum
                 cardView.setCc(

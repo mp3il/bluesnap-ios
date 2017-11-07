@@ -68,6 +68,7 @@ class BSPaymentTypeView: BSBaseBoxWithShadowView {
         }
         self.addSubview(self.imageButton)
         //setElementAttributes()
+        imageButton.addTarget(self, action: #selector(BSPaymentTypeView.touchUpInside(_:)), for: .touchUpInside)
     }
     
     /**
@@ -84,4 +85,13 @@ class BSPaymentTypeView: BSBaseBoxWithShadowView {
         super.layoutSubviews()
         setElementAttributes()
     }
+    
+    /**
+     Propagate the touch up inside action to the one defined on the view
+     */
+    func touchUpInside(_ sender: Any) {
+        
+        sendActions(for: UIControlEvents.touchUpInside)
+    }
+
 }
