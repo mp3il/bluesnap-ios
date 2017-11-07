@@ -184,7 +184,7 @@ class BSStartViewController: UIViewController {
                 sectionNum = sectionNum + 1
                 cardView.center.y = sectionY * sectionNum
                 cardView.setCc(
-                    ccType: existingCreditCard.cardType ?? "",
+                    ccType: existingCreditCard.ccType ?? "",
                     last4Digits: existingCreditCard.last4Digits ?? "",
                     expiration: (existingCreditCard.expirationMonth ?? "") + " / " + (existingCreditCard.expirationYear ?? ""))
                 cardView.resizeElements()

@@ -365,23 +365,22 @@ import Foundation
         var resultData: [String:String] = [:]
         var resultError: BSErrors? = nil
         if let data = data {
-            do {
-                // Parse the result JSOn object
-                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    resultData["ccType"] = json["ccType"] as? String
-                    resultData["last4Digits"] = json["last4Digits"] as? String
-                    resultData["ccIssuingCountry"] = (json["issuingCountry"] as? String ?? "").uppercased()
-                } else {
-                    NSLog("Error parsing BS result on CC details submit")
+            if !data.isEmpty {
+                do {
+                    // Parse the result JSOn object
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        resultData["ccType"] = json["ccType"] as? String
+                        resultData["last4Digits"] = json["last4Digits"] as? String
+                        resultData["ccIssuingCountry"] = (json["issuingCountry"] as? String ?? "").uppercased()
+                    } else {
+                        NSLog("Error parsing BS result on CC details submit")
+                        resultError = .unknown
+                    }
+                } catch let error as NSError {
+                    NSLog("Error parsing BS result on CC details submit: \(error.localizedDescription)")
                     resultError = .unknown
                 }
-            } catch let error as NSError {
-                NSLog("Error parsing BS result on CC details submit: \(error.localizedDescription)")
-                resultError = .unknown
             }
-        } else {
-            NSLog("No data in BS result on CC details submit")
-            resultError = .unknown
         }
         return (resultData, resultError)
     }
@@ -680,7 +679,7 @@ import Foundation
                             ccDetails.last4Digits = cardLastFourDigits
                         }
                         if let cardType = creditCardJson["cardType"] as? String {
-                            ccDetails.cardType = cardType
+                            ccDetails.ccType = cardType
                         }
                         if let expirationMonth = creditCardJson["expirationMonth"] as? String, let expirationYear = creditCardJson["expirationYear"] as? String {
                             ccDetails.expirationMonth = expirationMonth

@@ -23,29 +23,6 @@ class BSSdkData: NSObject {
     var creditCardRegex: [String : String]?
 }
 
-@objc public class BSExistingCcDetails: NSObject, NSCopying {
-    
-    var billingDetails: BSBillingAddressDetails?
-    var last4Digits: String?
-    var cardType: String?
-    var expirationMonth: String?
-    var expirationYear: String?
-    
-    func getExpiration() -> String {
-        return (expirationMonth ?? "") + " / " + (expirationYear ?? "")
-    }
-    
-    public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSExistingCcDetails()
-        copy.billingDetails = billingDetails?.copy(with: zone) as? BSBillingAddressDetails
-        copy.last4Digits = last4Digits
-        copy.cardType = cardType
-        copy.expirationMonth = expirationMonth
-        copy.expirationYear = expirationYear
-        return copy
-    }
-}
-
 class BSReturningShopperData: NSObject {
     
     var name: String?

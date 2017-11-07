@@ -181,6 +181,87 @@ import Foundation
         })
     }
 
+    
+    /**
+     Submit CC details to BlueSnap server
+     - parameters:
+     - ccNumber: Credit card number (in case of new CC)
+     - last4Digits: Credit card last 4 digits (in case of existing CC)
+     - expDate: CC expiration date in format MM/YYYY  (in case of new/existing CC)
+     - cvv: CC security code (CVV)  (in case of new CC)
+     - completion: callback with either result details if OK, or error details if not OK
+     */
+    static func submitPaymentRequest(ccNumber: String?, last4Digits: String?, expDate: String?, cvv: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+        
+        var requestBody : [String:String] = [:]
+        if let ccNumber = ccNumber {
+            requestBody["ccNumber"] = BSStringUtils.removeWhitespaces(ccNumber)
+        }
+        if let last4Digits = last4Digits {
+            requestBody["lastFourDigits"] = last4Digits
+        }
+        if let cvv = cvv {
+            requestBody["cvv"] = cvv
+        }
+        if let expDate = expDate {
+            requestBody["expDate"] = expDate
+        }
+        if let fraudSessionId = fraudSessionId {
+            requestBody["fraudSessionId"] = fraudSessionId
+        }
+        
+        if let billingDetails = billingDetails {
+            if let splitName = billingDetails.getSplitName() {
+                requestBody["billingFirstName"] = splitName.firstName
+                requestBody["billingLastName"] = splitName.lastName
+            }
+            if let country = billingDetails.country {
+                requestBody["billingCountry"] = country
+            }
+            if let state = billingDetails.state {
+                requestBody["billingState"] = state
+            }
+            if let city = billingDetails.city {
+                requestBody["billingCity"] = city
+            }
+            if let address = billingDetails.address {
+                requestBody["billingAddress"] = address
+            }
+            if let zip = billingDetails.zip {
+                requestBody["billingZip"] = zip
+            }
+            if let email = billingDetails.email {
+                requestBody["email"] = email
+            }
+        }
+        
+        if let shippingDetails = shippingDetails {
+            if let splitName = shippingDetails.getSplitName() {
+                requestBody["shippingFirstName"] = splitName.firstName
+                requestBody["shippingLastName"] = splitName.lastName
+            }
+            if let country = shippingDetails.country {
+                requestBody["shippingCountry"] = country
+            }
+            if let state = shippingDetails.state {
+                requestBody["shippingState"] = state
+            }
+            if let city = shippingDetails.city {
+                requestBody["shippingCity"] = city
+            }
+            if let address = shippingDetails.address {
+                requestBody["shippingAddress"] = address
+            }
+            if let zip = shippingDetails.zip {
+                requestBody["shippingZip"] = zip
+            }
+            if let phone = shippingDetails.phone {
+                requestBody["phone"] = phone
+            }
+        }
+        
+        submitCcDetails(requestBody: requestBody, completion: completion)
+    }
 
     /**
      Submit CC details to BlueSnap server

@@ -243,6 +243,21 @@ class ViewController: UIViewController {
                         self.showThankYouScreen(result)
                 })
                 
+            } else if let ccPaymentRequest = paymentRequest as? BSExistingCcPaymentRequest {
+                
+                let ccDetails = ccPaymentRequest.existingCcDetails
+                NSLog("CC Expiration: \(ccDetails.getExpiration() )")
+                NSLog("CC type: \(ccDetails.ccType ?? "")")
+                NSLog("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
+                demo.createTokenizedTransaction(
+                    paymentRequest: ccPaymentRequest,
+                    bsToken: self.bsToken!,
+                    completion: { success, data in
+                        result.data = data
+                        result.success = success
+                        self.logResultDetails(result: result, paymentRequest: ccPaymentRequest)
+                        self.showThankYouScreen(result)
+                })
             } else if let ccPaymentRequest = paymentRequest as? BSCcPaymentRequest {
                 
                 let ccDetails = ccPaymentRequest.ccDetails
@@ -261,7 +276,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
     func showThankYouScreen(_ result: (success: Bool, data: String?)) {
         // Show success/fail screen
         NSLog("- - - - - - - - - - - - - -")

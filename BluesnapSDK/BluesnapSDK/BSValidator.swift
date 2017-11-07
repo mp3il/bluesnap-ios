@@ -97,7 +97,7 @@ import Foundation
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count < 3) {
+        } else if !isValidStreet(newValue) {
             result = false
         } else {
             result = true
@@ -120,7 +120,7 @@ import Foundation
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count < 3) {
+        } else if !isValidCity(newValue) {
             result = false
         } else {
             result = true
@@ -139,7 +139,7 @@ import Foundation
         var result : Bool = true
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count != 2) {
+        } else if !isValidCountry(countryCode: newValue) {
             result = false
         } else {
             result = true
@@ -162,7 +162,7 @@ import Foundation
         }
         if (ignoreIfEmpty && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count < 3) {
+        } else if !isValidZip(countryCode: addressDetails?.country ?? "", zip: newValue) {
             result = false
         } else {
             result = true
@@ -182,11 +182,8 @@ import Foundation
         var result : Bool = true
         if ((ignoreIfEmpty || input.isHidden) && newValue.characters.count == 0) {
             // ignore
-        } else if (newValue.characters.count != 2) {
+        } else if !isValidState(countryCode: addressDetails?.country ?? "", stateCode: addressDetails?.state) {
             result = false
-        } else {
-            let stateName = BSCountryManager.getInstance().getStateName(countryCode: addressDetails?.country ?? "", stateCode: addressDetails?.state ?? "")
-            result = stateName != nil
         }
         if result {
             input.hideError()
@@ -420,7 +417,66 @@ import Foundation
         return true
     }
     
+    open class func isValidCity(_ str: String) -> Bool {
+        
+        var result : Bool = false
+        if (str.characters.count < 3) {
+            result = false
+        } else {
+            result = true
+        }
+        return result
+    }
     
+    open class func isValidStreet(_ str: String) -> Bool {
+        
+        var result : Bool = false
+        if (str.characters.count < 3) {
+            result = false
+        } else {
+            result = true
+        }
+        return result
+    }
+    
+    open class func isValidZip(countryCode: String, zip: String) -> Bool {
+        
+        var result : Bool = false
+        if BSCountryManager.getInstance().countryHasNoZip(countryCode: countryCode) {
+            result = true
+        } else if (zip.characters.count < 3) {
+            result = false
+        } else {
+            result = true
+        }
+        return result
+    }
+    
+    open class func isValidState(countryCode: String, stateCode: String?) -> Bool {
+        
+        var result : Bool = true
+        if BSCountryManager.getInstance().countryHasStates(countryCode: countryCode) {
+            if stateCode == nil || (stateCode?.characters.count != 2) {
+                result = false
+            } else {
+                let stateName = BSCountryManager.getInstance().getStateName(countryCode: countryCode, stateCode: stateCode ?? "")
+                result = stateName != nil
+            }
+        } else {
+            result = false
+        }
+        return result
+    }
+    
+    open class func isValidCountry(countryCode: String?) -> Bool {
+        
+        var result : Bool = true
+        if countryCode == nil || BSCountryManager.getInstance().getCountryName(countryCode: countryCode!) == nil {
+            result = false
+        }
+        return result
+    }
+
     open class func getCvvLength(cardType: String) -> Int {
         var cvvLength = 3
         if cardType.lowercased() == "amex" {

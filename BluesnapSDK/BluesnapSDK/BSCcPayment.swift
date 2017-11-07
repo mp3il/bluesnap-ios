@@ -27,6 +27,34 @@ import Foundation
     }
 }
 
+
+@objc public class BSExistingCcDetails: NSObject, NSCopying {
+    
+    var billingDetails: BSBillingAddressDetails?
+    public var last4Digits: String?
+    public var ccType: String?
+    public var expirationMonth: String?
+    public var expirationYear: String?
+    
+    public func getExpiration() -> String {
+        return (expirationMonth ?? "") + " / " + (expirationYear ?? "")
+    }
+    
+    func getExpirationForSubmit() -> String {
+        return (expirationMonth ?? "") + "/" + (expirationYear ?? "")
+    }
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = BSExistingCcDetails()
+        copy.billingDetails = billingDetails?.copy(with: zone) as? BSBillingAddressDetails
+        copy.last4Digits = last4Digits
+        copy.ccType = ccType
+        copy.expirationMonth = expirationMonth
+        copy.expirationYear = expirationYear
+        return copy
+    }
+}
+
 /**
  CC details for the purchase
  */
@@ -71,7 +99,7 @@ import Foundation
         super.init(initialData: initialData)
         
         self.existingCcDetails = existingCcDetails.copy() as! BSExistingCcDetails
-        self.ccDetails.ccType = existingCcDetails.cardType
+        self.ccDetails.ccType = existingCcDetails.ccType
         self.ccDetails.last4Digits = existingCcDetails.last4Digits
         
         if let ccBillingDetails = existingCcDetails.billingDetails {

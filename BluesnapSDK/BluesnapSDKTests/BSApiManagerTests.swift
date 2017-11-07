@@ -108,9 +108,9 @@ class BSApiManagerTests: XCTestCase {
                 if let existingCreditCards = shopper?.existingCreditCards {
                     let ccDetails: BSExistingCcDetails = existingCreditCards[0]
                     XCTAssertEqual("1111", ccDetails.last4Digits)
-                    XCTAssertEqual("VISA", ccDetails.cardType)
+                    XCTAssertEqual("VISA", ccDetails.ccType)
                     XCTAssertEqual("11", ccDetails.expirationMonth)
-                    XCTAssertEqual("2022", ccDetails.expirationYear)
+                    XCTAssertEqual("2020", ccDetails.expirationYear)
                     let billing = ccDetails.billingDetails
                     XCTAssertEqual("Slim Aklij", billing?.name)
                     XCTAssertEqual("Sixty", billing?.city)
@@ -142,9 +142,8 @@ class BSApiManagerTests: XCTestCase {
     
     func testGetPayPalToken() {
         
-        
-        let initialData = BSInitialData()
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let initialData = BSInitialData(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
         let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -164,8 +163,8 @@ class BSApiManagerTests: XCTestCase {
     func testGetPayPalTokenWithInvalidTokenNoRegeneration() {
         
         createExpiredTokenNoRegeneration()
-        let initialData = BSInitialData()
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let initialData = BSInitialData(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
         let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -187,8 +186,8 @@ class BSApiManagerTests: XCTestCase {
         
         createExpiredTokenWithRegeneration()
         
-        let initialData = BSInitialData()
-        initialData.priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
+        let initialData = BSInitialData(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
         let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
         
         let semaphore = DispatchSemaphore(value: 0)

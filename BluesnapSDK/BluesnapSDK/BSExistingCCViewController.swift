@@ -25,6 +25,7 @@ class BSExistingCCViewController: UIViewController {
     
     // MARK: private variables
     fileprivate var paymentRequest: BSExistingCcPaymentRequest!
+    fileprivate var activityIndicator : UIActivityIndicatorView?
     
     // MARK: init
     
@@ -37,7 +38,7 @@ class BSExistingCCViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +50,7 @@ class BSExistingCCViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        existingCcView.setCc(ccType: paymentRequest.existingCcDetails.cardType ?? "", last4Digits: paymentRequest.existingCcDetails.last4Digits ?? "", expiration: paymentRequest.existingCcDetails.getExpiration())
+        existingCcView.setCc(ccType: paymentRequest.existingCcDetails.ccType ?? "", last4Digits: paymentRequest.existingCcDetails.last4Digits ?? "", expiration: paymentRequest.existingCcDetails.getExpiration())
         
         // load label translations
         billingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Billing)
@@ -89,13 +90,60 @@ class BSExistingCCViewController: UIViewController {
     // MARK: button actions
 
     @IBAction func clickPay(_ sender: Any) {
+        
+//        if !validateBilling() {
+//            editBilling(sender)
+//        } else if !validateShipping() {
+//            editShipping(sender)
+//        } else {
+            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
+            submitPaymentFields()
+//        }
     }
+    
     @IBAction func editBilling(_ sender: Any) {
     }
+    
     @IBAction func editShipping(_ sender: Any) {
     }
 
-    // MARK: provate functions
+    // MARK: private functions
+    
+    private func submitPaymentFields() {
+        
+        BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: paymentRequest.existingCcDetails.last4Digits, expDate: paymentRequest.existingCcDetails.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: {
+            ccDetails, error in
+            
+            if let error = error {
+                if (error == .invalidCcNumber) {
+                    self.showError(BSValidator.ccnInvalidMessage)
+                } else if (error == .invalidExpDate) {
+                    self.showError(BSValidator.expInvalidMessage)
+                } else if (error == .invalidCvv) {
+                    self.showError(BSValidator.cvvInvalidMessage)
+                } else {
+                    NSLog("Unexpected error submitting Payment Fields to BS; error: \(error)")
+                    let message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Submit_Error)
+                    self.showError(message)
+                }
+            }
+            DispatchQueue.main.async {
+                // complete the purchase - go back to merchant screen and call the merchant purchaseFunc
+                BSViewsManager.stopActivityIndicator(activityIndicator: self.activityIndicator)
+                if error == nil {
+                    if let navigationController = self.navigationController {
+                        // return to merchant screen
+                        let viewControllers = navigationController.viewControllers
+                        let merchantControllerIndex = viewControllers.count - 3
+                        _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
+                    }
+                    // execute callback
+                    BlueSnapSDK.initialData?.purchaseFunc(self.paymentRequest)
+                }
+            }
+        })
+
+    }
     
     private func getDisplayAddress(addr : BSBaseAddressDetails?) -> String {
         
@@ -120,5 +168,50 @@ class BSExistingCCViewController: UIViewController {
         }
         return result
     }
+    
+    private func showError(_ message: String) {
+        // TODO
+    }
+    
+    // MARK: Validation methods
+    
+    func validateBilling() -> Bool {
+        
+        var result = false
+        if let data = BlueSnapSDK.initialData {
+            
+            // not validating CC, seeing as it is an existing one
+            
+            result = BSValidator.isValidName(paymentRequest.billingDetails.name)
+            result = result && data.withEmail ? BSValidator.isValidEmail(paymentRequest.billingDetails.email ?? "") : false
+            result = result && BSValidator.isValidZip(countryCode: paymentRequest.billingDetails.country ?? "", zip: paymentRequest.billingDetails.zip ?? "")
+            if data.fullBilling {
+                let ok1 = BSValidator.isValidCity(paymentRequest.billingDetails.city ?? "")
+                let ok2 = BSValidator.isValidStreet(paymentRequest.billingDetails.address ?? "")
+                let ok3 = BSValidator.isValidCountry(countryCode: paymentRequest.billingDetails.country)
+                let ok4 = BSValidator.isValidState(countryCode: paymentRequest.billingDetails.country ?? "", stateCode: paymentRequest.billingDetails.state)
+                result = result && ok1 && ok2 && ok3 && ok4
+            }
+        }
+        return result
+    }
 
+    func validateShipping() -> Bool {
+        
+        var result = true
+        if let data = BlueSnapSDK.initialData {
+            if data.withShipping {
+                if let shippingDetails = paymentRequest.shippingDetails {
+                    let ok1 = BSValidator.isValidName(shippingDetails.name)
+                    let ok2 = BSValidator.isValidCity(shippingDetails.city ?? "")
+                    let ok3 = BSValidator.isValidStreet(shippingDetails.address ?? "")
+                    let ok4 = BSValidator.isValidCountry(countryCode: shippingDetails.country)
+                    let ok5 = BSValidator.isValidState(countryCode: shippingDetails.country ?? "", stateCode: shippingDetails.state)
+                    let ok6 = BSValidator.isValidZip(countryCode: shippingDetails.country ?? "", zip: shippingDetails.zip ?? "")
+                    result =  ok1 && ok2 && ok3 && ok4 && ok5 && ok6
+                }
+            }
+        }
+        return result
+    }
 }
