@@ -306,12 +306,9 @@ class BluesnapSDKExampleUITests: XCTestCase {
     
     private func prepareInitialData(fullBilling: Bool, withShipping: Bool, withEmail: Bool, amount: Double!, currency: String) -> BSInitialData {
 
-        let initialData = BSInitialData()
-        initialData.fullBilling = fullBilling
-        initialData.withShipping = withShipping
-        initialData.withEmail = withEmail
         let taxAmount = amount * 0.05 // according to updateTax() in ViewController
-        initialData.priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
+        let priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
+        let initialData = BSInitialData(withEmail: withEmail, withShipping: withShipping, fullBilling: fullBilling, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: {_ in }, updateTaxFunc: nil)
         return initialData
     }
     

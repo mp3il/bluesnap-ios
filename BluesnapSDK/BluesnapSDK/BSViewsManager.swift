@@ -22,8 +22,6 @@ class BSViewsManager {
     static let stateScreenStoryboardId = "BSStatesStoryboardId"
     static let webScreenStoryboardId = "BSWebViewController"
 
-    fileprivate static var startScreen: BSStartViewController!
-    fileprivate static var purchaseScreen: BSPaymentViewController!//BSSummaryScreen!
     fileprivate static var currencyScreen: BSCurrenciesViewController!
     fileprivate static var bsBundle: Bundle = createBundle()
 
@@ -62,11 +60,9 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool) {
         
-        if startScreen == nil {
-            let bundle = BSViewsManager.getBundle()
-            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
-            startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
-        }
+        let bundle = BSViewsManager.getBundle()
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
+        let startScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.startScreenStoryboardId) as! BSStartViewController
 
         startScreen.initScreen()
 
@@ -81,19 +77,18 @@ class BSViewsManager {
      - animated: how to navigate to the new screen
      */
     open class func showCCDetailsScreen(
+        existingCcPaymentRequest: BSExistingCcPaymentRequest?,
         inNavigationController: UINavigationController!,
         animated: Bool) {
         
         if let initialData = BlueSnapSDK.initialData {
-            if purchaseScreen == nil {
-                let bundle = BSViewsManager.getBundle()
-                let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
-                purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController
-            }
+            let bundle = BSViewsManager.getBundle()
+            let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
+            let purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController
             
-            let paymentRequest = BSCcPaymentRequest(initialData: initialData)
+            let paymentRequest = existingCcPaymentRequest ?? BSCcPaymentRequest(initialData: initialData)
             purchaseScreen.initScreen(paymentRequest: paymentRequest)
-            
+
             inNavigationController.pushViewController(purchaseScreen, animated: animated)
         }
     }

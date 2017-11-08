@@ -17,24 +17,18 @@ import Foundation
     public var ccType : String?
     public var last4Digits : String?
     public var ccIssuingCountry : String?
+    public var expirationMonth: String?
+    public var expirationYear: String?
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSCcDetails()
         copy.ccType = ccType
         copy.last4Digits = last4Digits
         copy.ccIssuingCountry = ccIssuingCountry
+        copy.expirationMonth = expirationMonth
+        copy.expirationYear = expirationYear
         return copy
     }
-}
-
-
-@objc public class BSExistingCcDetails: NSObject, NSCopying {
-    
-    var billingDetails: BSBillingAddressDetails?
-    public var last4Digits: String?
-    public var ccType: String?
-    public var expirationMonth: String?
-    public var expirationYear: String?
     
     public func getExpiration() -> String {
         return (expirationMonth ?? "") + " / " + (expirationYear ?? "")
@@ -43,8 +37,13 @@ import Foundation
     func getExpirationForSubmit() -> String {
         return (expirationMonth ?? "") + "/" + (expirationYear ?? "")
     }
+}
+
+@objc public class BSExistingCcDetails: BSCcDetails {
     
-    public func copy(with zone: NSZone? = nil) -> Any {
+    var billingDetails: BSBillingAddressDetails?
+    
+    public override func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSExistingCcDetails()
         copy.billingDetails = billingDetails?.copy(with: zone) as? BSBillingAddressDetails
         copy.last4Digits = last4Digits
@@ -90,9 +89,14 @@ import Foundation
 /**
  CC details for the purchase
  */
-@objc public class BSExistingCcPaymentRequest : BSCcPaymentRequest {
+@objc public class BSExistingCcPaymentRequest : BSCcPaymentRequest, NSCopying {
     
     public var existingCcDetails: BSExistingCcDetails = BSExistingCcDetails()
+    
+    // for copy
+    override private init(initialData: BSInitialData) {
+         super.init(initialData: initialData)
+    }
     
     init(initialData: BSInitialData, shopper: BSReturningShopperData!, existingCcDetails: BSExistingCcDetails!) {
         
@@ -104,6 +108,14 @@ import Foundation
         
         if let ccBillingDetails = existingCcDetails.billingDetails {
             self.billingDetails = ccBillingDetails.copy() as! BSBillingAddressDetails
+            if !initialData.withEmail {
+                self.billingDetails.email = nil
+            }
+            if !initialData.fullBilling {
+                self.billingDetails.address = nil
+                self.billingDetails.city = nil
+                self.billingDetails.state = nil
+            }
         } else {
             if let initialBillingDetails = initialData.billingDetails {
                 self.billingDetails = initialBillingDetails.copy() as! BSBillingAddressDetails
@@ -113,19 +125,23 @@ import Foundation
             if let name = shopper.name {
                 billingDetails.name = name
             }
-            if let email = shopper.email {
-                billingDetails.email = email
+            if initialData.withEmail {
+                if let email = shopper.email {
+                    billingDetails.email = email
+                }
             }
             if let country = shopper.countryCode {
                 billingDetails.country =  country
-                if let state = shopper.stateCode {
-                    billingDetails.state = state
-                }
-                if let address = shopper.address {
-                    billingDetails.address = address
-                }
-                if let city = shopper.city {
-                    billingDetails.city = city
+                if initialData.fullBilling {
+                    if let state = shopper.stateCode {
+                        billingDetails.state = state
+                    }
+                    if let address = shopper.address {
+                        billingDetails.address = address
+                    }
+                    if let city = shopper.city {
+                        billingDetails.city = city
+                    }
                 }
                 if let zip = shopper.zip {
                     billingDetails.zip = zip
@@ -154,5 +170,18 @@ import Foundation
             }
         }
     }
+    
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = BSExistingCcPaymentRequest(initialData: BlueSnapSDK.initialData!)
+        copy.existingCcDetails = self.existingCcDetails.copy() as! BSExistingCcDetails
+        copy.ccDetails = self.ccDetails.copy() as! BSCcDetails
+        copy.billingDetails = self.billingDetails.copy() as! BSBillingAddressDetails
+        if let shippingDetails = self.shippingDetails {
+            copy.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
+        }
+        return copy
+    }
+
 }
 

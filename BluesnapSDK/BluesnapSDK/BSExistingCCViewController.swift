@@ -91,6 +91,7 @@ class BSExistingCCViewController: UIViewController {
 
     @IBAction func clickPay(_ sender: Any) {
         
+        // TODO: restore validations
 //        if !validateBilling() {
 //            editBilling(sender)
 //        } else if !validateShipping() {
@@ -102,6 +103,7 @@ class BSExistingCCViewController: UIViewController {
     }
     
     @IBAction func editBilling(_ sender: Any) {
+        _ = BSViewsManager.showCCDetailsScreen(existingCcPaymentRequest: paymentRequest, inNavigationController: self.navigationController, animated: true)
     }
     
     @IBAction func editShipping(_ sender: Any) {
@@ -111,7 +113,7 @@ class BSExistingCCViewController: UIViewController {
     
     private func submitPaymentFields() {
         
-        BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: paymentRequest.existingCcDetails.last4Digits, expDate: paymentRequest.existingCcDetails.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: {
+        BSApiManager.submitPaymentRequest(paymentRequest: paymentRequest, completion: {
             ccDetails, error in
             
             if let error = error {

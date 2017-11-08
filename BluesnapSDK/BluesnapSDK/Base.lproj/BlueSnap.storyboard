@@ -38,10 +38,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="jmW-2z-Xb6" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="280" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
@@ -49,7 +49,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="27" y="7" width="230" height="25"/>
+                                                    <rect key="frame" x="26.5" y="7" width="231" height="25.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
@@ -339,7 +339,7 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tF0-LC-ldx" userLabel="NewCard" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="28" y="132" width="320" height="40"/>
+                                        <rect key="frame" x="28" y="133" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="CcButton">
@@ -360,7 +360,7 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zdE-7E-j3h" userLabel="PayPal" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="28" y="203" width="320" height="40"/>
+                                        <rect key="frame" x="28" y="204" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="PayPalButton">
@@ -680,6 +680,10 @@
                                                     <action selector="editingDidBegin:" destination="W0G-M6-3dM" eventType="editingDidBegin" id="HBK-wC-AJ2"/>
                                                 </connections>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bLS-UU-Svw" customClass="BSExistingCcUIView" customModule="BluesnapSDK">
+                                                <rect key="frame" x="20" y="16" width="280" height="36.5"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
                                             <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcs-xh-zfv" userLabel="Name Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
                                                 <rect key="frame" x="20" y="68.5" width="280" height="37.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -771,12 +775,14 @@
                                             <constraint firstItem="3sW-jJ-zDD" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="6hE-UN-Ed0"/>
                                             <constraint firstItem="zAV-CU-OEK" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="83r-IH-GnO"/>
                                             <constraint firstItem="EKc-lR-XxG" firstAttribute="top" secondItem="3sW-jJ-zDD" secondAttribute="bottom" constant="1" id="Ct2-S7-Mpe"/>
+                                            <constraint firstItem="bLS-UU-Svw" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="Ere-lc-OLN"/>
                                             <constraint firstItem="yRx-IZ-fub" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="IgX-gD-TEE"/>
                                             <constraint firstItem="8Vk-vx-UOS" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="J6D-2M-mqh"/>
                                             <constraint firstAttribute="trailing" secondItem="8Vk-vx-UOS" secondAttribute="trailing" constant="20" symbolic="YES" id="NWv-go-LuA"/>
                                             <constraint firstAttribute="trailing" secondItem="EKc-lR-XxG" secondAttribute="trailing" constant="20" symbolic="YES" id="RCO-Yr-zQK"/>
                                             <constraint firstItem="gcs-xh-zfv" firstAttribute="top" secondItem="okv-vf-cV8" secondAttribute="bottom" constant="16" id="S4j-Qh-6EP"/>
                                             <constraint firstItem="okv-vf-cV8" firstAttribute="top" secondItem="TbD-vW-amX" secondAttribute="top" constant="16" id="SWW-fG-dpA"/>
+                                            <constraint firstItem="bLS-UU-Svw" firstAttribute="top" secondItem="TbD-vW-amX" secondAttribute="top" constant="16" id="UNx-UW-Lev"/>
                                             <constraint firstAttribute="trailing" secondItem="gcs-xh-zfv" secondAttribute="trailing" constant="20" symbolic="YES" id="USf-d9-a7K"/>
                                             <constraint firstAttribute="trailing" secondItem="3sW-jJ-zDD" secondAttribute="trailing" constant="20" symbolic="YES" id="Vn7-5s-WUu"/>
                                             <constraint firstItem="3sW-jJ-zDD" firstAttribute="top" secondItem="8Vk-vx-UOS" secondAttribute="bottom" constant="1" id="Whh-t8-7ii"/>
@@ -786,9 +792,11 @@
                                             <constraint firstItem="gcs-xh-zfv" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="aXH-s5-E7I"/>
                                             <constraint firstItem="8Vk-vx-UOS" firstAttribute="top" secondItem="yRx-IZ-fub" secondAttribute="bottom" constant="1" id="amR-Xt-kac"/>
                                             <constraint firstItem="zAV-CU-OEK" firstAttribute="top" secondItem="gcs-xh-zfv" secondAttribute="bottom" constant="1" id="c1s-mR-pCC"/>
+                                            <constraint firstItem="bLS-UU-Svw" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="egT-ra-pQy"/>
                                             <constraint firstAttribute="trailing" secondItem="yRx-IZ-fub" secondAttribute="trailing" constant="20" symbolic="YES" id="lfv-rV-inw"/>
                                             <constraint firstItem="EKc-lR-XxG" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="lvZ-cV-lb1"/>
                                             <constraint firstItem="zAV-CU-OEK" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="mqt-D2-hc3"/>
+                                            <constraint firstAttribute="trailing" secondItem="bLS-UU-Svw" secondAttribute="trailing" constant="20" symbolic="YES" id="sol-Sw-ETm"/>
                                             <constraint firstItem="okv-vf-cV8" firstAttribute="height" secondItem="TbD-vW-amX" secondAttribute="height" multiplier="43/390" id="tnp-lm-P2C"/>
                                             <constraint firstItem="EKc-lR-XxG" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="wpd-Dm-1tJ"/>
                                             <constraint firstItem="3sW-jJ-zDD" firstAttribute="leading" secondItem="TbD-vW-amX" secondAttribute="leading" constant="20" symbolic="YES" id="xfI-U0-Lsl"/>
@@ -887,6 +895,7 @@
                         <outlet property="ccInputLine" destination="okv-vf-cV8" id="tzJ-xG-p0J"/>
                         <outlet property="cityInputLine" destination="3sW-jJ-zDD" id="QDd-Hd-Ghv"/>
                         <outlet property="emailInputLine" destination="zAV-CU-OEK" id="WNj-qi-hal"/>
+                        <outlet property="existingCcView" destination="bLS-UU-Svw" id="ybq-I7-ugJ"/>
                         <outlet property="fieldsView" destination="TbD-vW-amX" id="U1w-eW-6K9"/>
                         <outlet property="nameInputLine" destination="gcs-xh-zfv" id="29n-uG-jyO"/>
                         <outlet property="payButton" destination="vTt-Ww-2zE" id="eH4-gr-psr"/>
@@ -936,10 +945,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" userLabel="I" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="288" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="288" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="288" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="288" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -1038,10 +1047,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="k9o-eM-cDg" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="280" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">

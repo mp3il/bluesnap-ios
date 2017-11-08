@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var withEmailSwitch: UISwitch!
     @IBOutlet weak var coverAllView: UIView!
     @IBOutlet weak var coverAllLabel: UILabel!
+    @IBOutlet weak var newShopperSwitch: UISwitch!
     
     // MARK: private properties
     
@@ -54,7 +55,7 @@ class ViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
         
         if bsToken == nil {
-            initBsToken()
+            initBsToken(newShopper: true)
         }
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
@@ -315,6 +316,16 @@ class ViewController: UIViewController {
     }
     
     /**
+     Called when the "new shopper" switch changes, to create a new token with/without shopper
+     */
+    @IBAction func withShopperValueChanged(_ sender: UISwitch) {
+        
+        coverAllView.isHidden = false
+        hideCoverView = true
+        initBsToken(newShopper: sender.isOn)
+    }
+
+    /**
         This function is called to recalculate the tax amoutn based on the country/state.
         In this example we give tax only to US states, with 5% for all states, except NY which has 8%.
     */
@@ -351,7 +362,7 @@ class ViewController: UIViewController {
             resultTextView.text = "An error occurred trying to show the Thank You screen."
         }
     }
-    
+
     private func logResultDetails(result: (success:Bool, data: String?), paymentRequest: BSBasePaymentRequest!) {
         
         NSLog("--------------------------------------------------------")
@@ -408,14 +419,16 @@ class ViewController: UIViewController {
      Create a test BS token and set it in BlueSnapSDK.
      In a real app, you would get the token from your app server.
      */
-    func initBsToken() {
+    func initBsToken(newShopper: Bool) {
         
         // To simulate expired token use:
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
         self.coverAllView.isHidden = false
         
-        BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperId, completion: { resultToken, errors in
+        let shopperIdForToken = newShopper ? nil : shopperId
+        
+        BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperIdForToken, completion: { resultToken, errors in
             
             if let resultToken = resultToken {
                 self.bsToken = resultToken

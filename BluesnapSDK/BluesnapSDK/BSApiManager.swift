@@ -181,6 +181,17 @@ import Foundation
         })
     }
 
+    /**
+     Submit Exisating CC request to BlueSnap server
+     - parameters:
+     - paymentRequest: BSExistingCcPaymentRequest
+     - completion: callback with either result details if OK, or error details if not OK
+     */
+    static func submitPaymentRequest(paymentRequest: BSExistingCcPaymentRequest, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+        
+        let ccDetails = paymentRequest.existingCcDetails
+        BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: ccDetails.last4Digits, expDate: ccDetails.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
+    }
     
     /**
      Submit CC details to BlueSnap server

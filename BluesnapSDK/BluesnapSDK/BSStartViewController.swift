@@ -111,7 +111,7 @@ class BSStartViewController: UIViewController {
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
 
         animateToPaymentScreen(startY: self.ccnButton.frame.minY, completion: { animate in
-            _ = BSViewsManager.showCCDetailsScreen(inNavigationController: self.navigationController, animated: animate)
+            _ = BSViewsManager.showCCDetailsScreen(existingCcPaymentRequest: nil, inNavigationController: self.navigationController, animated: animate)
         })
     }
     

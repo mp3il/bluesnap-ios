@@ -13,6 +13,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: private properties
     
+    fileprivate var newCardMode = true
     fileprivate var withShipping = false
     fileprivate var fullBilling = false
     fileprivate var withEmail = true
@@ -24,6 +25,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var payButtonText : String?
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     fileprivate var paymentRequest : BSCcPaymentRequest!
+    fileprivate var existingPaymentRequest : BSCcPaymentRequest?
     fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager = BSCountryManager.getInstance()
     
@@ -33,6 +35,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     @IBOutlet weak var subtotalAndTaxDetailsView: BSSubtotalUIView!
     
     @IBOutlet weak var ccInputLine: BSCcInputLine!
+    @IBOutlet weak var existingCcView: BSExistingCcUIView!
     
     @IBOutlet weak var nameInputLine: BSInputLine!
     @IBOutlet weak var emailInputLine: BSInputLine!
@@ -53,12 +56,18 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         self.firstTime = true
         self.firstTimeShipping = true
-        self.paymentRequest = paymentRequest
         if let data = BlueSnapSDK.initialData {
             self.fullBilling = data.fullBilling
             self.withEmail = data.withEmail
             self.withShipping = data.withShipping
             self.updateTaxFunc = data.updateTaxFunc
+        }
+        if let _ = paymentRequest as? BSExistingCcPaymentRequest {
+            newCardMode = false
+            self.existingPaymentRequest = paymentRequest
+            self.paymentRequest = paymentRequest.copy() as! BSCcPaymentRequest as? BSExistingCcPaymentRequest                
+        } else {
+            self.paymentRequest = paymentRequest
         }
     }
     
@@ -236,6 +245,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         // set the 'shipping same as billing' to be true if no shipping name is supplied
         if self.firstTime == true {
+            
             shippingSameAsBillingSwitch.isOn = self.paymentRequest.getShippingDetails()?.name ?? "" == ""
 
             // in case of empty shipping country - fill with default and call updateTaxFunc
@@ -266,8 +276,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             zipInputLine.hideError()
             cityInputLine.hideError()
             stateInputLine.hideError()
-            ccInputLine.reset()
-
+            if (!newCardMode) {
+                ccInputLine.closeOnLeave()
+            } else {
+                ccInputLine.reset()
+            }
         }
         hideShowFields()
     }
@@ -275,8 +288,10 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     override func viewDidAppear(_ animated: Bool) {
 
         super.viewDidAppear(animated)
-        if ccInputLine.ccnIsOpen == true {
+        if newCardMode && ccInputLine.ccnIsOpen == true {
             self.ccInputLine.focusOnCcnField()
+        } else {
+            self.nameInputLine.becomeFirstResponder()
         }
         //adjustToPageRotate()
     }
@@ -284,7 +299,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
-        ccInputLine.closeOnLeave()
+        if newCardMode {
+            ccInputLine.closeOnLeave()
+        }
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
@@ -315,7 +332,17 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func hideShowFields() {
         
-        if self.ccInputLine.ccnIsOpen {
+        if let paymentRequest = paymentRequest as? BSExistingCcPaymentRequest {
+            ccInputLine.isHidden = true
+            existingCcView.isHidden = false
+            let ccDetails = paymentRequest.existingCcDetails
+            existingCcView.setCc(ccType: ccDetails.ccType ?? "", last4Digits: ccDetails.last4Digits ?? "", expiration: ccDetails.getExpiration())
+        } else {
+            ccInputLine.isHidden = false
+            existingCcView.isHidden = true
+        }
+        
+        if newCardMode && self.ccInputLine.ccnIsOpen {
             // hide everything
             nameInputLine.isHidden = true
             emailInputLine.isHidden = true
@@ -382,16 +409,20 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         let taxAmount = paymentRequest.getTaxAmount() ?? 0.0
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
-        let amount = subtotalAmount + taxAmount
-        let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
-        let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
-        payButtonText = String(format: payFormat, currencyCode, CGFloat(amount))
+        if newCardMode {
+            let amount = subtotalAmount + taxAmount
+            let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
+            let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
+            payButtonText = String(format: payFormat, currencyCode, CGFloat(amount))
+        } else {
+            payButtonText = BSLocalizedStrings.getString(BSLocalizedString.Keyboard_Done_Button_Text)
+        }
         updatePayButtonText()
     }
 
     private func updatePayButtonText() {
         
-        if (self.withShipping && !isShippingSameAsBilling()) {
+        if (newCardMode && self.withShipping && !isShippingSameAsBilling()) {
             let shippingButtonText = BSLocalizedStrings.getString(BSLocalizedString.Payment_Shipping_Button)
             payButton.setTitle(shippingButtonText, for: UIControlState())
         } else {
@@ -522,7 +553,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         if (validateForm()) {
             
-            if (withShipping && !isShippingSameAsBilling()) {
+            if !newCardMode {
+                updateExistingPaymentRequestAndGoBack()
+            } else if (withShipping && !isShippingSameAsBilling()) {
                 updateAmounts()
                 gotoShippingScreen()
             } else {
@@ -534,13 +567,21 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
 
+    private func updateExistingPaymentRequestAndGoBack() {
+        
+        // copy billing values from payment request to existingPaymentRequest
+        existingPaymentRequest?.billingDetails = paymentRequest.billingDetails
+        
+        // go back to existing page
+        navigationController?.popViewController(animated: true)
+    }
     
     // MARK: Validation methods
     
     func validateForm() -> Bool {
         
         let ok1 = validateName(ignoreIfEmpty: false)
-        let ok2 = ccInputLine.validate()
+        let ok2 = newCardMode ? ccInputLine.validate() : true
         var result = ok1 && ok2
         
         if fullBilling {
