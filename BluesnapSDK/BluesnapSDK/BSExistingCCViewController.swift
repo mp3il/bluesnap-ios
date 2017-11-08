@@ -22,6 +22,7 @@ class BSExistingCCViewController: UIViewController {
     @IBOutlet weak var billingAddressTextView: UITextView!
     @IBOutlet weak var shippingNameLabel: UILabel!
     @IBOutlet weak var shippingAddressTextView: UITextView!
+    @IBOutlet weak var payButton: UIButton!
     
     // MARK: private variables
     fileprivate var paymentRequest: BSExistingCcPaymentRequest!
@@ -58,7 +59,9 @@ class BSExistingCCViewController: UIViewController {
         let editButtonTitle = BSLocalizedStrings.getString(BSLocalizedString.Edit_Button_Title)
         editBillingButton.setTitle(editButtonTitle, for: UIControlState())
         editShippingButton.setTitle(editButtonTitle, for: UIControlState())
-        
+        let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: paymentRequest.getAmount() ?? 0.0, taxAmount: paymentRequest.getTaxAmount() ?? 0.0, toCurrency: paymentRequest.getCurrency() ?? "")
+        payButton.setTitle(payButtonText, for: UIControlState())
+
         // for removing inner padding from text view
         let textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         
@@ -91,15 +94,14 @@ class BSExistingCCViewController: UIViewController {
 
     @IBAction func clickPay(_ sender: Any) {
         
-        // TODO: restore validations
-//        if !validateBilling() {
-//            editBilling(sender)
-//        } else if !validateShipping() {
-//            editShipping(sender)
-//        } else {
+        if !validateBilling() {
+            editBilling(sender)
+        } else if !validateShipping() {
+            editShipping(sender)
+        } else {
             BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
             submitPaymentFields()
-//        }
+        }
     }
     
     @IBAction func editBilling(_ sender: Any) {
@@ -107,6 +109,12 @@ class BSExistingCCViewController: UIViewController {
     }
     
     @IBAction func editShipping(_ sender: Any) {
+        BSViewsManager.showShippingScreen(
+            paymentRequest: paymentRequest,
+            submitPaymentFields: {_ in },
+            validateOnEntry: false,
+            inNavigationController: self.navigationController!,
+            animated: true)
     }
 
     // MARK: private functions
@@ -185,7 +193,9 @@ class BSExistingCCViewController: UIViewController {
             // not validating CC, seeing as it is an existing one
             
             result = BSValidator.isValidName(paymentRequest.billingDetails.name)
-            result = result && data.withEmail ? BSValidator.isValidEmail(paymentRequest.billingDetails.email ?? "") : false
+            if data.withEmail {
+                result = result && BSValidator.isValidEmail(paymentRequest.billingDetails.email ?? "")
+            }
             result = result && BSValidator.isValidZip(countryCode: paymentRequest.billingDetails.country ?? "", zip: paymentRequest.billingDetails.zip ?? "")
             if data.fullBilling {
                 let ok1 = BSValidator.isValidCity(paymentRequest.billingDetails.city ?? "")

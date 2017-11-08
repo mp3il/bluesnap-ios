@@ -14,12 +14,15 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     internal var activityIndicator : UIActivityIndicatorView?
 
     // MARK: private properties
+    fileprivate var newCardMode = true
     fileprivate var paymentRequest : BSCcPaymentRequest!
+    fileprivate var existingPaymentRequest : BSCcPaymentRequest?
     fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager : BSCountryManager!
     fileprivate var zipTopConstraintOriginalConstant : CGFloat?
     fileprivate var firstTime : Bool = true
+    fileprivate var validateOnEntry : Bool = false
 
     // MARK: outlets
         
@@ -36,12 +39,19 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: init
 
-    func initScreen(paymentRequest: BSCcPaymentRequest!, submitPaymentFields: @escaping () -> Void, firstTime: Bool, updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
+    func initScreen(paymentRequest: BSCcPaymentRequest!, submitPaymentFields: @escaping () -> Void, validateOnEntry: Bool) {
         
-        self.paymentRequest = paymentRequest
+        if let _ = paymentRequest as? BSExistingCcPaymentRequest {
+            newCardMode = false
+            self.existingPaymentRequest = paymentRequest
+            self.paymentRequest = paymentRequest.copy() as! BSCcPaymentRequest as? BSExistingCcPaymentRequest
+        } else {
+            self.paymentRequest = paymentRequest
+        }
         self.submitPaymentFields = submitPaymentFields
-        self.firstTime = firstTime
-        self.updateTaxFunc = updateTaxFunc
+        self.firstTime = true
+        self.validateOnEntry = validateOnEntry
+        self.updateTaxFunc = BlueSnapSDK.initialData?.updateTaxFunc
     }
     
     // MARK: Keyboard functions
@@ -154,12 +164,16 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
         if firstTime {
             firstTime = false
-            nameInputLine.hideError()
-            phoneInputLine.hideError()
-            streetInputLine.hideError()
-            zipInputLine.hideError()
-            cityInputLine.hideError()
-            stateInputLine.hideError()
+            if (validateOnEntry) {
+                _ = validateForm()
+            } else {
+                nameInputLine.hideError()
+                phoneInputLine.hideError()
+                streetInputLine.hideError()
+                zipInputLine.hideError()
+                cityInputLine.hideError()
+                stateInputLine.hideError()
+            }
             updateTexts()
             updateState()
             updateAmounts()
@@ -183,10 +197,15 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func SubmitClick(_ sender: Any) {        
         if (validateForm()) {
-            
-            BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
-            submitPaymentFields()
-            
+            if newCardMode {
+                BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
+                submitPaymentFields()
+            } else {
+                // copy shipping values from payment request to existingPaymentRequest
+                existingPaymentRequest?.shippingDetails = paymentRequest.shippingDetails
+                // go back to existing page
+                navigationController?.popViewController(animated: true)
+            }
         } else {
             //return false
         }
@@ -341,17 +360,19 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     private func updateAmounts() {
 
-        subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
+        subtotalAndTaxDetailsView.isHidden = !newCardMode && self.paymentRequest.getTaxAmount() == 0
         let toCurrency = paymentRequest.getCurrency() ?? ""
         let subtotalAmount = paymentRequest.getAmount() ?? 0.0
         let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
-        let amount = subtotalAmount + taxAmount
-        let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
-        let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
-        let payText = String(format: payFormat, currencyCode, CGFloat(amount))
-        payUIButton.setTitle(payText, for: UIControlState())
+        var payButtonText = "";
+        if newCardMode {
+            payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: subtotalAmount, taxAmount: taxAmount, toCurrency: toCurrency)
+        } else {
+            payButtonText = BSLocalizedStrings.getString(BSLocalizedString.Keyboard_Done_Button_Text)
+        }
+        payUIButton.setTitle(payButtonText, for: UIControlState())
     }
 
     private func updateTexts() {

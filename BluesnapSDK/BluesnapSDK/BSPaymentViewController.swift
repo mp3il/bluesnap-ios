@@ -17,7 +17,6 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var withShipping = false
     fileprivate var fullBilling = false
     fileprivate var withEmail = true
-    fileprivate var shippingScreen: BSShippingViewController!
     fileprivate var cardType : String?
     fileprivate var activityIndicator : UIActivityIndicatorView?
     fileprivate var firstTime : Bool = true
@@ -180,13 +179,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             
             let viewControllers = navigationController.viewControllers
             let topController = viewControllers[viewControllers.count-1]
-            let inShippingScreen = shippingScreen != nil && topController == shippingScreen
-            
-            if inShippingScreen {
-                BSViewsManager.stopActivityIndicator(activityIndicator: shippingScreen.activityIndicator)
-            } else {
-                self.stopActivityIndicator()
-            }
+            let inShippingScreen = topController != self            
+            self.stopActivityIndicator()
             
             if error == nil {
                 paymentRequest.ccDetails = ccDetails
@@ -363,7 +357,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             cityInputLine.isHidden = hideFields
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-            subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
+            subtotalAndTaxDetailsView.isHidden = !newCardMode && self.paymentRequest.getTaxAmount() == 0
             updateZipFieldLocation()
         }
     }
@@ -401,7 +395,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if self.ccInputLine.ccnIsOpen {
             subtotalAndTaxDetailsView.isHidden = true
         } else {
-            subtotalAndTaxDetailsView.isHidden = self.paymentRequest.getTaxAmount() == 0
+            subtotalAndTaxDetailsView.isHidden = !newCardMode && self.paymentRequest.getTaxAmount() == 0
         }
 
         let toCurrency = paymentRequest.getCurrency() ?? ""
@@ -410,10 +404,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
         if newCardMode {
-            let amount = subtotalAmount + taxAmount
-            let currencyCode = (toCurrency == "USD" ? "$" : toCurrency)
-            let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
-            payButtonText = String(format: payFormat, currencyCode, CGFloat(amount))
+            payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: subtotalAmount, taxAmount: taxAmount, toCurrency: toCurrency)
         } else {
             payButtonText = BSLocalizedStrings.getString(BSLocalizedString.Keyboard_Done_Button_Text)
         }
@@ -437,14 +428,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func gotoShippingScreen() {
         
-        if (self.shippingScreen == nil) {
-            if let storyboard = storyboard {
-                self.shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
-            }
-        }
-        shippingScreen.initScreen(paymentRequest: paymentRequest, submitPaymentFields: submitPaymentFields, firstTime: firstTimeShipping, updateTaxFunc: updateTaxFunc)
-        firstTimeShipping = false
-        self.navigationController?.pushViewController(self.shippingScreen, animated: true)
+        BSViewsManager.showShippingScreen(
+            paymentRequest: paymentRequest,
+            submitPaymentFields: submitPaymentFields,
+            validateOnEntry: !firstTimeShipping,
+            inNavigationController: self.navigationController!,
+            animated: true)
     }
     
     
@@ -571,6 +560,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         // copy billing values from payment request to existingPaymentRequest
         existingPaymentRequest?.billingDetails = paymentRequest.billingDetails
+        
+        if isShippingSameAsBilling() {
+            // copy shipping values from payment request to existingPaymentRequest
+            existingPaymentRequest?.shippingDetails = paymentRequest.shippingDetails
+        }
         
         // go back to existing page
         navigationController?.popViewController(animated: true)

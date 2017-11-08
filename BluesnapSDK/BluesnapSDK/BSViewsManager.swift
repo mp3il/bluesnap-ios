@@ -116,6 +116,30 @@ class BSViewsManager {
     }
     
     /**
+    Open the shipping screen
+     - parameters:
+     - paymentRequest: payment request (new or existing)
+     - submitPaymentFields: function to be called when clicking "Pay"
+     - validateOnEntry: true if you want to run validation
+     - inNavigationController: your viewController's navigationController (to be able to navigate back)
+     - animated: how to navigate to the new screen
+    */
+    open class func showShippingScreen(
+        paymentRequest: BSCcPaymentRequest!,
+        submitPaymentFields: @escaping () -> Void,
+        validateOnEntry: Bool,
+        inNavigationController: UINavigationController!,
+        animated: Bool) {
+        
+        let bundle = BSViewsManager.getBundle()
+        let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
+        let shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
+
+        shippingScreen.initScreen(paymentRequest: paymentRequest, submitPaymentFields: submitPaymentFields, validateOnEntry: validateOnEntry)
+        inNavigationController.pushViewController(shippingScreen, animated: true)
+    }
+
+    /**
      Navigate to the country list, allow changing current selection.
      
      - parameters:
@@ -259,12 +283,14 @@ class BSViewsManager {
         }
     }
 
-    open class func stopActivityIndicator(activityIndicator: UIActivityIndicatorView!) {
+    open class func stopActivityIndicator(activityIndicator: UIActivityIndicatorView?) {
         
         UIApplication.shared.endIgnoringInteractionEvents()
-        DispatchQueue.global(qos: .default).async {
-            DispatchQueue.main.async {
-                activityIndicator.stopAnimating()
+        if let activityIndicator = activityIndicator {
+            DispatchQueue.global(qos: .default).async {
+                DispatchQueue.main.async {
+                    activityIndicator.stopAnimating()
+                }
             }
         }
     }
@@ -318,5 +344,16 @@ class BSViewsManager {
         let screen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.webScreenStoryboardId) as! BSWebViewController
         screen.initScreen(url: url, shouldGoToUrlFunc: shouldGoToUrlFunc)
         inNavigationController.pushViewController(screen, animated: true)
+    }
+    
+    /**
+    Generate the Pay button text according to the amounts
+    */
+    open class func getPayButtonText(subtotalAmount: Double!, taxAmount: Double!, toCurrency: String!) -> String {
+        let amount = subtotalAmount + taxAmount
+        let currencyCode = (toCurrency == "USD" ? "$" : toCurrency) ?? ""
+        let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
+        let result = String(format: payFormat, currencyCode, CGFloat(amount))
+        return result
     }
 }

@@ -236,24 +236,39 @@ class BSValidatorTests: XCTestCase {
         addressDetails.state = ""
         result = BSValidator.validateState(ignoreIfEmpty: true, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, true)
-
+        
+        addressDetails.country = "US"
         addressDetails.state = nil
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, false)
-
+        
+        addressDetails.country = "IL"
+        addressDetails.state = nil
+        result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
+        XCTAssertEqual(result, true)
+        
+        addressDetails.country = "US"
         addressDetails.state = ""
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, false)
+        
+        addressDetails.country = "IL"
+        addressDetails.state = ""
+        result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
+        XCTAssertEqual(result, true)
 
+        addressDetails.country = "US"
         addressDetails.state = "12"
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, false)
-
-        addressDetails.state = "12 Cdf"
+        
+        addressDetails.country = "IL"
+        addressDetails.state = "12"
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, false)
-
-        addressDetails.state = "AL"
+        
+        addressDetails.country = "US"
+        addressDetails.state = "12 Cdf"
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, false)
 
@@ -262,9 +277,10 @@ class BSValidatorTests: XCTestCase {
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
         XCTAssertEqual(result, true)
         
-        addressDetails.state = "12 Cdf"
+        addressDetails.country = "AR"
+        addressDetails.state = ""
         result = BSValidator.validateState(ignoreIfEmpty: false, input: input, addressDetails: addressDetails)
-        XCTAssertEqual(result, false)
+        XCTAssertEqual(result, true)
     }
 
     func testValidateExp() {

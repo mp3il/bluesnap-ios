@@ -35,7 +35,8 @@ class ViewController: UIViewController {
     final fileprivate let initialShippingState = "MA"
     final fileprivate let baseCurrency = "USD"
     final fileprivate let applePayMerchantIdentifier = "merchant.com.example.bluesnap"
-    final fileprivate let shopperId : Int? = 22061813
+    final fileprivate let returningShopperId : Int = 22061813
+    final fileprivate var shopperId : Int? = nil
 
 
     // MARK: - UIViewController's methods
@@ -426,9 +427,9 @@ class ViewController: UIViewController {
         
         self.coverAllView.isHidden = false
         
-        let shopperIdForToken = newShopper ? nil : shopperId
+        shopperId = newShopper ? nil : returningShopperId
         
-        BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperIdForToken, completion: { resultToken, errors in
+        BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperId, completion: { resultToken, errors in
             
             if let resultToken = resultToken {
                 self.bsToken = resultToken

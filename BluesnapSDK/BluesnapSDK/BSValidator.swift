@@ -182,6 +182,8 @@ import Foundation
         var result : Bool = true
         if ((ignoreIfEmpty || input.isHidden) && newValue.characters.count == 0) {
             // ignore
+        } else if !isValidCountry(countryCode: addressDetails?.country ?? "") {
+            result = false
         } else if !isValidState(countryCode: addressDetails?.country ?? "", stateCode: addressDetails?.state) {
             result = false
         }
@@ -455,14 +457,16 @@ import Foundation
     open class func isValidState(countryCode: String, stateCode: String?) -> Bool {
         
         var result : Bool = true
-        if BSCountryManager.getInstance().countryHasStates(countryCode: countryCode) {
+        if !isValidCountry(countryCode: countryCode) {
+            result = false
+        } else if BSCountryManager.getInstance().countryHasStates(countryCode: countryCode) {
             if stateCode == nil || (stateCode?.characters.count != 2) {
                 result = false
             } else {
                 let stateName = BSCountryManager.getInstance().getStateName(countryCode: countryCode, stateCode: stateCode ?? "")
                 result = stateName != nil
             }
-        } else {
+        } else if stateCode?.characters.count ?? 0 > 0 {
             result = false
         }
         return result

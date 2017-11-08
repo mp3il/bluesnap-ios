@@ -634,6 +634,7 @@
                         <outlet property="editBillingButton" destination="TDM-5V-Dy9" id="Zq3-XC-7cS"/>
                         <outlet property="editShippingButton" destination="Cvc-VT-WZV" id="PH3-cW-qwQ"/>
                         <outlet property="existingCcView" destination="NZP-iU-d4A" id="bzs-cM-yAS"/>
+                        <outlet property="payButton" destination="EAf-rt-eow" id="REK-hd-STR"/>
                         <outlet property="shippingAddressTextView" destination="cGO-u1-6SF" id="U5X-pc-G8m"/>
                         <outlet property="shippingBoxView" destination="UDS-ih-c9e" id="Jbg-Jh-MSD"/>
                         <outlet property="shippingLabel" destination="Vqz-QH-oYM" id="PvR-ND-kqB"/>
