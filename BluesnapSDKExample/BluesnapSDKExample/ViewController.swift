@@ -56,7 +56,7 @@ class ViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
         
         if bsToken == nil {
-            initBsToken(newShopper: true)
+            initBsToken(newShopper: newShopperSwitch.isOn)
         }
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true

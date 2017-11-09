@@ -40,6 +40,7 @@ class BSExistingCCViewController: UIViewController {
         super.viewDidLoad()
 
         activityIndicator = BSViewsManager.createActivityIndicator(view: self.view)
+        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Screen)
     }
 
     override func didReceiveMemoryWarning() {
