@@ -55,7 +55,7 @@ import Foundation
 }
 
 /**
- CC details for the purchase
+ New CC details for the purchase
  */
 @objc public class BSCcPaymentRequest : BSBasePaymentRequest/*, NSCopying*/ {
     
@@ -87,12 +87,10 @@ import Foundation
 }
 
 /**
- CC details for the purchase
+ Existing CC details for the purchase
  */
 @objc public class BSExistingCcPaymentRequest : BSCcPaymentRequest, NSCopying {
-    
-    public var existingCcDetails: BSExistingCcDetails = BSExistingCcDetails()
-    
+        
     // for copy
     override private init(initialData: BSInitialData) {
          super.init(initialData: initialData)
@@ -102,7 +100,7 @@ import Foundation
         
         super.init(initialData: initialData)
         
-        self.existingCcDetails = existingCcDetails.copy() as! BSExistingCcDetails
+        self.ccDetails = existingCcDetails.copy() as! BSExistingCcDetails
         self.ccDetails.ccType = existingCcDetails.ccType
         self.ccDetails.last4Digits = existingCcDetails.last4Digits
         
@@ -174,7 +172,7 @@ import Foundation
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSExistingCcPaymentRequest(initialData: BlueSnapSDK.initialData!)
-        copy.existingCcDetails = self.existingCcDetails.copy() as! BSExistingCcDetails
+        copy.ccDetails = self.ccDetails.copy() as! BSExistingCcDetails
         copy.ccDetails = self.ccDetails.copy() as! BSCcDetails
         copy.billingDetails = self.billingDetails.copy() as! BSBillingAddressDetails
         if let shippingDetails = self.shippingDetails {

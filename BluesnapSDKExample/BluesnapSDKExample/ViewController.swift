@@ -247,7 +247,7 @@ class ViewController: UIViewController {
                 
             } else if let ccPaymentRequest = paymentRequest as? BSExistingCcPaymentRequest {
                 
-                let ccDetails = ccPaymentRequest.existingCcDetails
+                let ccDetails = ccPaymentRequest.ccDetails
                 NSLog("CC Expiration: \(ccDetails.getExpiration() )")
                 NSLog("CC type: \(ccDetails.ccType ?? "")")
                 NSLog("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
@@ -439,7 +439,7 @@ class ViewController: UIViewController {
                     initKount: self.shouldInitKount,
                     fraudSessionId: nil,
                     applePayMerchantIdentifier: self.applePayMerchantIdentifier,
-                    baseCurrency: self.baseCurrency,
+                    merchantStoreCurrency: self.baseCurrency,
                     completion: { error in
                         DispatchQueue.main.async {
                             self.coverAllView.isHidden = true

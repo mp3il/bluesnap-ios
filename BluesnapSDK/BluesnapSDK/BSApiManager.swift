@@ -189,7 +189,7 @@ import Foundation
      */
     static func submitPaymentRequest(paymentRequest: BSExistingCcPaymentRequest, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
         
-        let ccDetails = paymentRequest.existingCcDetails
+        let ccDetails = paymentRequest.ccDetails
         BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: ccDetails.last4Digits, expDate: ccDetails.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
     }
     

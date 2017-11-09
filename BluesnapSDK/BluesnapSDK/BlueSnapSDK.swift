@@ -30,8 +30,9 @@ import PassKit
      - bsToken: BlueSnap token, should be fresh and valid
      - generateTokenFunc: callback function for generating a new token
      - initKount: true if you want to initialize the Kount device data collection for fraud (recommended: True)
-     - fraudSessionId: a unique ID (up to 32 characters) for the shopper session - optional (if empty, a new oine is generated)
-     - baseCurrency: base currency code for currency rate calculations
+     - fraudSessionId: a unique ID (up to 32 characters) for the shopper session - optional (if empty, a new one is generated)
+     - applePayMerchantIdentifier: optional identifier for ApplePay
+     - merchantStoreCurrency: base currency code for currency rate calculations
      - completion: callback; will be called when the init process is done. Only then can you proceed to call other functions in the SDK
      */
     open class func initBluesnap(
@@ -40,13 +41,13 @@ import PassKit
         initKount: Bool,
         fraudSessionId: String?,
         applePayMerchantIdentifier: String?,
-        baseCurrency : String?,
+        merchantStoreCurrency : String?,
         completion: @escaping (BSErrors?)->Void) {
         
         BSApiManager.setBsToken(bsToken: bsToken)
         BSApiManager.setGenerateBsTokenFunc(generateTokenFunc: generateTokenFunc)
         
-        BSApiManager.getSdkData(baseCurrency: baseCurrency, completion: { sdkData, error in
+        BSApiManager.getSdkData(baseCurrency: merchantStoreCurrency, completion: { sdkData, error in
         
             if let error = error {
                 NSLog("Failed to fetch data for Bluesnap SDK. error: \(error)")

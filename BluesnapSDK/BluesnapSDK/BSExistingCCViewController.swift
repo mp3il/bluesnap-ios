@@ -52,7 +52,7 @@ class BSExistingCCViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        existingCcView.setCc(ccType: paymentRequest.existingCcDetails.ccType ?? "", last4Digits: paymentRequest.existingCcDetails.last4Digits ?? "", expiration: paymentRequest.existingCcDetails.getExpiration())
+        existingCcView.setCc(ccType: paymentRequest.ccDetails.ccType ?? "", last4Digits: paymentRequest.ccDetails.last4Digits ?? "", expiration: paymentRequest.ccDetails.getExpiration())
         
         // update tax if needed
         if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = BlueSnapSDK.initialData?.updateTaxFunc {

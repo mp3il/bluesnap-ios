@@ -329,7 +329,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if let paymentRequest = paymentRequest as? BSExistingCcPaymentRequest {
             ccInputLine.isHidden = true
             existingCcView.isHidden = false
-            let ccDetails = paymentRequest.existingCcDetails
+            let ccDetails = paymentRequest.ccDetails
             existingCcView.setCc(ccType: ccDetails.ccType ?? "", last4Digits: ccDetails.last4Digits ?? "", expiration: ccDetails.getExpiration())
         } else {
             ccInputLine.isHidden = false

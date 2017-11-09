@@ -204,9 +204,9 @@ class BSPaymentScreenUITestHelper {
         
         let textField = getInputFieldElement(input)
         if textField.exists {
-            textField.tap()
             let oldValue = textField.value as! String
             if oldValue != value {
+                textField.tap()
                 if oldValue.characters.count > 0 {
                     let deleteString = oldValue.characters.map { _ in "\u{8}" }.joined(separator: "")
                     textField.typeText(deleteString)
