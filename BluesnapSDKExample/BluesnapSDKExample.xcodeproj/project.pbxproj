@@ -28,6 +28,7 @@
 		FD50228F1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD50228E1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift */; };
 		FD5022911F61399300C820AC /* BSPaymentScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */; };
 		FD5022931F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */; };
+		FD6479EE1FB44D6D00403E7D /* BSExistingCcScreenUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6479ED1FB44D6D00403E7D /* BSExistingCcScreenUITestHelper.swift */; };
 		FD68146D1F405EAD00FAE1ED /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD68146F1F405EAD00FAE1ED /* Localizable.strings */; };
 		FD89AB641EB6038600A1B257 /* DemoTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD89AB631EB6038600A1B257 /* DemoTransactions.swift */; };
 		FDF2217C1F25CAB10078217C /* ThankYouViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */; };
@@ -118,6 +119,7 @@
 		FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaymentScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSShippingScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD5B44431E881FB100507A98 /* BluesnapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluesnapSDK.framework; path = "../../../../Library/Developer/Xcode/DerivedData/BluesnapIOS-furswmzhhushocevhthezmvziaep/Build/Products/Debug-iphonesimulator/BluesnapSDK.framework"; sourceTree = "<group>"; };
+		FD6479ED1FB44D6D00403E7D /* BSExistingCcScreenUITestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSExistingCcScreenUITestHelper.swift; sourceTree = "<group>"; };
 		FD68146E1F405EAD00FAE1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD89AB631EB6038600A1B257 /* DemoTransactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoTransactions.swift; sourceTree = "<group>"; };
 		FDF2217B1F25CAB10078217C /* ThankYouViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYouViewController.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				FD50228E1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift */,
 				FD5022901F61399300C820AC /* BSPaymentScreenUITestHelper.swift */,
 				FD5022921F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift */,
+				FD6479ED1FB44D6D00403E7D /* BSExistingCcScreenUITestHelper.swift */,
 			);
 			path = BluesnapSDKExampleUITests;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 				FD50228F1F6137A900C820AC /* BSPaymentTypeScreenUITestHelper.swift in Sources */,
 				2D4E27A31E8808A800C56C46 /* BluesnapSDKExampleUITests.swift in Sources */,
 				FD5022931F67AD6B00C820AC /* BSShippingScreenUITestHelper.swift in Sources */,
+				FD6479EE1FB44D6D00403E7D /* BSExistingCcScreenUITestHelper.swift in Sources */,
 				FD5022911F61399300C820AC /* BSPaymentScreenUITestHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

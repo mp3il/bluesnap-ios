@@ -192,6 +192,11 @@ class BSStartViewController: UIViewController {
                 cardView.resizeElements()
                 cardView.addTarget(self, action: #selector(BSStartViewController.existingCCTouchUpInside(_:)), for: .touchUpInside)
                 cardView.tag = tag
+                cardView.isAccessibilityElement = true
+                let accessibilityIdentifier = "existingCc\(tag)"
+                cardView.accessibilityIdentifier = accessibilityIdentifier
+                cardView.isUserInteractionEnabled = true
+                cardView.accessibilityTraits = UIAccessibilityTraitButton
                 tag = tag + 1
             }
         }

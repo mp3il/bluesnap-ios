@@ -126,7 +126,14 @@ class BSShippingScreenUITestHelper {
         let textField = getInputFieldElement(input)
         if textField.exists {
             textField.tap()
-            textField.typeText(value)
+            let oldValue = textField.value as! String
+            if oldValue != value {
+                if oldValue.characters.count > 0 {
+                    let deleteString = oldValue.characters.map { _ in "\u{8}" }.joined(separator: "")
+                    textField.typeText(deleteString)
+                }
+                textField.typeText(value)
+            }
         }
     }
     

@@ -38,10 +38,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="jmW-2z-Xb6" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="55.5" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="56" width="280" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
@@ -49,7 +49,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="26.5" y="7" width="231" height="25.5"/>
+                                                    <rect key="frame" x="26" y="7" width="231" height="26"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
@@ -339,7 +339,7 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tF0-LC-ldx" userLabel="NewCard" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="28" y="133" width="320" height="40"/>
+                                        <rect key="frame" x="28" y="132" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="CcButton">
@@ -360,7 +360,7 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zdE-7E-j3h" userLabel="PayPal" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="28" y="204" width="320" height="40"/>
+                                        <rect key="frame" x="28" y="203" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="PayPalButton">
@@ -478,21 +478,21 @@
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Billing Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S5N-Ju-9SR">
                                                 <rect key="frame" x="8" y="15" width="264" height="26.5"/>
-                                                <accessibility key="accessibilityConfiguration" label="BillingName"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="BillingName"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" text="Billing Address" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8S9-6F-08H">
                                                 <rect key="frame" x="8" y="42.5" width="264" height="42.5"/>
-                                                <accessibility key="accessibilityConfiguration" label="BillingAddress"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="BillingAddress"/>
                                                 <color key="textColor" red="0.43529412150000002" green="0.4431372583" blue="0.47450980539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDM-5V-Dy9">
                                                 <rect key="frame" x="226" y="8" width="46" height="24"/>
-                                                <accessibility key="accessibilityConfiguration" label="EditBillingButton"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="EditBillingButton"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="24" id="BUq-jZ-T3s"/>
                                                     <constraint firstAttribute="width" constant="46" id="FJV-LR-GbI"/>
@@ -533,14 +533,14 @@
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8XH-dZ-MHd">
                                                 <rect key="frame" x="8" y="15" width="264" height="26.5"/>
-                                                <accessibility key="accessibilityConfiguration" label="ShippingName"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingName"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" text="Shipping Address" translatesAutoresizingMaskIntoConstraints="NO" id="cGO-u1-6SF">
                                                 <rect key="frame" x="8" y="42.5" width="264" height="42.5"/>
-                                                <accessibility key="accessibilityConfiguration" label="ShippingAddress"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="ShippingAddress"/>
                                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                                 <color key="textColor" red="0.43529412150000002" green="0.4431372583" blue="0.47450980539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -548,7 +548,7 @@
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvc-VT-WZV">
                                                 <rect key="frame" x="226" y="8" width="46" height="24"/>
-                                                <accessibility key="accessibilityConfiguration" label="EditShippingButton"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="EditShippingButton"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="46" id="YTs-Zb-jXL"/>
                                                     <constraint firstAttribute="height" constant="24" id="yR0-zF-1CK"/>
@@ -946,10 +946,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" userLabel="I" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="55.5" width="288" height="40"/>
+                                        <rect key="frame" x="0.0" y="56" width="288" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="288" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="288" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
@@ -1048,10 +1048,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="k9o-eM-cDg" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="55.5" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="56" width="280" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">

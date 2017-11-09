@@ -54,6 +54,11 @@ class BSExistingCCViewController: UIViewController {
         
         existingCcView.setCc(ccType: paymentRequest.existingCcDetails.ccType ?? "", last4Digits: paymentRequest.existingCcDetails.last4Digits ?? "", expiration: paymentRequest.existingCcDetails.getExpiration())
         
+        // update tax if needed
+        if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = BlueSnapSDK.initialData?.updateTaxFunc {
+            updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
+        }
+        
         // load label translations
         billingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Billing)
         shippingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Shipping)

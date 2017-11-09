@@ -31,6 +31,123 @@ class BluesnapSDKExampleUITests: XCTestCase {
         super.tearDown()
     }
     
+    /* -------------------------------- Returning shopper tests ---------------------------------------- */
+    
+    func testShortReturningShopperExistingCcFlow() {
+        
+        // no full billing, no shipping, no email, new CC
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 20, currency: "USD")
+        initialData.priceDetails = nil
+        
+        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true, tapExistingCc: true)
+        
+        let _ = waitForExistingCcScreen(app: app)
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 20.00")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText: "Success!")
+        
+        print("done")
+    }
+    
+    func testShortReturningShopperExistingCcFlowWithShipping() {
+        
+        // no full billing, with shipping, no email, new CC
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: false, withShipping: true, withEmail: false, amount: 20, currency: "USD")
+        initialData.priceDetails = nil
+        
+        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true, tapExistingCc: true)
+        
+        let _ = waitForExistingCcScreen(app: app)
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 20.00")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText: "Success!")
+        
+        print("done")
+    }
+    
+    func testShortReturningShopperExistingCcFlowWithEdit() {
+        
+        // full billing, with shipping, no email, new CC
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: false, amount: 20, currency: "USD")
+        initialData.priceDetails = nil
+        
+        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true, tapExistingCc: true)
+        
+        let existingCcHelper = waitForExistingCcScreen(app: app)
+        
+        existingCcHelper.editBillingButton.tap()
+        
+        let paymentHelper = BSPaymentScreenUITestHelper(app:app)
+        paymentHelper.setFieldValues(billingDetails: getDummyBillingDetails(), initialData: initialData)
+        paymentHelper.closeKeyboard()
+        let editBillingPayButton = checkPayButton(app: app, expectedPayText: "Done")
+        editBillingPayButton.tap()
+        
+        existingCcHelper.editShippingButton.tap()
+
+        let shippingHelper = BSShippingScreenUITestHelper(app: app)
+        shippingHelper.setFieldValues(shippingDetails: getDummyShippingDetails(countryCode: "IL", stateCode: nil), initialData: initialData)
+        shippingHelper.closeKeyboard()
+        let editShippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Done")
+        editShippingPayButton.tap()
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 20.00")
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText: "Success!")
+        
+        print("done")
+    }
+
+    // full billing, with shipping, check "shipping same as billing"
+    
+    func testShortReturningShopperNewCcFlow() {
+        
+        // no full billing, no shipping, no email, new CC
+        
+        let app = XCUIApplication()
+        
+        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
+        initialData.priceDetails = nil
+        
+        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true)
+        
+        let paymentHelper = BSPaymentScreenUITestHelper(app:app)
+        
+        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails(countryCode: "US"), ignoreCountry: true)
+        
+        let elementsQuery = app.scrollViews.otherElements
+        let textField = elementsQuery.element(matching: .any, identifier: "Name")
+        if textField.exists {
+            textField.tap()
+            app.keyboards.buttons["Done"].tap()
+        }
+        
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 20.00")
+        paymentHelper.closeKeyboard()
+        payButton.tap()
+        
+        checkResult(app: app, expectedSuccessText: "Success!")
+        
+        print("done")
+    }
+    
+    
+    
+    /* -------------------------------- New shopper tests ---------------------------------------- */
     
     func testFlowFullBillingNoShippingNoEmail() {
         
@@ -300,7 +417,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
     
     private func getDummyShippingDetails(countryCode: String? = "CA", stateCode: String? = "ON") -> BSShippingAddressDetails {
         
-        let shippingDetails = BSShippingAddressDetails(phone: "12345678", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : countryCode, state : stateCode)
+        let shippingDetails = BSShippingAddressDetails(phone: "18008007070", name: "Shevie Chen", address: "58 somestreet", city : "somecity", zip : "4282300", country : countryCode, state : stateCode)
         return shippingDetails
     }
     
@@ -346,12 +463,12 @@ class BluesnapSDKExampleUITests: XCTestCase {
         return paymentHelper
     }
     
-    private func gotoPaymentScreen(app: XCUIApplication, initialData: BSInitialData) {
+    private func gotoPaymentScreen(app: XCUIApplication, initialData: BSInitialData, returningShopper: Bool = false, tapExistingCc: Bool = false) {
         
         let paymentTypeHelper = BSPaymentTypeScreenUITestHelper(app: app)
         
         // set switches and amounts in merchant checkout screen
-        setMerchantCheckoutScreen(app: app, initialData: initialData)
+        setMerchantCheckoutScreen(app: app, initialData: initialData, newShopper: !returningShopper)
         
         // click "Checkout" button
         app.buttons["CheckoutButton"].tap()
@@ -364,15 +481,29 @@ class BluesnapSDKExampleUITests: XCTestCase {
         // make sure payment type buttons are visible
         paymentTypeHelper.checkPaymentTypes(expectedApplePay: true, expectedPayPal: true, expectedCC: true)
         
-        // click CC button
-        app.buttons["CcButton"].tap()
+        if tapExistingCc {
+            // click existing CC
+            app.buttons["existingCc0"].tap()
+            
+        } else {
+            // click New CC button
+            app.buttons["CcButton"].tap()
+        }
     }
     
-    private func setMerchantCheckoutScreen(app: XCUIApplication, initialData: BSInitialData) {
+    private func setMerchantCheckoutScreen(app: XCUIApplication, initialData: BSInitialData, newShopper: Bool = true) {
+        
+        // set new/returning shopper
+        let newShopperSwitch = app.switches["NewShopperSwitch"]
+        waitForElementToExist(element: newShopperSwitch, waitTime: 30)
+        let newShopperSwitchValue = (newShopperSwitch.value as? String) ?? "0"
+        if (newShopperSwitchValue == "0" && newShopper) || (newShopperSwitchValue == "1" && !newShopper) {
+            newShopperSwitch.tap()
+        }
         
         // set with Shipping switch = on
         let withShippingSwitch = app.switches["WithShippingSwitch"]
-        waitForElementToExist(element: withShippingSwitch, waitTime: 8)
+        waitForElementToExist(element: withShippingSwitch, waitTime: 30)
         let withShippingSwitchValue = (withShippingSwitch.value as? String) ?? "0"
         if (withShippingSwitchValue == "0" && initialData.withShipping) || (withShippingSwitchValue == "1" && !initialData.withShipping) {
             withShippingSwitch.tap()
@@ -402,6 +533,13 @@ class BluesnapSDKExampleUITests: XCTestCase {
             amountField.typeText(amount)
         }
         
+    }
+    
+    private func waitForExistingCcScreen(app: XCUIApplication) -> BSExistingCcScreenUITestHelper {
+        
+        let existingCcHelper = BSExistingCcScreenUITestHelper(app:app)
+        waitForElementToExist(element: existingCcHelper.billingNameLabel, waitTime: 5)
+        return existingCcHelper
     }
     
     private func waitForPaymentScreen(app: XCUIApplication) {
