@@ -11,6 +11,7 @@ import Foundation
 /**
  (PCI-compliant) CC details: result of submitting the CC details to BlueSnap server
  */
+// todo: change to CreditCard
 @objc public class BSCcDetails : NSObject, NSCopying {
     
     // these fields are output - result of submitting the CC details to BlueSnap server
@@ -39,6 +40,7 @@ import Foundation
     }
 }
 
+// todo: change to creditCardInfo
 @objc public class BSExistingCcDetails: BSCcDetails {
     
     var billingDetails: BSBillingAddressDetails?
@@ -65,10 +67,16 @@ import Foundation
 
     public override init(initialData: BSInitialData) {
         super.init(initialData: initialData)
-        if let billingDetails = initialData.billingDetails {
+        
+        if let shopper = BSApiManager.returningShopperData {
+            self.billingDetails = BSBillingAddressDetails(email: shopper.email, name: shopper.name, address: shopper.address, city: shopper.city, zip: shopper.zip, country: shopper.countryCode, state: shopper.stateCode)
+        } else if let billingDetails = initialData.billingDetails {
             self.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
         }
-        if let shippingDetails = initialData.shippingDetails {
+        if let shippingDetails = BSApiManager.returningShopperData?.shippingDetails {
+            self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
+            self.shippingDetails?.phone = BSApiManager.returningShopperData?.phone
+        } else if let shippingDetails = initialData.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
         }
     }
