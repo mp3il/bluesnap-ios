@@ -49,14 +49,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="26" y="7" width="231" height="26"/>
+                                                    <rect key="frame" x="25" y="6" width="232" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="253" y="15" width="15" height="13"/>
+                                                    <rect key="frame" x="252" y="15" width="15" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -339,7 +339,7 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tF0-LC-ldx" userLabel="NewCard" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="28" y="132" width="320" height="40"/>
+                                        <rect key="frame" x="28" y="131" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="CcButton">
@@ -349,10 +349,10 @@
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="image" keyPath="iconImage" value="Card_button"/>
                                             <userDefinedRuntimeAttribute type="number" keyPath="iconWidth">
-                                                <real key="value" value="103"/>
+                                                <real key="value" value="110"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="iconHeight">
-                                                <real key="value" value="29"/>
+                                                <real key="value" value="36"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -360,7 +360,7 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zdE-7E-j3h" userLabel="PayPal" customClass="BSPaymentTypeView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="28" y="203" width="320" height="40"/>
+                                        <rect key="frame" x="28" y="202" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="PayPalButton">
@@ -1133,7 +1133,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Card_button" width="103" height="29"/>
+        <image name="Card_button" width="110" height="36"/>
         <image name="IL" width="28" height="20"/>
         <image name="apple_pay_button" width="46" height="30"/>
         <image name="blue_check_mark" width="16" height="13"/>
