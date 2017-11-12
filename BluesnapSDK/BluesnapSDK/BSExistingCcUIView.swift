@@ -46,13 +46,12 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
         let imageHeight : CGFloat = 21
         
         let actualHeight : CGFloat = self.frame.height - marginY * 2.0
-        let ratioY = actualHeight / imageHeight
-        let actualImageWidth : CGFloat = imageWidth * ratioY
-        let actualLabelsWidth = actualWidth - actualImageWidth - (2.0 * marginX) - (2.0 * outerMarginX)
+        let imageY : CGFloat = (self.frame.height - imageHeight) / 2.0
+        let actualLabelsWidth = actualWidth - imageWidth - (2.0 * marginX) - (2.0 * outerMarginX)
         
-        imageView.frame = CGRect(x: outerMarginX, y: marginY, width: actualImageWidth, height: actualHeight)
+        imageView.frame = CGRect(x: outerMarginX, y: imageY, width: imageWidth, height: imageHeight)
         
-        let last4DigitsX = outerMarginX + actualImageWidth + marginX
+        let last4DigitsX = outerMarginX + imageWidth + marginX
         last4DigitsLabel.frame = CGRect(x: last4DigitsX, y: marginY, width: actualLabelsWidth * 0.33, height: actualHeight)
         
         let expirationLabelWidth = actualLabelsWidth * 0.66
