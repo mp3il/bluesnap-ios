@@ -28,11 +28,11 @@ public protocol BSCcInputLineDelegate : class {
      didCheckCreditCard is called just after getting the BlueSnap server result; this is where you hide the activity indicator.
      The card type, issuing country etc will be filled in the paymentRequest if the error is nil, so check the error first.
      */
-    func didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors?)
+    func didCheckCreditCard(creditCard: BSCreditCard, error: BSErrors?)
     /**
      didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; The card type, issuing country etc will be filled in the paymentRequest if the error is nil, so check the error first.
      */
-    func didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors?)
+    func didSubmitCreditCard(creditCard: BSCreditCard, error: BSErrors?)
     /**
      showAlert is called in case of unexpected errors from the BlueSnap server.
      */
@@ -322,7 +322,7 @@ public class BSCcInputLine: BSBaseTextInput {
             self.delegate?.willCheckCreditCard()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 , execute: {
-                BSApiManager.submitCcn(ccNumber: ccn, completion: { (ccDetails, error) in
+                BSApiManager.submitCcn(ccNumber: ccn, completion: { (creditCard, error) in
                     
                     // Check for error
                     if let error = error {
@@ -335,10 +335,10 @@ public class BSCcInputLine: BSBaseTextInput {
                             }
                         }
                     } else {
-                        self.cardType = ccDetails.ccType ?? ""
+                        self.cardType = creditCard.ccType ?? ""
                     }
                     DispatchQueue.main.async {
-                        self.delegate?.didCheckCreditCard(ccDetails: ccDetails, error: error)
+                        self.delegate?.didCheckCreditCard(creditCard: creditCard, error: error)
                     }
                 })
             })
@@ -357,7 +357,7 @@ public class BSCcInputLine: BSBaseTextInput {
         let exp = self.getExpDateAsMMYYYY() ?? ""
         
         BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
-            ccDetails, error in
+            creditCard, error in
             
             if let error = error {
                 if (error == .invalidCcNumber) {
@@ -385,7 +385,7 @@ public class BSCcInputLine: BSBaseTextInput {
                 }
             }
             DispatchQueue.main.async {
-                self.delegate?.didSubmitCreditCard(ccDetails: ccDetails, error: error)
+                self.delegate?.didSubmitCreditCard(creditCard: creditCard, error: error)
             }
         })
     }

@@ -164,16 +164,16 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     func willCheckCreditCard() {
     }
     
-    func didCheckCreditCard(ccDetails: BSCcDetails, error: BSErrors?) {
+    func didCheckCreditCard(creditCard: BSCreditCard, error: BSErrors?) {
         if error == nil {
-            paymentRequest.ccDetails = ccDetails
-            if let issuingCountry = ccDetails.ccIssuingCountry {
+            paymentRequest.creditCard = creditCard
+            if let issuingCountry = creditCard.ccIssuingCountry {
                 self.updateWithNewCountry(countryCode: issuingCountry, countryName: "")
             }
         }
     }
     
-    func didSubmitCreditCard(ccDetails: BSCcDetails, error: BSErrors?) {
+    func didSubmitCreditCard(creditCard: BSCreditCard, error: BSErrors?) {
 
         if let navigationController = self.navigationController {
             
@@ -183,7 +183,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             self.stopActivityIndicator()
             
             if error == nil {
-                paymentRequest.ccDetails = ccDetails
+                paymentRequest.creditCard = creditCard
                 // return to merchant screen
                 let merchantControllerIndex = viewControllers.count - (inShippingScreen ? 4 : 3)
                 _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
@@ -329,8 +329,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if let paymentRequest = paymentRequest as? BSExistingCcPaymentRequest {
             ccInputLine.isHidden = true
             existingCcView.isHidden = false
-            let ccDetails = paymentRequest.ccDetails
-            existingCcView.setCc(ccType: ccDetails.ccType ?? "", last4Digits: ccDetails.last4Digits ?? "", expiration: ccDetails.getExpiration())
+            let creditCard = paymentRequest.creditCard
+            existingCcView.setCc(ccType: creditCard.ccType ?? "", last4Digits: creditCard.last4Digits ?? "", expiration: creditCard.getExpiration())
         } else {
             ccInputLine.isHidden = false
             existingCcView.isHidden = true

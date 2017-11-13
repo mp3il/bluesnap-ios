@@ -79,11 +79,11 @@ import Foundation
                     }
                     if let rates = json["rates"] as? [String: AnyObject] {
                         let currencies = parseCurrenciesJSON(json: rates)
-                        resultData?.currencyRates = currencies
+                        resultData?.currencies = currencies
                     }
                     if let shopper = json["shopper"] as? [String: AnyObject] {
                         let shopper = parseShopperJSON(json: shopper)
-                        resultData?.returningShopper = shopper
+                        resultData?.shopper = shopper
                     }
                     if let supportedPaymentMethods = json["supportedPaymentMethods"] as? [String: AnyObject] {
                         let methods = parsePaymentMethodsJSON(json: supportedPaymentMethods)
@@ -572,9 +572,9 @@ import Foundation
         return BSCurrencies(baseCurrency: baseCurrency, currencies: currencies)
     }
     
-    private static func parseShopperJSON(json: [String: AnyObject]) -> BSReturningShopperData {
+    private static func parseShopperJSON(json: [String: AnyObject]) -> BSShopper {
         
-        let shopper = BSReturningShopperData()
+        let shopper = BSShopper()
         if let firstName = json["firstName"] as? String
             , let lastName = json["lastName"] as? String {
             shopper.name = firstName + " " + lastName
@@ -643,49 +643,51 @@ import Foundation
         if let paymentSources = json["paymentSources"] as? [String: AnyObject] {
             if let creditCardInfo = paymentSources["creditCardInfo"] as? [[String: AnyObject]] {
                 for ccDetailsJson in creditCardInfo {
-                    let ccDetails = BSExistingCcDetails()
-                    shopper.existingCreditCards.append(ccDetails)
+                    var billingDetails : BSBillingAddressDetails?
                     if let billingContactInfo = ccDetailsJson["billingContactInfo"] as? [String: AnyObject] {
-                        ccDetails.billingDetails = BSBillingAddressDetails()
+                        billingDetails = BSBillingAddressDetails()
                         if let firstName = billingContactInfo["firstName"] as? String
                             , let lastName = billingContactInfo["lastName"] as? String {
-                            ccDetails.billingDetails?.name = firstName + " " + lastName
+                            billingDetails?.name = firstName + " " + lastName
                         }
                         if let country = billingContactInfo["country"] as? String {
-                            ccDetails.billingDetails?.country = country
+                            billingDetails?.country = country
                         }
                         if let state = billingContactInfo["state"] as? String {
-                            ccDetails.billingDetails?.state = state
+                            billingDetails?.state = state
                         }
                         if let address = billingContactInfo["address1"] as? String {
-                            ccDetails.billingDetails?.address = address
+                            billingDetails?.address = address
                         }
                         if let address2 = billingContactInfo["address2"] as? String {
                             if (shopper.address == nil) {
-                                ccDetails.billingDetails?.address = address2
+                                billingDetails?.address = address2
                             } else {
-                                ccDetails.billingDetails?.address = shopper.address! + " " + address2
+                                billingDetails?.address = shopper.address! + " " + address2
                             }
                         }
                         if let city = billingContactInfo["city"] as? String {
-                            ccDetails.billingDetails?.city = city
+                            billingDetails?.city = city
                         }
                         if let zip = billingContactInfo["zip"] as? String {
-                            ccDetails.billingDetails?.zip = zip
+                            billingDetails?.zip = zip
                         }
                     }
+                    let cc = BSCreditCard()
                     if let creditCardJson = ccDetailsJson["creditCard"] as? [String: AnyObject] {
                         if let cardLastFourDigits = creditCardJson["cardLastFourDigits"] as? String {
-                            ccDetails.last4Digits = cardLastFourDigits
+                            cc.last4Digits = cardLastFourDigits
                         }
                         if let cardType = creditCardJson["cardType"] as? String {
-                            ccDetails.ccType = cardType
+                            cc.ccType = cardType
                         }
                         if let expirationMonth = creditCardJson["expirationMonth"] as? String, let expirationYear = creditCardJson["expirationYear"] as? String {
-                            ccDetails.expirationMonth = expirationMonth
-                            ccDetails.expirationYear = expirationYear
+                            cc.expirationMonth = expirationMonth
+                            cc.expirationYear = expirationYear
                         }
                     }
+                    let ccInfo = BSCreditCardInfo(creditCard: cc, billingDetails: billingDetails)
+                    shopper.existingCreditCards.append(ccInfo)
                 }
             }
         }

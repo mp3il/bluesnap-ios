@@ -79,45 +79,44 @@ class BSApiManagerTests: XCTestCase {
                 
                 XCTAssertEqual(700000, sdkData?.kountMID)
                 
-                let bsCurrencies = sdkData?.currencyRates
+                let bsCurrencies = sdkData?.currencies
                 let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
                 XCTAssertNotNil(gbpCurrency)
                 NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
                 
-                let shopper = sdkData?.returningShopper
+                let shopper = sdkData?.shopper
                 XCTAssertNotNil(shopper, "Failed to get shopper")
                 XCTAssertEqual("Slim Aklij", shopper?.name)
                 XCTAssertEqual("Sixty", shopper?.city)
                 XCTAssertEqual("CA", shopper?.stateCode)
                 XCTAssertEqual("123123", shopper?.zip)
                 XCTAssertEqual("us", shopper?.countryCode)
-                XCTAssertEqual("A@n.cin", shopper?.email)
+                XCTAssertEqual("Dhsh@hsjs.com", shopper?.email)
                 XCTAssertEqual("strings", shopper?.address)
                 
                 let shipping = shopper?.shippingDetails
-                XCTAssertNil(shipping)
-                /*let shipping = shopper?.shippingDetails!
+                //XCTAssertNil(shipping)
                 XCTAssertEqual("Shevie Chen", shipping?.name)
-                XCTAssertEqual("Zoran", shipping?.city)
-                XCTAssertEqual("MA", shipping?.state)
-                XCTAssertEqual("us", shipping?.country)
+                XCTAssertEqual("somecity", shipping?.city)
+                XCTAssertEqual(nil, shipping?.state)
+                XCTAssertEqual("il", shipping?.country)
                 XCTAssertEqual("4282300", shipping?.zip)
-                XCTAssertEqual("58 Hailan st", shipping?.address)
-                XCTAssertEqual(nil, shopper?.phone)*/
+                XCTAssertEqual("58 somestreet", shipping?.address)
+                XCTAssertEqual("18008007070", shopper?.phone)                
 
                 if let existingCreditCards = shopper?.existingCreditCards {
-                    let ccDetails: BSExistingCcDetails = existingCreditCards[0]
+                    let ccDetails: BSCreditCardInfo = existingCreditCards[0]
                     XCTAssertEqual("1111", ccDetails.last4Digits)
                     XCTAssertEqual("VISA", ccDetails.ccType)
                     XCTAssertEqual("11", ccDetails.expirationMonth)
-                    XCTAssertEqual("2020", ccDetails.expirationYear)
+                    XCTAssertEqual("2026", ccDetails.expirationYear)
                     let billing = ccDetails.billingDetails
-                    XCTAssertEqual("Slim Aklij", billing?.name)
-                    XCTAssertEqual("Sixty", billing?.city)
-                    XCTAssertEqual("CA", billing?.state)
-                    XCTAssertEqual("us", billing?.country)
-                    XCTAssertEqual("123123", billing?.zip)
-                    XCTAssertEqual("strings", billing?.address)
+                    XCTAssertEqual("Shevie Chen", billing?.name)
+                    XCTAssertEqual("somecity", billing?.city)
+                    XCTAssertEqual("ON", billing?.state)
+                    XCTAssertEqual("ca", billing?.country)
+                    XCTAssertEqual("4282300", billing?.zip)
+                    XCTAssertEqual("58 somestreet", billing?.address)
                 } else {
                     XCTFail("No cc in shopper")
                 }

@@ -9,12 +9,10 @@
 import Foundation
 
 /**
- (PCI-compliant) CC details: result of submitting the CC details to BlueSnap server
+ (PCI-compliant) Credit Card details: result of submitting the CC details to BlueSnap server
  */
-// todo: change to CreditCard
-@objc public class BSCcDetails : NSObject, NSCopying {
+@objc public class BSCreditCard : NSObject, NSCopying {
     
-    // these fields are output - result of submitting the CC details to BlueSnap server
     public var ccType : String?
     public var last4Digits : String?
     public var ccIssuingCountry : String?
@@ -22,7 +20,7 @@ import Foundation
     public var expirationYear: String?
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSCcDetails()
+        let copy = BSCreditCard()
         copy.ccType = ccType
         copy.last4Digits = last4Digits
         copy.ccIssuingCountry = ccIssuingCountry
@@ -40,18 +38,28 @@ import Foundation
     }
 }
 
-// todo: change to creditCardInfo
-@objc public class BSExistingCcDetails: BSCcDetails {
+/**
+ (PCI-compliant) Existing credit card info as we get it from BlueSnap API when getting the shopper information
+ */
+@objc public class BSCreditCardInfo: BSPaymentInfo, NSCopying {
     
-    var billingDetails: BSBillingAddressDetails?
+    public var creditCard: BSCreditCard!
+    public var billingDetails: BSBillingAddressDetails?
     
-    public override func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSExistingCcDetails()
+    private init() {
+        super.init(paymentType: BSPaymentType.CreditCard)
+    }
+    
+    public init(creditCard: BSCreditCard!, billingDetails: BSBillingAddressDetails?) {
+        super.init(paymentType: BSPaymentType.CreditCard)
+        self.creditCard = creditCard
+        self.billingDetails = billingDetails
+    }
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = BSCreditCardInfo()
         copy.billingDetails = billingDetails?.copy(with: zone) as? BSBillingAddressDetails
-        copy.last4Digits = last4Digits
-        copy.ccType = ccType
-        copy.expirationMonth = expirationMonth
-        copy.expirationYear = expirationYear
+        copy.creditCard = creditCard.copy(with: zone) as? BSCreditCard
         return copy
     }
 }
@@ -61,21 +69,21 @@ import Foundation
  */
 @objc public class BSCcPaymentRequest : BSBasePaymentRequest/*, NSCopying*/ {
     
-    public var ccDetails: BSCcDetails = BSCcDetails()
+    public var creditCard: BSCreditCard = BSCreditCard()
     public var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
     public var shippingDetails : BSShippingAddressDetails?
 
     public override init(initialData: BSInitialData) {
         super.init(initialData: initialData)
         
-        if let shopper = BSApiManager.returningShopperData {
+        if let shopper = BSApiManager.shopper {
             self.billingDetails = BSBillingAddressDetails(email: shopper.email, name: shopper.name, address: shopper.address, city: shopper.city, zip: shopper.zip, country: shopper.countryCode, state: shopper.stateCode)
         } else if let billingDetails = initialData.billingDetails {
             self.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
         }
-        if let shippingDetails = BSApiManager.returningShopperData?.shippingDetails {
+        if let shippingDetails = BSApiManager.shopper?.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
-            self.shippingDetails?.phone = BSApiManager.returningShopperData?.phone
+            self.shippingDetails?.phone = BSApiManager.shopper?.phone
         } else if let shippingDetails = initialData.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
         }
@@ -104,13 +112,11 @@ import Foundation
          super.init(initialData: initialData)
     }
     
-    init(initialData: BSInitialData, shopper: BSReturningShopperData!, existingCcDetails: BSExistingCcDetails!) {
+    init(initialData: BSInitialData, shopper: BSShopper!, existingCcDetails: BSCreditCardInfo!) {
         
         super.init(initialData: initialData)
         
-        self.ccDetails = existingCcDetails.copy() as! BSExistingCcDetails
-        self.ccDetails.ccType = existingCcDetails.ccType
-        self.ccDetails.last4Digits = existingCcDetails.last4Digits
+        self.creditCard = existingCcDetails.creditCard.copy() as! BSCreditCard
         
         if let ccBillingDetails = existingCcDetails.billingDetails {
             self.billingDetails = ccBillingDetails.copy() as! BSBillingAddressDetails
@@ -180,8 +186,7 @@ import Foundation
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSExistingCcPaymentRequest(initialData: BlueSnapSDK.initialData!)
-        copy.ccDetails = self.ccDetails.copy() as! BSExistingCcDetails
-        copy.ccDetails = self.ccDetails.copy() as! BSCcDetails
+        copy.creditCard = self.creditCard.copy() as! BSCreditCard
         copy.billingDetails = self.billingDetails.copy() as! BSBillingAddressDetails
         if let shippingDetails = self.shippingDetails {
             copy.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails

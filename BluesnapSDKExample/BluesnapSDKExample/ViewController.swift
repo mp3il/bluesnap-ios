@@ -247,10 +247,10 @@ class ViewController: UIViewController {
                 
             } else if let ccPaymentRequest = paymentRequest as? BSExistingCcPaymentRequest {
                 
-                let ccDetails = ccPaymentRequest.ccDetails
-                NSLog("CC Expiration: \(ccDetails.getExpiration() )")
-                NSLog("CC type: \(ccDetails.ccType ?? "")")
-                NSLog("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
+                let creditCard = ccPaymentRequest.creditCard
+                NSLog("CC Expiration: \(creditCard.getExpiration() )")
+                NSLog("CC type: \(creditCard.ccType ?? "")")
+                NSLog("CC last 4 digits: \(creditCard.last4Digits ?? "")")
                 demo.createTokenizedTransaction(
                     paymentRequest: ccPaymentRequest,
                     bsToken: self.bsToken!,
@@ -262,10 +262,10 @@ class ViewController: UIViewController {
                 })
             } else if let ccPaymentRequest = paymentRequest as? BSCcPaymentRequest {
                 
-                let ccDetails = ccPaymentRequest.ccDetails
-                NSLog("CC Issuing country: \(ccDetails.ccIssuingCountry ?? "")")
-                NSLog("CC type: \(ccDetails.ccType ?? "")")
-                NSLog("CC last 4 digits: \(ccDetails.last4Digits ?? "")")
+                let creditCard = ccPaymentRequest.creditCard
+                NSLog("CC Issuing country: \(creditCard.ccIssuingCountry ?? "")")
+                NSLog("CC type: \(creditCard.ccType ?? "")")
+                NSLog("CC last 4 digits: \(creditCard.last4Digits ?? "")")
                 demo.createCreditCardTransaction(
                     paymentRequest: ccPaymentRequest,
                     bsToken: self.bsToken!,

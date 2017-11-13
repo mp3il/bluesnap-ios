@@ -28,7 +28,7 @@ import Foundation
     internal static var bsCurrencies: BSCurrencies?
     internal static var supportedPaymentMethods: [String]?
     internal static var lastSupportedPaymentMethodsFetchDate: Date?
-    internal static var returningShopperData: BSReturningShopperData?
+    internal static var shopper: BSShopper?
     internal static var apiToken: BSToken?
     internal static var payPalToken : String?
     internal static var apiGenerateTokenFunc: (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void = { completion in
@@ -117,8 +117,8 @@ import Foundation
                         }
                         if let sdkData = sdkData2 {
                             self.supportedPaymentMethods = sdkData.supportedPaymentMethods
-                            self.bsCurrencies = sdkData.currencyRates
-                            self.returningShopperData = sdkData.returningShopper
+                            self.bsCurrencies = sdkData.currencies
+                            self.shopper = sdkData.shopper
                         }
                         completion(sdkData2, resultError2)
                     })
@@ -128,9 +128,9 @@ import Foundation
                     self.lastSupportedPaymentMethodsFetchDate = Date()
                 }
                 if let sdkData = sdkData {
-                    self.bsCurrencies = sdkData.currencyRates
+                    self.bsCurrencies = sdkData.currencies
                     self.supportedPaymentMethods = sdkData.supportedPaymentMethods
-                    self.returningShopperData = sdkData.returningShopper
+                    self.shopper = sdkData.shopper
                 }
                 completion(sdkData, resultError)
             }
@@ -187,10 +187,10 @@ import Foundation
      - paymentRequest: BSExistingCcPaymentRequest
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitPaymentRequest(paymentRequest: BSExistingCcPaymentRequest, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+    static func submitPaymentRequest(paymentRequest: BSExistingCcPaymentRequest, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
-        let ccDetails = paymentRequest.ccDetails
-        BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: ccDetails.last4Digits, expDate: ccDetails.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
+        let cc = paymentRequest.creditCard
+        BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: cc.last4Digits, expDate: cc.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
     }
     
     /**
@@ -202,7 +202,7 @@ import Foundation
      - cvv: CC security code (CVV)  (in case of new CC)
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitPaymentRequest(ccNumber: String?, last4Digits: String?, expDate: String?, cvv: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+    static func submitPaymentRequest(ccNumber: String?, last4Digits: String?, expDate: String?, cvv: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         var requestBody : [String:String] = [:]
         if let ccNumber = ccNumber {
@@ -282,7 +282,7 @@ import Foundation
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
     */
-    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
 
         let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber), "cvv": cvv, "expDate": expDate]
         submitCcDetails(requestBody: requestBody, completion: completion)
@@ -295,7 +295,7 @@ import Foundation
      - ccNumber: Credit card number
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitCcn(ccNumber: String, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+    static func submitCcn(ccNumber: String, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber)]
         submitCcDetails(requestBody: requestBody, completion: completion)
@@ -468,7 +468,7 @@ import Foundation
     }
 
     
-    private static func submitCcDetails(requestBody: [String:String], completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+    private static func submitCcDetails(requestBody: [String:String], completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         NSLog("BlueSnap; submitCcDetails")
         BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: { resultData, error in
@@ -490,18 +490,18 @@ import Foundation
         })
     }
     
-    private static func fillCcDetailsAndComplete(resultData: [String:String], error: BSErrors?, completion: @escaping (BSCcDetails, BSErrors?) -> Void) {
+    private static func fillCcDetailsAndComplete(resultData: [String:String], error: BSErrors?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
-        let ccDetails = BSCcDetails()
+        let cc = BSCreditCard()
         if let error = error {
-            completion(ccDetails, error)
+            completion(cc, error)
             debugPrint(error.description())
             return
         }
-        ccDetails.ccIssuingCountry = resultData["ccIssuingCountry"]
-        ccDetails.ccType = resultData["ccType"]
-        ccDetails.last4Digits = resultData["last4Digits"]
-        completion(ccDetails, nil)
+        cc.ccIssuingCountry = resultData["ccIssuingCountry"]
+        cc.ccType = resultData["ccType"]
+        cc.last4Digits = resultData["last4Digits"]
+        completion(cc, nil)
     }
 
 }

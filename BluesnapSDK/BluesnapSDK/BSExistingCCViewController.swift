@@ -52,7 +52,7 @@ class BSExistingCCViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        existingCcView.setCc(ccType: paymentRequest.ccDetails.ccType ?? "", last4Digits: paymentRequest.ccDetails.last4Digits ?? "", expiration: paymentRequest.ccDetails.getExpiration())
+        existingCcView.setCc(ccType: paymentRequest.creditCard.ccType ?? "", last4Digits: paymentRequest.creditCard.last4Digits ?? "", expiration: paymentRequest.creditCard.getExpiration())
         
         // update tax if needed
         if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = BlueSnapSDK.initialData?.updateTaxFunc {
@@ -128,7 +128,7 @@ class BSExistingCCViewController: UIViewController {
     private func submitPaymentFields() {
         
         BSApiManager.submitPaymentRequest(paymentRequest: paymentRequest, completion: {
-            ccDetails, error in
+            creditCard, error in
             
             if let error = error {
                 if (error == .invalidCcNumber) {

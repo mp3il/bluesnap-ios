@@ -147,8 +147,8 @@ class BSStartViewController: UIViewController {
     
     private func hideShowElements() {
         
-        var existingCreditCards: [BSExistingCcDetails] = []
-        if let shopper = BSApiManager.returningShopperData {
+        var existingCreditCards: [BSCreditCardInfo] = []
+        if let shopper = BSApiManager.shopper {
             existingCreditCards = shopper.existingCreditCards
         }
         let numSections = existingCreditCards.count +
@@ -186,9 +186,9 @@ class BSStartViewController: UIViewController {
                 sectionNum = sectionNum + 1
                 cardView.center.y = sectionY * sectionNum
                 cardView.setCc(
-                    ccType: existingCreditCard.ccType ?? "",
-                    last4Digits: existingCreditCard.last4Digits ?? "",
-                    expiration: (existingCreditCard.expirationMonth ?? "") + " / " + (existingCreditCard.expirationYear ?? ""))
+                    ccType: existingCreditCard.creditCard.ccType ?? "",
+                    last4Digits: existingCreditCard.creditCard.last4Digits ?? "",
+                    expiration: existingCreditCard.creditCard.getExpiration())
                 cardView.resizeElements()
                 cardView.addTarget(self, action: #selector(BSStartViewController.existingCCTouchUpInside(_:)), for: .touchUpInside)
                 cardView.tag = tag
@@ -204,12 +204,12 @@ class BSStartViewController: UIViewController {
     
     func existingCCTouchUpInside(_ sender: Any) {
         
-        if let existingCcUIView = sender as? BSExistingCcUIView, let existingCreditCards = BSApiManager.returningShopperData?.existingCreditCards {
+        if let existingCcUIView = sender as? BSExistingCcUIView, let existingCreditCards = BSApiManager.shopper?.existingCreditCards {
             let ccIdx = existingCcUIView.tag
             let cc = existingCreditCards[ccIdx]
             animateToPaymentScreen(startY: existingCcUIView.frame.minY, completion: { animate in
                 
-                let paymentRequest = BSExistingCcPaymentRequest(initialData: BlueSnapSDK.initialData!, shopper: BSApiManager.returningShopperData, existingCcDetails: cc)
+                let paymentRequest = BSExistingCcPaymentRequest(initialData: BlueSnapSDK.initialData!, shopper: BSApiManager.shopper, existingCcDetails: cc)
                 _ = BSViewsManager.showExistingCCDetailsScreen(paymentRequest: paymentRequest, inNavigationController: self.navigationController, animated: animate)
             })
         }

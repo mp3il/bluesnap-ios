@@ -8,11 +8,13 @@
 
 import Foundation
 
+// todo: change to BSSdkConfiguration
 class BSSdkData: NSObject {
     
     var kountMID: Int?
-    var currencyRates: BSCurrencies?
-    var returningShopper: BSReturningShopperData?
+    var currencies: BSCurrencies?
+    var shopper: BSShopper?
+    
     var supportedPaymentMethods: [String]?
     // TODO: use this top prevent paypal error
     var paypalCurrencies: [String]?
@@ -23,8 +25,9 @@ class BSSdkData: NSObject {
     var creditCardRegex: [String : String]?
 }
 
-class BSReturningShopperData: NSObject {
+class BSShopper : NSObject {
     
+    // todo: put contact address in baseAddressDetails?
     var name: String?
     var email: String?
     var countryCode: String?
@@ -35,5 +38,7 @@ class BSReturningShopperData: NSObject {
     var phone: String?
     
     var shippingDetails : BSShippingAddressDetails?
-    var existingCreditCards: [BSExistingCcDetails] = []
+    // todo: change to paymentSources of type paymentInfo
+    var existingCreditCards: [BSCreditCardInfo] = []
+    // todo: add last payment info? type paymentInfo, base for creditCardInfo
 }

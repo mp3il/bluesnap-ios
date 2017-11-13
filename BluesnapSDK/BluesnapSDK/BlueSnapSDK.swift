@@ -102,7 +102,7 @@ import PassKit
      - cvv: CC security code (CVV)
      - completion: callback with either result details if OK, or error details if not OK
      */
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCcDetails,BSErrors?)->Void) {
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCreditCard,BSErrors?)->Void) {
         
         BSApiManager.submitCcDetails(ccNumber: ccNumber, expDate: expDate, cvv: cvv, completion: completion)
     }

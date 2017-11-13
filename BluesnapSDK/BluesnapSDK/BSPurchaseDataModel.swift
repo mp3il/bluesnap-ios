@@ -17,10 +17,20 @@ public enum BSPaymentType : String {
     case PayPal = "PAYPAL"
 }
 
+/**
+ Base class for the different payments; for now only BSCreditCardInfo inherits from this.
+ */
+@objc public class BSPaymentInfo: NSObject {
+    let paymentType : BSPaymentType!
+    public init(paymentType: BSPaymentType!) {
+        self.paymentType = paymentType
+    }
+}
 
 /**
- Base class for payment request; this will be the result of the payment flow (one of the inherited classes: BSCcDetails/BSApplePayPaymentRequest/BSPayPalPaymentRequest)
+ Base class for payment request; this will be the result of the payment flow (one of the inherited classes: BSCcPaymentRequest/BSApplePayPaymentRequest/BSPayPalPaymentRequest)
  */
+// todo: change to BaseSdkResult
 @objc public class BSBasePaymentRequest : NSObject {
     
     var fraudSessionId: String?
@@ -118,6 +128,7 @@ public enum BSPaymentType : String {
     - (optional) Shopper details
     - (optional) function for updating tax amount based on shipping country/state. Only called when 'withShipping
  */
+// todo: change to SdkRequest
 @objc public class BSInitialData : NSObject {
 
     public var withEmail: Bool = true
