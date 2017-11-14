@@ -300,7 +300,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hfL-eJ-YBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3425" y="340"/>
+            <point key="canvasLocation" x="4421.25" y="339.08450704225351"/>
         </scene>
         <!--Payment Type-->
         <scene sceneID="urS-zv-Kno">
@@ -402,7 +402,7 @@
                         <outlet property="payPalButton" destination="zdE-7E-j3h" id="pAw-hl-jad"/>
                         <segue destination="GdF-z9-L8H" kind="show" id="1KG-Ig-ECE"/>
                         <segue destination="W0G-M6-3dM" kind="show" id="rfc-7Z-z7N"/>
-                        <segue destination="Uqu-XD-vmH" kind="show" id="7e7-yj-5Ow"/>
+                        <segue destination="lhw-wu-tEn" kind="show" id="7e7-yj-5Ow"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -599,7 +599,7 @@
                                 </constraints>
                             </view>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EAf-rt-eow">
-                                <rect key="frame" x="0.0" y="503" width="320" height="65"/>
+                                <rect key="frame" x="0.0" y="459" width="320" height="65"/>
                                 <color key="backgroundColor" red="0.23998337984085083" green="0.23292297124862671" blue="0.93167179822921753" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration" identifier="PayButton"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
@@ -627,6 +627,15 @@
                             <constraint firstAttribute="trailing" secondItem="EAf-rt-eow" secondAttribute="trailing" id="xDq-bA-SRn"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Payment" id="0Nc-ks-k9m" userLabel="Navigation">
+                        <barButtonItem key="rightBarButtonItem" image="menu_button" style="done" id="Kw6-9N-uyj">
+                            <connections>
+                                <action selector="MenuClick:" destination="Uqu-XD-vmH" id="gXz-sa-fer"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="billingAddressTextView" destination="8S9-6F-08H" id="gFR-AD-RTt"/>
                         <outlet property="billingLabel" destination="jEz-xL-d7a" id="F2I-Ne-YRK"/>
@@ -639,11 +648,12 @@
                         <outlet property="shippingBoxView" destination="UDS-ih-c9e" id="Jbg-Jh-MSD"/>
                         <outlet property="shippingLabel" destination="Vqz-QH-oYM" id="PvR-ND-kqB"/>
                         <outlet property="shippingNameLabel" destination="8XH-dZ-MHd" id="eS0-HZ-9gV"/>
+                        <outlet property="topMenuButton" destination="Kw6-9N-uyj" id="z4I-LR-vB6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N5h-9c-lkT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1963.125" y="341.19718309859155"/>
+            <point key="canvasLocation" x="2960.625" y="341.19718309859155"/>
         </scene>
         <!--Payment-->
         <scene sceneID="7hI-Z7-7qB">
@@ -885,7 +895,7 @@
                             <constraint firstItem="evC-6K-ko8" firstAttribute="width" secondItem="bcK-ji-r2M" secondAttribute="width" id="uKf-uz-gSg"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Payment" id="SMO-Vb-QOG">
+                    <navigationItem key="navigationItem" title="Payment" id="SMO-Vb-QOG" userLabel="Navigation">
                         <barButtonItem key="rightBarButtonItem" image="menu_button" style="done" id="ODe-4v-aVb">
                             <connections>
                                 <action selector="MenuClick:" destination="W0G-M6-3dM" id="7S4-w1-Lfd"/>
@@ -907,6 +917,7 @@
                         <outlet property="stateInputLine" destination="EKc-lR-XxG" id="Yje-Ab-5bX"/>
                         <outlet property="streetInputLine" destination="8Vk-vx-UOS" id="1hu-iI-rby"/>
                         <outlet property="subtotalAndTaxDetailsView" destination="yFX-qm-9XX" id="hMe-w6-Soy"/>
+                        <outlet property="topMenuButton" destination="ODe-4v-aVb" id="iIr-n7-oqo"/>
                         <outlet property="zipInputLine" destination="yRx-IZ-fub" id="n5X-b7-TOL"/>
                         <outlet property="zipTopConstraint" destination="Zch-dH-6RJ" id="A8W-lo-FnM"/>
                         <segue destination="PPS-Pq-6Wu" kind="show" id="sh5-3f-7TO"/>
@@ -917,7 +928,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A8J-iy-m7u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2729" y="341"/>
+            <point key="canvasLocation" x="3725.625" y="340.14084507042253"/>
         </scene>
         <!--Select Currency-->
         <scene sceneID="T9n-5J-QN1">
@@ -1130,6 +1141,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fxW-DM-hAh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1950" y="-380"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="T67-Tp-3Ik">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lhw-wu-tEn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QeD-2B-60y">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Uqu-XD-vmH" kind="relationship" relationship="rootViewController" id="0zj-iJ-PK8"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QFN-9h-VK4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1963.125" y="341.19718309859155"/>
         </scene>
     </scenes>
     <resources>

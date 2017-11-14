@@ -30,6 +30,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     // MARK: - Outlets
     
+    @IBOutlet weak var topMenuButton: UIBarButtonItem!
+    
     @IBOutlet weak var payButton: UIButton!
     @IBOutlet weak var subtotalAndTaxDetailsView: BSSubtotalUIView!
     
@@ -331,9 +333,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             existingCcView.isHidden = false
             let creditCard = purchaseDetails.creditCard
             existingCcView.setCc(ccType: creditCard.ccType ?? "", last4Digits: creditCard.last4Digits ?? "", expiration: creditCard.getExpiration())
+            topMenuButton.isEnabled = false
         } else {
             ccInputLine.isHidden = false
             existingCcView.isHidden = true
+            topMenuButton.isEnabled = true
         }
         
         if newCardMode && self.ccInputLine.ccnIsOpen {

@@ -23,6 +23,7 @@ class BSExistingCCViewController: UIViewController {
     @IBOutlet weak var shippingNameLabel: UILabel!
     @IBOutlet weak var shippingAddressTextView: UITextView!
     @IBOutlet weak var payButton: UIButton!
+    @IBOutlet weak var topMenuButton: UIBarButtonItem!
     
     // MARK: private variables
     fileprivate var purchaseDetails: BSExistingCcSdkResult!
@@ -65,8 +66,7 @@ class BSExistingCCViewController: UIViewController {
         let editButtonTitle = BSLocalizedStrings.getString(BSLocalizedString.Edit_Button_Title)
         editBillingButton.setTitle(editButtonTitle, for: UIControlState())
         editShippingButton.setTitle(editButtonTitle, for: UIControlState())
-        let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: purchaseDetails.getAmount() ?? 0.0, taxAmount: purchaseDetails.getTaxAmount() ?? 0.0, toCurrency: purchaseDetails.getCurrency() ?? "")
-        payButton.setTitle(payButtonText, for: UIControlState())
+        updateAmounts()
 
         // for removing inner padding from text view
         let textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
@@ -96,6 +96,7 @@ class BSExistingCCViewController: UIViewController {
         }
     }
 
+    
     // MARK: button actions
 
     @IBAction func clickPay(_ sender: Any) {
@@ -122,9 +123,45 @@ class BSExistingCCViewController: UIViewController {
             inNavigationController: self.navigationController!,
             animated: true)
     }
+    
+    // MARK: menu actions
+    
+    private func updateCurrencyFunc(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
+        
+        purchaseDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
+        updateAmounts()
+    }
+    
+    @IBAction func MenuClick(_ sender: UIBarButtonItem) {
+        
+        let menu : UIAlertController = BSViewsManager.openPopupMenu(purchaseDetails: purchaseDetails, inNavigationController: self.navigationController!, updateCurrencyFunc: updateCurrencyFunc, errorFunc: {
+            let errorMessage = BSLocalizedStrings.getString(BSLocalizedString.Error_General_Payment_error)
+            self.showAlert(errorMessage)
+        })
+        present(menu, animated: true, completion: nil)
+    }
+    
 
     // MARK: private functions
     
+    func showAlert(_ message : String) {
+        let alert = BSViewsManager.createErrorAlert(title: BSLocalizedString.Error_Title_Payment, message: message)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func updateAmounts() {
+        
+        //subtotalAndTaxDetailsView.isHidden = self.purchaseDetails.getTaxAmount() == 0
+        
+        let toCurrency = purchaseDetails.getCurrency() ?? ""
+        let subtotalAmount = purchaseDetails.getAmount() ?? 0.0
+        let taxAmount = purchaseDetails.getTaxAmount() ?? 0.0
+        //subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
+        
+        let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: subtotalAmount, taxAmount: taxAmount, toCurrency: toCurrency)
+        payButton.setTitle(payButtonText, for: UIControlState())
+    }
+
     private func submitPaymentFields() {
         
         BSApiManager.submitPurchaseDetails(purchaseDetails: purchaseDetails, completion: {

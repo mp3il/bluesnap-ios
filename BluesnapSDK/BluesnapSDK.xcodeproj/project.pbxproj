@@ -264,6 +264,7 @@
 			children = (
 				FD43A0AE1ECC2367000BF7A1 /* BSStartViewController.swift */,
 				FDF630871ED1AA2A00BE6F48 /* BSPaymentViewController.swift */,
+				FD919B521FB04C9A00CFDEE9 /* BSExistingCCViewController.swift */,
 				FDAB3AC11ECDAE9600AC8A71 /* BSShippingViewController.swift */,
 				DEB753629162521B2FF3F4AC /* BSApplepayViewController.swift */,
 				FD6814541F3071A200FAE1ED /* BSWebViewController.swift */,
@@ -274,7 +275,6 @@
 				FD1ACDEC1E9F66170010C983 /* BSCurrencyTableViewCell.swift */,
 				FDA077301EAC94CF0045E920 /* BSCountryTableViewCell.swift */,
 				FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */,
-				FD919B521FB04C9A00CFDEE9 /* BSExistingCCViewController.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
