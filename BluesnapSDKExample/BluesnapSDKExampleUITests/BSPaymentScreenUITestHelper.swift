@@ -114,13 +114,13 @@ class BSPaymentScreenUITestHelper {
     }
     
     // check visibility of inputs - make sure fields are shown according to configuration
-    func checkInputs(initialData: BSInitialData) {
+    func checkInputs(sdkRequest: BSSdkRequest) {
         
-        if let billingDetails = initialData.billingDetails {
+        if let billingDetails = sdkRequest.billingDetails {
             checkInput(input: nameInput, expectedExists: true, expectedValue: billingDetails.name ?? "", expectedLabelText: "Name")
-            checkInput(input: emailInput, expectedExists: initialData.withEmail, expectedValue: billingDetails.email ?? "", expectedLabelText: "Email")
-            checkInput(input: cityInput, expectedExists: initialData.fullBilling, expectedValue: billingDetails.city ?? "", expectedLabelText: "City")
-            checkInput(input: streetInput, expectedExists: initialData.fullBilling, expectedValue: billingDetails.address ?? "", expectedLabelText: "Street")
+            checkInput(input: emailInput, expectedExists: sdkRequest.withEmail, expectedValue: billingDetails.email ?? "", expectedLabelText: "Email")
+            checkInput(input: cityInput, expectedExists: sdkRequest.fullBilling, expectedValue: billingDetails.city ?? "", expectedLabelText: "City")
+            checkInput(input: streetInput, expectedExists: sdkRequest.fullBilling, expectedValue: billingDetails.address ?? "", expectedLabelText: "Street")
             // zip should be hidden only for country that does not have zip; label also changes according to country
             let expectedZipLabelText = (billingDetails.country == "US") ? "Billing Zip" : "Postal Code"
             let zipShouldBeVisible = !BSCountryManager.getInstance().countryHasNoZip(countryCode: billingDetails.country ?? "")
@@ -133,7 +133,7 @@ class BSPaymentScreenUITestHelper {
                 //assert(countryImage.exists)
                 
                 // state should be visible for US/Canada/Brazil
-                let stateIsVisible = initialData.fullBilling && BSCountryManager.getInstance().countryHasStates(countryCode: countryCode)
+                let stateIsVisible = sdkRequest.fullBilling && BSCountryManager.getInstance().countryHasStates(countryCode: countryCode)
                 var expectedStateValue = ""
                 if let stateName = bsCountryManager.getStateName(countryCode : countryCode, stateCode: billingDetails.state ?? "") {
                     expectedStateValue = stateName
@@ -144,21 +144,21 @@ class BSPaymentScreenUITestHelper {
         }
     }
     
-    func setFieldValues(billingDetails: BSBillingAddressDetails, initialData: BSInitialData, ignoreCountry: Bool? = false) {
+    func setFieldValues(billingDetails: BSBillingAddressDetails, sdkRequest: BSSdkRequest, ignoreCountry: Bool? = false) {
     
         setInputValue(input: nameInput, value: billingDetails.name ?? "")
-        if initialData.withEmail {
+        if sdkRequest.withEmail {
             setInputValue(input: emailInput, value: billingDetails.email ?? "")
         }
         setInputValue(input: zipInput, value: billingDetails.zip ?? "")
-        if initialData.fullBilling {
+        if sdkRequest.fullBilling {
             setInputValue(input: cityInput, value: billingDetails.city ?? "")
             setInputValue(input: streetInput, value: billingDetails.address ?? "")
         }
         if ignoreCountry == false {
             if let countryCode = billingDetails.country {
                 setCountry(countryCode: countryCode)
-                if initialData.fullBilling {
+                if sdkRequest.fullBilling {
                     if let stateCode = billingDetails.state {
                         setState(countryCode: countryCode, stateCode: stateCode)
                     }

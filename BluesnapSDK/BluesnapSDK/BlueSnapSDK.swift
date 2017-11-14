@@ -18,7 +18,7 @@ import PassKit
         .visa
     ]
     static internal var fraudSessionId : String?
-    static internal var initialData : BSInitialData?
+    static internal var sdkRequest : BSSdkRequest?
 
 
     // MARK: SDK functions
@@ -76,15 +76,15 @@ import PassKit
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - initialData: initial payment details + flow settings
+     - sdkRequest: initial payment details + flow settings
      */
     open class func showCheckoutScreen(
         inNavigationController: UINavigationController!,
         animated: Bool,
-        initialData : BSInitialData!) {
+        sdkRequest : BSSdkRequest!) {
         
-        self.initialData = initialData
-        adjustInitialData()
+        self.sdkRequest = sdkRequest
+        adjustSdkRequest()
         
         DispatchQueue.main.async {
             BSViewsManager.showStartScreen(inNavigationController: inNavigationController,
@@ -245,9 +245,9 @@ import PassKit
         }
     }
 
-    private class func adjustInitialData() {
+    private class func adjustSdkRequest() {
         
-        if let data = initialData {
+        if let data = sdkRequest {
             
             let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
             

@@ -25,13 +25,13 @@ class BSExistingCCViewController: UIViewController {
     @IBOutlet weak var payButton: UIButton!
     
     // MARK: private variables
-    fileprivate var paymentRequest: BSExistingCcPaymentRequest!
+    fileprivate var purchaseDetails: BSExistingCcSdkResult!
     fileprivate var activityIndicator : UIActivityIndicatorView?
     
     // MARK: init
     
-    public func initScreen(paymentRequest: BSExistingCcPaymentRequest!) {
-        self.paymentRequest = paymentRequest
+    public func initScreen(purchaseDetails: BSExistingCcSdkResult!) {
+        self.purchaseDetails = purchaseDetails
     }
     
     // MARK: - UIViewController's methods
@@ -52,11 +52,11 @@ class BSExistingCCViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        existingCcView.setCc(ccType: paymentRequest.creditCard.ccType ?? "", last4Digits: paymentRequest.creditCard.last4Digits ?? "", expiration: paymentRequest.creditCard.getExpiration())
+        existingCcView.setCc(ccType: purchaseDetails.creditCard.ccType ?? "", last4Digits: purchaseDetails.creditCard.last4Digits ?? "", expiration: purchaseDetails.creditCard.getExpiration())
         
         // update tax if needed
-        if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = BlueSnapSDK.initialData?.updateTaxFunc {
-            updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
+        if let shippingDetails = purchaseDetails.getShippingDetails(), let updateTaxFunc = BlueSnapSDK.sdkRequest?.updateTaxFunc {
+            updateTaxFunc(shippingDetails.country!, shippingDetails.state, purchaseDetails.priceDetails)
         }
         
         // load label translations
@@ -65,13 +65,13 @@ class BSExistingCCViewController: UIViewController {
         let editButtonTitle = BSLocalizedStrings.getString(BSLocalizedString.Edit_Button_Title)
         editBillingButton.setTitle(editButtonTitle, for: UIControlState())
         editShippingButton.setTitle(editButtonTitle, for: UIControlState())
-        let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: paymentRequest.getAmount() ?? 0.0, taxAmount: paymentRequest.getTaxAmount() ?? 0.0, toCurrency: paymentRequest.getCurrency() ?? "")
+        let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: purchaseDetails.getAmount() ?? 0.0, taxAmount: purchaseDetails.getTaxAmount() ?? 0.0, toCurrency: purchaseDetails.getCurrency() ?? "")
         payButton.setTitle(payButtonText, for: UIControlState())
 
         // for removing inner padding from text view
         let textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         
-        let billingDetails = paymentRequest.billingDetails
+        let billingDetails = purchaseDetails.billingDetails
         billingNameLabel.text = billingDetails?.name ?? ""
         billingAddressTextView.text = getDisplayAddress(addr: billingDetails)
         billingAddressTextView.isScrollEnabled = false
@@ -79,13 +79,13 @@ class BSExistingCCViewController: UIViewController {
         
         shippingBoxView.isHidden = true
         shippingLabel.isHidden = true
-        if let data = BlueSnapSDK.initialData {
+        if let data = BlueSnapSDK.sdkRequest {
             if data.withShipping {
                 shippingBoxView.isHidden = false
                 shippingLabel.isHidden = false
                 shippingAddressTextView.isScrollEnabled = false
                 shippingAddressTextView.textContainerInset = textContainerInset
-                if let shippingDetails = paymentRequest.shippingDetails {
+                if let shippingDetails = purchaseDetails.shippingDetails {
                     shippingNameLabel.text = shippingDetails.name
                     shippingAddressTextView.text = getDisplayAddress(addr: shippingDetails)
                 } else {
@@ -111,12 +111,12 @@ class BSExistingCCViewController: UIViewController {
     }
     
     @IBAction func editBilling(_ sender: Any) {
-        _ = BSViewsManager.showCCDetailsScreen(existingCcPaymentRequest: paymentRequest, inNavigationController: self.navigationController, animated: true)
+        _ = BSViewsManager.showCCDetailsScreen(existingCcPurchaseDetails: purchaseDetails, inNavigationController: self.navigationController, animated: true)
     }
     
     @IBAction func editShipping(_ sender: Any) {
         BSViewsManager.showShippingScreen(
-            paymentRequest: paymentRequest,
+            purchaseDetails: purchaseDetails,
             submitPaymentFields: {_ in },
             validateOnEntry: false,
             inNavigationController: self.navigationController!,
@@ -127,7 +127,7 @@ class BSExistingCCViewController: UIViewController {
     
     private func submitPaymentFields() {
         
-        BSApiManager.submitPaymentRequest(paymentRequest: paymentRequest, completion: {
+        BSApiManager.submitPurchaseDetails(purchaseDetails: purchaseDetails, completion: {
             creditCard, error in
             
             if let error = error {
@@ -154,7 +154,7 @@ class BSExistingCCViewController: UIViewController {
                         _ = navigationController.popToViewController(viewControllers[merchantControllerIndex], animated: false)
                     }
                     // execute callback
-                    BlueSnapSDK.initialData?.purchaseFunc(self.paymentRequest)
+                    BlueSnapSDK.sdkRequest?.purchaseFunc(self.purchaseDetails)
                 }
             }
         })
@@ -194,20 +194,20 @@ class BSExistingCCViewController: UIViewController {
     func validateBilling() -> Bool {
         
         var result = false
-        if let data = BlueSnapSDK.initialData {
+        if let data = BlueSnapSDK.sdkRequest {
             
             // not validating CC, seeing as it is an existing one
             
-            result = BSValidator.isValidName(paymentRequest.billingDetails.name)
+            result = BSValidator.isValidName(purchaseDetails.billingDetails.name)
             if data.withEmail {
-                result = result && BSValidator.isValidEmail(paymentRequest.billingDetails.email ?? "")
+                result = result && BSValidator.isValidEmail(purchaseDetails.billingDetails.email ?? "")
             }
-            result = result && BSValidator.isValidZip(countryCode: paymentRequest.billingDetails.country ?? "", zip: paymentRequest.billingDetails.zip ?? "")
+            result = result && BSValidator.isValidZip(countryCode: purchaseDetails.billingDetails.country ?? "", zip: purchaseDetails.billingDetails.zip ?? "")
             if data.fullBilling {
-                let ok1 = BSValidator.isValidCity(paymentRequest.billingDetails.city ?? "")
-                let ok2 = BSValidator.isValidStreet(paymentRequest.billingDetails.address ?? "")
-                let ok3 = BSValidator.isValidCountry(countryCode: paymentRequest.billingDetails.country)
-                let ok4 = BSValidator.isValidState(countryCode: paymentRequest.billingDetails.country ?? "", stateCode: paymentRequest.billingDetails.state)
+                let ok1 = BSValidator.isValidCity(purchaseDetails.billingDetails.city ?? "")
+                let ok2 = BSValidator.isValidStreet(purchaseDetails.billingDetails.address ?? "")
+                let ok3 = BSValidator.isValidCountry(countryCode: purchaseDetails.billingDetails.country)
+                let ok4 = BSValidator.isValidState(countryCode: purchaseDetails.billingDetails.country ?? "", stateCode: purchaseDetails.billingDetails.state)
                 result = result && ok1 && ok2 && ok3 && ok4
             }
         }
@@ -217,9 +217,9 @@ class BSExistingCCViewController: UIViewController {
     func validateShipping() -> Bool {
         
         var result = true
-        if let data = BlueSnapSDK.initialData {
+        if let data = BlueSnapSDK.sdkRequest {
             if data.withShipping {
-                if let shippingDetails = paymentRequest.shippingDetails {
+                if let shippingDetails = purchaseDetails.shippingDetails {
                     let ok1 = BSValidator.isValidName(shippingDetails.name)
                     let ok2 = BSValidator.isValidCity(shippingDetails.city ?? "")
                     let ok3 = BSValidator.isValidStreet(shippingDetails.address ?? "")

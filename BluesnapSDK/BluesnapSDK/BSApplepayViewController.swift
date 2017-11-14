@@ -15,8 +15,8 @@ extension BSStartViewController : PaymentOperationDelegate {
 
     func applePayPressed(_ sender: Any, completion: @escaping (BSErrors?) -> Void) {
 
-        if let initialData = BlueSnapSDK.initialData {
-            let priceDetails = initialData.priceDetails!
+        if let sdkRequest = BlueSnapSDK.sdkRequest {
+            let priceDetails = sdkRequest.priceDetails!
             let tax = PKPaymentSummaryItem(label: "Tax", amount: NSDecimalNumber(floatLiteral: priceDetails.taxAmount.doubleValue), type: .final)
             let total = PKPaymentSummaryItem(label: "Payment", amount: NSDecimalNumber(floatLiteral: priceDetails.amount.doubleValue), type: .final)
             
@@ -29,10 +29,10 @@ extension BSStartViewController : PaymentOperationDelegate {
             pkPaymentRequest.countryCode = "US"
             pkPaymentRequest.currencyCode = priceDetails.currency
             
-            if initialData.withShipping {
+            if sdkRequest.withShipping {
                 pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
             }
-            if initialData.fullBilling {
+            if sdkRequest.fullBilling {
                 pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
             }
             

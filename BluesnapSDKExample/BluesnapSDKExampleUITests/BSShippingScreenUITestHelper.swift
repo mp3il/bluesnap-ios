@@ -59,9 +59,9 @@ class BSShippingScreenUITestHelper {
     }
 
     // check visibility of inputs - make sure fields are shown according to configuration
-    func checkInputs(initialData: BSInitialData) {
+    func checkInputs(sdkRequest: BSSdkRequest) {
         
-        if let shippingDetails = initialData.shippingDetails {
+        if let shippingDetails = sdkRequest.shippingDetails {
             checkInput(input: nameInput, expectedExists: true, expectedValue: shippingDetails.name ?? "", expectedLabelText: "Name")
             checkInput(input: phoneInput, expectedExists: true, expectedValue: shippingDetails.phone ?? "", expectedLabelText: "Phone")
             checkInput(input: cityInput, expectedExists: true, expectedValue: shippingDetails.city ?? "", expectedLabelText: "City")
@@ -84,7 +84,7 @@ class BSShippingScreenUITestHelper {
         }
     }
 
-    func setFieldValues(shippingDetails: BSShippingAddressDetails, initialData: BSInitialData) {
+    func setFieldValues(shippingDetails: BSShippingAddressDetails, sdkRequest: BSSdkRequest) {
         
         setInputValue(input: nameInput, value: shippingDetails.name ?? "")
         setInputValue(input: phoneInput, value: shippingDetails.phone ?? "")

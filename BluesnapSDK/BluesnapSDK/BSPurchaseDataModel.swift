@@ -28,10 +28,9 @@ public enum BSPaymentType : String {
 }
 
 /**
- Base class for payment request; this will be the result of the payment flow (one of the inherited classes: BSCcPaymentRequest/BSApplePayPaymentRequest/BSPayPalPaymentRequest)
+ Base class for payment request; this will be the result of the payment flow (one of the inherited classes: BSCcSdkResult/BSApplePaySdkResult/BSPayPalSdkResult)
  */
-// todo: change to BaseSdkResult
-@objc public class BSBasePaymentRequest : NSObject {
+@objc public class BSBaseSdkResult : NSObject {
     
     var fraudSessionId: String?
     var priceDetails: BSPriceDetails!
@@ -41,9 +40,9 @@ public enum BSPaymentType : String {
     internal var originalTaxAmount: NSNumber! = 0.0
     internal var originalRate: NSNumber?
     
-    internal init(initialData: BSInitialData) {
+    internal init(sdkRequest: BSSdkRequest) {
         super.init()
-        self.priceDetails = initialData.priceDetails.copy() as! BSPriceDetails
+        self.priceDetails = sdkRequest.priceDetails.copy() as! BSPriceDetails
         self.originalAmount = priceDetails.amount
         self.originalTaxAmount = priceDetails.taxAmount ?? 0.0
         self.originalRate = nil
@@ -128,8 +127,7 @@ public enum BSPaymentType : String {
     - (optional) Shopper details
     - (optional) function for updating tax amount based on shipping country/state. Only called when 'withShipping
  */
-// todo: change to SdkRequest
-@objc public class BSInitialData : NSObject {
+@objc public class BSSdkRequest : NSObject {
 
     public var withEmail: Bool = true
     public var withShipping: Bool = false
@@ -139,7 +137,7 @@ public enum BSPaymentType : String {
     public var billingDetails: BSBillingAddressDetails?
     public var shippingDetails: BSShippingAddressDetails?
 
-    public var purchaseFunc: (BSBasePaymentRequest!) -> Void
+    public var purchaseFunc: (BSBaseSdkResult!) -> Void
     public var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     
     public init(
@@ -149,7 +147,7 @@ public enum BSPaymentType : String {
         priceDetails: BSPriceDetails!,
         billingDetails: BSBillingAddressDetails?,
         shippingDetails: BSShippingAddressDetails?,
-        purchaseFunc: @escaping (BSBasePaymentRequest!) -> Void,
+        purchaseFunc: @escaping (BSBaseSdkResult!) -> Void,
         updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?) {
         
         self.withEmail = withEmail

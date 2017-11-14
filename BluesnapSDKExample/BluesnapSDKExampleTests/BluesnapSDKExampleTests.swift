@@ -32,7 +32,7 @@ class BluesnapSDKExampleTests: XCTestCase {
             XCTAssertNotNil(token, "Failed to get token")
             NSLog("Token: \(token?.getTokenStr() ?? "")")
             
-            BlueSnapSDK.initBluesnap(bsToken: token, generateTokenFunc: self.generateAndSetBsToken, initKount: false, fraudSessionId: nil, applePayMerchantIdentifier: nil, baseCurrency: nil, completion: { error in
+            BlueSnapSDK.initBluesnap(bsToken: token, generateTokenFunc: self.generateAndSetBsToken, initKount: false, fraudSessionId: nil, applePayMerchantIdentifier: nil, merchantStoreCurrency: nil, completion: { error in
             
                 BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
                     

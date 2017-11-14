@@ -12,11 +12,11 @@ import Foundation
 /**
  PayPal details for the purchase
  */
-@objc public class BSPayPalPaymentRequest: BSBasePaymentRequest {
+@objc public class BSPayPalSdkResult: BSBaseSdkResult {
     
     public var payPalInvoiceId : String?
     
-    override public init(initialData: BSInitialData) {
-        super.init(initialData: initialData)
+    override public init(sdkRequest: BSSdkRequest) {
+        super.init(sdkRequest: sdkRequest)
     }
 }

@@ -97,7 +97,7 @@ import Foundation
      - baseCurrency: optional base currency for currency rates; default = USD
      - completion: function to be called after data is received; will receive optional currency data and optional error
      */
-    static func getSdkData(baseCurrency: String?, completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
+    static func getSdkData(baseCurrency: String?, completion: @escaping (BSSdkConfiguration?, BSErrors?) -> Void) {
         
         let bsToken = getBsToken()
         
@@ -184,13 +184,13 @@ import Foundation
     /**
      Submit Exisating CC request to BlueSnap server
      - parameters:
-     - paymentRequest: BSExistingCcPaymentRequest
+     - purchaseDetails: BSExistingCcSdkResult
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitPaymentRequest(paymentRequest: BSExistingCcPaymentRequest, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
+    static func submitPurchaseDetails(purchaseDetails: BSExistingCcSdkResult, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
-        let cc = paymentRequest.creditCard
-        BSApiManager.submitPaymentRequest(ccNumber: nil, last4Digits: cc.last4Digits, expDate: cc.getExpirationForSubmit(), cvv: nil, billingDetails: paymentRequest.billingDetails, shippingDetails: paymentRequest.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
+        let cc = purchaseDetails.creditCard
+        BSApiManager.submitPurchaseDetails(ccNumber: nil, last4Digits: cc.last4Digits, expDate: cc.getExpirationForSubmit(), cvv: nil, billingDetails: purchaseDetails.billingDetails, shippingDetails: purchaseDetails.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
     }
     
     /**
@@ -202,7 +202,7 @@ import Foundation
      - cvv: CC security code (CVV)  (in case of new CC)
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitPaymentRequest(ccNumber: String?, last4Digits: String?, expDate: String?, cvv: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
+    static func submitPurchaseDetails(ccNumber: String?, last4Digits: String?, expDate: String?, cvv: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         var requestBody : [String:String] = [:]
         if let ccNumber = ccNumber {
@@ -372,11 +372,11 @@ import Foundation
      Create PayPal token on BlueSnap server and get back the URL for redirect
      - parameters:
      - bsToken: a token for BlueSnap tokenized services
-     - paymentRequest: details of the purchase: specifically amount and currency are used
+     - purchaseDetails: details of the purchase: specifically amount and currency are used
      - withShipping: setting for the PayPal flow - do we want to request shipping details from the shopper
      - completion: a callback function to be called once the PayPal token is fetched; receives optional PayPal Token string data and optional error
      */
-    static func createPayPalToken(paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
+    static func createPayPalToken(purchaseDetails: BSPayPalSdkResult, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
         if (payPalToken != nil) {
             completion(payPalToken, nil)
@@ -387,7 +387,7 @@ import Foundation
             let bsToken = getBsToken()
             
             NSLog("BlueSnap; createPayPalToken")
-            BSApiCaller.createPayPalToken(bsToken: bsToken, paymentRequest: paymentRequest, withShipping: withShipping, completion: {
+            BSApiCaller.createPayPalToken(bsToken: bsToken, purchaseDetails: purchaseDetails, withShipping: withShipping, completion: {
                 resultToken, resultError in
                 NSLog("BlueSnap; createPayPalToken completion")
                 if resultError == .unAuthorised {
@@ -397,7 +397,7 @@ import Foundation
                         if isExpired {
                             // regenerate Token and try again
                             regenerateToken(executeAfter: { _ in
-                                BSApiCaller.createPayPalToken(bsToken: getBsToken(), paymentRequest: paymentRequest, withShipping: withShipping, completion: { resultToken2, resultError2 in
+                                BSApiCaller.createPayPalToken(bsToken: getBsToken(), purchaseDetails: purchaseDetails, withShipping: withShipping, completion: { resultToken2, resultError2 in
                                     
                                     payPalToken = resultToken2
                                     completion(resultToken2, resultError2)

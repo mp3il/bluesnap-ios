@@ -33,12 +33,12 @@ class BSExistingCcScreenUITestHelper {
     
     
     // check visibility of inputs - make sure fields are shown according to configuration
-    func checkScreenItems(initialData: BSInitialData) {
+    func checkScreenItems(sdkRequest: BSSdkRequest) {
         
         assert(billingNameLabel.exists)
         assert(billingAddressLabel.exists)
         assert(editBillingButton.exists)
-        if initialData.withShipping {
+        if sdkRequest.withShipping {
             assert(shippingNameLabel.exists)
             assert(shippingAddressLabel.exists)
             assert(editShippingButton.exists)

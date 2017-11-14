@@ -1,15 +1,13 @@
 //
-//  BSSDKData.swift
+//  BSSdkConfiguration.swift
 //  BluesnapSDK
 //
-//  Created by Shevie Chen on 19/10/2017.
+//  Created by Shevie Chen on 13/11/2017.
 //  Copyright © 2017 Bluesnap. All rights reserved.
 //
-
 import Foundation
 
-// todo: change to BSSdkConfiguration
-class BSSdkData: NSObject {
+class BSSdkConfiguration: NSObject {
     
     var kountMID: Int?
     var currencies: BSCurrencies?

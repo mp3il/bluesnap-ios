@@ -105,12 +105,13 @@ class BSApiManagerTests: XCTestCase {
                 XCTAssertEqual("18008007070", shopper?.phone)                
 
                 if let existingCreditCards = shopper?.existingCreditCards {
-                    let ccDetails: BSCreditCardInfo = existingCreditCards[0]
+                    let ccInfo: BSCreditCardInfo = existingCreditCards[0]
+                    let ccDetails: BSCreditCard = ccInfo.creditCard
                     XCTAssertEqual("1111", ccDetails.last4Digits)
                     XCTAssertEqual("VISA", ccDetails.ccType)
                     XCTAssertEqual("11", ccDetails.expirationMonth)
                     XCTAssertEqual("2026", ccDetails.expirationYear)
-                    let billing = ccDetails.billingDetails
+                    let billing = ccInfo.billingDetails
                     XCTAssertEqual("Shevie Chen", billing?.name)
                     XCTAssertEqual("somecity", billing?.city)
                     XCTAssertEqual("ON", billing?.state)
@@ -142,13 +143,13 @@ class BSApiManagerTests: XCTestCase {
     func testGetPayPalToken() {
         
         let priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
-        let initialData = BSInitialData(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
-        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
+        let sdkRequest = BSSdkRequest(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
+        let purchaseDetails: BSPayPalSdkResult = BSPayPalSdkResult(sdkRequest: sdkRequest)
         
         let semaphore = DispatchSemaphore(value: 0)
         
         createToken(completion: { token, error in
-            BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
+            BSApiManager.createPayPalToken(purchaseDetails: purchaseDetails, withShipping: false, completion: { resultToken, resultError in
                 
                 XCTAssertNil(resultError)
                 NSLog("*** testGetPayPalToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
@@ -163,12 +164,12 @@ class BSApiManagerTests: XCTestCase {
         
         createExpiredTokenNoRegeneration()
         let priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
-        let initialData = BSInitialData(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
-        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
+        let sdkRequest = BSSdkRequest(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
+        let purchaseDetails: BSPayPalSdkResult = BSPayPalSdkResult(sdkRequest: sdkRequest)
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false, completion: { resultToken, resultError in
+        BSApiManager.createPayPalToken(purchaseDetails: purchaseDetails, withShipping: false, completion: { resultToken, resultError in
             
             XCTAssertNotNil(resultError)
             assert(resultError == BSErrors.unAuthorised)
@@ -186,12 +187,12 @@ class BSApiManagerTests: XCTestCase {
         createExpiredTokenWithRegeneration()
         
         let priceDetails = BSPriceDetails(amount: 30, taxAmount: 0, currency: "USD")
-        let initialData = BSInitialData(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
-        let paymentRequest: BSPayPalPaymentRequest = BSPayPalPaymentRequest(initialData: initialData)
+        let sdkRequest = BSSdkRequest(withEmail: false, withShipping: false, fullBilling: false, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: { _ in }, updateTaxFunc: nil)
+        let purchaseDetails: BSPayPalSdkResult = BSPayPalSdkResult(sdkRequest: sdkRequest)
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        BSApiManager.createPayPalToken(paymentRequest: paymentRequest, withShipping: false,completion: { resultToken, resultError in
+        BSApiManager.createPayPalToken(purchaseDetails: purchaseDetails, withShipping: false,completion: { resultToken, resultError in
             
             XCTAssertNil(resultError)
             NSLog("*** testGetPayPalTokenWithExpiredToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")

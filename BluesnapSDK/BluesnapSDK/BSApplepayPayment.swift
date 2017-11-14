@@ -9,10 +9,10 @@ import PassKit
 /**
  Apple Pay details for the purchase
  */
-@objc public class BSApplePayPaymentRequest: BSBasePaymentRequest {
+@objc public class BSApplePaySdkResult: BSBaseSdkResult {
     
-    public override init(initialData: BSInitialData) {
-        super.init(initialData: initialData)
+    public override init(sdkRequest: BSSdkRequest) {
+        super.init(sdkRequest: sdkRequest)
     }
 }
 

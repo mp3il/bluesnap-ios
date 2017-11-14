@@ -26,11 +26,11 @@ public protocol BSCcInputLineDelegate : class {
     func willCheckCreditCard()
     /**
      didCheckCreditCard is called just after getting the BlueSnap server result; this is where you hide the activity indicator.
-     The card type, issuing country etc will be filled in the paymentRequest if the error is nil, so check the error first.
+     The card type, issuing country etc will be filled in the creditCard if the error is nil, so check the error first.
      */
     func didCheckCreditCard(creditCard: BSCreditCard, error: BSErrors?)
     /**
-     didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; The card type, issuing country etc will be filled in the paymentRequest if the error is nil, so check the error first.
+     didSubmitCreditCard is called at the end of submitPaymentFields() to let the owner know of the submit result; The card type, issuing country etc will be filled in the creditCard if the error is nil, so check the error first.
      */
     func didSubmitCreditCard(creditCard: BSCreditCard, error: BSErrors?)
     /**

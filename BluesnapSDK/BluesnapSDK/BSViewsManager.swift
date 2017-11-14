@@ -52,9 +52,6 @@ class BSViewsManager {
      - parameters:
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
-     - paymentRequest: object that holds the shopper and payment details; shopper name and shipping details may be pre-filled
-     - withShipping: if true, the shopper will be asked to supply shipping details
-     - fullBilling: if true, we collect full billing address; otherwise only name and optionally zip code
      */
     open static func showStartScreen(
         inNavigationController: UINavigationController!,
@@ -77,17 +74,17 @@ class BSViewsManager {
      - animated: how to navigate to the new screen
      */
     open class func showCCDetailsScreen(
-        existingCcPaymentRequest: BSExistingCcPaymentRequest?,
+        existingCcPurchaseDetails: BSExistingCcSdkResult?,
         inNavigationController: UINavigationController!,
         animated: Bool) {
         
-        if let initialData = BlueSnapSDK.initialData {
+        if let sdkRequest = BlueSnapSDK.sdkRequest {
             let bundle = BSViewsManager.getBundle()
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
             let purchaseScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.purchaseScreenStoryboardId) as! BSPaymentViewController
             
-            let paymentRequest = existingCcPaymentRequest ?? BSCcPaymentRequest(initialData: initialData)
-            purchaseScreen.initScreen(paymentRequest: paymentRequest)
+            let purchaseDetails = existingCcPurchaseDetails ?? BSCcSdkResult(sdkRequest: sdkRequest)
+            purchaseScreen.initScreen(purchaseDetails: purchaseDetails)
 
             inNavigationController.pushViewController(purchaseScreen, animated: animated)
         }
@@ -97,12 +94,12 @@ class BSViewsManager {
      Open the check-out screen for an existing CC, For returning shopper.
      
      - parameters:
-     - paymentRequest: returning shopper details in the payment request
+     - purchaseDetails: returning shopper details in the payment request
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      */
     open class func showExistingCCDetailsScreen(
-        paymentRequest: BSExistingCcPaymentRequest!,
+        purchaseDetails: BSExistingCcSdkResult!,
         inNavigationController: UINavigationController!,
         animated: Bool) {
         
@@ -110,7 +107,7 @@ class BSViewsManager {
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
         let existingCcScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.existingCcScreenStoryboardId) as! BSExistingCCViewController
         
-        existingCcScreen.initScreen(paymentRequest: paymentRequest)
+        existingCcScreen.initScreen(purchaseDetails: purchaseDetails)
         
         inNavigationController.pushViewController(existingCcScreen, animated: animated)
     }
@@ -118,14 +115,14 @@ class BSViewsManager {
     /**
     Open the shipping screen
      - parameters:
-     - paymentRequest: payment request (new or existing)
+     - purchaseDetails: payment request (new or existing)
      - submitPaymentFields: function to be called when clicking "Pay"
      - validateOnEntry: true if you want to run validation
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
     */
     open class func showShippingScreen(
-        paymentRequest: BSCcPaymentRequest!,
+        purchaseDetails: BSCcSdkResult!,
         submitPaymentFields: @escaping () -> Void,
         validateOnEntry: Bool,
         inNavigationController: UINavigationController!,
@@ -135,7 +132,7 @@ class BSViewsManager {
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle);
         let shippingScreen = storyboard.instantiateViewController(withIdentifier: "BSShippingDetailsScreen") as! BSShippingViewController
 
-        shippingScreen.initScreen(paymentRequest: paymentRequest, submitPaymentFields: submitPaymentFields, validateOnEntry: validateOnEntry)
+        shippingScreen.initScreen(purchaseDetails: purchaseDetails, submitPaymentFields: submitPaymentFields, validateOnEntry: validateOnEntry)
         inNavigationController.pushViewController(shippingScreen, animated: true)
     }
 
@@ -298,7 +295,7 @@ class BSViewsManager {
     /*
      Create the popup menu for payment screen
     */
-    open class func openPopupMenu(paymentRequest: BSBasePaymentRequest?,
+    open class func openPopupMenu(purchaseDetails: BSBaseSdkResult?,
             inNavigationController : UINavigationController,
             updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
             errorFunc: @escaping ()->Void) -> UIAlertController {
@@ -308,11 +305,11 @@ class BSViewsManager {
         // Add change currency menu item
         let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
         let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
-            if let paymentRequest = paymentRequest {
+            if let purchaseDetails = purchaseDetails {
                 BSViewsManager.showCurrencyList(
                     inNavigationController: inNavigationController,
                     animated: true,
-                    selectedCurrencyCode: paymentRequest.getCurrency(),
+                    selectedCurrencyCode: purchaseDetails.getCurrency(),
                     updateFunc: updateCurrencyFunc,
                     errorFunc: errorFunc)
             }

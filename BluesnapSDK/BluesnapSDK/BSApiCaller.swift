@@ -31,7 +31,7 @@ import Foundation
      - baseCurrency: optional base currency for currency rates; default = USD
      - completion: a callback function to be called once the data is fetched; receives optional data and optional error
      */
-    static func getSdkData(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSSdkData?, BSErrors?) -> Void) {
+    static func getSdkData(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSSdkConfiguration?, BSErrors?) -> Void) {
         
         let urlStr = bsToken.serverUrl + "services/2/tokenized-services/sdk-init?base-currency=" + (baseCurrency ?? "USD")
         let url = NSURL(string: urlStr)!
@@ -41,7 +41,7 @@ import Foundation
         
         // fire request
         
-        var sdkData: BSSdkData?
+        var sdkConfig : BSSdkConfiguration?
         var resultError: BSErrors?
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response, error) in
             if let error = error {
@@ -51,21 +51,21 @@ import Foundation
             } else {
                 let httpStatusCode:Int? = (response as? HTTPURLResponse)?.statusCode
                 if (httpStatusCode != nil && httpStatusCode! >= 200 && httpStatusCode! <= 299) {
-                    (sdkData, resultError) = parseSdkDataJSON(data: data)
+                    (sdkConfig, resultError) = parseSdkDataJSON(data: data)
                 } else {
                     resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
                 }
             }
             defer {
-                completion(sdkData, resultError)
+                completion(sdkConfig, resultError)
             }
         }
         task.resume()
     }
     
-    private static func parseSdkDataJSON(data: Data?) -> (BSSdkData?, BSErrors?) {
+    private static func parseSdkDataJSON(data: Data?) -> (BSSdkConfiguration?, BSErrors?) {
         
-        var resultData: BSSdkData?
+        var resultData: BSSdkConfiguration?
         var resultError: BSErrors?
         
         if let data = data {
@@ -73,7 +73,7 @@ import Foundation
                 // Parse the result JSOn object
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                     
-                    resultData = BSSdkData()
+                    resultData = BSSdkConfiguration()
                     if let kountMID = json["kountMerchantId"] as? Int {
                         resultData?.kountMID = kountMID
                     }
@@ -213,13 +213,13 @@ import Foundation
      Calls BlueSnap server to create a PayPal token
      - parameters:
      - bsToken: a token for BlueSnap tokenized services
-     - paymentRequest: details of the purchase: specifically amount and currency are used
+     - purchaseDetails: details of the purchase: specifically amount and currency are used
      - withShipping: setting for the PayPal flow - do we want to request shipping details from the shopper
      - completion: a callback function to be called once the PayPal token is fetched; receives optional PayPal Token string data and optional error
     */
-    static func createPayPalToken(bsToken: BSToken!, paymentRequest: BSPayPalPaymentRequest, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
+    static func createPayPalToken(bsToken: BSToken!, purchaseDetails: BSPayPalSdkResult, withShipping: Bool, completion: @escaping (String?, BSErrors?) -> Void) {
         
-        var urlStr = bsToken.serverUrl + PAYPAL_SERVICE  + "\(paymentRequest.getAmount() ?? 0)" + "&currency=" + paymentRequest.getCurrency()
+        var urlStr = bsToken.serverUrl + PAYPAL_SERVICE  + "\(purchaseDetails.getAmount() ?? 0)" + "&currency=" + purchaseDetails.getCurrency()
         if withShipping {
             urlStr += PAYPAL_SHIPPING
         }
@@ -343,7 +343,6 @@ import Foundation
     }
     
     
-    // parseFunction: @escaping (BSBasePaymentRequest, Int, Data?) -> BSErrors?
     static func parseCCResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
         
         var resultData: [String:String] = [:]

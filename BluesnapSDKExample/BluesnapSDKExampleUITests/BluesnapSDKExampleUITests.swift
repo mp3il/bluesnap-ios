@@ -39,10 +39,10 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 20, currency: "USD")
-        initialData.priceDetails = nil
+        let sdkRequest = prepareSdkRequest(fullBilling: false, withShipping: false, withEmail: false, amount: 20, currency: "USD")
+        sdkRequest.priceDetails = nil
         
-        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true, tapExistingCc: true)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest, returningShopper: true, tapExistingCc: true)
         
         let _ = waitForExistingCcScreen(app: app)
         
@@ -60,10 +60,10 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: false, withShipping: true, withEmail: false, amount: 20, currency: "USD")
-        initialData.priceDetails = nil
+        let sdkRequest = prepareSdkRequest(fullBilling: false, withShipping: true, withEmail: false, amount: 20, currency: "USD")
+        sdkRequest.priceDetails = nil
         
-        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true, tapExistingCc: true)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest, returningShopper: true, tapExistingCc: true)
         
         let _ = waitForExistingCcScreen(app: app)
         
@@ -81,17 +81,17 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: false, amount: 20, currency: "USD")
-        initialData.priceDetails = nil
+        let sdkRequest = prepareSdkRequest(fullBilling: true, withShipping: true, withEmail: false, amount: 20, currency: "USD")
+        sdkRequest.priceDetails = nil
         
-        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true, tapExistingCc: true)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest, returningShopper: true, tapExistingCc: true)
         
         let existingCcHelper = waitForExistingCcScreen(app: app)
         
         existingCcHelper.editBillingButton.tap()
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
-        paymentHelper.setFieldValues(billingDetails: getDummyBillingDetails(), initialData: initialData)
+        paymentHelper.setFieldValues(billingDetails: getDummyBillingDetails(), sdkRequest: sdkRequest)
         paymentHelper.closeKeyboard()
         let editBillingPayButton = checkPayButton(app: app, expectedPayText: "Done")
         editBillingPayButton.tap()
@@ -99,7 +99,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         existingCcHelper.editShippingButton.tap()
 
         let shippingHelper = BSShippingScreenUITestHelper(app: app)
-        shippingHelper.setFieldValues(shippingDetails: getDummyShippingDetails(countryCode: "IL", stateCode: nil), initialData: initialData)
+        shippingHelper.setFieldValues(shippingDetails: getDummyShippingDetails(countryCode: "IL", stateCode: nil), sdkRequest: sdkRequest)
         shippingHelper.closeKeyboard()
         let editShippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Done")
         editShippingPayButton.tap()
@@ -120,14 +120,14 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
-        initialData.priceDetails = nil
+        let sdkRequest = prepareSdkRequest(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
+        sdkRequest.priceDetails = nil
         
-        gotoPaymentScreen(app: app, initialData: initialData, returningShopper: true)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest, returningShopper: true)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
         
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails(countryCode: "US"), ignoreCountry: true)
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails(countryCode: "US"), ignoreCountry: true)
         
         let elementsQuery = app.scrollViews.otherElements
         let textField = elementsQuery.element(matching: .any, identifier: "Name")
@@ -153,13 +153,13 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: true, withShipping: false, withEmail: false, amount: 30, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: true, withShipping: false, withEmail: false, amount: 30, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
 
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
         
         let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.00")
         paymentHelper.closeKeyboard()
@@ -174,15 +174,15 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: false, amount: 30, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: true, withShipping: true, withEmail: false, amount: 30, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
         
         let _ = checkPayButton(app: app, expectedPayText: "Pay $ 31.50")
 
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
         
         paymentHelper.closeKeyboard()
         paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
@@ -195,7 +195,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         waitForShippingScreen(app: app)
         
         let shippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 31.50")
-        let shippingHelper = fillShippingDetails(app: app, initialData: initialData, shippingDetails: getDummyShippingDetails())
+        let shippingHelper = fillShippingDetails(app: app, sdkRequest: sdkRequest, shippingDetails: getDummyShippingDetails())
         let _ = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 30.30")
         
         shippingHelper.closeKeyboard()
@@ -210,9 +210,9 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: true, amount: 20, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: true, withShipping: true, withEmail: true, amount: 20, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let billingDetails = getDummyBillingDetails()
         billingDetails.country = "IL"
@@ -221,7 +221,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let _ = checkPayButton(app: app, expectedPayText: "Pay $ 21.00")
         
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: billingDetails)
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: billingDetails)
         
         paymentHelper.closeKeyboard()
         paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
@@ -239,7 +239,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
 
         let shippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 21.00")
         
-        let shippingHelper = fillShippingDetails(app: app, initialData: initialData, shippingDetails: shippingDetails)
+        let shippingHelper = fillShippingDetails(app: app, sdkRequest: sdkRequest, shippingDetails: shippingDetails)
         let _ = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 20.00")
         
         shippingHelper.closeKeyboard()
@@ -254,16 +254,16 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: true, withShipping: true, withEmail: true, amount: 20, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: true, withShipping: true, withEmail: true, amount: 20, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let billingDetails = getDummyBillingDetails()
         billingDetails.country = "GH"
         billingDetails.state = nil
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
 
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: billingDetails)
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: billingDetails)
         
         paymentHelper.closeKeyboard()
         paymentHelper.setShippingSameAsBillingSwitch(shouldBeOn: true)
@@ -278,7 +278,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         let shippingDetails = getDummyShippingDetails()
         shippingDetails.country = "GH"
         shippingDetails.state = nil
-        let shippingHelper = fillShippingDetails(app: app, initialData: initialData, shippingDetails: shippingDetails)
+        let shippingHelper = fillShippingDetails(app: app, sdkRequest: sdkRequest, shippingDetails: shippingDetails)
         let shippingPayButton = checkAPayButton(app: app, buttonId: "ShippingPayButton", expectedPayText: "Pay $ 20.00")
         
         shippingHelper.closeKeyboard()
@@ -294,12 +294,12 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: true, withShipping: false, withEmail: true, amount: 30, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: true, withShipping: false, withEmail: true, amount: 30, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
         
         let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.00")
         paymentHelper.closeKeyboard()
@@ -315,13 +315,13 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: true, amount: 30, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: false, withShipping: false, withEmail: true, amount: 30, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
 
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
         
         let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.00")
         paymentHelper.closeKeyboard()
@@ -337,13 +337,13 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
+        let sdkRequest = prepareSdkRequest(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
 
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails())
         
         let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 30.00")
         paymentHelper.closeKeyboard()
@@ -358,14 +358,14 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let app = XCUIApplication()
         
-        let initialData = prepareInitialData(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
-        initialData.priceDetails = nil
+        let sdkRequest = prepareSdkRequest(fullBilling: false, withShipping: false, withEmail: false, amount: 30, currency: "USD")
+        sdkRequest.priceDetails = nil
         
-        gotoPaymentScreen(app: app, initialData: initialData)
+        gotoPaymentScreen(app: app, sdkRequest: sdkRequest)
         
         let paymentHelper = BSPaymentScreenUITestHelper(app:app)
         
-        fillBillingDetails(paymentHelper: paymentHelper, initialData: initialData, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails(countryCode: "US"), ignoreCountry: true)
+        fillBillingDetails(paymentHelper: paymentHelper, sdkRequest: sdkRequest, ccn: "4111 1111 1111 1111", exp: "1126", cvv: "333", billingDetails: getDummyBillingDetails(countryCode: "US"), ignoreCountry: true)
         
         let elementsQuery = app.scrollViews.otherElements
         let textField = elementsQuery.element(matching: .any, identifier: "Name")
@@ -421,54 +421,54 @@ class BluesnapSDKExampleUITests: XCTestCase {
         return shippingDetails
     }
     
-    private func prepareInitialData(fullBilling: Bool, withShipping: Bool, withEmail: Bool, amount: Double!, currency: String) -> BSInitialData {
+    private func prepareSdkRequest(fullBilling: Bool, withShipping: Bool, withEmail: Bool, amount: Double!, currency: String) -> BSSdkRequest {
 
         let taxAmount = amount * 0.05 // according to updateTax() in ViewController
         let priceDetails = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
-        let initialData = BSInitialData(withEmail: withEmail, withShipping: withShipping, fullBilling: fullBilling, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: {_ in }, updateTaxFunc: nil)
-        return initialData
+        let sdkRequest = BSSdkRequest(withEmail: withEmail, withShipping: withShipping, fullBilling: fullBilling, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: {_ in }, updateTaxFunc: nil)
+        return sdkRequest
     }
     
-    private func fillBillingDetails(paymentHelper: BSPaymentScreenUITestHelper, initialData: BSInitialData, ccn: String, exp: String, cvv: String, billingDetails: BSBillingAddressDetails, ignoreCountry: Bool? = false) {
+    private func fillBillingDetails(paymentHelper: BSPaymentScreenUITestHelper, sdkRequest: BSSdkRequest, ccn: String, exp: String, cvv: String, billingDetails: BSBillingAddressDetails, ignoreCountry: Bool? = false) {
         
         // fill CC values
         paymentHelper.setCcDetails(isOpen: true, ccn: ccn, exp: exp, cvv: cvv)
         
         // make sure fields are shown according to configuration
-        paymentHelper.checkInputs(initialData: initialData)
+        paymentHelper.checkInputs(sdkRequest: sdkRequest)
         
         // fill field values
-        paymentHelper.setFieldValues(billingDetails: billingDetails, initialData: initialData, ignoreCountry: ignoreCountry)
+        paymentHelper.setFieldValues(billingDetails: billingDetails, sdkRequest: sdkRequest, ignoreCountry: ignoreCountry)
         
         // check that the values are in correctly
-        initialData.billingDetails = billingDetails
-        paymentHelper.checkInputs(initialData: initialData)
+        sdkRequest.billingDetails = billingDetails
+        paymentHelper.checkInputs(sdkRequest: sdkRequest)
     }
     
-    private func fillShippingDetails(app: XCUIApplication, initialData: BSInitialData, shippingDetails: BSShippingAddressDetails) -> BSShippingScreenUITestHelper {
+    private func fillShippingDetails(app: XCUIApplication, sdkRequest: BSSdkRequest, shippingDetails: BSShippingAddressDetails) -> BSShippingScreenUITestHelper {
         
         let paymentHelper = BSShippingScreenUITestHelper(app:app)
         
         // make sure fields are shown according to configuration
-        initialData.shippingDetails = BSShippingAddressDetails()
-        paymentHelper.checkInputs(initialData: initialData)
+        sdkRequest.shippingDetails = BSShippingAddressDetails()
+        paymentHelper.checkInputs(sdkRequest: sdkRequest)
         
         // fill field values
-        paymentHelper.setFieldValues(shippingDetails: shippingDetails, initialData: initialData)
+        paymentHelper.setFieldValues(shippingDetails: shippingDetails, sdkRequest: sdkRequest)
         
         // check that the values are in correctly
-        initialData.shippingDetails = shippingDetails
-        paymentHelper.checkInputs(initialData: initialData)
+        sdkRequest.shippingDetails = shippingDetails
+        paymentHelper.checkInputs(sdkRequest: sdkRequest)
         
         return paymentHelper
     }
     
-    private func gotoPaymentScreen(app: XCUIApplication, initialData: BSInitialData, returningShopper: Bool = false, tapExistingCc: Bool = false) {
+    private func gotoPaymentScreen(app: XCUIApplication, sdkRequest: BSSdkRequest, returningShopper: Bool = false, tapExistingCc: Bool = false) {
         
         let paymentTypeHelper = BSPaymentTypeScreenUITestHelper(app: app)
         
         // set switches and amounts in merchant checkout screen
-        setMerchantCheckoutScreen(app: app, initialData: initialData, newShopper: !returningShopper)
+        setMerchantCheckoutScreen(app: app, sdkRequest: sdkRequest, newShopper: !returningShopper)
         
         // click "Checkout" button
         app.buttons["CheckoutButton"].tap()
@@ -491,7 +491,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         }
     }
     
-    private func setMerchantCheckoutScreen(app: XCUIApplication, initialData: BSInitialData, newShopper: Bool = true) {
+    private func setMerchantCheckoutScreen(app: XCUIApplication, sdkRequest: BSSdkRequest, newShopper: Bool = true) {
         
         // set new/returning shopper
         let newShopperSwitch = app.switches["NewShopperSwitch"]
@@ -505,25 +505,25 @@ class BluesnapSDKExampleUITests: XCTestCase {
         let withShippingSwitch = app.switches["WithShippingSwitch"]
         waitForElementToExist(element: withShippingSwitch, waitTime: 30)
         let withShippingSwitchValue = (withShippingSwitch.value as? String) ?? "0"
-        if (withShippingSwitchValue == "0" && initialData.withShipping) || (withShippingSwitchValue == "1" && !initialData.withShipping) {
+        if (withShippingSwitchValue == "0" && sdkRequest.withShipping) || (withShippingSwitchValue == "1" && !sdkRequest.withShipping) {
             withShippingSwitch.tap()
         }
         
         // set full billing switch = on
         let fullBillingSwitch = app.switches["FullBillingSwitch"]
         let fullBillingSwitchValue = (fullBillingSwitch.value as? String) ?? "0"
-        if (fullBillingSwitchValue == "0" && initialData.fullBilling) || (fullBillingSwitchValue == "1" && !initialData.fullBilling) {
+        if (fullBillingSwitchValue == "0" && sdkRequest.fullBilling) || (fullBillingSwitchValue == "1" && !sdkRequest.fullBilling) {
             fullBillingSwitch.tap()
         }
         
         // set with Email switch = on
         let withEmailSwitch = app.switches["WithEmailSwitch"]
         let withEmailSwitchValue = (withEmailSwitch.value as? String) ?? "0"
-        if (withEmailSwitchValue == "0" && initialData.withEmail) || (withEmailSwitchValue == "1" && !initialData.withEmail) {
+        if (withEmailSwitchValue == "0" && sdkRequest.withEmail) || (withEmailSwitchValue == "1" && !sdkRequest.withEmail) {
             withEmailSwitch.tap()
         }
         
-        if let priceDetails = initialData.priceDetails {
+        if let priceDetails = sdkRequest.priceDetails {
             
             // set amount text field value
             let amount = "\(priceDetails.amount ?? 0)"

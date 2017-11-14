@@ -15,8 +15,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: private properties
     fileprivate var newCardMode = true
-    fileprivate var paymentRequest : BSCcPaymentRequest!
-    fileprivate var existingPaymentRequest : BSCcPaymentRequest?
+    fileprivate var purchaseDetails : BSCcSdkResult!
+    fileprivate var existingPurchaseDetails : BSCcSdkResult?
     fileprivate var submitPaymentFields : () -> Void = { print("This will be overridden by payment screen") }
     fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager : BSCountryManager!
@@ -39,19 +39,19 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: init
 
-    func initScreen(paymentRequest: BSCcPaymentRequest!, submitPaymentFields: @escaping () -> Void, validateOnEntry: Bool) {
+    func initScreen(purchaseDetails: BSCcSdkResult!, submitPaymentFields: @escaping () -> Void, validateOnEntry: Bool) {
         
-        if let _ = paymentRequest as? BSExistingCcPaymentRequest {
+        if let _ = purchaseDetails as? BSExistingCcSdkResult {
             newCardMode = false
-            self.existingPaymentRequest = paymentRequest
-            self.paymentRequest = paymentRequest.copy() as! BSCcPaymentRequest as? BSExistingCcPaymentRequest
+            self.existingPurchaseDetails = purchaseDetails
+            self.purchaseDetails = purchaseDetails.copy() as! BSCcSdkResult as? BSExistingCcSdkResult
         } else {
-            self.paymentRequest = paymentRequest
+            self.purchaseDetails = purchaseDetails
         }
         self.submitPaymentFields = submitPaymentFields
         self.firstTime = true
         self.validateOnEntry = validateOnEntry
-        self.updateTaxFunc = BlueSnapSDK.initialData?.updateTaxFunc
+        self.updateTaxFunc = BlueSnapSDK.sdkRequest?.updateTaxFunc
     }
     
     // MARK: Keyboard functions
@@ -149,7 +149,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        if let shippingDetails = self.paymentRequest.getShippingDetails() {
+        if let shippingDetails = self.purchaseDetails.getShippingDetails() {
             nameInputLine.setValue(shippingDetails.name)
             phoneInputLine.setValue(shippingDetails.phone)
             streetInputLine.setValue(shippingDetails.address)
@@ -158,7 +158,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
             if (shippingDetails.country == "") {
                 shippingDetails.country = Locale.current.regionCode ?? ""
             }
-            let countryCode = paymentRequest.getShippingDetails()?.country ?? ""
+            let countryCode = purchaseDetails.getShippingDetails()?.country ?? ""
             updateZipByCountry(countryCode: countryCode)
             updateFlagImage(countryCode: countryCode)
         }
@@ -201,8 +201,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
                 BSViewsManager.startActivityIndicator(activityIndicator: self.activityIndicator, blockEvents: true)
                 submitPaymentFields()
             } else {
-                // copy shipping values from payment request to existingPaymentRequest
-                existingPaymentRequest?.shippingDetails = paymentRequest.shippingDetails
+                // copy shipping values from payment request to existingPurchaseDetails
+                existingPurchaseDetails?.shippingDetails = purchaseDetails.shippingDetails
                 // go back to existing page
                 navigationController?.popViewController(animated: true)
             }
@@ -227,45 +227,45 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     func validateName(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validateName(ignoreIfEmpty: ignoreIfEmpty, input: nameInputLine, addressDetails: purchaseDetails.getShippingDetails())
         return result
     }
     
     func validateStreet(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateStreet(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validateStreet(ignoreIfEmpty: ignoreIfEmpty, input: streetInputLine, addressDetails: purchaseDetails.getShippingDetails())
         return result
     }
     
     func validateCity(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validateCity(ignoreIfEmpty: ignoreIfEmpty, input: cityInputLine, addressDetails: purchaseDetails.getShippingDetails())
         return result
     }
     
     func validateZip(ignoreIfEmpty : Bool) -> Bool {
         
         if (zipInputLine.isHidden) {
-            if let shippingDetails = paymentRequest.getShippingDetails() {
+            if let shippingDetails = purchaseDetails.getShippingDetails() {
                 shippingDetails.zip = ""
             }
             zipInputLine.setValue("")
             return true
         }
         
-        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result = BSValidator.validateZip(ignoreIfEmpty: ignoreIfEmpty, input: zipInputLine, addressDetails: purchaseDetails.getShippingDetails())
         return result
     }
     
     func validateState(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validateState(ignoreIfEmpty: ignoreIfEmpty, input: stateInputLine, addressDetails: purchaseDetails.getShippingDetails())
         return result
     }
     
     func validatePhone(ignoreIfEmpty : Bool) -> Bool {
         
-        let result : Bool = BSValidator.validatePhone(ignoreIfEmpty: ignoreIfEmpty, input: phoneInputLine, addressDetails: paymentRequest.getShippingDetails())
+        let result : Bool = BSValidator.validatePhone(ignoreIfEmpty: ignoreIfEmpty, input: phoneInputLine, addressDetails: purchaseDetails.getShippingDetails())
         return result
     }
 
@@ -320,13 +320,13 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         BSViewsManager.showStateList(
             inNavigationController: self.navigationController,
             animated: true,
-            addressDetails: paymentRequest.getShippingDetails()!,
+            addressDetails: purchaseDetails.getShippingDetails()!,
             updateFunc: updateWithNewState)
     }
 
     @IBAction func flagTouchUpInside(_ sender: BSInputLine) {
         
-        let selectedCountryCode = paymentRequest.getShippingDetails()?.country ?? ""
+        let selectedCountryCode = purchaseDetails.getShippingDetails()?.country ?? ""
         BSViewsManager.showCountryList(
             inNavigationController: self.navigationController,
             animated: true,
@@ -360,10 +360,10 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     private func updateAmounts() {
 
-        subtotalAndTaxDetailsView.isHidden = !newCardMode && self.paymentRequest.getTaxAmount() == 0
-        let toCurrency = paymentRequest.getCurrency() ?? ""
-        let subtotalAmount = paymentRequest.getAmount() ?? 0.0
-        let taxAmount = (paymentRequest.getTaxAmount() ?? 0.0)
+        subtotalAndTaxDetailsView.isHidden = !newCardMode && self.purchaseDetails.getTaxAmount() == 0
+        let toCurrency = purchaseDetails.getCurrency() ?? ""
+        let subtotalAmount = purchaseDetails.getAmount() ?? 0.0
+        let taxAmount = (purchaseDetails.getTaxAmount() ?? 0.0)
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
         var payButtonText = "";
@@ -388,14 +388,14 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func updateWithNewCountry(countryCode : String, countryName : String) {
         
-        if let shippingDetails = paymentRequest.getShippingDetails() {
+        if let shippingDetails = purchaseDetails.getShippingDetails() {
             shippingDetails.country = countryCode
             updateZipByCountry(countryCode: countryCode)
         }
         updateFlagImage(countryCode: countryCode)
         updateState()
-        if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
-            updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
+        if let shippingDetails = purchaseDetails.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
+            updateTaxFunc(shippingDetails.country!, shippingDetails.state, purchaseDetails.priceDetails)
             updateAmounts()
         }
     }
@@ -422,17 +422,17 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     
     private func updateState() {
 
-        BSValidator.updateState(addressDetails: paymentRequest.getShippingDetails()!, stateInputLine: stateInputLine)
+        BSValidator.updateState(addressDetails: purchaseDetails.getShippingDetails()!, stateInputLine: stateInputLine)
     }
     
     private func updateWithNewState(stateCode : String, stateName : String) {
         
-        if let shippingDetails = paymentRequest.getShippingDetails() {
+        if let shippingDetails = purchaseDetails.getShippingDetails() {
             shippingDetails.state = stateCode
         }
         self.stateInputLine.setValue(stateName)
-        if let shippingDetails = paymentRequest.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
-            updateTaxFunc(shippingDetails.country!, shippingDetails.state, paymentRequest.priceDetails)
+        if let shippingDetails = purchaseDetails.getShippingDetails(), let updateTaxFunc = updateTaxFunc {
+            updateTaxFunc(shippingDetails.country!, shippingDetails.state, purchaseDetails.priceDetails)
             updateAmounts()
         }
     }

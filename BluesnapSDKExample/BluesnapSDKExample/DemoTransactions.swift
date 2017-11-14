@@ -23,7 +23,7 @@ class DemoTreansactions {
 //    static let BS_SANDBOX_TEST_PASS = "Plimus12345"
 
 
-    func createApplePayTransaction(paymentRequest: BSApplePayPaymentRequest!,
+    func createApplePayTransaction(purchaseDetails: BSApplePaySdkResult!,
                                    bsToken: BSToken!,
                                    completion: @escaping (_ success: Bool, _ data: String?) -> Void) {
 
@@ -31,11 +31,11 @@ class DemoTreansactions {
                 "recurringTransaction": "ECOMMERCE",
                 "softDescriptor": "MobileSDKtest",
                 "cardTransactionType": "AUTH_CAPTURE",
-                "amount": "\(paymentRequest.getAmount()!)",
-                "currency": "\(paymentRequest.getCurrency()!)",
+                "amount": "\(purchaseDetails.getAmount()!)",
+                "currency": "\(purchaseDetails.getCurrency()!)",
                 "pfToken": "\(bsToken.getTokenStr()!)",
         ] as [String: Any]
-        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+        if let fraudSessionId: String = purchaseDetails.getFraudSessionId() {
             requestBody["transactionFraudInfo"] = ["fraudSessionId": fraudSessionId]
         }
         print("requestBody= \(requestBody)")
@@ -88,29 +88,29 @@ class DemoTreansactions {
 
 
     func createCreditCardTransaction(
-        paymentRequest: BSCcPaymentRequest!,
+        purchaseDetails: BSCcSdkResult!,
         bsToken: BSToken!,
         completion: @escaping (_ success: Bool, _ data: String?)->Void) {
         
-        let name = paymentRequest.getBillingDetails().getSplitName()!
+        let name = purchaseDetails.getBillingDetails().getSplitName()!
         
         var cardHolderInfo: [String:String] = [
             "firstName": "\(name.firstName)",
             "lastName": "\(name.lastName)"
         ]
-        if let zip = paymentRequest.getBillingDetails().zip {
+        if let zip = purchaseDetails.getBillingDetails().zip {
             cardHolderInfo["zip"] = "\(zip)"
         }
         var requestBody = [
-            "amount": "\(paymentRequest.getAmount()!)",
+            "amount": "\(purchaseDetails.getAmount()!)",
             "recurringTransaction": "ECOMMERCE",
             "softDescriptor": "MobileSDKtest",
             "cardHolderInfo": cardHolderInfo,
-            "currency": "\(paymentRequest.getCurrency()!)",
+            "currency": "\(purchaseDetails.getCurrency()!)",
             "cardTransactionType": "AUTH_CAPTURE",
             "pfToken": "\(bsToken.getTokenStr()!)",
         ] as [String : Any]
-        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+        if let fraudSessionId: String = purchaseDetails.getFraudSessionId() {
             requestBody["transactionFraudInfo"] = ["fraudSessionId": fraudSessionId]
         }
         print("requestBody= \(requestBody)")
@@ -164,15 +164,15 @@ class DemoTreansactions {
     Here all the data is on the token, we only need to send amoutn and currency
      */
     func createTokenizedTransaction(
-        paymentRequest: BSCcPaymentRequest!,
+        purchaseDetails: BSCcSdkResult!,
         bsToken: BSToken!,
         completion: @escaping (_ success: Bool, _ data: String?)->Void) {
         
         var requestBody = [
-            "amount": "\(paymentRequest.getAmount()!)",
+            "amount": "\(purchaseDetails.getAmount()!)",
             "recurringTransaction": "ECOMMERCE",
             "softDescriptor": "MobileSDKtest",
-            "currency": "\(paymentRequest.getCurrency()!)",
+            "currency": "\(purchaseDetails.getCurrency()!)",
             "cardTransactionType": "AUTH_CAPTURE",
             "pfToken": "\(bsToken.getTokenStr()!)",
             ] as [String : Any]
@@ -223,20 +223,20 @@ class DemoTreansactions {
     }
     
     func createCreditCardTransactionWithXml(
-        paymentRequest: BSCcPaymentRequest!,
+        purchaseDetails: BSCcSdkResult!,
         bsToken: BSToken!,
         completion: @escaping (_ success:Bool, _ data: String?)->Void) {
         
-        let name = paymentRequest.getBillingDetails().getSplitName()!
+        let name = purchaseDetails.getBillingDetails().getSplitName()!
         let bodyStart: String = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
             "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
             "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
             "<soft-descriptor>MobileSDK</soft-descriptor>" +
-            "<amount>\(paymentRequest.getAmount()!)</amount>" +
-        "<currency>\(paymentRequest.getCurrency()!)</currency>"
+            "<amount>\(purchaseDetails.getAmount()!)</amount>" +
+        "<currency>\(purchaseDetails.getCurrency()!)</currency>"
         
         var fraudInfoXML : String = ""
-        if let fraudSessionId: String = paymentRequest.getFraudSessionId() {
+        if let fraudSessionId: String = purchaseDetails.getFraudSessionId() {
 
             fraudInfoXML = "<transaction-fraud-info>" +
                 "<fraud-session-id>" + fraudSessionId + "</fraud-session-id>" +

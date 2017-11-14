@@ -1,5 +1,6 @@
 import Foundation
 
+// todo: add function for currency symbol
 @objc public class BSCurrency: NSObject {
     
     internal var name : String!

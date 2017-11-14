@@ -67,24 +67,24 @@ import Foundation
 /**
  New CC details for the purchase
  */
-@objc public class BSCcPaymentRequest : BSBasePaymentRequest/*, NSCopying*/ {
+@objc public class BSCcSdkResult : BSBaseSdkResult/*, NSCopying*/ {
     
     public var creditCard: BSCreditCard = BSCreditCard()
     public var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()
     public var shippingDetails : BSShippingAddressDetails?
 
-    public override init(initialData: BSInitialData) {
-        super.init(initialData: initialData)
+    public override init(sdkRequest: BSSdkRequest) {
+        super.init(sdkRequest: sdkRequest)
         
         if let shopper = BSApiManager.shopper {
             self.billingDetails = BSBillingAddressDetails(email: shopper.email, name: shopper.name, address: shopper.address, city: shopper.city, zip: shopper.zip, country: shopper.countryCode, state: shopper.stateCode)
-        } else if let billingDetails = initialData.billingDetails {
+        } else if let billingDetails = sdkRequest.billingDetails {
             self.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
         }
         if let shippingDetails = BSApiManager.shopper?.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
             self.shippingDetails?.phone = BSApiManager.shopper?.phone
-        } else if let shippingDetails = initialData.shippingDetails {
+        } else if let shippingDetails = sdkRequest.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
         }
     }
@@ -105,31 +105,31 @@ import Foundation
 /**
  Existing CC details for the purchase
  */
-@objc public class BSExistingCcPaymentRequest : BSCcPaymentRequest, NSCopying {
+@objc public class BSExistingCcSdkResult : BSCcSdkResult, NSCopying {
         
     // for copy
-    override private init(initialData: BSInitialData) {
-         super.init(initialData: initialData)
+    override private init(sdkRequest: BSSdkRequest) {
+         super.init(sdkRequest: sdkRequest)
     }
     
-    init(initialData: BSInitialData, shopper: BSShopper!, existingCcDetails: BSCreditCardInfo!) {
+    init(sdkRequest: BSSdkRequest, shopper: BSShopper!, existingCcDetails: BSCreditCardInfo!) {
         
-        super.init(initialData: initialData)
+        super.init(sdkRequest: sdkRequest)
         
         self.creditCard = existingCcDetails.creditCard.copy() as! BSCreditCard
         
         if let ccBillingDetails = existingCcDetails.billingDetails {
             self.billingDetails = ccBillingDetails.copy() as! BSBillingAddressDetails
-            if !initialData.withEmail {
+            if !sdkRequest.withEmail {
                 self.billingDetails.email = nil
             }
-            if !initialData.fullBilling {
+            if !sdkRequest.fullBilling {
                 self.billingDetails.address = nil
                 self.billingDetails.city = nil
                 self.billingDetails.state = nil
             }
         } else {
-            if let initialBillingDetails = initialData.billingDetails {
+            if let initialBillingDetails = sdkRequest.billingDetails {
                 self.billingDetails = initialBillingDetails.copy() as! BSBillingAddressDetails
             } else {
                 self.billingDetails = BSBillingAddressDetails()
@@ -137,14 +137,14 @@ import Foundation
             if let name = shopper.name {
                 billingDetails.name = name
             }
-            if initialData.withEmail {
+            if sdkRequest.withEmail {
                 if let email = shopper.email {
                     billingDetails.email = email
                 }
             }
             if let country = shopper.countryCode {
                 billingDetails.country =  country
-                if initialData.fullBilling {
+                if sdkRequest.fullBilling {
                     if let state = shopper.stateCode {
                         billingDetails.state = state
                     }
@@ -161,10 +161,10 @@ import Foundation
             }
         }
         
-        if initialData.withShipping {
+        if sdkRequest.withShipping {
             if let shopperShippingDetails = shopper.shippingDetails {
                 self.shippingDetails = shopperShippingDetails.copy() as? BSShippingAddressDetails
-            } else if let initialShippingDetails = initialData.shippingDetails {
+            } else if let initialShippingDetails = sdkRequest.shippingDetails {
                 self.shippingDetails = initialShippingDetails.copy() as? BSShippingAddressDetails
             }
             if self.shippingDetails?.name == nil || self.shippingDetails?.name == "" {
@@ -185,7 +185,7 @@ import Foundation
     
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSExistingCcPaymentRequest(initialData: BlueSnapSDK.initialData!)
+        let copy = BSExistingCcSdkResult(sdkRequest: BlueSnapSDK.sdkRequest!)
         copy.creditCard = self.creditCard.copy() as! BSCreditCard
         copy.billingDetails = self.billingDetails.copy() as! BSBillingAddressDetails
         if let shippingDetails = self.shippingDetails {
