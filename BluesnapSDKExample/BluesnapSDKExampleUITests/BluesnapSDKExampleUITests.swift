@@ -67,7 +67,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         
         let _ = waitForExistingCcScreen(app: app)
         
-        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 20.00")
+        let payButton = checkPayButton(app: app, expectedPayText: "Pay $ 21.00")
         payButton.tap()
         
         checkResult(app: app, expectedSuccessText: "Success!")
@@ -468,7 +468,7 @@ class BluesnapSDKExampleUITests: XCTestCase {
         let paymentTypeHelper = BSPaymentTypeScreenUITestHelper(app: app)
         
         // set switches and amounts in merchant checkout screen
-        setMerchantCheckoutScreen(app: app, sdkRequest: sdkRequest, newShopper: !returningShopper)
+        setMerchantCheckoutScreen(app: app, sdkRequest: sdkRequest, returningShopper: returningShopper)
         
         // click "Checkout" button
         app.buttons["CheckoutButton"].tap()
@@ -491,14 +491,17 @@ class BluesnapSDKExampleUITests: XCTestCase {
         }
     }
     
-    private func setMerchantCheckoutScreen(app: XCUIApplication, sdkRequest: BSSdkRequest, newShopper: Bool = true) {
+    private func setMerchantCheckoutScreen(app: XCUIApplication, sdkRequest: BSSdkRequest, returningShopper: Bool = false) {
         
         // set new/returning shopper
-        let newShopperSwitch = app.switches["NewShopperSwitch"]
-        waitForElementToExist(element: newShopperSwitch, waitTime: 30)
-        let newShopperSwitchValue = (newShopperSwitch.value as? String) ?? "0"
-        if (newShopperSwitchValue == "0" && newShopper) || (newShopperSwitchValue == "1" && !newShopper) {
-            newShopperSwitch.tap()
+        let returningShopperSwitch = app.switches["ReturningShopperSwitch"]
+        waitForElementToExist(element: returningShopperSwitch, waitTime: 30)
+        let returningShopperSwitchValue = (returningShopperSwitch.value as? String) ?? "0"
+        if (returningShopperSwitchValue == "0" && returningShopper) || (returningShopperSwitchValue == "1" && !returningShopper) {
+            returningShopperSwitch.tap()
+            // wait for action to finish
+            let coverView = app.otherElements.element(matching: .any, identifier: "CoverView")
+            waitForEllementToDisappear(element: coverView, waitTime: 30)
         }
         
         // set with Shipping switch = on
@@ -562,6 +565,13 @@ class BluesnapSDKExampleUITests: XCTestCase {
         //waitForExpectations(timeout: waitTime, handler: { error in
          //   NSLog("Finished waiting")
         //})
+    }
+    
+    private func waitForEllementToDisappear(element: XCUIElement, waitTime: TimeInterval) {
+        
+        let exists = NSPredicate(format: "exists == 0")
+        let ex: XCTestExpectation = expectation(for: exists, evaluatedWith: element)
+        wait(for: [ex], timeout: waitTime)
     }
 }
 

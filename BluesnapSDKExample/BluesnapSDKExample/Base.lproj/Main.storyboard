@@ -42,18 +42,18 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtG-Zk-3aB" userLabel="Inner View">
                                 <rect key="frame" x="0.0" y="79" width="375" height="588"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New shopper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTe-GM-YPU">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Returning shopper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTe-GM-YPU">
                                         <rect key="frame" x="14" y="5" width="135" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nTF-Hf-KxX" userLabel="New Shopper Switch">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="nTF-Hf-KxX" userLabel="Returning Shopper Switch">
                                         <rect key="frame" x="162" y="0.0" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="NewShopperSwitch"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ReturningShopperSwitch"/>
                                         <connections>
-                                            <action selector="withShopperValueChanged:" destination="BYZ-38-t0r" eventType="touchUpInside" id="84U-QM-48M"/>
+                                            <action selector="returningShopperValueChanged:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zWT-oj-uNm"/>
                                         </connections>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With shipping" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyA-5y-lej">
@@ -164,6 +164,7 @@
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="CoverView"/>
                                         <constraints>
                                             <constraint firstItem="5gd-cl-sWV" firstAttribute="centerY" secondItem="cco-GN-tEP" secondAttribute="centerY" constant="24.5" id="Dww-Ok-kT3"/>
                                             <constraint firstItem="5gd-cl-sWV" firstAttribute="centerX" secondItem="cco-GN-tEP" secondAttribute="centerX" id="Z78-it-7Jr"/>
@@ -238,8 +239,8 @@
                         <outlet property="coverAllView" destination="cco-GN-tEP" id="n6f-jP-Kui"/>
                         <outlet property="currencyButton" destination="dMR-1J-U5n" id="565-Jx-enD"/>
                         <outlet property="fullBillingSwitch" destination="xkv-uS-lPt" id="ufh-bw-LTe"/>
-                        <outlet property="newShopperSwitch" destination="nTF-Hf-KxX" id="SUd-oD-f5y"/>
                         <outlet property="resultTextView" destination="TT4-Lq-e8Y" id="feq-X1-fla"/>
+                        <outlet property="returningShopperSwitch" destination="nTF-Hf-KxX" id="fTG-7d-b1F"/>
                         <outlet property="taxTextField" destination="AB2-QV-u38" id="equ-Sf-nYm"/>
                         <outlet property="valueTextField" destination="1E4-kM-4oY" id="Irq-uA-p7l"/>
                         <outlet property="withEmailSwitch" destination="u0H-Xe-vin" id="LVg-J4-Zw2"/>

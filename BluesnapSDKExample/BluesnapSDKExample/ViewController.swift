@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var withEmailSwitch: UISwitch!
     @IBOutlet weak var coverAllView: UIView!
     @IBOutlet weak var coverAllLabel: UILabel!
-    @IBOutlet weak var newShopperSwitch: UISwitch!
+    @IBOutlet weak var returningShopperSwitch: UISwitch!
     
     // MARK: private properties
     
@@ -56,7 +56,7 @@ class ViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
         
         if bsToken == nil {
-            initBsToken(newShopper: newShopperSwitch.isOn)
+            initBsToken(returningShopper: returningShopperSwitch.isOn)
         }
 		super.viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
@@ -319,11 +319,11 @@ class ViewController: UIViewController {
     /**
      Called when the "new shopper" switch changes, to create a new token with/without shopper
      */
-    @IBAction func withShopperValueChanged(_ sender: UISwitch) {
+    @IBAction func returningShopperValueChanged(_ sender: UISwitch) {
         
         coverAllView.isHidden = false
         hideCoverView = true
-        initBsToken(newShopper: sender.isOn)
+        initBsToken(returningShopper: sender.isOn)
     }
 
     /**
@@ -420,14 +420,14 @@ class ViewController: UIViewController {
      Create a test BS token and set it in BlueSnapSDK.
      In a real app, you would get the token from your app server.
      */
-    func initBsToken(newShopper: Bool) {
+    func initBsToken(returningShopper: Bool) {
         
         // To simulate expired token use:
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
         self.coverAllView.isHidden = false
         
-        shopperId = newShopper ? nil : returningShopperId
+        shopperId = returningShopper ? returningShopperId : nil
         
         BlueSnapSDK.createSandboxTestTokenWithShopperId(shopperId: shopperId, completion: { resultToken, errors in
             
