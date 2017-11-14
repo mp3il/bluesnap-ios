@@ -361,7 +361,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             cityInputLine.isHidden = hideFields
             updateState()
             shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
-            subtotalAndTaxDetailsView.isHidden = !newCardMode && self.purchaseDetails.getTaxAmount() == 0
+            subtotalAndTaxDetailsView.isHidden = !newCardMode || self.purchaseDetails.getTaxAmount() == 0
             updateZipFieldLocation()
         }
     }
@@ -403,7 +403,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         if self.ccInputLine.ccnIsOpen {
             subtotalAndTaxDetailsView.isHidden = true
         } else {
-            subtotalAndTaxDetailsView.isHidden = !newCardMode && self.purchaseDetails.getTaxAmount() == 0
+            subtotalAndTaxDetailsView.isHidden = !newCardMode || self.purchaseDetails.getTaxAmount() == 0
         }
 
         let toCurrency = purchaseDetails.getCurrency() ?? ""

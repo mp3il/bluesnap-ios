@@ -24,6 +24,7 @@ class BSExistingCCViewController: UIViewController {
     @IBOutlet weak var shippingAddressTextView: UITextView!
     @IBOutlet weak var payButton: UIButton!
     @IBOutlet weak var topMenuButton: UIBarButtonItem!
+    @IBOutlet weak var subtotalAndTaxDetailsView: BSSubtotalUIView!
     
     // MARK: private variables
     fileprivate var purchaseDetails: BSExistingCcSdkResult!
@@ -151,15 +152,28 @@ class BSExistingCCViewController: UIViewController {
     
     private func updateAmounts() {
         
-        //subtotalAndTaxDetailsView.isHidden = self.purchaseDetails.getTaxAmount() == 0
+        callUpdateTax()
+
+        subtotalAndTaxDetailsView.isHidden = self.purchaseDetails.getTaxAmount() == 0
         
         let toCurrency = purchaseDetails.getCurrency() ?? ""
         let subtotalAmount = purchaseDetails.getAmount() ?? 0.0
         let taxAmount = purchaseDetails.getTaxAmount() ?? 0.0
-        //subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
+        subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
         let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: subtotalAmount, taxAmount: taxAmount, toCurrency: toCurrency)
         payButton.setTitle(payButtonText, for: UIControlState())
+    }
+
+    private func callUpdateTax() {
+        
+        let sdkRequest = BlueSnapSDK.sdkRequest!
+        let updateTaxFunc = sdkRequest.updateTaxFunc
+        if updateTaxFunc != nil && sdkRequest.withShipping && purchaseDetails.shippingDetails?.country != nil {
+            let country: String = purchaseDetails.shippingDetails!.country!
+            let state: String? = purchaseDetails.shippingDetails?.state
+            updateTaxFunc!(country, state, purchaseDetails.priceDetails)
+        }
     }
 
     private func submitPaymentFields() {

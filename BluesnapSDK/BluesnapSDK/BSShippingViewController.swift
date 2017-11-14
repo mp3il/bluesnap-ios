@@ -360,7 +360,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
 
     private func updateAmounts() {
 
-        subtotalAndTaxDetailsView.isHidden = !newCardMode && self.purchaseDetails.getTaxAmount() == 0
+        subtotalAndTaxDetailsView.isHidden = !newCardMode || self.purchaseDetails.getTaxAmount() == 0
         let toCurrency = purchaseDetails.getCurrency() ?? ""
         let subtotalAmount = purchaseDetails.getAmount() ?? 0.0
         let taxAmount = (purchaseDetails.getTaxAmount() ?? 0.0)

@@ -457,7 +457,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OfH-nY-PCP">
-                                <rect key="frame" x="0.0" y="64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="501"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NZP-iU-d4A" customClass="BSExistingCcUIView" customModule="BluesnapSDK">
                                         <rect key="frame" x="20" y="13" width="280" height="40"/>
@@ -522,14 +522,14 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqz-QH-oYM">
-                                        <rect key="frame" x="20" y="240" width="280" height="21.5"/>
+                                        <rect key="frame" x="20" y="228" width="280" height="21.5"/>
                                         <accessibility key="accessibilityConfiguration" label="ShippingTitle"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="textColor" red="0.43529412150000002" green="0.4431372583" blue="0.47450980539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UDS-ih-c9e" userLabel="shipping Box" customClass="BSBaseBoxWithShadowView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="20" y="265" width="280" height="92"/>
+                                        <rect key="frame" x="20" y="253" width="280" height="92"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8XH-dZ-MHd">
                                                 <rect key="frame" x="8" y="15" width="264" height="26.5"/>
@@ -580,8 +580,7 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="UDS-ih-c9e" secondAttribute="trailing" constant="20" symbolic="YES" id="6EQ-tf-Zq1"/>
                                     <constraint firstItem="Vqz-QH-oYM" firstAttribute="leading" secondItem="OfH-nY-PCP" secondAttribute="leading" constant="20" symbolic="YES" id="6uV-CF-Izd"/>
-                                    <constraint firstItem="Vqz-QH-oYM" firstAttribute="top" secondItem="VhF-2J-DbG" secondAttribute="bottom" constant="30" id="CtP-a6-xIM"/>
-                                    <constraint firstItem="VhF-2J-DbG" firstAttribute="height" secondItem="OfH-nY-PCP" secondAttribute="height" multiplier="108/667" id="H5U-Hk-rhy"/>
+                                    <constraint firstItem="Vqz-QH-oYM" firstAttribute="top" secondItem="VhF-2J-DbG" secondAttribute="bottom" constant="18" id="CtP-a6-xIM"/>
                                     <constraint firstItem="VhF-2J-DbG" firstAttribute="leading" secondItem="OfH-nY-PCP" secondAttribute="leading" constant="20" symbolic="YES" id="Kay-Xb-nCY"/>
                                     <constraint firstItem="jEz-xL-d7a" firstAttribute="leading" secondItem="OfH-nY-PCP" secondAttribute="leading" constant="20" symbolic="YES" id="Mjq-OE-FAy"/>
                                     <constraint firstAttribute="trailing" secondItem="NZP-iU-d4A" secondAttribute="trailing" constant="20" symbolic="YES" id="Rh8-2G-y7f"/>
@@ -589,7 +588,6 @@
                                     <constraint firstItem="UDS-ih-c9e" firstAttribute="top" secondItem="Vqz-QH-oYM" secondAttribute="bottom" constant="4" id="Tys-1c-CuS"/>
                                     <constraint firstAttribute="trailing" secondItem="VhF-2J-DbG" secondAttribute="trailing" constant="20" symbolic="YES" id="aCd-iz-yT7"/>
                                     <constraint firstItem="VhF-2J-DbG" firstAttribute="top" secondItem="jEz-xL-d7a" secondAttribute="bottom" constant="3" id="cKi-9Y-UaI"/>
-                                    <constraint firstItem="UDS-ih-c9e" firstAttribute="height" secondItem="OfH-nY-PCP" secondAttribute="height" multiplier="108/667" id="cSV-bu-yzO"/>
                                     <constraint firstItem="UDS-ih-c9e" firstAttribute="leading" secondItem="OfH-nY-PCP" secondAttribute="leading" constant="20" symbolic="YES" id="gP1-T9-odZ"/>
                                     <constraint firstAttribute="trailing" secondItem="jEz-xL-d7a" secondAttribute="trailing" constant="20" symbolic="YES" id="nlh-zN-gUY"/>
                                     <constraint firstItem="NZP-iU-d4A" firstAttribute="top" secondItem="OfH-nY-PCP" secondAttribute="top" constant="13" id="nnX-JE-NX3"/>
@@ -597,6 +595,11 @@
                                     <constraint firstItem="jEz-xL-d7a" firstAttribute="top" secondItem="NZP-iU-d4A" secondAttribute="bottom" constant="40" id="wEQ-Op-21F"/>
                                     <constraint firstItem="UDS-ih-c9e" firstAttribute="top" secondItem="Vqz-QH-oYM" secondAttribute="bottom" constant="4" id="wuO-FN-VKr"/>
                                 </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZz-jo-p8Z" customClass="BSSubtotalUIView" customModule="BluesnapSDK">
+                                <rect key="frame" x="99" y="422" width="205" height="34"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration" identifier="SubtotalAndTaxView"/>
                             </view>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="bottom" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EAf-rt-eow">
                                 <rect key="frame" x="0.0" y="459" width="320" height="65"/>
@@ -618,13 +621,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="OfH-nY-PCP" secondAttribute="trailing" id="1Ym-3X-026"/>
+                            <constraint firstItem="UDS-ih-c9e" firstAttribute="height" secondItem="gqs-zK-L6E" secondAttribute="height" multiplier="108/667" id="FUJ-35-fI7"/>
                             <constraint firstItem="vhD-Gk-hjn" firstAttribute="top" secondItem="EAf-rt-eow" secondAttribute="bottom" id="NeC-w2-W5W"/>
+                            <constraint firstItem="ZZz-jo-p8Z" firstAttribute="height" secondItem="gqs-zK-L6E" secondAttribute="height" multiplier="40/667" id="Phb-De-o9f"/>
                             <constraint firstItem="OfH-nY-PCP" firstAttribute="leading" secondItem="gqs-zK-L6E" secondAttribute="leading" id="Xmw-PB-XVl"/>
+                            <constraint firstItem="EAf-rt-eow" firstAttribute="top" secondItem="ZZz-jo-p8Z" secondAttribute="bottom" constant="3" id="a3b-Mb-mAp"/>
                             <constraint firstItem="OfH-nY-PCP" firstAttribute="top" secondItem="GlA-ZY-fRS" secondAttribute="bottom" id="cFZ-yB-WCY"/>
                             <constraint firstItem="EAf-rt-eow" firstAttribute="leading" secondItem="gqs-zK-L6E" secondAttribute="leading" id="dGP-Ic-Ti5"/>
+                            <constraint firstItem="VhF-2J-DbG" firstAttribute="height" secondItem="gqs-zK-L6E" secondAttribute="height" multiplier="108/667" id="gf1-48-DqJ"/>
                             <constraint firstItem="OfH-nY-PCP" firstAttribute="width" secondItem="gqs-zK-L6E" secondAttribute="width" id="hYa-1q-9mP"/>
-                            <constraint firstItem="OfH-nY-PCP" firstAttribute="height" secondItem="gqs-zK-L6E" secondAttribute="height" id="tLI-Dn-WlV"/>
+                            <constraint firstAttribute="bottom" secondItem="OfH-nY-PCP" secondAttribute="bottom" constant="3" id="lFo-pt-Qx7"/>
+                            <constraint firstItem="ZZz-jo-p8Z" firstAttribute="trailing" secondItem="gqs-zK-L6E" secondAttribute="trailingMargin" id="oJE-GW-f4V"/>
                             <constraint firstAttribute="trailing" secondItem="EAf-rt-eow" secondAttribute="trailing" id="xDq-bA-SRn"/>
+                            <constraint firstItem="ZZz-jo-p8Z" firstAttribute="width" secondItem="gqs-zK-L6E" secondAttribute="width" multiplier="240/375" id="ycj-cw-jhG"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -648,6 +657,7 @@
                         <outlet property="shippingBoxView" destination="UDS-ih-c9e" id="Jbg-Jh-MSD"/>
                         <outlet property="shippingLabel" destination="Vqz-QH-oYM" id="PvR-ND-kqB"/>
                         <outlet property="shippingNameLabel" destination="8XH-dZ-MHd" id="eS0-HZ-9gV"/>
+                        <outlet property="subtotalAndTaxDetailsView" destination="ZZz-jo-p8Z" id="1zA-u6-XRL"/>
                         <outlet property="topMenuButton" destination="Kw6-9N-uyj" id="z4I-LR-vB6"/>
                     </connections>
                 </viewController>
