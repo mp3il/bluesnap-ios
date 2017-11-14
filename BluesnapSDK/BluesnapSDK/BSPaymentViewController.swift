@@ -380,7 +380,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     private func updateTexts() {
         
-        self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Screen)
+        if self.newCardMode {
+            self.title = BSLocalizedStrings.getString(BSLocalizedString.Title_Payment_Screen)
+        } else {
+            self.title = BSLocalizedStrings.getString(BSLocalizedString.Label_Billing)
+        }
         updateAmounts()
         
         self.nameInputLine.labelText = BSLocalizedStrings.getString(BSLocalizedString.Label_Name)

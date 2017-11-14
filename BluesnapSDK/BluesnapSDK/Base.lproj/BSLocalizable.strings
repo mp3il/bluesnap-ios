@@ -161,7 +161,7 @@
 
 /* ------- Existing CC screen labels ------- */
 
-/* Billing title */
+/* Billing title, also used as billing page title */
 "Label_Billing" = "Billing";
 
 /* Shipping title */
