@@ -148,7 +148,9 @@ import Foundation
                 if let httpStatusCode: Int = (httpResponse?.statusCode) {
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         result = extractTokenFromResponse(httpResponse: httpResponse, domain: domain)
-                        if result == nil {
+                        if let result = result {
+                            NSLog("createBSToken result: \(result.tokenStr)")
+                        } else {
                             resultError = .unknown
                         }
                     } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {

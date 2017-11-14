@@ -200,7 +200,12 @@ class BSExistingCCViewController: UIViewController {
             
             result = BSValidator.isValidName(purchaseDetails.billingDetails.name)
             if data.withEmail {
-                result = result && BSValidator.isValidEmail(purchaseDetails.billingDetails.email ?? "")
+                let email = purchaseDetails.billingDetails.email ?? ""
+                if email == "" {
+                    result = !data.fullBilling // email is mandfatory only in full billing
+                } else {
+                    result = result && BSValidator.isValidEmail(email)
+                }
             }
             result = result && BSValidator.isValidZip(countryCode: purchaseDetails.billingDetails.country ?? "", zip: purchaseDetails.billingDetails.zip ?? "")
             if data.fullBilling {
