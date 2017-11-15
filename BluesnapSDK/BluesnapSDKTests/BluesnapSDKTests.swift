@@ -35,7 +35,7 @@ class BluesnapSDKTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: { (result, error) in
+            BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, purchaseDetails: nil, completion: { (result, error) in
                 
                 XCTAssert(error == nil, "error: \(error)")
                 let ccType = result.ccType
@@ -102,7 +102,7 @@ class BluesnapSDKTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            BlueSnapSDK.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, purchaseDetails: nil, completion: {
                 (result, error) in
                 
                 if let error = error {

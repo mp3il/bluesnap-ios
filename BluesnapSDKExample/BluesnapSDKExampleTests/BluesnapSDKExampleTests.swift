@@ -34,22 +34,18 @@ class BluesnapSDKExampleTests: XCTestCase {
             
             BlueSnapSDK.initBluesnap(bsToken: token, generateTokenFunc: self.generateAndSetBsToken, initKount: false, fraudSessionId: nil, applePayMerchantIdentifier: nil, merchantStoreCurrency: nil, completion: { error in
             
-                BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
+                let bsCurrencies = BlueSnapSDK.getCurrencyRates()
+                XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
                     
-                    XCTAssertNil(errors, "Got errors while trying to get currencies")
-                    XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
-                    
-                    let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
-                    XCTAssertNotNil(gbpCurrency)
-                    NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.getName()), its rate is \(gbpCurrency.getRate())")
-                    
-                    let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
-                    XCTAssertNotNil(eurCurrencyRate)
-                    NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
-                    
-                    semaphore.signal()
-                })
-            
+                let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
+                XCTAssertNotNil(gbpCurrency)
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.getName()), its rate is \(gbpCurrency.getRate())")
+                
+                let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
+                XCTAssertNotNil(eurCurrencyRate)
+                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                
+                semaphore.signal()
             })
             
         })

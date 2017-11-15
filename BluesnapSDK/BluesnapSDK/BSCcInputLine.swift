@@ -349,14 +349,16 @@ public class BSCcInputLine: BSBaseTextInput {
      This should be called by the 'Pay' button - it submits all the CC details to BlueSnap server, so that later purchase requests to BlueSnap will not need gto contain these values (they will be automatically identified by the token).
      In case of errors from the server (there may be validations we did not catch before), we show the errors under the matching fields.
      After getting the result, we call the delegate's didSubmitCreditCard function.
+     - parameters:
+     - purchaseDetails: optional purchase details to be tokenized as well as the CC details
     */
-    public func submitPaymentFields() {
+    public func submitPaymentFields(purchaseDetails: BSCcSdkResult?) {
         
         let ccn = self.getValue() ?? ""
         let cvv = self.getCvv() ?? ""
         let exp = self.getExpDateAsMMYYYY() ?? ""
         
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+        BSApiManager.submitPurchaseDetails(ccNumber: ccn, last4Digits: nil, expDate: exp, cvv: cvv, billingDetails: purchaseDetails?.billingDetails, shippingDetails: purchaseDetails?.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: {
             creditCard, error in
             
             if let error = error {

@@ -62,6 +62,7 @@ class BSApiManagerTests: XCTestCase {
     //------------------------------------------------------
     
     // test get SDk Data with a valid token
+    // If the test fails on the billing/shipping values, run the UI test testShortReturningShopperExistingCcFlowWithEdit in the demo app
     func testGetSdkData() {
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -273,7 +274,7 @@ class BSApiManagerTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            self.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
                 (result, error) in
                 
                 XCTAssert(error == nil, "error: \(error)")
@@ -299,7 +300,7 @@ class BSApiManagerTests: XCTestCase {
         let exp = "10/2020"
         
         let semaphore = DispatchSemaphore(value: 0)
-        BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+        self.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
             XCTAssert(error == nil, "error: \(error)")
@@ -428,7 +429,7 @@ class BSApiManagerTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BSApiManager.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
+            self.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
                 (result, error) in
                 
                 if let error = error {
@@ -481,5 +482,10 @@ class BSApiManagerTests: XCTestCase {
             self.tokenWasRecreated = true
             BSApiManager.createSandboxBSToken(shopperId: nil, completion: completion)
         })
+    }
+    
+    private func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
+        
+        BSApiManager.submitPurchaseDetails(ccNumber: ccNumber, last4Digits: nil, expDate: expDate, cvv: cvv, billingDetails: nil, shippingDetails: nil, fraudSessionId: nil, completion: completion)
     }
 }

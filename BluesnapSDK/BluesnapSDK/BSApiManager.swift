@@ -230,20 +230,6 @@ import Foundation
         submitCcDetails(requestBody: requestBody, completion: completion)
     }
 
-    /**
-     Submit CC details to BlueSnap server
-     - parameters:
-     - ccNumber: Credit card number
-     - expDate: CC expiration date in format MM/YYYY
-     - cvv: CC security code (CVV)
-     - completion: callback with either result details if OK, or error details if not OK
-    */
-    static func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
-
-        let requestBody = ["ccNumber": BSStringUtils.removeWhitespaces(ccNumber), "cvv": cvv, "expDate": expDate]
-        submitCcDetails(requestBody: requestBody, completion: completion)
-    }
-
     
     /**
      Submit CCN only to BlueSnap server

@@ -100,11 +100,12 @@ import PassKit
      - ccNumber: Credit card number
      - expDate: CC expiration date in format MM/YYYY
      - cvv: CC security code (CVV)
+     - purchaseDetails: optional purchase details to be tokenized as well as the CC details
      - completion: callback with either result details if OK, or error details if not OK
      */
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCreditCard,BSErrors?)->Void) {
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCreditCard,BSErrors?)->Void) {
         
-        BSApiManager.submitCcDetails(ccNumber: ccNumber, expDate: expDate, cvv: cvv, completion: completion)
+        BSApiManager.submitPurchaseDetails(ccNumber: ccNumber, last4Digits: nil, expDate: expDate, cvv: cvv, billingDetails: purchaseDetails?.billingDetails, shippingDetails: purchaseDetails?.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
     }
     
     /**

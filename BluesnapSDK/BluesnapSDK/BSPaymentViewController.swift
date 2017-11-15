@@ -431,7 +431,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     
     func submitPaymentFields() {
         
-        self.ccInputLine.submitPaymentFields()
+        self.ccInputLine.submitPaymentFields(purchaseDetails: self.purchaseDetails)
     }
     
     private func gotoShippingScreen() {
