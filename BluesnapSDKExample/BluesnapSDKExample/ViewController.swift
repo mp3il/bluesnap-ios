@@ -277,28 +277,14 @@ class ViewController: UIViewController {
                         self.showThankYouScreen(result)
                 })
                 
-            } else if let ccPurchaseDetails = purchaseDetails as? BSExistingCcSdkResult {
+            } else if let ccPurchaseDetails = purchaseDetails as? BSCcSdkResult {
                 
                 let creditCard = ccPurchaseDetails.creditCard
                 NSLog("CC Expiration: \(creditCard.getExpiration() )")
                 NSLog("CC type: \(creditCard.ccType ?? "")")
                 NSLog("CC last 4 digits: \(creditCard.last4Digits ?? "")")
-                demo.createTokenizedTransaction(
-                    purchaseDetails: ccPurchaseDetails,
-                    bsToken: self.bsToken!,
-                    completion: { success, data in
-                        result.data = data
-                        result.success = success
-                        self.logResultDetails(result: result, purchaseDetails: ccPurchaseDetails)
-                        self.showThankYouScreen(result)
-                })
-            } else if let ccPurchaseDetails = purchaseDetails as? BSCcSdkResult {
-                
-                let creditCard = ccPurchaseDetails.creditCard
                 NSLog("CC Issuing country: \(creditCard.ccIssuingCountry ?? "")")
-                NSLog("CC type: \(creditCard.ccType ?? "")")
-                NSLog("CC last 4 digits: \(creditCard.last4Digits ?? "")")
-                demo.createCreditCardTransaction(
+                demo.createTokenizedTransaction(
                     purchaseDetails: ccPurchaseDetails,
                     bsToken: self.bsToken!,
                     completion: { success, data in

@@ -423,16 +423,16 @@ import Foundation
                     BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: { resultData2, error2 in
                         
                         NSLog("BlueSnap; submitCcDetails retry completion")
-                        fillCcDetailsAndComplete(resultData: resultData2, error: error2, completion: completion)
+                        fillCcDetailsAndComplete(requestBody: requestBody, resultData: resultData2, error: error2, completion: completion)
                     })
                 })
             } else {
-                fillCcDetailsAndComplete(resultData: resultData, error: error, completion: completion)
+                fillCcDetailsAndComplete(requestBody: requestBody, resultData: resultData, error: error, completion: completion)
             }
         })
     }
     
-    private static func fillCcDetailsAndComplete(resultData: [String:String], error: BSErrors?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
+    private static func fillCcDetailsAndComplete(requestBody: [String:String], resultData: [String:String], error: BSErrors?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         let cc = BSCreditCard()
         if let error = error {
@@ -443,6 +443,13 @@ import Foundation
         cc.ccIssuingCountry = resultData["ccIssuingCountry"]
         cc.ccType = resultData["ccType"]
         cc.last4Digits = resultData["last4Digits"]
+        if let expDate = requestBody["expDate"] {
+            if let p = expDate.characters.index(of: "/") {
+                cc.expirationMonth = expDate.substring(with: expDate.startIndex..<p)
+                let p = expDate.index(after: p)
+                cc.expirationYear = expDate.substring(with: p..<expDate.endIndex)
+            }
+        }
         completion(cc, nil)
     }
 
