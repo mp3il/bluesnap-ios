@@ -777,14 +777,11 @@ public class BSCurrencies {
 ```
 #### Currency Functionality (in BlueSnapSDK class):
 ##### getCurrencyRates
-This function returns a list of currencies and their rates from BlueSnap. 
+This function returns a list of currencies and their rates. The values are fetched when calling BlueSnapSDK.initBlesnap().
 
 Signature:
 
-    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void)
-    
-Parameters:
-- `completion`: after the data is fetched, this function will be called with optional currency data and optional error
+    open class func getCurrencyRates() -> BSCurrencies?
  
 ##### showCurrencyList
 If you're using the Standard Checkout Flow, you can use this function to take advantage of our currency selection screen, allowing the user to select a new currency to pay in. To see an example of calling this function, see ViewController.swift of the demo app. 
