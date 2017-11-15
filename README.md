@@ -684,7 +684,7 @@ When called, `submitCcDetails` submits the user's card data to BlueSnap, where i
 
 Signature:
 
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, completion : @escaping (BSCcDetails, BSErrors?)->Void)
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCcDetails, BSErrors?)->Void)
     
 Parameter: 
 
@@ -692,8 +692,9 @@ Parameter:
 | ------------- | ------------- |
 | `ccNumber` | CC number |
 | `expDate` | CC expiration date in the format MM/YYYY |
-|`cvv` | CC security code (CVV) |
-|`completion`* | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
+| `cvv` | CC security code (CVV) |
+| `purchaseDetails` | optional shopper details you want to tokenize (billing/shipping address) |
+| `completion` | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
 
 *Your `completion` callback should do the following: 
 1. Detect if the user's card data was successfully submitted to BlueSnap (if `BSErrors` is `nil`). 
