@@ -35,46 +35,16 @@ public enum BSPaymentType : String {
     var fraudSessionId: String?
     var priceDetails: BSPriceDetails!
     
-    // These fields hold the original amounts in USD, to keep precision in case of currency change
-    internal var originalAmount: NSNumber! = 0.0
-    internal var originalTaxAmount: NSNumber! = 0.0
-    internal var originalRate: NSNumber?
-    
     internal init(sdkRequest: BSSdkRequest) {
         super.init()
         self.priceDetails = sdkRequest.priceDetails.copy() as! BSPriceDetails
-        self.originalAmount = priceDetails.amount
-        self.originalTaxAmount = priceDetails.taxAmount ?? 0.0
-        self.originalRate = nil
         self.fraudSessionId = BlueSnapSDK.fraudSessionId
     }
     
     public func getFraudSessionId() -> String? {
         return fraudSessionId;
     }
-    
-    // MARK: Change currency methods
-
-    /*
-    Change currency will also change the amounts according to the change rates
-    */
-    public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?) {
         
-        if originalRate == nil {
-            if let oldCurrency = oldCurrency {
-                originalRate = NSNumber.init(value: oldCurrency.getRate() ?? 1.0)
-            } else {
-                originalRate = 1.0
-            }
-        }
-        if let newCurrency = newCurrency {
-            self.priceDetails.currency = newCurrency.code
-            let newRate = newCurrency.getRate() / Double.init((originalRate?.doubleValue)!)
-            self.priceDetails.amount = NSNumber.init(value: originalAmount.doubleValue * newRate)
-            self.priceDetails.taxAmount = NSNumber.init(value: originalTaxAmount.doubleValue * newRate)
-        }
-    }
-    
     // MARK: getters and setters
     
     public func getAmount() -> Double! {
@@ -116,6 +86,19 @@ public enum BSPaymentType : String {
     public func copy(with zone: NSZone? = nil) -> Any {
         let copy = BSPriceDetails(amount: amount.doubleValue, taxAmount: taxAmount.doubleValue, currency: currency)
         return copy
+    }
+    
+    public func changeCurrencyAndConvertAmounts(newCurrency: BSCurrency!) {
+        
+        if let currencies = BSApiManager.bsCurrencies {
+            let originalRate = currencies.getCurrencyByCode(code: self.currency)?.getRate() ?? 1.0
+            self.currency = newCurrency.code
+            let newRate = newCurrency.getRate() / originalRate
+            self.amount = NSNumber.init(value: self.amount.doubleValue * newRate)
+            self.taxAmount = NSNumber.init(value: self.taxAmount.doubleValue * newRate)
+        } else {
+            fatalError("Unable to access currency rates")
+        }
     }
 }
 

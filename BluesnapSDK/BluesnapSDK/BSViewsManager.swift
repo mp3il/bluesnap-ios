@@ -174,7 +174,7 @@ class BSViewsManager {
         inNavigationController: UINavigationController!,
         animated: Bool,
         selectedCurrencyCode : String!,
-        updateFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+        updateFunc: @escaping (BSCurrency?, BSCurrency)->Void,
         errorFunc: @escaping ()->Void) {
         
         BSApiManager.getCurrencyRates(completion: { currencies, errors in
@@ -297,7 +297,7 @@ class BSViewsManager {
     */
     open class func openPopupMenu(purchaseDetails: BSBaseSdkResult?,
             inNavigationController : UINavigationController,
-            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency?)->Void,
+            updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency)->Void,
             errorFunc: @escaping ()->Void) -> UIAlertController {
         
         let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)

@@ -213,20 +213,7 @@ class ViewController: UIViewController {
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
         if let priceDetails = sdkRequest?.priceDetails {
-            if let newCurrency = newCurrency {
-                var oldRate: NSNumber! = 1.0
-                if let oldCurrency = oldCurrency {
-                    oldRate = oldCurrency.getRateNSNumber()
-                }
-                // convert the prices back to $
-                priceDetails.amount = priceDetails.amount.doubleValue / oldRate.doubleValue as NSNumber
-                priceDetails.taxAmount = priceDetails.taxAmount.doubleValue / oldRate.doubleValue as NSNumber
-                
-                priceDetails.currency = newCurrency.getCode()
-                priceDetails.amount = priceDetails.amount.doubleValue * newCurrency.getRateNSNumber().doubleValue as NSNumber
-                priceDetails.taxAmount = priceDetails.taxAmount.doubleValue * newCurrency.getRateNSNumber().doubleValue as NSNumber
-            }
-
+            priceDetails.changeCurrencyAndConvertAmounts(newCurrency: newCurrency)
             valueTextField.text = String(format: "%.2f", CGFloat(priceDetails.amount ?? 0))
             taxTextField.text = String(format: "%.2f", CGFloat(priceDetails.taxAmount ?? 0))
             currencyButton.titleLabel?.text = priceDetails.currency

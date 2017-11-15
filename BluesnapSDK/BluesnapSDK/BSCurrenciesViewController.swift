@@ -16,10 +16,10 @@ class BSCurrenciesViewController: BSBaseListController {
     fileprivate var bsCurrencies : BSCurrencies?
     fileprivate var filteredItems : BSCurrencies?
     // the callback function that gets called when a currency is selected;
-    // this ids just a default
-    fileprivate var updateFunc : (BSCurrency?, BSCurrency?)->Void = {
+    // this is just a default
+    fileprivate var updateFunc : (BSCurrency?, BSCurrency)->Void = {
         oldCurrency, newCurrency in
-        NSLog("Currency \(newCurrency?.getCode() ?? "None") was selected")
+        NSLog("Currency \(newCurrency.getCode() ?? "None") was selected")
     }
 
     // MARK: init currencies
@@ -29,7 +29,7 @@ class BSCurrenciesViewController: BSBaseListController {
      */
     func initCurrencies(currencyCode : String,
                         currencies : BSCurrencies,
-                        updateFunc : @escaping (BSCurrency?, BSCurrency?)->Void) {
+                        updateFunc : @escaping (BSCurrency?, BSCurrency)->Void) {
         
         self.updateFunc = updateFunc
         self.bsCurrencies = currencies
@@ -72,7 +72,7 @@ class BSCurrenciesViewController: BSBaseListController {
             let newBsCurrency = bsCurrencies.getCurrencyByCode(code: newItem.code)
             
             // call updateFunc
-            updateFunc(oldBsCurrency, newBsCurrency)
+            updateFunc(oldBsCurrency, newBsCurrency!)
         }
     }
     

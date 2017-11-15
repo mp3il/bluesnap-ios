@@ -125,9 +125,9 @@ class BSExistingCCViewController: UIViewController {
     
     // MARK: menu actions
     
-    private func updateCurrencyFunc(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
+    private func updateCurrencyFunc(oldCurrency : BSCurrency?, newCurrency : BSCurrency) {
         
-        purchaseDetails.changeCurrency(oldCurrency: oldCurrency, newCurrency: newCurrency)
+        purchaseDetails.priceDetails.changeCurrencyAndConvertAmounts(newCurrency: newCurrency)
         updateAmounts()
     }
     
