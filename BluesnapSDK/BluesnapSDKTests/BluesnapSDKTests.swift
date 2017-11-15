@@ -71,9 +71,11 @@ class BluesnapSDKTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BlueSnapSDK.getCurrencyRates(completion: { bsCurrencies, errors in
+            BlueSnapSDK.initBluesnap(bsToken: token, generateTokenFunc: {_ in }, initKount: false, fraudSessionId: nil, applePayMerchantIdentifier: nil, merchantStoreCurrency: "USD", completion: { errors in
                 
-                XCTAssertNil(errors, "Got errors while trying to get currencies")
+                XCTAssertNil(errors, "Got errors from initBluesnap")
+                
+                let bsCurrencies = BlueSnapSDK.getCurrencyRates()
                 XCTAssertNotNil(bsCurrencies, "Failed to get currencies")
                 
                 let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")

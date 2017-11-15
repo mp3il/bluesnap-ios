@@ -136,50 +136,6 @@ import Foundation
             }
         })
     }
-    
-    /**
-        Return a list of currencies and their rates from BlueSnap server
-     - parameters:
-     - completion: function to be called after data is received; will receive optional currency data and optional error
-    */
-    static func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
-
-        let bsToken = getBsToken()
-
-        if let bsCurrencies = self.bsCurrencies {
-            let diff = bsCurrencies.getCreationDate().timeIntervalSinceNow as Double // interval in seconds
-            if (diff > TIME_DIFF_TO_RELOAD) {
-                completion(bsCurrencies, nil)
-                return
-            }
-        }
-
-        NSLog("BlueSnap; getCurrencyRates")
-        let baseCurrency = self.bsCurrencies?.baseCurrency
-        BSApiCaller.getCurrencyRates(bsToken: bsToken, baseCurrency: baseCurrency, completion: {
-            resultCurrencies, resultError in
-            
-            NSLog("BlueSnap; getCurrencyRates completion")
-            if resultError == .unAuthorised {
-                // Assume token expired: regenerate Token and try again
-                regenerateToken(executeAfter: { _ in
-                    BSApiCaller.getCurrencyRates(bsToken: getBsToken(), baseCurrency: baseCurrency, completion: { resultCurrencies2, resultError2 in
-                        
-                        if resultError2 == nil {
-                            bsCurrencies = resultCurrencies2
-                        }
-                        completion(bsCurrencies, resultError2)
-                    })
-                })
-            
-            } else {
-                if (resultError == nil) {
-                    bsCurrencies = resultCurrencies
-                }
-                completion(bsCurrencies, resultError)
-            }
-        })
-    }
 
     /**
      Submit Exisating CC request to BlueSnap server

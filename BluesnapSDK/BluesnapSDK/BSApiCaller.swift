@@ -171,45 +171,6 @@ import Foundation
         }
         task.resume()
     }
-
-    /**
-     Return a list of currencies and their rates from BlueSnap server
-     - parameters:
-     - bsToken: a token for BlueSnap tokenized services
-     - completion: a callback function to be called once the data is fetched; receives optional currency data and optional error
-     */
-    static func getCurrencyRates(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
-        
-        let urlStr = bsToken.serverUrl + "services/2/tokenized-services/rates?base-currency=" + (baseCurrency ?? "USD")
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bsToken.tokenStr, forHTTPHeaderField: "Token-Authentication")
-        
-        // fire request
-        
-        var resultError: BSErrors?
-        var resultCurrencies: BSCurrencies?
-        
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response, error) in
-            if let error = error {
-                let errorType = type(of: error)
-                NSLog("error getting BS currencies - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
-                resultError = .unknown
-            } else {
-                let httpStatusCode:Int? = (response as? HTTPURLResponse)?.statusCode
-                if (httpStatusCode != nil && httpStatusCode! >= 200 && httpStatusCode! <= 299) {
-                    (resultCurrencies, resultError) = parseCurrenciesData(data: data)
-                } else {
-                    resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
-                }
-            }
-            defer {
-                completion(resultCurrencies, resultError)
-            }
-        }
-        task.resume()
-    }
     
     /**
      Calls BlueSnap server to create a PayPal token
@@ -520,31 +481,6 @@ import Foundation
             NSLog("Error - result data is empty")
         }
         return errStr ?? ""
-    }
-
-    private static func parseCurrenciesData(data: Data?) -> (BSCurrencies?, BSErrors?) {
-        
-        var resultData: BSCurrencies?
-        var resultError: BSErrors?
-        
-        if let data = data {
-            do {
-                // Parse the result JSOn object
-                if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    resultData = parseCurrenciesJSON(json: json)
-                } else {
-                    resultError = .unknown
-                    NSLog("Error parsing BS currency rates")
-                }
-            } catch let error as NSError {
-                resultError = .unknown
-                NSLog("Error parsing BS currency rates: \(error.localizedDescription)")
-            }
-        } else {
-            resultError = .unknown
-            NSLog("No BS currency data exists")
-        }
-        return (resultData, resultError)
     }
     
     private static func parseCurrenciesJSON(json: [String: AnyObject]) -> BSCurrencies {

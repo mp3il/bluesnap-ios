@@ -109,11 +109,10 @@ import PassKit
     
     /**
      Return a list of currencies and their rates from BlueSnap server
-     - parameters:
-     - completion: after the data is fetched, this function will be called with optional currency data and optional error
+     The list is updated when calling initBluesnap
      */
-    open class func getCurrencyRates(completion: @escaping (BSCurrencies?, BSErrors?) -> Void) {
-        BSApiManager.getCurrencyRates(completion: completion)
+    open class func getCurrencyRates() -> BSCurrencies? {
+        return BSApiManager.bsCurrencies
     }
 
     /**
