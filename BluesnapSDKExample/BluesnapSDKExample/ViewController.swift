@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var returningShopperSwitch: UISwitch!
     @IBOutlet weak var returningShopperIdLabel: UILabel!
     @IBOutlet var returningShopperIdTextField: UITextField!
+    @IBOutlet weak var storeCurrencyButton: UIButton!
     
     // MARK: private properties
     
@@ -35,7 +36,7 @@ class ViewController: UIViewController {
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
     final fileprivate let initialShippingCoutry = "US"
     final fileprivate let initialShippingState = "MA"
-    final fileprivate let baseCurrency = "USD"
+    final fileprivate var storeCurrency = "USD"
     final fileprivate let applePayMerchantIdentifier = "merchant.com.example.bluesnap"
     final fileprivate var returningShopperId : Int = 22061813
     final fileprivate var shopperId : Int? = nil
@@ -57,17 +58,18 @@ class ViewController: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
         
-        if bsToken == nil {
-            initBsToken(returningShopper: returningShopperSwitch.isOn)
-        }
-		super.viewWillAppear(animated)
-		self.navigationController?.isNavigationBarHidden = true
+ 		super.viewWillAppear(animated)
         if hideCoverView {
             coverAllView.isHidden = true
             hideCoverView = true
         }
+        if bsToken == nil {
+            initBsToken(returningShopper: returningShopperSwitch.isOn)
+        }
+		self.navigationController?.isNavigationBarHidden = true
         self.returningShopperIdLabel.isHidden = !returningShopperSwitch.isOn
         self.returningShopperIdTextField.isHidden = !returningShopperSwitch.isOn
+        self.storeCurrencyButton.setTitle(storeCurrency, for: UIControlState())
         amountValueDidChange(valueTextField)
     }
 	
@@ -133,6 +135,24 @@ class ViewController: UIViewController {
         }
 	}
 	
+    @IBAction func storeCurrencyButtonAction(_ sender: UIButton) {
+        coverAllLabel.text = LOADING_MESSAGE
+        coverAllView.isHidden = false
+        hideCoverView = true
+        
+        DispatchQueue.main.async {
+            self.fillSdkRequest()
+            BlueSnapSDK.showCurrencyList(
+                inNavigationController: self.navigationController,
+                animated: true,
+                selectedCurrencyCode: self.storeCurrency,
+                updateFunc: self.updateViewWithNewStoreCurrency,
+                errorFunc: {
+                    self.showErrorAlert(message: "Failed to display currency List, please try again")
+            })
+        }
+    }
+    
 	// MARK: - UIPopoverPresentationControllerDelegate
 	
 	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -187,8 +207,8 @@ class ViewController: UIViewController {
     }
     
     /**
-     This function is called by the change currency screen when the user changes the currency.
-     Here we update yhje checkout details and the fields in our view according tp the new currency.
+     This function is called by the change currency flow when the user changes the currency.
+     Here we update the checkout details and the fields in our view according tp the new currency.
     */
     private func updateViewWithNewCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
         
@@ -212,6 +232,24 @@ class ViewController: UIViewController {
             currencyButton.titleLabel?.text = priceDetails.currency
         }
     }
+    
+    /**
+     This function is called by the change store currency flow when the user chooses a currency.
+     Here we update the base currency.
+     */
+    private func updateViewWithNewStoreCurrency(oldCurrency : BSCurrency?, newCurrency : BSCurrency?) {
+        
+        if let newCurrency = newCurrency {
+            if newCurrency.getCode() != self.storeCurrency {
+                self.storeCurrency = newCurrency.getCode()
+                self.storeCurrencyButton.setTitle(storeCurrency, for: UIControlState())
+                coverAllView.isHidden = false
+                hideCoverView = true
+                initBluesnap()
+            }
+        }
+    }
+
     
     /**
      This is the callback we pass to BlueSnap SDK; it will be called when all the shopper details have been
@@ -331,8 +369,6 @@ class ViewController: UIViewController {
         self.returningShopperIdLabel.isHidden = !sender.isOn
         self.returningShopperIdTextField.isHidden = !sender.isOn
         
-        coverAllView.isHidden = false
-        hideCoverView = true
         initBsToken(returningShopper: sender.isOn)
     }
 
@@ -435,7 +471,8 @@ class ViewController: UIViewController {
         // To simulate expired token use:
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
-        self.coverAllView.isHidden = false
+        coverAllView.isHidden = false
+        hideCoverView = true
         
         shopperId = returningShopper ? returningShopperId : nil
         
@@ -443,19 +480,7 @@ class ViewController: UIViewController {
             
             if let resultToken = resultToken {
                 self.bsToken = resultToken
-                BlueSnapSDK.initBluesnap(
-                    bsToken: resultToken,
-                    generateTokenFunc: self.generateAndSetBsToken,
-                    initKount: self.shouldInitKount,
-                    fraudSessionId: nil,
-                    applePayMerchantIdentifier: self.applePayMerchantIdentifier,
-                    merchantStoreCurrency: self.baseCurrency,
-                    completion: { error in
-                        DispatchQueue.main.async {
-                            self.coverAllView.isHidden = true
-                            self.hideCoverView = true
-                        }
-                })
+                self.initBluesnap()
             } else {
                 NSLog("Failed to obtain Bluesnap Token")
                 DispatchQueue.main.async {
@@ -467,6 +492,23 @@ class ViewController: UIViewController {
         })
     }
     
+    private func initBluesnap() {
+        
+        BlueSnapSDK.initBluesnap(
+            bsToken: self.bsToken,
+            generateTokenFunc: self.generateAndSetBsToken,
+            initKount: self.shouldInitKount,
+            fraudSessionId: nil,
+            applePayMerchantIdentifier: self.applePayMerchantIdentifier,
+            merchantStoreCurrency: self.storeCurrency,
+            completion: { error in
+                DispatchQueue.main.async {
+                    self.coverAllView.isHidden = true
+                    self.hideCoverView = true
+                }
+        })
+    }
+
      /**
      Called by the BlueSnapSDK when token expired error is recognized.
      Here we generate and set a new token, so that when the action re-tries, it will succeed.
@@ -490,8 +532,6 @@ class ViewController: UIViewController {
             if let newShopperId = Int(sender.text ?? "") {
                 self.returningShopperId = newShopperId
                 if returningShopperSwitch.isOn {
-                    coverAllView.isHidden = false
-                    hideCoverView = true
                     initBsToken(returningShopper: true)
                 }
             }
