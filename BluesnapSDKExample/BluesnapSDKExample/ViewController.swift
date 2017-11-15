@@ -22,6 +22,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var coverAllView: UIView!
     @IBOutlet weak var coverAllLabel: UILabel!
     @IBOutlet weak var returningShopperSwitch: UISwitch!
+    @IBOutlet weak var returningShopperIdLabel: UILabel!
+    @IBOutlet var returningShopperIdTextField: UITextField!
     
     // MARK: private properties
     
@@ -35,7 +37,7 @@ class ViewController: UIViewController {
     final fileprivate let initialShippingState = "MA"
     final fileprivate let baseCurrency = "USD"
     final fileprivate let applePayMerchantIdentifier = "merchant.com.example.bluesnap"
-    final fileprivate let returningShopperId : Int = 22061813
+    final fileprivate var returningShopperId : Int = 22061813
     final fileprivate var shopperId : Int? = nil
 
 
@@ -64,6 +66,8 @@ class ViewController: UIViewController {
             coverAllView.isHidden = true
             hideCoverView = true
         }
+        self.returningShopperIdLabel.isHidden = !returningShopperSwitch.isOn
+        self.returningShopperIdTextField.isHidden = !returningShopperSwitch.isOn
         amountValueDidChange(valueTextField)
     }
 	
@@ -79,8 +83,11 @@ class ViewController: UIViewController {
             valueTextField.resignFirstResponder()
         } else if taxTextField.isFirstResponder {
             taxTextField.resignFirstResponder()
+        } else if self.returningShopperIdTextField.isFirstResponder {
+            self.returningShopperIdTextField.resignFirstResponder()
         }
     }
+    
 
 	// MARK: - Actions
 	
@@ -321,6 +328,9 @@ class ViewController: UIViewController {
      */
     @IBAction func returningShopperValueChanged(_ sender: UISwitch) {
         
+        self.returningShopperIdLabel.isHidden = !sender.isOn
+        self.returningShopperIdTextField.isHidden = !sender.isOn
+        
         coverAllView.isHidden = false
         hideCoverView = true
         initBsToken(returningShopper: sender.isOn)
@@ -448,6 +458,11 @@ class ViewController: UIViewController {
                 })
             } else {
                 NSLog("Failed to obtain Bluesnap Token")
+                DispatchQueue.main.async {
+                    self.coverAllView.isHidden = true
+                    self.hideCoverView = true
+                    self.showErrorAlert(message: "Failed to obtain BlueSnap Token, please try again.")
+                }
             }
         })
     }
@@ -467,6 +482,20 @@ class ViewController: UIViewController {
                 completion(resultToken, errors)
             }
         })
+    }
+    
+    @IBAction func returningShopperIdEditingDidEnd(_ sender: UITextField) {
+        
+        if sender.text != "\(self.returningShopperId)" {
+            if let newShopperId = Int(sender.text ?? "") {
+                self.returningShopperId = newShopperId
+                if returningShopperSwitch.isOn {
+                    coverAllView.isHidden = false
+                    hideCoverView = true
+                    initBsToken(returningShopper: true)
+                }
+            }
+        }
     }
 }
 
