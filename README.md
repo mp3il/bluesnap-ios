@@ -473,6 +473,10 @@ This class contains the price details that are both input and output for the pur
 			let copy = BSPriceDetails(amount: amount, taxAmount: taxAmount, currency: currency)
 			return copy
 		}
+		
+		public func changeCurrencyAndConvertAmounts(newCurrency: BSCurrency!) {
+			...
+		}
 	}
 
 ### BSBaseAddressDetails, BSBillingAddressDetails, BSShippingAddressDetails (in BSAddress.swift)
@@ -532,11 +536,6 @@ The central data structure is this class (and its derived classes), which holds 
         
         var fraudSessionId: String?
         var priceDetails: BSPriceDetails!
-        
-        // These fields hold the original amounts in USD, to keep precision in case of currency change
-        internal var originalAmount : Double! = 0.0
-        internal var originalTaxAmount : Double! = 0.0
-        internal var originalRate : Double?
             
         internal init(sdkRequest: BSSdkRequest) {
             ...
@@ -547,22 +546,13 @@ The central data structure is this class (and its derived classes), which holds 
         	return fraudSessionId;
     	}
         
-        // MARK: Change currency methods
-        
         /*
         Set amounts will reset the currency and amounts, including the original amounts.
         */
         public func setAmountsAndCurrency(amount: Double!, taxAmount: Double?, currency: String) {
         ...
         }
-        
-        /*
-        Change currency will also change the amounts according to the change rates
-        */
-        public func changeCurrency(oldCurrency: BSCurrency?, newCurrency : BSCurrency?) {
-            ...
-        }
-        
+         
         // MARK: getters and setters
         
         public func getAmount() -> Double! {
@@ -750,7 +740,7 @@ This string provide string helper functions like removeWhitespaces, removeNoneDi
 This class provides validation functions like isValidEmail, getCcLengthByCardType, formatCCN, getCCTypeByRegex, etc. to help you format credit card information, and validate user details. 
 
 ### Handling currencies and rates
-These currency structures and methods assist you in performing currency conversions during checkout.
+These currency structures and methods assist you in performing currency conversions during checkout. Use BSPriceDetails function `changeCurrencyAndConvertAmounts`.
 
 #### Currency Data Structures
 We have 2 data structures (see BSCurrencyModel.swift): 	`BSCurrency` holds a single currency and  `BSCurrencies` holds all the currencies.
