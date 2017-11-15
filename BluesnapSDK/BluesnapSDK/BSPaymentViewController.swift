@@ -237,7 +237,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         self.navigationController!.isNavigationBarHidden = false
         
-        shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
+        shippingSameAsBillingView.isHidden = !newCardMode || !self.withShipping || !self.fullBilling
         
         // set the 'shipping same as billing' to be true if no shipping name is supplied
         if self.firstTime == true {
@@ -323,7 +323,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     }*/
     
     private func isShippingSameAsBilling() -> Bool {
-        return self.withShipping && self.fullBilling && self.shippingSameAsBillingSwitch.isOn
+        return newCardMode && self.withShipping && self.fullBilling && self.shippingSameAsBillingSwitch.isOn
     }
     
     private func hideShowFields() {
@@ -360,7 +360,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             updateFlagImage(countryCode: countryCode)
             cityInputLine.isHidden = hideFields
             updateState()
-            shippingSameAsBillingView.isHidden = !self.withShipping || !self.fullBilling
+            shippingSameAsBillingView.isHidden = !newCardMode || !self.withShipping || !self.fullBilling
             subtotalAndTaxDetailsView.isHidden = !newCardMode || self.purchaseDetails.getTaxAmount() == 0
             updateZipFieldLocation()
         }
