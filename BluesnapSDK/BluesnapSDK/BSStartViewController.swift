@@ -21,6 +21,7 @@ class BSStartViewController: UIViewController {
     internal var existingCardViews : [BSExistingCcUIView] = []
     internal var showPayPal : Bool = false
     internal var showApplePay : Bool = false
+    internal var bottomOfLastIcon : CGFloat = 0
 
     // MARK: Outlets
 
@@ -110,7 +111,7 @@ class BSStartViewController: UIViewController {
         backItem.title = BSLocalizedStrings.getString(BSLocalizedString.Navigate_Back_to_payment_type_screen)
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
 
-        animateToPaymentScreen(startY: self.ccnButton.frame.minY, completion: { animate in
+        animateToPaymentScreen(startY: bottomOfLastIcon, completion: { animate in
             _ = BSViewsManager.showCCDetailsScreen(existingCcPurchaseDetails: nil, inNavigationController: self.navigationController, animated: animate)
         })
     }
@@ -160,12 +161,14 @@ class BSStartViewController: UIViewController {
             applePayButton.isHidden = false
             sectionNum = sectionNum + 1
             applePayButton.center.y = sectionY * sectionNum
+            bottomOfLastIcon = applePayButton.frame.maxY
         } else {
             
             applePayButton.isHidden = true
         }
         sectionNum = sectionNum + 1
         ccnButton.center.y = sectionY * sectionNum
+        bottomOfLastIcon = ccnButton.frame.maxY
 
         if showPayPal {
             sectionNum = sectionNum + 1
@@ -174,6 +177,7 @@ class BSStartViewController: UIViewController {
         } else {
             payPalButton.isHidden = true
         }
+        bottomOfLastIcon = payPalButton.frame.maxY
         
         let newCcRect = self.ccnButton.frame
         
@@ -185,6 +189,7 @@ class BSStartViewController: UIViewController {
                 cardView.frame = CGRect(x: newCcRect.minX, y: newCcRect.minY, width: newCcRect.width, height: newCcRect.height)
                 sectionNum = sectionNum + 1
                 cardView.center.y = sectionY * sectionNum
+                bottomOfLastIcon = cardView.frame.maxY
                 cardView.setCc(
                     ccType: existingCreditCard.creditCard.ccType ?? "",
                     last4Digits: existingCreditCard.creditCard.last4Digits ?? "",
