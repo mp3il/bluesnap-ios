@@ -49,7 +49,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="25" y="6" width="232" height="28"/>
+                                                    <rect key="frame" x="25" y="6" width="232" height="29"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
@@ -473,24 +473,24 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VhF-2J-DbG" userLabel="Billing Box" customClass="BSBaseBoxWithShadowView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="20" y="120.5" width="280" height="56"/>
+                                        <rect key="frame" x="20" y="120.5" width="280" height="64"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Billing Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S5N-Ju-9SR">
-                                                <rect key="frame" x="8" y="8" width="231" height="17"/>
+                                                <rect key="frame" x="8" y="8" width="231" height="21.5"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="BillingName"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" text="Billing Address" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8S9-6F-08H">
-                                                <rect key="frame" x="8" y="25.5" width="264" height="22"/>
+                                                <rect key="frame" x="8" y="30" width="264" height="32"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="BillingAddress"/>
                                                 <color key="textColor" red="0.6470588235294118" green="0.6470588235294118" blue="0.6470588235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDM-5V-Dy9">
-                                                <rect key="frame" x="240" y="8" width="32" height="17"/>
+                                                <rect key="frame" x="240" y="8" width="32" height="21.5"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="EditBillingButton"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                                 <state key="normal" title="Edit">
@@ -513,18 +513,18 @@
                                             <constraint firstItem="TDM-5V-Dy9" firstAttribute="top" secondItem="VhF-2J-DbG" secondAttribute="top" constant="8" id="eFH-je-XYK"/>
                                             <constraint firstItem="TDM-5V-Dy9" firstAttribute="height" secondItem="S5N-Ju-9SR" secondAttribute="height" id="h4H-r3-aSx"/>
                                             <constraint firstItem="8S9-6F-08H" firstAttribute="top" secondItem="S5N-Ju-9SR" secondAttribute="bottom" constant="0.5" id="mCi-eI-vh1"/>
-                                            <constraint firstAttribute="bottom" secondItem="8S9-6F-08H" secondAttribute="bottom" constant="8" id="xik-G9-ZNC"/>
+                                            <constraint firstAttribute="bottom" secondItem="8S9-6F-08H" secondAttribute="bottom" constant="2" id="xik-G9-ZNC"/>
                                             <constraint firstItem="TDM-5V-Dy9" firstAttribute="leading" secondItem="S5N-Ju-9SR" secondAttribute="trailing" constant="1" id="yXh-dN-Fig"/>
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqz-QH-oYM">
-                                        <rect key="frame" x="20" y="204" width="280" height="24"/>
+                                        <rect key="frame" x="20" y="212" width="280" height="24"/>
                                         <accessibility key="accessibilityConfiguration" label="ShippingTitle"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UDS-ih-c9e" userLabel="shipping Box" customClass="BSBaseBoxWithShadowView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="20" y="231" width="280" height="56"/>
+                                        <rect key="frame" x="20" y="239" width="280" height="56"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8XH-dZ-MHd">
                                                 <rect key="frame" x="8" y="8" width="231" height="17"/>
@@ -628,7 +628,7 @@
                             <constraint firstItem="EAf-rt-eow" firstAttribute="top" secondItem="ZZz-jo-p8Z" secondAttribute="bottom" constant="3" id="a3b-Mb-mAp"/>
                             <constraint firstItem="OfH-nY-PCP" firstAttribute="top" secondItem="GlA-ZY-fRS" secondAttribute="bottom" id="cFZ-yB-WCY"/>
                             <constraint firstItem="EAf-rt-eow" firstAttribute="leading" secondItem="gqs-zK-L6E" secondAttribute="leading" id="dGP-Ic-Ti5"/>
-                            <constraint firstItem="VhF-2J-DbG" firstAttribute="height" secondItem="gqs-zK-L6E" secondAttribute="height" multiplier="56/568" id="gf1-48-DqJ"/>
+                            <constraint firstItem="VhF-2J-DbG" firstAttribute="height" secondItem="gqs-zK-L6E" secondAttribute="height" multiplier="64/568" id="gf1-48-DqJ"/>
                             <constraint firstItem="OfH-nY-PCP" firstAttribute="width" secondItem="gqs-zK-L6E" secondAttribute="width" id="hYa-1q-9mP"/>
                             <constraint firstAttribute="bottom" secondItem="OfH-nY-PCP" secondAttribute="bottom" constant="3" id="lFo-pt-Qx7"/>
                             <constraint firstItem="ZZz-jo-p8Z" firstAttribute="trailing" secondItem="gqs-zK-L6E" secondAttribute="trailingMargin" id="oJE-GW-f4V"/>

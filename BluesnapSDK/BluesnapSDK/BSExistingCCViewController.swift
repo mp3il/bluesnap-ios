@@ -213,9 +213,14 @@ class BSExistingCCViewController: UIViewController {
     private func getDisplayAddress(addr : BSBaseAddressDetails?) -> String {
         
         var result = ""
+        if let addr = addr as? BSBillingAddressDetails {
+            if let email = addr.email {
+                result = result + email + "\n"
+            }
+        }
         if let addr = addr {
             if let address = addr.address {
-                result = address + ", "
+                result = result + address + ", "
             }
             if let city = addr.city {
                 result = result + city + " "
