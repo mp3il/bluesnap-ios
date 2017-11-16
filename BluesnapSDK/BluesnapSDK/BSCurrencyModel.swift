@@ -1,5 +1,8 @@
 import Foundation
 
+/**
+ This class represents a currency: name, ISO code, and exchange rate
+ */
 // todo: add function for currency symbol
 @objc public class BSCurrency: NSObject {
     
@@ -31,6 +34,10 @@ import Foundation
     
 }
 
+/**
+ This class represents a currency dictionary: it contains a list of currencies and 
+ the base currency (according to which we get the exchange rates)
+ */
 @objc public class BSCurrencies: NSObject {
     
     internal var baseCurrency : String = "USD"

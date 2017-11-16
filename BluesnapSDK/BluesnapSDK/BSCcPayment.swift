@@ -41,7 +41,7 @@ import Foundation
 /**
  (PCI-compliant) Existing credit card info as we get it from BlueSnap API when getting the shopper information
  */
-@objc public class BSCreditCardInfo: BSPaymentInfo, NSCopying {
+class BSCreditCardInfo: BSPaymentInfo, NSCopying {
     
     public var creditCard: BSCreditCard!
     public var billingDetails: BSBillingAddressDetails?
@@ -67,7 +67,7 @@ import Foundation
 /**
  New CC details for the purchase
  */
-@objc public class BSCcSdkResult : BSBaseSdkResult/*, NSCopying*/ {
+@objc public class BSCcSdkResult : BSBaseSdkResult {
     
     public var creditCard: BSCreditCard = BSCreditCard()
     public var billingDetails : BSBillingAddressDetails! = BSBillingAddressDetails()

@@ -55,14 +55,7 @@ import Foundation
     }
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSBillingAddressDetails()
-        copy.name = name
-        copy.address = address
-        copy.city = city
-        copy.zip = zip
-        copy.country = country
-        copy.state = state
-        copy.email = email
+        let copy = BSBillingAddressDetails(email: email, name:name, address: address, city: city, zip: zip, country: country, state: state)
         return copy
     }
 }
@@ -88,14 +81,7 @@ import Foundation
     }
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let copy = BSShippingAddressDetails()
-        copy.name = name
-        copy.address = address
-        copy.city = city
-        copy.zip = zip
-        copy.country = country
-        copy.state = state
-        copy.phone = phone
+        let copy = BSShippingAddressDetails(phone: phone, name:name, address: address, city: city, zip: zip, country: country, state: state)
         return copy
     }
 }
