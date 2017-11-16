@@ -60,7 +60,7 @@ public class BSBaseBoxWithShadowView: UIControl {
     /**
      shadowDarkColor (default = lightGray) determines the darkest color of the component's shadow
      */
-    @IBInspectable var shadowDarkColor: UIColor = UIColor.lightGray {
+    @IBInspectable var shadowDarkColor: UIColor = UIColor.init(red: 206/255, green: 206/255, blue: 206/255, alpha: 1) {
         didSet {
             if designMode {
                 setShadowAttributes()
@@ -70,7 +70,7 @@ public class BSBaseBoxWithShadowView: UIControl {
     /**
      shadowRadius (default = 15) determines the radius of the component's shadow (the shadow will not work if you have the property "clip to bounds" set to true)
      */
-    @IBInspectable var shadowRadius: CGFloat = 15.0 {
+    @IBInspectable var shadowRadius: CGFloat = 10.0 {
         didSet {
             if designMode {
                 setShadowAttributes()
@@ -80,7 +80,7 @@ public class BSBaseBoxWithShadowView: UIControl {
     /**
      shadowOpacity (default = 0.5) determines the opacity the component's shadow
      */
-    @IBInspectable var shadowOpacity: CGFloat = 0.25 {
+    @IBInspectable var shadowOpacity: CGFloat = 0.8 {
         didSet {
             if designMode {
                 setShadowAttributes()
@@ -179,7 +179,7 @@ public class BSBaseBoxWithShadowView: UIControl {
         
         // set stuff for shadow
         layer.shadowColor = shadowDarkColor.cgColor
-        layer.shadowOffset = CGSize.zero
+        layer.shadowOffset = CGSize(width: 0, height: 5)//CGSize.zero
         layer.shadowRadius = shadowRadius
         layer.shadowOpacity = Float(shadowOpacity)
         super.backgroundColor = UIColor.clear
