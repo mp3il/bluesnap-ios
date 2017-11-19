@@ -38,7 +38,7 @@ To see an image of the credit card UI component, click [here](https://developers
 
 ## Requirements
 * CocoaPods 1.1.0+
-* Xcode 8.8.3+
+* Xcode 8.3.3+
 * [BlueSnap API credentials](https://support.bluesnap.com/docs/api-credentials) 
 
 ## CocoaPods (Optional, CocoaPods 1.1.0+)
