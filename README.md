@@ -146,12 +146,13 @@ fileprivate var sdkRequest: BSSdkRequest! = BSSdkRequest(...)
 ```
 
 BSSdkRequest constructor parameters:
+
 | Parameter      | Description   |
 | ------------- | ------------- |
 | Specifying required checkout fields |
 | `withEmail`   | Boolean that determines if email is required. Default value is `true` - email is required. |
 | `fullBilling` | Boolean that determines if full billing details are required. If `true`, full billing details are required. Default value is `false` - Full billing details are not required. |
-| `withShipping`* | Boolean that determines if shipping details are required. If `true`, shipping details (i.e. name, address, etc.) are required. Default value is `false` - shipping details are not required. |
+| `withShipping` | Boolean that determines if shipping details are required. If `true`, shipping details (i.e. name, address, etc.) are required. Default value is `false` - shipping details are not required. |
 | Purchase amount and currency |
 | `priceDetails` | an instance of class BSPriceDetails, holding the proce details (see more below) |
 | Pre-populating the checkout page (if you have user's data that you've already collected) |
