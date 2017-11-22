@@ -18,8 +18,8 @@ The BlueSnap iOS SDK provides two elegant checkout flows to choose from.
 The Standard Checkout Flow allows you to get up and running quickly with our pre-built checkout UI, enabling you to accept credit cards, Apple Pay, and PayPal payments in your app.
  Some of the capabilities include:
 * Specifying required user info, such as email or billing address.
-* Specifying an existing/returning shopper, so we can pre-populate all the details and allow selecting from existing payment methods.
 * Pre-populating checkout page.
+* Specifying a returning user so BlueSnap can pre-populate checkout screen with their payment and shipping/billing info.  
 * Launching checkout UI with simple start function.
 
 To see an image of the Standard Checkout Flow, click [here](https://developers.bluesnap.com/v8976-Basics/docs/ios-sdk#standard-checkout-flow). 
@@ -93,18 +93,19 @@ In the Standard Checkout Flow, you have the option to accept PayPal payments in 
 # Usage
 This section will cover the following topics: 
 * [Generating a token for the transaction](#generating-a-token-for-the-transaction)
-* [Initializing the SDK](#initializing-the-sdk-with-the-token)
+* [Initializing the SDK](#initializing-the-sdk)
 
 ## Generating a token for the transaction
 For each transaction, you'll need to generate a Hosted Payment Fields token on your server and pass it to the SDK.
 
-To do this, initiate a server to server POST request with your API credentials and send it to the relevant URL for the Sandbox or Production environment:
+To do this, initiate a server-to-server POST request with your API credentials and send it to the relevant URL for the Sandbox or Production environment:
 * **Sandbox:** `https://sandbox.bluesnap.com/services/2/payment-fields-tokens`
 * **Production:** `https://ws.bluesnap.com/services/2/payment-fields-tokens`
 
-The token is returned in the Location header in the response. For more information, see [Creating a Hosted Payment Fields Token](http://developers.bluesnap.com/v4.0/docs/create-hosted-payment-fields-token). 
+> **Specifying a returning user** <br>
+>To specify a returning user and have BlueSnap pre-populate the checkout page with their information, include the parameter `shopperId` in the URL query string. For example: `https://sandbox.bluesnap.com/services/2/payment-fields-tokens?shopperId=20848977`
 
-For returning shopper flow, add a querystring parameter to the URL: ?shopperId=<the shopper ID>
+ A successful response will contain the token in Location header. For more information, see [Creating a Hosted Payment Fields Token](http://developers.bluesnap.com/v4.0/docs/create-hosted-payment-fields-token). 
 
 ## Initializing the SDK
 Create a `BSToken` instance using your token and a boolean to indicate if you're working in production. For this example, we'll pass `false` to indicate sandbox. 
@@ -113,19 +114,18 @@ Create a `BSToken` instance using your token and a boolean to indicate if you're
 fileprivate var bsToken : BSToken?
 bsToken = BSToken(tokenStr: "c3d011abe0ba877be0d903a2f0e4ca4ecc0376e042e07bdec2090610e92730b5_", isProduction: false)
 ```
-Initialize the SDK by calling [`initBluesnap`](#initBluesnap) function of `BlueSnapSDK` class.
-See all the information on the functions parameters below, in the section "Main functionality - BlueSnapSDK class".
+
+Initialize your token and any additional functionality (such as Apple Pay or fraud prevention) in the SDK by calling the [`initBluesnap`](#initbluesnap) function of the `BlueSnapSDK` class. See [initBluesnap](#initbluesnap) for a complete list of the function's parameters. 
 
 → If you're using the Standard Checkout Flow, then continue on to the next section. <br>
 → If you're using the Custom Checkout Flow, then jump down to [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow). 
 
 # Implementing Standard Checkout Flow
 This section will cover the following topics: 
-* [Defining your checkout settings & callback function](#defining-your-checkout-settings--callback-function)
+* [Defining your checkout settings](#defining-your-checkout-settings)
 * [Launching checkout UI](#launching-checkout-ui)
 
 ## Defining your checkout settings
-
 The [`showCheckoutScreen`](#showcheckoutscreen) function of the `BlueSnapSDK` class is the main entry point for the SDK. When called, this function launches the checkout UI for the user based on the parameters you provide. For example, you can display tax amounts and subtotals, specify which fields to require from the user, and pre-populate the checkout page with information you've already collected.
 
 This function takes the parameters listed below. We'll go over setting `sdkRequest` in this section. 
@@ -139,7 +139,7 @@ This function takes the parameters listed below. We'll go over setting `sdkReque
 See the [Reference](#showcheckoutscreen) section below for more information on `showCheckoutScreen`. 
 
 ### Defining sdkRequest
-`sdkRequest` (an instance of `BSSdkRequest`) allows you to initialize your checkout settings, such as price details, required user fields, and user data you've already collected.
+`sdkRequest` (an instance of `BSSdkRequest`) holds your checkout settings, such as price details, required user fields, and user data you've already collected, as well as holds your callback functions to complete the purchase and to update tax rates. 
 
 ```swift
 fileprivate var sdkRequest: BSSdkRequest! = BSSdkRequest(...)
@@ -149,19 +149,18 @@ BSSdkRequest constructor parameters:
 
 | Parameter      | Description   |
 | ------------- | ------------- |
-| Specifying required checkout fields |
+| Parameters for specifying required checkout fields: |
 | `withEmail`   | Boolean that determines if email is required. Default value is `true` - email is required. |
-| `fullBilling` | Boolean that determines if full billing details are required. If `true`, full billing details are required. Default value is `false` - Full billing details are not required. |
+| `fullBilling` | Boolean that determines if full billing details are required. Default value is `false` - full billing details are not required. |
 | `withShipping` | Boolean that determines if shipping details are required. If `true`, shipping details (i.e. name, address, etc.) are required. Default value is `false` - shipping details are not required. |
-| Purchase amount and currency |
-| `priceDetails` | an instance of class BSPriceDetails, holding the proce details (see more below) |
-| Pre-populating the checkout page (if you have user's data that you've already collected) |
-| `billingDetails` | An instance of `BSBillingAddressDetails` - see `Pre-populating the checkout page` below. |
-| `shippingDetails` | An instance of `BSShippingAddressDetails` - see `Pre-populating the checkout page` below. |
+| Parameter that defines purchase amount and currency: |
+| `priceDetails` | Instance of `BSPriceDetails` that holds the price details (see [Defining priceDetails](#defining-pricedetails)) |
+| Parameters that allow you to pre-populate the checkout page (if you have user's data that you've already collected): |
+| `billingDetails` | Instance of `BSBillingAddressDetails` (see [Pre-populating the checkout page](#pre-populating-the-checkout-page-optional)). |
+| `shippingDetails` | Instance of `BSShippingAddressDetails` (see [Pre-populating the checkout page](#pre-populating-the-checkout-page-optional)). |
 | Callback functions: |
-| `purchaseFunc` | See `Defining your purchase callback function` below. |
-| `updateTaxFunc` | (optional) See `Handling tax updates` below. |
-
+| `purchaseFunc` | Callback function that handles the purchase (see [Defining your purchase callback function](#defining-your-purchase-callback-function)).|
+| `updateTaxFunc` | Optional. Callback function that handles tax rate updates (see [Handling tax updates](#handling-tax-updates-optional)). |
 
 #### Defining priceDetails
 `priceDetails` (an instance of `BSPriceDetails`) is a property of `sdkRequest` that contains properties for amount, tax amount, and [currency](https://developers.bluesnap.com/docs/currency-codes). Set these properties to intialize the price details of the checkout page. 
@@ -172,7 +171,7 @@ sdkRequest.priceDetails = BSPriceDetails(amount: 25.00, taxAmount: 1.52, currenc
 > If you’re accepting PayPal payments, please note: PayPal will be available only if `currency` is set to a currency supported by your [PayPal configuration](https://support.bluesnap.com/docs/connecting-paypal-and-bluesnap#section-4-synchronize-your-currency-balances). 
 
 #### Pre-populating the checkout page (optional)
-The following properties of `sdkRequest` allow you to pass user's data that you've already collected in order to pre-populate the checkout page.
+The following properties of `sdkRequest` allow you to pass information that you've already collected about the user in order to pre-populate the checkout page.
 
 | Property      | Description   |
 | ------------- | ------------- |
@@ -182,24 +181,18 @@ The following properties of `sdkRequest` allow you to pass user's data that you'
 In ViewController.swift of the demo app, take a look at the `setInitialShopperDetails` function to see an example of setting these properties with user data.
 
 #### Handling tax updates (optional)
-If you choose to collect shipping details (i.e. `withShipping` is set to `true`), then you may want to update tax rates whenever the user changes their shipping location. Supply a callback function to handle tax updates to the `updateTaxFunc` property of `sdkRequest`. Your function will be called whenever the user changes their shipping country or state. 
+If you choose to collect shipping details (i.e. `withShipping` is set to `true`), then you may want to update tax rates whenever the user changes their shipping location. Supply a callback function to handle tax updates to the `updateTaxFunc` property of `sdkRequest`. Your function will be called whenever the user changes their shipping country or state. To see an example, check out `updateTax` in the demo app. 
 
-To see an example, check out `updateTax` in the demo app. 
-
-### Defining your purchase callback function
-`purchaseFunc` is a member of `sdkRequest` that takes a callback function to be invoked after the user hits “Pay” and their data is successfully submitted to BlueSnap (and associated with your token). 
-
-`purchaseFunc` will be invoked with one of the following class instances (if and only if data submission to BlueSnap was successful): 
+#### Defining your purchase callback function
+`purchaseFunc` is a member of `sdkRequest` that takes a callback function to be invoked after the user hits “Pay” and their data is successfully submitted to BlueSnap (and associated with your token). `purchaseFunc` will be invoked with one of the following class instances (if and only if data submission to BlueSnap was successful): 
 
 * If the result is a `BSApplePaySdkResult` instance, it will contain details about the amount, tax, and currency. Note that billing/shipping info is not collected, as it’s not needed to complete the purchase.  
 
 * If the result is a `BSCcSdkResult` or `BSExistingCcSdkResult` instance, it will contain details about the amount, tax, currency, shipping/billing information, and non-sensitive credit card details (card type, last 4 digits, issuing country). 
 
-* If the result is a `BSPayPalSdkResult`, then the transaction has already been completed! There is no need to send the transaction for processing from your server. 
+* If the result is a `BSPayPalSdkResult`, then the transaction has already been completed! There is no need to send the transaction for processing from your server.  
 
-To see how to structure `purchaseFunc`, check out [Defining your callback function](#defining-your-callback-function). 
-
-Within `purchaseFunc`, the following logic will apply: 
+The following logic should apply within `purchaseFunc` : 
 1. Detect the specific payment method the user selected. 
 
 2. If the user selected PayPal, no further action is required - transaction is complete. Show success message.
@@ -236,7 +229,7 @@ private func completePurchase(purchaseDetails: BSBaseSdkResult!) {
 ```
 
 > **Notes**: 
-> * `purchaseFunc` will be called only if the user's details were successfully submitted to BlueSnap; it will not be called in case of an error. 
+> * `purchaseFunc` will be called only if the user's details were successfully submitted to BlueSnap. It will not be called in case of an error. 
 >
 > * It's very important to send the payment for processing from your server. 
 
@@ -287,24 +280,19 @@ If you're using `BSCcInputLine` to collect the user's data, in your `ViewControl
 4. After you receive BlueSnap's response, you'll update the client and display an appropriate message to your user (i.e. "Congratulations, your payment was successful!" or "Oops, please try again.").
 
 ## Setting up your submit action
-On your submit action (i.e. when the user submits their payment during checkout), you should call `BSCcInputLine`'s `validate` function (which returns a boolean) to make sure the data is correct. 
+On your submit action (i.e. when the user submits their payment during checkout), you should call `BSCcInputLine`'s `validate` function to make sure the data is correct. If the validation was successful (i.e. `validate` returns `true`), then call `BSCcInputLine`'s `submitPaymentFields()` function, which will call the `didSubmitCreditCard` callback with the results of the submission. 
 
-If the validation was successful (i.e. `validate` returns `true`), then call `BSCcInputLine`'s `submitPaymentFields()` function, which will call the `didSubmitCreditCard` callback with the results of the submission. 
-
-Another option is to call `checkCreditCard(ccn: String)` which first validates and then submits, calling the delegate `didSubmitCreditCard` after a successful submit.
-
-Congratulations, you're ready to start accepting credit card payments! 
+Another option is to call `checkCreditCard(ccn: String)`, which first validates and then submits the details, calling the delegate `didSubmitCreditCard` after a successful submit.
 
 # Sending the payment for processing
-For credit card and Apple Pay payments, you will use our Payment API with your token to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture), [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) or [subscription](https://developers.bluesnap.com/v8976-JSON/docs/create-subscription) request, or to attach the payment details to a [shopper](https://developers.bluesnap.com/v8976-JSON/docs/create-vaulted-shopper). 
-Note that for a returning shopper CC transaction, all the payment data is already tokenized on the server, so in your API call you need only pass the token, amount and currency!
+For credit card and Apple Pay payments, you'll use the Payment API with your token to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture), [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) or [subscription](https://developers.bluesnap.com/v8976-JSON/docs/create-subscription) request, or to attach the payment details to a [user](https://developers.bluesnap.com/v8976-JSON/docs/create-vaulted-shopper). 
 
-**Note**: The token must be associated with the user's payment details. In the Standard Checkout Flow, this is when `purchaseFunc` is called. In the Custom Checkout Flow, this is when `didSubmitCreditCard` is called (if you're using the `BSCcInputLine` field) or `completion` is called (if you're using your own input fields). 
+> **Note:** The token must be associated with the user's payment details. In the Standard Checkout Flow, this is when `purchaseFunc` is called. In the Custom Checkout Flow, this is when `didSubmitCreditCard` is called (if you're using the `BSCcInputLine` field) or `completion` is called (if you're using your own input fields). 
 
-> DemoTransactions.swift of demo app shows an example of an Auth Capture request. Please note that these calls are for demonstration purposes only - the transaction should be sent from your server.
+DemoTransactions.swift of demo app shows an example of an Auth Capture request. Please note that these calls are for demonstration purposes only - the transaction should be sent from your server.
 
 ### Auth Capture example - Apple Pay payments (Standard Checkout Flow)
-For Apple Pay payments, send an HTTP POST request to `/services/2/transactions` of the BlueSnap sandbox or production environment. 
+For Apple Pay payments, send an HTTP POST request to `/services/2/transactions` of the relevant BlueSnap environment. 
 
 For example: 
 ```cURL
@@ -325,10 +313,12 @@ curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 ```
 If successful, the response HTTP status code is 200 OK. Visit our [API Reference](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) for more details. 
 
-### Auth Capture example - Credit card payments (new CC / returning shopper with existing CC)
-For credit card payments, send an HTTP POST request to `/services/2/transactions` of the BlueSnap sandbox or production environment. 
+### Auth Capture example - Credit card payments
+For credit card payments, send an HTTP POST request to `/services/2/transactions` of the relevant BlueSnap environment. Your request will look like the following code sample for both new and returning users. 
 
-For example: 
+> **Note:** All the user's details, including their billing/shipping info and credit card details, and the fraud session ID have been submitted to BlueSnap,
+ so there's no need to include this information in the request. 
+
 ```cURL
 curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 -H 'Content-Type: application/json' \
@@ -341,26 +331,24 @@ curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 	"softDescriptor": "Mobile SDK test",
 	"amount": 25.00, 
 	"currency": "USD",
-	"pfToken": "812f6ee706e463d3276e3abeb21fa94072e40695ed423ddac244409b3b652eff_",
+	"pfToken": "812f6ee706e463d3276e3abeb21fa94072e40695ed423ddac244409b3b652eff_"
 }'
 ```
+
 If successful, the response HTTP status code is 200 OK. Visit our [API Reference](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) for more details. 
 
-Note that all the shopper data (billing, shipping, CC details, fraud-session-id) has already been submitted except the amount and price.
-
-
 # Demo app - explained
-The demo app shows how to use the basic functionality of the Standard Checkout Flow, including the various stages you need to implement (everything is in class `ViewController`).
+The demo app shows how to use the basic functionality of the Standard Checkout Flow, including the various stages you need to implement (everything is in class `ViewController`). The basic steps include:
 
-1. Get a token from BlueSnap's server. Please note that you need to do this in your server-side implementation, so you don't expose your BlueSnap API credentials in your app. In the demo app, we create a token from BlueSnap Sandbox environment with dummy credentials. Call `BlueSnapSDK.setBsToken` to initialize it in the SDK. Note that according to the toggle in the UI, we create a token with a shopper ID (for returning shopper flow) or without (for new shopper flow).
+1. Getting a token from BlueSnap's server. Please note that you need to do this from your server. In the demo app, we create a token from the BlueSnap Sandbox environment with dummy credentials. According to the toggle in the UI, we either create a token with a shopper ID (for returning user flow) or without the shopper ID (for new user flow).
 
-2. Call `BlueSnapSDK.initBluesnap` to initialize the SDK with your token, fraud detection, token expiration handling, and other settingas.
+2. Calling `BlueSnapSDK.initBluesnap` to initialize the token and any additional settings, such as fraud detection or a token expiration callback function, in the SDK. 
 
-3. Initialize the input to the checkout flow by creating an instance of `BSSdkRequest` and filling the parts you may know already of the user (by setting `shippingDetails` & `billingDetails`), your callback functions for purchase and tax calculation, and the fields you wish to require from the user (by setting `withShipping`, `fullBilling`, & `withEmail`). 
+3. Initializing the input to the checkout flow by creating an instance of `BSSdkRequest` and filling the parts you may know already of the user (by setting `shippingDetails` & `billingDetails`), supplying your callback for tax calculations, and specifying the fields you wish to require from the user (by setting `withShipping`, `fullBilling`, & `withEmail`). 
 
-4. Define your `purchaseFunc` callback to call your application's server to complete the purchase (see [Defining your callback function](#defining-your-callback-function) for the logic of this function).
+4. Defining the `purchaseFunc` callback to call your application's server to complete the purchase (see [Defining your purchase callback function](#defining-your-purchase-callback-function) for the logic of this function).
 
-5. Call `BlueSnapSDK.showCheckoutScreen` (#showcheckoutscreen) to launch the checkout UI for the user. 
+5. Calling `BlueSnapSDK.showCheckoutScreen` to launch the checkout UI for the user. 
 
 > **Note**: The demo app shows how to take advantage of our currency screen, which allows the user to change the currency selection during checkout, by calling [`BlueSnapSDK.showCurrencyList`](#showcurrencylist) with its associated parameters. <br>
  > **Important**: All transaction calls are for demonstration purposes only. These calls should be made from your server. 
@@ -403,7 +391,7 @@ The SDK holds a function for obtaining a token from our Sandbox environment for 
 ### BSSdkRequest (in BSPurchaseModelData.swift)
 This class allows you to initialize your checkout settings, such as price details, required user fields, and user data you've already collected.
 
-For more information on the properties of `BSSdkRequest`, see [Defining sdkRequest](#defining-initialdata). 
+For more information on the properties of `BSSdkRequest`, see [Defining sdkRequest](#defining-sdkrequest). 
  
 	@objc public class BSSdkRequest : NSObject {
 		public var withEmail: Bool = true
@@ -414,7 +402,7 @@ For more information on the properties of `BSSdkRequest`, see [Defining sdkReque
 		
 		public var billingDetails : BSBillingAddressDetails?
 		public var shippingDetails : BSShippingAddressDetails?
-    		public var purchaseFunc: (BSBaseSdkResult!) -> Void
+    	public var purchaseFunc: (BSBaseSdkResult!) -> Void
 		public var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
 		
 		public init(
@@ -561,7 +549,7 @@ This class inherits from `BSBaseSdkResult`, and it holds the data collected in t
     }
 
 ### BSExistingCcSdkResult (in BSCcPayment.swift)
-This class inherits from `BSCcSdkResult`, and it holds the data collected in the flow, when a returning shopper chosoes an existing credit card. The data it holds is the same as the parent class.
+This class inherits from `BSCcSdkResult` and it holds the data collected during checkout when a returning user selects an existing credit card. The data it holds is the same as the parent class.
 
 	public class BSExistingCcPaymentRequest : BSCcPaymentRequest, NSCopying {
     		
@@ -605,10 +593,13 @@ This class inherits from `BSBaseSdkResult`, and it holds the data collected in t
     }
 
 ## Main functionality - BlueSnapSDK class
-The class BlueSnapSDK holds main the functions that you'll utilize. In this section, we'll go through each function contained in this class. 
+The `BlueSnapSDK` class holds the main functionality for the SDK. In this section, we'll go through each function contained in this class. 
 
 ### initBluesnap
-This is the first function you need to call before using any other. Signature:
+This is the first function you need to call to initialize your token, fraud prevention, Apple Pay, and more in the SDK. 
+
+Signature:
+
 	open class func initBluesnap(
         	bsToken : BSToken!,
         	generateTokenFunc: @escaping (_ completion: @escaping (BSToken?, BSErrors?) -> Void) -> Void,
@@ -621,22 +612,27 @@ This is the first function you need to call before using any other. Signature:
 
 | Parameter | Description |
 | ------------- | ------------- |
-| `bsToken`  | the `BSToken` you created.  |
-| `generateTokenFunc` | This function sets the callback function that creates a new token when the current one is expired. For more information, see [Handling token expiration](#handling-token-expiration).  |
-| `initKount` | True if you want to initialize the Kount device data collection for fraud (recommended: True). |
-| `fraudSessionId` | a unique ID (up to 32 characters) for the shopper session - optional (if empty, a new one is generated). |
-| `applePayMerchantIdentifier` | optional identifier for ApplePay |
-| `merchantStoreCurrency` | base currency code for currency rate calculations |
-| completion | callback; will be called when the init process is done. Only then can you proceed to call other functions in the SDK |
+| `bsToken`  | Your `BSToken` instance (see [Generating a token for the transaction](#generating-a-token-for-the-transaction)).  |
+| `generateTokenFunc` | This function sets the callback function that creates a new token when the current one is expired. (see [Handling token expiration](#handling-token-expiration)).  |
+| `initKount` | Pass `true` to initialize the Kount device data collection for fraud. We recommend setting this to `true`. |
+| `fraudSessionId` | Optional. Unique ID (up to 32 characters) for the session. If empty, BlueSnap generates one for you. |
+| `applePayMerchantIdentifier` | Optional. Merchant identifier for Apple Pay. |
+| `merchantStoreCurrency` | Base currency code for currency rate calculations. |
+| completion | Callback function to be called when the init process is done. At this time, you can call the other functions in the SDK. |
 
-> **Note**: Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase.<br> This will be handled automatically for you when you supply the callback function in parameter generateTokenFunc. See [Handling token expiration](#handling-token-expiration)<br>
-> **Initializing fraud prevention**: by passing `initKount: true` when calling initBluesnap, you initialize the fraud prevention capabilities of the SDK, which collects data about the user's device for fraud profiling. You may pass the fraud-session-id if you have one; if you pass nil (empty), we generate a unique ID for you. See the [Developer Docs](https://developers.bluesnap.com/docs/fraud-prevention#section-device-data-checks) for more info.<br>
-> **Configuring Apple Pay (optional)**: Set your [Apple Pay Merchant ID](#apple-pay-optional) by passing the parameter applePayMerchantIdentifier when calling initBluesnap<br>
-> **Note**: The initBluesnap function is asynchronous and may take a few seconds; its `completion` parameter is a callback function you supply, which will be called when the init is done. Make sure you do not start the checkout flow before this happens.<br>
+> **Notes**
+> * `initBluesnap` is asynchronous and may take a few seconds. Its `completion` parameter is a callback function you supply, which will be called when the init is done. Make sure you do not start the checkout flow before this happens.<br>
+> * Tokens expire after 60 minutes or after using the token to process a payment, whichever comes first. Therefore, you'll need to generate a new one for each purchase. This will be handled automatically for you when you supply the callback function in the `generateTokenFunc` parameter (see [Handling token expiration](#handling-token-expiration)).
+
+#### Initializing fraud prevention
+Pass `initKount: true` when calling `initBluesnap` to initialize the fraud prevention capabilities of the SDK. Data about the user's device will be collected for fraud profiling. You may pass the `fraudSessionId` if you have one. Otherwise, you can pass `nil` (empty) to have BlueSnap generate one for you. See the [Developer Docs](https://developers.bluesnap.com/docs/fraud-prevention#section-device-data-checks) for more info.
+
+ #### Configuring Apple Pay (optional)
+Set your [Apple Pay Merchant ID](#apple-pay-optional) by passing the parameter `applePayMerchantIdentifier` when calling `initBluesnap`
 
 
 ### showCheckoutScreen
-This is the main function for the Standard Checkout Flow (you'll call it after calling `initBluesnap` has completed). Once you call `showCheckoutScreen`, the SDK starts the checkout flow of choosing the payment method and collecting the user's details.
+This is the main function for the Standard Checkout Flow (you'll call it after calling `initBluesnap` has completed). Once you call `showCheckoutScreen`, the SDK starts the checkout flow for the user.
 
 Signature:
 
@@ -657,11 +653,11 @@ Parameters:
 ### submitCcDetails
 This function is relevant if you're collecting the user's card data using your own input fields. 
 When called, `submitCcDetails` submits the user's card data to BlueSnap, where it will be associated with your token. 
-> **Note**: Do not send raw credit card data to your server. Use this function from the client-side to submit sensitive data directly to BlueSnap.  
+> **Important:** Do not send raw credit card data to your server. Use this function from the client-side to submit sensitive data directly to BlueSnap.  
 
 Signature:
 
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCcDetails, BSErrors?)->Void)
+    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCreditCard, BSErrors?)->Void)
     
 Parameter: 
 
@@ -670,32 +666,33 @@ Parameter:
 | `ccNumber` | CC number |
 | `expDate` | CC expiration date in the format MM/YYYY |
 | `cvv` | CC security code (CVV) |
-| `purchaseDetails` | optional shopper details you want to tokenize (billing/shipping address) |
+| `purchaseDetails` | Optional. Shopper details that you want to tokenize, such as billing or shipping address. |
 | `completion` | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
 
-*Your `completion` callback should do the following: 
+Your `completion` callback should do the following: 
 1. Detect if the user's card data was successfully submitted to BlueSnap (if `BSErrors` is `nil`). 
 2. If submission was successful, you'll update your server with the transaction details. 
 3. From your server, you'll [Send the payment for processing](#sending-the-payment-for-processing) using your token. 
 4. After receiving BlueSnap's response, you'll update the client and display an appropriate message to the user. 
 
 ### createSandboxTestToken
-Returns a token for BlueSnap Sandbox environment; useful for tests.
-In your real app, the token should be generated on the server side and passed to the app, so that the app will not expose your API credentials.
-The completion function will be called once we get a result from the server; it will receive either a token or an error.
+Returns a token for BlueSnap Sandbox environment, which is useful for testing purposes.
+In your real app, the token should be generated from your server and passed to the app so that the app will not expose your API credentials.
+The completion function will be called once BlueSnap gets a result from the server. It will either receive either a token or an error.
 
 Signature:
 
     open class func createSandboxTestToken(completion: @escaping (BSToken?, BSErrors?) -> Void)
     
 ### createSandboxTestTokenWithShopperId
-Same as `createSandboxTestToken`, only here you may supply a returning shopper ID, to enable returning shopper flow.
+Similiar to `createSandboxTestToken`, except here you supply a shopper ID to enable the returning user flow.
+
 Signature:
 
     open class func createSandboxTestTokenWithShopperId(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) 
 
 ## Handling token expiration
-To handle token expiration, supply the `BlueSnapSDK` class with a function for it to call when the token expires (as part of the initBluesnap function call).
+You'll handle token expiration by supplying the SDK with a callback function to be invoked when the token expires. You'll supply this function to the SDK as part of the `BlueSnapSDK.initBluesnap` call within the `generateTokenFunc` parameter (see [initBluesnap](#initbluesnap) for complete list of parameters).
 
 Your callback function should have the following signature. In the demo app, this function is called `generateAndSetBsToken`. 
 
@@ -718,7 +715,7 @@ This string provide string helper functions like removeWhitespaces, removeNoneDi
 This class provides validation functions like isValidEmail, getCcLengthByCardType, formatCCN, getCCTypeByRegex, etc. to help you format credit card information, and validate user details. 
 
 ### Handling currencies and rates
-These currency structures and methods assist you in performing currency conversions during checkout. Use BSPriceDetails function `changeCurrencyAndConvertAmounts`.
+These currency structures and methods assist you in performing currency conversions during checkout. Use the function `changeCurrencyAndConvertAmounts`of `BSPriceDetails`.
 
 #### Currency Data Structures
 We have 2 data structures (see BSCurrencyModel.swift): 	`BSCurrency` holds a single currency and  `BSCurrencies` holds all the currencies.
