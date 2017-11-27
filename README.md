@@ -596,7 +596,7 @@ This class inherits from `BSBaseSdkResult`, and it holds the data collected in t
 The `BlueSnapSDK` class holds the main functionality for the SDK. In this section, we'll go through each function contained in this class. 
 
 ### initBluesnap
-This is the first function you need to call to initialize your token, fraud prevention, Apple Pay, and more in the SDK. 
+This is the first function you need to call to initialize your token, fraud prevention, Apple Pay, and more in the SDK. **Note:** The token expires after 60 minutes or after the transaction is complete (whichever comes first). 
 
 Signature:
 
@@ -627,8 +627,17 @@ Signature:
 #### Initializing fraud prevention
 Pass `initKount: true` when calling `initBluesnap` to initialize the fraud prevention capabilities of the SDK. Data about the user's device will be collected for fraud profiling. You may pass the `fraudSessionId` if you have one. Otherwise, you can pass `nil` (empty) to have BlueSnap generate one for you. See the [Developer Docs](https://developers.bluesnap.com/docs/fraud-prevention#section-device-data-checks) for more info.
 
- #### Configuring Apple Pay (optional)
+#### Configuring Apple Pay (optional)
 Set your [Apple Pay Merchant ID](#apple-pay-optional) by passing the parameter `applePayMerchantIdentifier` when calling `initBluesnap`
+
+### setBsToken
+This function is used for [handling token expiration](#handling-token-expiration). Call it to set your token in the SDK (after receiving a new token from BlueSnap). **Note:** To initialize your token at the beginning of the flow, call `initBluesnap`.
+
+Signature:
+
+    open class func setBsToken(bsToken: BSToken!)
+ 
+The token expires after 60 minutes or after the transaction is complete (whichever comes first). 
 
 
 ### showCheckoutScreen
