@@ -358,7 +358,7 @@ public class BSCcInputLine: BSBaseTextInput {
         let cvv = self.getCvv() ?? ""
         let exp = self.getExpDateAsMMYYYY() ?? ""
         
-        BSApiManager.submitPurchaseDetails(ccNumber: ccn, last4Digits: nil, expDate: exp, cvv: cvv, billingDetails: purchaseDetails?.billingDetails, shippingDetails: purchaseDetails?.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: {
+        BSApiManager.submitPurchaseDetails(ccNumber: ccn, expDate: exp, cvv: cvv, last4Digits: nil, cardType: nil, billingDetails: purchaseDetails?.billingDetails, shippingDetails: purchaseDetails?.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: {
             creditCard, error in
             
             if let error = error {

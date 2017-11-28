@@ -146,19 +146,20 @@ import Foundation
     static func submitPurchaseDetails(purchaseDetails: BSExistingCcSdkResult, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         let cc = purchaseDetails.creditCard
-        BSApiManager.submitPurchaseDetails(ccNumber: nil, last4Digits: cc.last4Digits, expDate: cc.getExpirationForSubmit(), cvv: nil, billingDetails: purchaseDetails.billingDetails, shippingDetails: purchaseDetails.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
+        BSApiManager.submitPurchaseDetails(ccNumber: nil, expDate: cc.getExpirationForSubmit(), cvv: nil, last4Digits: cc.last4Digits, cardType: cc.ccType, billingDetails: purchaseDetails.billingDetails, shippingDetails: purchaseDetails.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
     }
     
     /**
      Submit CC details to BlueSnap server
      - parameters:
      - ccNumber: Credit card number (in case of new CC)
-     - last4Digits: Credit card last 4 digits (in case of existing CC)
      - expDate: CC expiration date in format MM/YYYY  (in case of new/existing CC)
      - cvv: CC security code (CVV)  (in case of new CC)
+     - last4Digits: Credit card last 4 digits (in case of existing CC)
+     - cardType: Credit card type (in case of existing CC)
      - completion: callback with either result details if OK, or error details if not OK
      */
-    static func submitPurchaseDetails(ccNumber: String?, last4Digits: String?, expDate: String?, cvv: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
+    static func submitPurchaseDetails(ccNumber: String?, expDate: String?, cvv: String?, last4Digits: String?, cardType: String?, billingDetails: BSBillingAddressDetails?, shippingDetails: BSShippingAddressDetails?, fraudSessionId: String?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         var requestBody : [String:String] = [:]
         if let ccNumber = ccNumber {
@@ -166,6 +167,9 @@ import Foundation
         }
         if let last4Digits = last4Digits {
             requestBody["lastFourDigits"] = last4Digits
+        }
+        if let cardType = cardType {
+            requestBody["ccType"] = cardType
         }
         if let cvv = cvv {
             requestBody["cvv"] = cvv
