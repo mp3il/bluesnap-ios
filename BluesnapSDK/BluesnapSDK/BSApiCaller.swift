@@ -623,8 +623,12 @@ import Foundation
                             cc.expirationYear = expirationYear
                         }
                     }
-                    let ccInfo = BSCreditCardInfo(creditCard: cc, billingDetails: billingDetails)
-                    shopper.existingCreditCards.append(ccInfo)
+                    // add the CC only if it's not expired
+                    let validCc : (Bool, String) = BSValidator.isCcValidExpiration(mm: cc.expirationMonth ?? "", yy: cc.expirationYear ?? "")
+                    if validCc.0 {
+                        let ccInfo = BSCreditCardInfo(creditCard: cc, billingDetails: billingDetails)
+                        shopper.existingCreditCards.append(ccInfo)
+                    }
                 }
             }
         }

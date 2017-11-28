@@ -286,38 +286,38 @@ class BSValidatorTests: XCTestCase {
     func testValidateExp() {
 
         let input = BSCcInputLine()
-        XCTAssertEqual(BSValidator.validateExp(input: input), false)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, false)
-        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage)
+        XCTAssertEqual(BSValidator.validateExp(input: input), false, "1 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, false, "1 isHidden")
+        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage, "1 message")
 
         input.expTextField.text = "12"
-        XCTAssertEqual(BSValidator.validateExp(input: input), false)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, false)
-        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage)
+        XCTAssertEqual(BSValidator.validateExp(input: input), false, "2 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, false, "2 isHidden")
+        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage, "2 message")
 
         input.expTextField.text = "1220"
-        XCTAssertEqual(BSValidator.validateExp(input: input), false)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, false)
-        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage)
+        XCTAssertEqual(BSValidator.validateExp(input: input), false, "3 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, false, "3 isHidden")
+        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage, "3 message")
 
         input.expTextField.text = "12/26"
-        XCTAssertEqual(BSValidator.validateExp(input: input), true)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, true)
+        XCTAssertEqual(BSValidator.validateExp(input: input), true, "4 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, true, "4 isHidden")
 
         input.expTextField.text = "14/26"
-        XCTAssertEqual(BSValidator.validateExp(input: input), false)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, false)
-        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expMonthInvalidMessage)
+        XCTAssertEqual(BSValidator.validateExp(input: input), false, "5 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, false, "5 isHidden")
+        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expMonthInvalidMessage, "5 message")
 
         input.expTextField.text = "11/11"
-        XCTAssertEqual(BSValidator.validateExp(input: input), false)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, false)
-        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expPastInvalidMessage)
+        XCTAssertEqual(BSValidator.validateExp(input: input), false, "6 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, false, "6 isHidden")
+        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expPastInvalidMessage, "6 message")
 
         input.expTextField.text = "12/80"
-        XCTAssertEqual(BSValidator.validateExp(input: input), false)
-        XCTAssertEqual(input.expErrorLabel?.isHidden, false)
-        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage)
+        XCTAssertEqual(BSValidator.validateExp(input: input), false, "7 validateExp")
+        XCTAssertEqual(input.expErrorLabel?.isHidden, false, "7 isHidden")
+        XCTAssertEqual(input.expErrorLabel?.text, BSValidator.expInvalidMessage, "7 message")
     }
 
     func testValidateCvv() {

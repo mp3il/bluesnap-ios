@@ -211,21 +211,8 @@ import Foundation
                 msg = expMonthInvalidMessage
             } else if (yy.characters.count < 2) {
                 ok = false
-            } else if let month = Int(mm), let year = Int(yy) {
-                var dateComponents = DateComponents()
-                let currYear : Int! = getCurrentYear()
-                dateComponents.year = year + (currYear / 100)*100
-                dateComponents.month = month
-                dateComponents.day = 1
-                let expDate = Calendar.current.date(from: dateComponents)!
-                if dateComponents.year! > currYear + 10 {
-                    ok = false
-                } else {
-                    ok = expDate > Date()
-                    msg = expPastInvalidMessage
-                }
             } else {
-                ok = false
+                (ok, msg) = isCcValidExpiration(mm: mm, yy: yy)
             }
         } else {
             ok = false
@@ -369,6 +356,32 @@ import Foundation
         
         let validMonths = ["01","02","03","04","05","06","07","08","09","10","11","12"]
         return validMonths.contains(str)
+    }
+    
+    open class func isCcValidExpiration(mm: String, yy: String) -> (Bool, String) {
+        var ok = false
+        var msg = expInvalidMessage
+        if let month = Int(mm), let year = Int(yy) {
+            var dateComponents = DateComponents()
+            let currYear : Int! = getCurrentYear()
+            if yy.characters.count < 4 {
+                dateComponents.year = year + (currYear / 100)*100
+            } else {
+                dateComponents.year = year
+            }
+            dateComponents.month = month
+            dateComponents.day = 1
+            let expDate = Calendar.current.date(from: dateComponents)!
+            if dateComponents.year! > currYear + 10 {
+                ok = false
+            } else if expDate < Date() {
+                ok = false
+                msg = expPastInvalidMessage
+            } else {
+                ok = true
+            }
+        }
+        return (ok, msg)
     }
     
     open class func isValidEmail(_ str: String) -> Bool {
