@@ -32,9 +32,11 @@ extension BSStartViewController : PaymentOperationDelegate {
             if sdkRequest.withShipping {
                 pkPaymentRequest.requiredShippingAddressFields = [.email, .phone, .postalAddress]
             }
-            if sdkRequest.fullBilling {
+            // The billing fields are required for creating an ApplePay transaction on
+            // BlueSnap servers, so we take them all even if the merchant did not request it.
+            //if sdkRequest.fullBilling {
                 pkPaymentRequest.requiredBillingAddressFields = [.postalAddress]
-            }
+            //}
             
             pkPaymentRequest.supportedNetworks = [
                 .amex,
