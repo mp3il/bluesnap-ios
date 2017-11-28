@@ -245,9 +245,11 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             shippingSameAsBillingSwitch.isOn = self.purchaseDetails.getShippingDetails()?.name ?? "" == ""
 
             // in case of empty shipping country - fill with default and call updateTaxFunc
-            if withShipping && purchaseDetails.shippingDetails!.country ?? "" == "" {
-                let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
-                purchaseDetails.shippingDetails!.country = defaultCountry
+            if withShipping {
+                if purchaseDetails.shippingDetails!.country ?? "" == "" {
+                    let defaultCountry = NSLocale.current.regionCode ?? BSCountryManager.US_COUNTRY_CODE
+                    purchaseDetails.shippingDetails!.country = defaultCountry
+                }
                 callUpdateTax(ifSameAsBilling: false, ifNotSameAsBilling: true)
             }
         }
