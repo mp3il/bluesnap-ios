@@ -122,6 +122,8 @@ class BSCreditCardInfo: BSPaymentInfo, NSCopying {
             self.billingDetails = ccBillingDetails.copy() as! BSBillingAddressDetails
             if !sdkRequest.withEmail {
                 self.billingDetails.email = nil
+            } else if self.billingDetails.email == nil {
+                self.billingDetails.email = shopper.email
             }
             if !sdkRequest.fullBilling {
                 self.billingDetails.address = nil
