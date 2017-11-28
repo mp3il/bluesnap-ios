@@ -485,6 +485,8 @@ class ViewController: UIViewController {
      /**
      Called by the BlueSnapSDK when token expired error is recognized.
      Here we generate and set a new token, so that when the action re-tries, it will succeed.
+     In your real app you should get the token from your app server, then call
+     BlueSnapSDK.setBsToken to set it.
      */
     func generateAndSetBsToken(completion: @escaping (_ token: BSToken?, _ error: BSErrors?)->Void) {
         

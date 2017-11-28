@@ -71,6 +71,19 @@ import PassKit
     }
     
     /**
+     Set the token used for BS API
+     This needs to be called when you generate a new token after a token expired (in your generateTokenFunc
+     function, which you pass in initBluesnap call abopve)
+     
+     - parameters:
+     - bsToken: BlueSnap token, should be fresh and valid
+     */
+    open class func setBsToken(bsToken : BSToken!) {
+        
+        BSApiManager.setBsToken(bsToken: bsToken)
+    }
+    
+    /**
      Start the BlueSnap checkout flow
      
      - parameters:
