@@ -34,6 +34,7 @@ class ViewController: UIViewController {
     fileprivate var hideCoverView : Bool = false
     final fileprivate let LOADING_MESSAGE = "Loading, please wait"
     final fileprivate let PROCESSING_MESSAGE = "Processing, please wait"
+    final fileprivate let GENERATING_TOKEN_MESSAGE = "Generating a new token, please wait"
     final fileprivate let initialShippingCoutry = "US"
     final fileprivate let initialShippingState = "MA"
     final fileprivate var storeCurrency = "USD"
@@ -96,7 +97,14 @@ class ViewController: UIViewController {
 	@IBAction func convertButtonAction(_ sender: UIButton) {
         
         resultTextView.text = ""
-
+        
+        // Make sure a new token is created for the shopper
+        if returningShopperIdTextField.isFirstResponder {
+            returningShopperIdTextField.resignFirstResponder()
+            return
+        }
+        dismissKeyboard()
+        
         // Override the navigation name, so that the next screen navigation item will say "Cancel"
         let backItem = UIBarButtonItem()
         backItem.title = "Cancel"
@@ -230,9 +238,12 @@ class ViewController: UIViewController {
             if newCurrency.getCode() != self.storeCurrency {
                 self.storeCurrency = newCurrency.getCode()
                 self.storeCurrencyButton.setTitle(storeCurrency, for: UIControlState())
+                coverAllLabel.text = LOADING_MESSAGE
                 coverAllView.isHidden = false
                 hideCoverView = true
-                initBluesnap()
+                DispatchQueue.main.async {
+                    self.initBluesnap()
+                }
             }
         }
     }
@@ -444,6 +455,7 @@ class ViewController: UIViewController {
         // To simulate expired token use:
         //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
         
+        coverAllLabel.text = GENERATING_TOKEN_MESSAGE
         coverAllView.isHidden = false
         hideCoverView = true
         
@@ -467,6 +479,7 @@ class ViewController: UIViewController {
     
     private func initBluesnap() {
         
+        coverAllLabel.text = LOADING_MESSAGE
         BlueSnapSDK.initBluesnap(
             bsToken: self.bsToken,
             generateTokenFunc: self.generateAndSetBsToken,
