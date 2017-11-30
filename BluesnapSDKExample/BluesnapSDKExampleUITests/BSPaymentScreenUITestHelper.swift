@@ -204,7 +204,7 @@ class BSPaymentScreenUITestHelper {
         
         let textField = getInputFieldElement(input)
         if textField.exists {
-            let oldValue = textField.value as! String
+            let oldValue = textField.value as? String ?? ""
             if oldValue != value {
                 textField.tap()
                 if oldValue.characters.count > 0 {
