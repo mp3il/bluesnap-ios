@@ -17,7 +17,8 @@ import Foundation
     internal static let PAYPAL_SERVICE = "services/2/tokenized-services/paypal-token?amount="
     internal static let PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2"
     internal static let TOKENIZED_SERVICE = "services/2/payment-fields-tokens/"
-
+    internal static let BLUESNAP_VERSION_HEADER = "BLUESNAP_VERSION_HEADER"
+    internal static let BLUESNAP_VERSION_HEADER_VAL = "2.0"
     
     /**
      Fetch all the initial data required for the SDK from BlueSnap server:
@@ -38,6 +39,7 @@ import Foundation
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
         
         // fire request
         
@@ -131,7 +133,8 @@ import Foundation
         request.setValue("text/xml", forHTTPHeaderField: "Content-Type")
         request.setValue(authorization, forHTTPHeaderField: "Authorization")
         request.setValue("0", forHTTPHeaderField: "Content-Length")
-        
+        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+
         // fire request
         
         var result: BSToken?
@@ -193,7 +196,8 @@ import Foundation
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
-        
+        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+
         // fire request
         
         var resultToken: String?
@@ -232,7 +236,8 @@ import Foundation
         var request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
-        
+        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+
         // fire request
         
         var supportedPaymentMethods: [String]?
@@ -279,7 +284,8 @@ import Foundation
         }
         //request.timeoutInterval = 60
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+
         // fire request
         
         var resultError: BSErrors?
@@ -385,7 +391,8 @@ import Foundation
                 NSLog("Error serializing CC details: \(error.localizedDescription)")
             }
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
+            request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+
             
             // fire request
             
