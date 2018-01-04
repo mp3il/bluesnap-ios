@@ -115,7 +115,7 @@ fileprivate var bsToken : BSToken?
 bsToken = BSToken(tokenStr: "c3d011abe0ba877be0d903a2f0e4ca4ecc0376e042e07bdec2090610e92730b5_", isProduction: false)
 ```
 
-Initialize your token and any additional functionality (such as Apple Pay or fraud prevention) in the SDK by calling the [`initBluesnap`](#initbluesnap) function of the `BlueSnapSDK` class. See [initBluesnap](#initbluesnap) for a complete list of the function's parameters. 
+Initialize your token and any additional functionality (such as Apple Pay or fraud prevention) in the SDK by calling the [`initBluesnap`](#initbluesnap) function of the `BlueSnapSDK` class. See [initBluesnap](#initbluesnap) for a complete list of the function's parameters. **Note:** For each purchase, you'll need to call `initBluesnap` with a new token. 
 
 → If you're using the Standard Checkout Flow, then continue on to the next section. <br>
 → If you're using the Custom Checkout Flow, then jump down to [Implementing Custom Checkout Flow](#implementing-custom-checkout-flow). 
@@ -126,7 +126,7 @@ This section will cover the following topics:
 * [Launching checkout UI](#launching-checkout-ui)
 
 ## Defining your checkout settings
-The [`showCheckoutScreen`](#showcheckoutscreen) function of the `BlueSnapSDK` class is the main entry point for the SDK. When called, this function launches the checkout UI for the user based on the parameters you provide. For example, you can display tax amounts and subtotals, specify which fields to require from the user, and pre-populate the checkout page with information you've already collected.
+The [`showCheckoutScreen`](#showcheckoutscreen) function of the `BlueSnapSDK` class is the main entry point for the SDK and should be called after `initBluesnap`. When called, this function launches the checkout UI for the user based on the parameters you provide. For example, you can display tax amounts and subtotals, specify which fields to require from the user, and pre-populate the checkout page with information you've already collected.
 
 This function takes the parameters listed below. We'll go over setting `sdkRequest` in this section. 
 
@@ -243,6 +243,8 @@ Now that you've set `showCheckoutScreen`'s parameters, it's time to launch the c
     )
 ```
 And you're ready to go! Accepting Apple Pay, credit card, and PayPal payments will be a breeze.
+
+> **Important**: For each new purchase, you need to generate a new token, call `initBluesnap` with your token and any additional parameters, and then call `showCheckoutScreen` (in this order). 
 
 # Implementing Custom Checkout Flow
 This section will cover the following topics: 
