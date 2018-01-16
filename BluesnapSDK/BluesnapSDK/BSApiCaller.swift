@@ -10,8 +10,6 @@
 
 import Foundation
 
-import Foundation
-
 @objc class BSApiCaller: NSObject {
     
     internal static let PAYPAL_SERVICE = "services/2/tokenized-services/paypal-token?amount="
@@ -86,7 +84,7 @@ import Foundation
                         resultData?.shopper = shopper
                     }
                     if let supportedPaymentMethods = json["supportedPaymentMethods"] as? [String: AnyObject] {
-                        let methods = parsePaymentMethodsJSON(json: supportedPaymentMethods)
+                        let methods = parseSupportedPaymentMethodsJSON(json: supportedPaymentMethods)
                         resultData?.supportedPaymentMethods = methods
                     }
 
@@ -669,7 +667,7 @@ import Foundation
             do {
                 // Parse the result JSOn object
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    resultArr = parsePaymentMethodsJSON(json: json)
+                    resultArr = parseSupportedPaymentMethodsJSON(json: json)
                 } else {
                     resultError = .unknown
                     NSLog("Error parsing BS Supported Payment Methods")
@@ -685,8 +683,18 @@ import Foundation
         return (resultArr, resultError)
     }
     
-    private static func parsePaymentMethodsJSON(json: [String: AnyObject]) -> [String]?  {
-        
+    private static func parseSupportedPaymentMethodsJSON(json: [String: AnyObject]) -> [String]?  {
+
+        // insert SDKInit Regex data to the cardTypeRegex Validator while maintaining order
+        if let cardTypesRegex = json["creditCardRegex"] as? [String: String] {
+            var index: Int = 0
+            for (k,v) in cardTypesRegex {
+                BSValidator.cardTypesRegex[index] = (cardType: k, regexp: v)
+                index += 1
+            }
+
+        }
+
         var resultArr: [String]?
         if let arr = json["paymentMethods"] as? [String] {
             resultArr = arr
