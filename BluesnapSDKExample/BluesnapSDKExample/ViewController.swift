@@ -479,7 +479,9 @@ class ViewController: UIViewController {
     
     private func initBluesnap() {
         
-        coverAllLabel.text = LOADING_MESSAGE
+        DispatchQueue.main.async {
+            self.coverAllLabel.text = self.LOADING_MESSAGE
+        }
         BlueSnapSDK.initBluesnap(
             bsToken: self.bsToken,
             generateTokenFunc: self.generateAndSetBsToken,

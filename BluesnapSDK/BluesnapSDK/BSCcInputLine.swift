@@ -906,7 +906,9 @@ public class BSCcInputLine: BSBaseTextInput {
         
         // change the image in ccIconImage
         if let image = BSImageLibrary.getCcIconByCardType(ccType: ccType) {
-            self.image = image
+            DispatchQueue.main.async {
+                self.image = image
+            }
         }
     }
     
