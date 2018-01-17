@@ -8,9 +8,7 @@
 //  Copyright © 2017 Bluesnap. All rights reserved.
 //
 
-import Foundation
-
-import Foundation
+import Foundation 
 
 @objc class BSApiCaller: NSObject {
     
@@ -19,6 +17,19 @@ import Foundation
     internal static let TOKENIZED_SERVICE = "services/2/payment-fields-tokens/"
     internal static let BLUESNAP_VERSION_HEADER = "BLUESNAP_VERSION_HEADER"
     internal static let BLUESNAP_VERSION_HEADER_VAL = "2.0"
+    internal static let SDK_VERSION_HEADER = "BLUESNAP_ORIGIN_HEADER"
+    internal static let SDK_VERSION_HEADER_VAL = "IOS SDK 0.1.1"
+    
+    private static func createRequest(_ urlStr: String, bsToken: BSToken!) -> NSMutableURLRequest {
+        
+        let url = NSURL(string: urlStr)!
+        let request = NSMutableURLRequest(url: url as URL)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
+        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+        request.setValue(SDK_VERSION_HEADER_VAL, forHTTPHeaderField: SDK_VERSION_HEADER)
+        return request
+    }
     
     /**
      Fetch all the initial data required for the SDK from BlueSnap server:
@@ -34,12 +45,10 @@ import Foundation
      */
     static func getSdkData(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSSdkConfiguration?, BSErrors?) -> Void) {
         
+        let SDK_VERSION_HEADER_VAL = "IOS SDK 0.0.1" //+ BluesnapSDKVersionString
+        
         let urlStr = bsToken.serverUrl + "services/2/tokenized-services/sdk-init?base-currency=" + (baseCurrency ?? "USD")
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
-        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+        let request = createRequest(urlStr, bsToken: bsToken)
         
         // fire request
         
@@ -134,6 +143,7 @@ import Foundation
         request.setValue(authorization, forHTTPHeaderField: "Authorization")
         request.setValue("0", forHTTPHeaderField: "Content-Length")
         request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+        request.setValue(SDK_VERSION_HEADER_VAL, forHTTPHeaderField: SDK_VERSION_HEADER)
 
         // fire request
         
@@ -191,12 +201,7 @@ import Foundation
         }
         
         NSLog("Calling \(urlStr)")
-        
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
-        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+        let request = createRequest(urlStr, bsToken: bsToken)
 
         // fire request
         
@@ -232,11 +237,7 @@ import Foundation
     static func getSupportedPaymentMethods(bsToken: BSToken!, completion: @escaping ([String]?, BSErrors?) -> Void) {
         
         let urlStr = bsToken.serverUrl + "services/2/tokenized-services/supported-payment-methods"
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bsToken!.tokenStr, forHTTPHeaderField: "Token-Authentication")
-        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
+        let request = createRequest(urlStr, bsToken: bsToken)
 
         // fire request
         
@@ -274,17 +275,13 @@ import Foundation
         // If you want to test expired token, use this:
         //let urlStr = domain + TOKENIZED_SERVICE + "fcebc8db0bcda5f8a7a5002ca1395e1106ea668f21200d98011c12e69dd6bceb_"
         let urlStr = domain + TOKENIZED_SERVICE + bsToken!.getTokenStr()
-        let url = NSURL(string: urlStr)!
-        var request = NSMutableURLRequest(url: url as URL)
+        var request = createRequest(urlStr, bsToken: bsToken)
         request.httpMethod = "PUT"
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
         } catch let error {
             NSLog("Error serializing CC details: \(error.localizedDescription)")
         }
-        //request.timeoutInterval = 60
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
 
         // fire request
         
@@ -381,8 +378,7 @@ import Foundation
             
             // create request
             let urlStr = bsToken.serverUrl + TOKENIZED_SERVICE + bsToken.getTokenStr()
-            let url = NSURL(string: urlStr)!
-            var request = NSMutableURLRequest(url: url as URL)
+            var request = createRequest(urlStr, bsToken: bsToken)
             request.httpMethod = "PUT"
             do {
                 let requestBody = ["dummy":"check:"]
@@ -390,9 +386,6 @@ import Foundation
             } catch let error {
                 NSLog("Error serializing CC details: \(error.localizedDescription)")
             }
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue(BLUESNAP_VERSION_HEADER_VAL, forHTTPHeaderField: BLUESNAP_VERSION_HEADER)
-
             
             // fire request
             
