@@ -13,7 +13,7 @@ import BluesnapSDK
 
 class BluesnapSDKExampleUITests: XCTestCase {
     
-    let keyboardIsHidden = true
+    let keyboardIsHidden = false
     
     override func setUp() {
         super.setUp()
