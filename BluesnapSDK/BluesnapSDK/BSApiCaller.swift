@@ -45,8 +45,6 @@ import Foundation
      */
     static func getSdkData(bsToken: BSToken!, baseCurrency: String?, completion: @escaping (BSSdkConfiguration?, BSErrors?) -> Void) {
         
-        let SDK_VERSION_HEADER_VAL = "IOS SDK 0.0.1" //+ BluesnapSDKVersionString
-        
         let urlStr = bsToken.serverUrl + "services/2/tokenized-services/sdk-init?base-currency=" + (baseCurrency ?? "USD")
         let request = createRequest(urlStr, bsToken: bsToken)
         

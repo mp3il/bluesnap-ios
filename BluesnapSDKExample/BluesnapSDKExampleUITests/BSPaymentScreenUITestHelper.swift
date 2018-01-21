@@ -20,10 +20,12 @@ class BSPaymentScreenUITestHelper {
     var cityInput : XCUIElement!
     var streetInput : XCUIElement!
     var stateInput : XCUIElement!
-    
+    var keyBoardIsVisible = false
+    var keyboardIsHidden = true
+
     let bsCountryManager = BSCountryManager.getInstance()
 
-    init(app: XCUIApplication!) {
+    init(app: XCUIApplication!, keyboardIsHidden : Bool) {
         self.app = app
         let elementsQuery = app.scrollViews.otherElements
         ccInput = elementsQuery.element(matching: .any, identifier: "CCN")
@@ -33,6 +35,7 @@ class BSPaymentScreenUITestHelper {
         cityInput = elementsQuery.element(matching: .any, identifier: "City")
         streetInput = elementsQuery.element(matching: .any, identifier: "Street")
         stateInput = elementsQuery.element(matching: .any, identifier: "State")
+        self.keyboardIsHidden = keyboardIsHidden
     }
     
     func getCcInputFieldElement() -> XCUIElement {
@@ -68,8 +71,15 @@ class BSPaymentScreenUITestHelper {
     }
 
     func closeKeyboard() {
-        nameInput.tap()
-        app.keyboards.buttons["Done"].tap()
+        if (!keyboardIsHidden) {
+            nameInput.tap()
+            if (app.keyboards.count > 0) {
+                let doneBtn = app.keyboards.buttons["Done"]
+                if doneBtn.exists && doneBtn.isHittable {
+                    doneBtn.tap()
+                }
+            }
+        }
     }
 
     // fill CC details 
