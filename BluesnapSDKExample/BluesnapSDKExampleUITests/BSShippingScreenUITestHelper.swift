@@ -19,10 +19,11 @@ class BSShippingScreenUITestHelper {
     var cityInput : XCUIElement!
     var streetInput : XCUIElement!
     var stateInput : XCUIElement!
+    var keyboardIsHidden = true
 
     let bsCountryManager = BSCountryManager.getInstance()
     
-    init(app: XCUIApplication!) {
+    init(app: XCUIApplication!, keyboardIsHidden : Bool) {
         self.app = app
         let elementsQuery = app.scrollViews.otherElements
         nameInput = elementsQuery.element(matching: .any, identifier: "ShippingName")
@@ -31,8 +32,9 @@ class BSShippingScreenUITestHelper {
         cityInput = elementsQuery.element(matching: .any, identifier: "ShippingCity")
         streetInput = elementsQuery.element(matching: .any, identifier: "ShippingStreet")
         stateInput = elementsQuery.element(matching: .any, identifier: "ShippingState")
+        self.keyboardIsHidden = keyboardIsHidden
     }
-
+    
     func getInputFieldElement(_ input : XCUIElement) -> XCUIElement {
         return input.textFields["TextField"]
     }
@@ -54,8 +56,15 @@ class BSShippingScreenUITestHelper {
     }
 
     func closeKeyboard() {
-        nameInput.tap()
-        app.keyboards.buttons["Done"].tap()
+        if (!keyboardIsHidden) {
+            nameInput.tap()
+            if (app.keyboards.count > 0) {
+                let doneBtn = app.keyboards.buttons["Done"]
+                if doneBtn.exists && doneBtn.isHittable {
+                    doneBtn.tap()
+                }
+            }
+        }
     }
 
     // check visibility of inputs - make sure fields are shown according to configuration
