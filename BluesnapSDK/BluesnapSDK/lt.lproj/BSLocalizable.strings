@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "Įvyko klaida. Prašome bandyti dar kartą.";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "Šios rūšies ";
+"Error_Card_Type_Not_Supported_2" = " kortelės nepalaikomos, jei norite atlikti šį sandorį. Naudokite kitokią kortelę ir bandykite dar kartą";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "Įvyko klaida. Prašome bandyti dar kartą.";
 /* Token not found error while submitting CC details to BlueSnap server */

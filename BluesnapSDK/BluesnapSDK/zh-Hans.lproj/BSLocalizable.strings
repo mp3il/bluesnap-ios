@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "發生錯誤。請再次嘗試。";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "此交易目前不支持此卡片品牌/類型 ";
+"Error_Card_Type_Not_Supported_2" = " 。請使用其他卡片重試。";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "發生錯誤。請再次嘗試。";
 /* Token not found error while submitting CC details to BlueSnap server */

@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "Възникна грешка. Моля, опитайте отново.";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "Тази търговска марка/тип карта ";
+"Error_Card_Type_Not_Supported_2" = " в момента не се поддържа за тази транзакция. Моля, опитайте отново с различна карта";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "Възникна грешка. Моля, опитайте отново.";
 /* Token not found error while submitting CC details to BlueSnap server */

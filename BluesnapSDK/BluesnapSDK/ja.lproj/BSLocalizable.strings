@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "エラーが発生しました。再試行してください。";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "このカードブランド/タイプ ";
+"Error_Card_Type_Not_Supported_2" = " はこの取引に対応していません。別のカードで再度お試しください。";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "エラーが発生しました。再試行してください。";
 /* Token not found error while submitting CC details to BlueSnap server */

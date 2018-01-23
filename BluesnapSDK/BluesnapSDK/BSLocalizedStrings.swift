@@ -30,6 +30,8 @@ public enum BSLocalizedString : String {
     /* ------- BSCcInputLine ------- */
     
     case Error_General_CC_Validation_Error
+    case Error_Card_Type_Not_Supported_1
+    case Error_Card_Type_Not_Supported_2
     case Error_Cc_Submit_Token_expired
     case Error_Cc_Submit_Token_not_found
     case Error_General_CC_Submit_Error

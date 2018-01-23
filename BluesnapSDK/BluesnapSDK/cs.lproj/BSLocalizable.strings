@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "Došlo k chybě. Zkuste to prosím znovu.";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "Tato značka/typ karty ";
+"Error_Card_Type_Not_Supported_2" = " není v současné době podporována pro tuto transakci. Zkuste prosím použít jinou kartu";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "Došlo k chybě. Zkuste to prosím znovu.";
 /* Token not found error while submitting CC details to BlueSnap server */

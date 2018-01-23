@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "Tapahtui virhe, yritä uudelleen.";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "Käyttämääsi korttia ";
+"Error_Card_Type_Not_Supported_2" = " ei voida käyttää tämän maksun suorittamiseen. Ole hyvä ja käytä toista korttia";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = " Tapahtui virhe, yritä uudelleen.";
 /* Token not found error while submitting CC details to BlueSnap server */

@@ -329,7 +329,10 @@ public class BSCcInputLine: BSBaseTextInput {
                         if (error == .invalidCcNumber) {
                             self.showError(BSValidator.ccnInvalidMessage)
                         } else {
-                            let message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Validation_Error)
+                            var message = BSLocalizedStrings.getString(BSLocalizedString.Error_General_CC_Validation_Error)
+                            if (error == .cardTypeNotSupported) {
+                                message = BSLocalizedStrings.getString(BSLocalizedString.Error_Card_Type_Not_Supported_1) + BSLocalizedStrings.getString(BSLocalizedString.Error_Card_Type_Not_Supported_2)
+                            }
                             DispatchQueue.main.async {
                                 self.delegate?.showAlert(message)
                             }

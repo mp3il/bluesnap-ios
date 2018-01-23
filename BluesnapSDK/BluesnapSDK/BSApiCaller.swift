@@ -433,6 +433,8 @@ import Foundation
                 resultError = .invalidCvv
             } else if (errStr == "INVALID_EXP_DATE") {
                 resultError = .invalidExpDate
+            } else if (errStr == "CARD_TYPE_NOT_SUPPORTED") {
+                resultError = .cardTypeNotSupported
             } else if (BSStringUtils.startsWith(theString: errStr ?? "", subString: "TOKEN_WAS_ALREADY_USED_FOR_")) {
                 resultError = .tokenAlreadyUsed
             } else if httpStatusCode == 403 && errStr == "Unauthorized" {

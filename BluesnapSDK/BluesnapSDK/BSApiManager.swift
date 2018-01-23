@@ -430,6 +430,10 @@ import Foundation
                         fillCcDetailsAndComplete(requestBody: requestBody, resultData: resultData2, error: error2, completion: completion)
                     })
                 })
+            } else if error == BSErrors.cardTypeNotSupported {
+                // gives the shopper an error reponse in the UI
+                NSLog("BlueSnap; card type not supported")
+                fillCcDetailsAndComplete(requestBody: requestBody, resultData: resultData, error: error, completion: completion)
             } else {
                 fillCcDetailsAndComplete(requestBody: requestBody, resultData: resultData, error: error, completion: completion)
             }

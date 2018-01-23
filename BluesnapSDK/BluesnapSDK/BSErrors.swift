@@ -26,6 +26,7 @@ import Foundation
     // generic
     case invalidInput
     case expiredToken
+    case cardTypeNotSupported
     case tokenNotFound
     case tokenAlreadyUsed
     case unAuthorised
@@ -55,6 +56,8 @@ import Foundation
             return "invalidInput";
         case .expiredToken:
             return "expiredToken";
+        case .cardTypeNotSupported:
+            return "cardTypeNotSupported";
         case .tokenNotFound:
             return "tokenNotFound";
         case .tokenAlreadyUsed:
