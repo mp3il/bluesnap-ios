@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "Ha habido un error. Por favor, prueba de nuevo.";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "Esta marca de tarjeta / tipo ";
+"Error_Card_Type_Not_Supported_2" = " No está soportado actualmente para esta transacción. Inténtalo de nuevo con otra tarjeta";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "Ha habido un error. Por favor, prueba de nuevo.";
 /* Token not found error while submitting CC details to BlueSnap server */

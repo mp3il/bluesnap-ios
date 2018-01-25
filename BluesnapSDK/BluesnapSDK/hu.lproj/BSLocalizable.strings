@@ -17,6 +17,9 @@
 
 /* General error while submitting CC to validate credit card */
 "Error_General_CC_Validation_Error" = "Hiba történt, Kérjük, próbálja újra.";
+/* CardType not supported by merchant while submitting CC details to BlueSnap server */
+"Error_Card_Type_Not_Supported_1" = "Ezt a kártyamárkát/ típust ";
+"Error_Card_Type_Not_Supported_2" = " ennél a tranzakciónál jelenleg nem támogatjuk. Kérjük, próbálkozzon újra egy másik kártyával";
 /* Token expired error while submitting CC details to BlueSnap server */
 "Error_Cc_Submit_Token_expired" = "Hiba történt, Kérjük, próbálja újra.";
 /* Token not found error while submitting CC details to BlueSnap server */
