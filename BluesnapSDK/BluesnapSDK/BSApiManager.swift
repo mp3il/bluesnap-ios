@@ -14,13 +14,13 @@ import Foundation
 
     // MARK: Constants
 
-    internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
+    internal static let BS_PRODUCTION_DOMAIN_PART1 = "https://ws"
+    internal static let BS_PRODUCTION_DOMAIN_PART2 = ".bluesnap.com/"
     internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
     internal static let BS_SANDBOX_TEST_USER = "sdkuser"
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
 //    internal static let BS_SANDBOX_DOMAIN = "https://us-qa-fct02.bluesnap.com/"
 //    internal static let BS_SANDBOX_TEST_USER = "HostedPapi"
-//    internal static let BS_SANDBOX_TEST_PASS = "Plimus12345"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
     // every hour (interval should be negative, and in seconds)
  
@@ -76,7 +76,7 @@ import Foundation
      */
     static func createSandboxBSToken(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        createBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: { bsToken, bsError in
+        BSApiCaller.createSandboxBSToken(shopperId: shopperId, user: BSApiManager.BS_SANDBOX_TEST_USER, password: BSApiManager.BS_SANDBOX_TEST_PASS, completion:  { bsToken, bsError in
             
             BSApiManager.setBsToken(bsToken: bsToken)
             completion(bsToken, bsError)
@@ -86,7 +86,7 @@ import Foundation
     static func isProductionToken() -> Bool {
         
         let bsToken = getBsToken()
-        return bsToken?.serverUrl == BS_PRODUCTION_DOMAIN
+        return bsToken?.serverUrl != BS_SANDBOX_DOMAIN
     }
     
     // MARK: Main functions
@@ -364,21 +364,6 @@ import Foundation
 
 
     // MARK: Private/internal functions
-
-    /**
-     Get BlueSnap Token from BlueSnap server
-     Normally you will not do this from the app.
-     
-     - parameters:
-     - domain: look at BSApiManager BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
-     - user: username
-     - password: password
-     - completion: function to be called after result is fetched; will receive optional token and optional error
-     */
-    internal static func createBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
-        
-        BSApiCaller.createBSToken(shopperId: shopperId, domain: domain, user: user, password: password, completion: completion)
-    }
 
  
     /**
