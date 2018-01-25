@@ -8,7 +8,7 @@
 //  Copyright © 2017 Bluesnap. All rights reserved.
 //
 
-import Foundation 
+import Foundation
 
 @objc class BSApiCaller: NSObject {
     
@@ -19,9 +19,9 @@ import Foundation
     internal static let BLUESNAP_VERSION_HEADER_VAL = "2.0"
     internal static let SDK_VERSION_HEADER = "BLUESNAP_ORIGIN_HEADER"
     internal static let SDK_VERSION_HEADER_VAL = "IOS SDK 0.1.1"
-    
+
     private static func createRequest(_ urlStr: String, bsToken: BSToken!) -> NSMutableURLRequest {
-        
+
         let url = NSURL(string: urlStr)!
         let request = NSMutableURLRequest(url: url as URL)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -95,7 +95,7 @@ import Foundation
                         resultData?.shopper = shopper
                     }
                     if let supportedPaymentMethods = json["supportedPaymentMethods"] as? [String: AnyObject] {
-                        let methods = parsePaymentMethodsJSON(json: supportedPaymentMethods)
+                        let methods = parseSupportedPaymentMethodsJSON(json: supportedPaymentMethods)
                         resultData?.supportedPaymentMethods = methods
                     }
 
@@ -125,7 +125,7 @@ import Foundation
      - completion: callback function for after the token is created; recfeives optional token and optional error
      */
     internal static func createSandboxBSToken(shopperId: Int?, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
-        
+
         let domain: String = BSApiManager.BS_SANDBOX_DOMAIN
         
         // create request
@@ -670,7 +670,7 @@ import Foundation
             do {
                 // Parse the result JSOn object
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                    resultArr = parsePaymentMethodsJSON(json: json)
+                    resultArr = parseSupportedPaymentMethodsJSON(json: json)
                 } else {
                     resultError = .unknown
                     NSLog("Error parsing BS Supported Payment Methods")
@@ -686,8 +686,18 @@ import Foundation
         return (resultArr, resultError)
     }
     
-    private static func parsePaymentMethodsJSON(json: [String: AnyObject]) -> [String]?  {
-        
+    private static func parseSupportedPaymentMethodsJSON(json: [String: AnyObject]) -> [String]?  {
+
+        // insert SDKInit Regex data to the cardTypeRegex Validator while maintaining order
+        if let cardTypesRegex = json["creditCardRegex"] as? [String: String] {
+            var index: Int = 0
+            for (k,v) in cardTypesRegex {
+                BSValidator.cardTypesRegex[index] = (cardType: k, regexp: v)
+                index += 1
+            }
+
+        }
+
         var resultArr: [String]?
         if let arr = json["paymentMethods"] as? [String] {
             resultArr = arr
