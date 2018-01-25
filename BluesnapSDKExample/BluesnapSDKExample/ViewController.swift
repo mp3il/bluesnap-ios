@@ -453,7 +453,7 @@ class ViewController: UIViewController {
     func initBsToken(returningShopper: Bool) {
         
         // To simulate expired token use:
-        //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_", serverUrl: bsToken?.getServerUrl())
+        //    bsToken = BSToken(tokenStr: "5e2e3f50e287eab0ba20dc1712cf0f64589c585724b99c87693a3326e28b1a3f_")
         
         coverAllLabel.text = GENERATING_TOKEN_MESSAGE
         coverAllView.isHidden = false

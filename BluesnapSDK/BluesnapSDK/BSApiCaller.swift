@@ -120,12 +120,13 @@ import Foundation
      Normally you will not do this from the app.
      
      - parameters:
-     - domain: look at BSApiManager BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
      - user: username
      - password: password
      - completion: callback function for after the token is created; recfeives optional token and optional error
      */
-    internal static func createBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+    internal static func createSandboxBSToken(shopperId: Int?, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+        
+        let domain: String = BSApiManager.BS_SANDBOX_DOMAIN
         
         // create request
         let authorization = getBasicAuth(user: user, password: password)
@@ -158,7 +159,7 @@ import Foundation
                 let httpResponse = response as? HTTPURLResponse
                 if let httpStatusCode: Int = (httpResponse?.statusCode) {
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
-                        result = extractTokenFromResponse(httpResponse: httpResponse, domain: domain)
+                        result = extractTokenFromResponse(httpResponse: httpResponse)
                         if let result = result {
                             NSLog("createBSToken result: \(result.tokenStr)")
                         } else {
@@ -692,13 +693,13 @@ import Foundation
          return resultArr
     }
     
-    private static func extractTokenFromResponse(httpResponse: HTTPURLResponse?, domain: String!) -> BSToken? {
+    private static func extractTokenFromResponse(httpResponse: HTTPURLResponse?) -> BSToken? {
         
         var result: BSToken?
         if let location: String = httpResponse?.allHeaderFields["Location"] as? String {
             if let lastIndexOfSlash = location.range(of: "/", options: String.CompareOptions.backwards, range: nil, locale: nil) {
                 let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
-                result = BSToken(tokenStr: tokenStr, serverUrl: domain)
+                result = BSToken(tokenStr: tokenStr)
             } else {
                 NSLog("Error: BS Token does not contain /")
             }
