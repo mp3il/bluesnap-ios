@@ -14,13 +14,13 @@ import Foundation
 
     // MARK: Constants
 
-    internal static let BS_PRODUCTION_DOMAIN = "https://api.bluesnap.com/"
+    internal static let BS_PRODUCTION_DOMAIN_PART1 = "https://ws"
+    internal static let BS_PRODUCTION_DOMAIN_PART2 = ".bluesnap.com/"
     internal static let BS_SANDBOX_DOMAIN = "https://sandbox.bluesnap.com/"
     internal static let BS_SANDBOX_TEST_USER = "sdkuser"
     internal static let BS_SANDBOX_TEST_PASS = "SDKuser123"
 //    internal static let BS_SANDBOX_DOMAIN = "https://us-qa-fct02.bluesnap.com/"
 //    internal static let BS_SANDBOX_TEST_USER = "HostedPapi"
-//    internal static let BS_SANDBOX_TEST_PASS = "Plimus12345"
     internal static let TIME_DIFF_TO_RELOAD: Double = -60 * 60
     // every hour (interval should be negative, and in seconds)
  
@@ -86,7 +86,7 @@ import Foundation
     static func isProductionToken() -> Bool {
         
         let bsToken = getBsToken()
-        return bsToken?.serverUrl == BS_PRODUCTION_DOMAIN
+        return bsToken?.serverUrl != BS_SANDBOX_DOMAIN
     }
     
     // MARK: Main functions

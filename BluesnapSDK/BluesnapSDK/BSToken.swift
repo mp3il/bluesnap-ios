@@ -15,12 +15,28 @@ import Foundation
 
     public init(tokenStr : String!, isProduction : Bool) {
         self.tokenStr = tokenStr
-        self.serverUrl = isProduction ? BSApiManager.BS_PRODUCTION_DOMAIN : BSApiManager.BS_SANDBOX_DOMAIN
+        let lastChar = "\(tokenStr.characters.last!)"
+        
+        if (lastChar == "_") {
+            self.serverUrl = BSApiManager.BS_SANDBOX_DOMAIN
+        } else if (lastChar == "1" || lastChar == "2") {
+            self.serverUrl = BSApiManager.BS_PRODUCTION_DOMAIN_PART1 + lastChar + BSApiManager.BS_PRODUCTION_DOMAIN_PART2
+        } else {
+            fatalError("Illegal token " + tokenStr)
+        }
     }
 
     public init(tokenStr : String!, serverUrl : String!) {
         self.tokenStr = tokenStr
-        self.serverUrl = serverUrl
+        let lastChar = "\(tokenStr.characters.last!)"
+        
+        if (lastChar == "_") {
+            self.serverUrl = BSApiManager.BS_SANDBOX_DOMAIN
+        } else if (lastChar == "1" || lastChar == "2") {
+            self.serverUrl = BSApiManager.BS_PRODUCTION_DOMAIN_PART1 + lastChar + BSApiManager.BS_PRODUCTION_DOMAIN_PART2
+        } else {
+            fatalError("Illegal token " + tokenStr)
+        }
     }
     
     public func getTokenStr() -> String! {
