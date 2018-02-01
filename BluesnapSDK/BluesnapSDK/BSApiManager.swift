@@ -76,7 +76,7 @@ import Foundation
      */
     static func createSandboxBSToken(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        BSApiCaller.createSandboxBSToken(shopperId: shopperId, user: BSApiManager.BS_SANDBOX_TEST_USER, password: BSApiManager.BS_SANDBOX_TEST_PASS, completion:  { bsToken, bsError in
+        createBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: { bsToken, bsError in
             
             BSApiManager.setBsToken(bsToken: bsToken)
             completion(bsToken, bsError)
@@ -365,7 +365,22 @@ import Foundation
 
     // MARK: Private/internal functions
 
- 
+    /**
+     Get BlueSnap Token from BlueSnap server
+     Normally you will not do this from the app.
+
+     - parameters:
+     - domain: look at BSApiManager BS_PRODUCTION_DOMAIN / BS_SANDBOX_DOMAIN
+     - user: username
+     - password: password
+     - completion: function to be called after result is fetched; will receive optional token and optional error
+     */
+    internal static func createBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+
+        BSApiCaller.createBSToken(shopperId: shopperId, domain: domain, user: user, password: password, completion: completion)
+    }
+
+
     /**
      Submit Apple pay data to BlueSnap server
      - parameters:
