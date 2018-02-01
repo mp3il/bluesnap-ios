@@ -13,10 +13,11 @@ import Foundation
     internal var tokenStr: String! = ""
     internal var serverUrl: String! = ""
 
-    public init(tokenStr : String!, isProduction : Bool) {
+    public init(tokenStr : String!) {
+
         self.tokenStr = tokenStr
         let lastChar = "\(tokenStr.characters.last!)"
-        
+
         if (lastChar == "_") {
             self.serverUrl = BSApiManager.BS_SANDBOX_DOMAIN
         } else if (lastChar == "1" || lastChar == "2") {
@@ -29,7 +30,7 @@ import Foundation
     public init(tokenStr : String!, serverUrl : String!) {
         self.tokenStr = tokenStr
         let lastChar = "\(tokenStr.characters.last!)"
-        
+
         if (lastChar == "_") {
             self.serverUrl = BSApiManager.BS_SANDBOX_DOMAIN
         } else if (lastChar == "1" || lastChar == "2") {
