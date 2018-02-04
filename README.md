@@ -108,11 +108,11 @@ To do this, initiate a server-to-server POST request with your API credentials a
  A successful response will contain the token in Location header. For more information, see [Creating a Hosted Payment Fields Token](http://developers.bluesnap.com/v4.0/docs/create-hosted-payment-fields-token). 
 
 ## Initializing the SDK
-Create a `BSToken` instance using your token and a boolean to indicate if you're working in production. For this example, we'll pass `false` to indicate sandbox. 
+Create a `BSToken` instance using your token string.
 
 ```swift
 fileprivate var bsToken : BSToken?
-bsToken = BSToken(tokenStr: "c3d011abe0ba877be0d903a2f0e4ca4ecc0376e042e07bdec2090610e92730b5_", isProduction: false)
+bsToken = BSToken(tokenStr: "c3d011abe0ba877be0d903a2f0e4ca4ecc0376e042e07bdec2090610e92730b5_")
 ```
 
 Initialize your token and any additional functionality (such as Apple Pay or fraud prevention) in the SDK by calling the [`initBluesnap`](#initbluesnap) function of the `BlueSnapSDK` class. See [initBluesnap](#initbluesnap) for a complete list of the function's parameters. 
@@ -365,18 +365,14 @@ This section will cover the following topics:
 In the BlueSnap iOS SDK project, the `Model` group contains the data structures used throughout.
  
 ### BSToken (in BSToken.swift)
-`BSToken` is the simplest one. It contains the token you received from BlueSnap and a boolean to indicate production or sandbox.
+`BSToken` is the simplest one. It contains the token you received from BlueSnap, so that the SDK can call BlueSnap API with it.
 
     public class BSToken {
         internal var tokenStr: String! = ""
         internal var serverUrl: String! = ""
-        public init(tokenStr : String!, isProduction : Bool) {
+        public init(tokenStr : String!) {
             self.tokenStr = tokenStr
             self.serverUrl = isProduction ? BSApiManager.BS_PRODUCTION_DOMAIN : BSApiManager.BS_SANDBOX_DOMAIN
-        }
-        public init(tokenStr : String!, serverUrl : String!) {
-            self.tokenStr = tokenStr
-            self.serverUrl = serverUrl
         }
         public func getTokenStr() -> String! {
             return self.tokenStr
