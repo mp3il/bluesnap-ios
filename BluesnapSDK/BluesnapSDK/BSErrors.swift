@@ -32,7 +32,7 @@ import Foundation
     case unAuthorised
     case unknown
     
-    func description() -> String {
+    public func description() -> String {
         switch self {
             
         case .invalidCcNumber:

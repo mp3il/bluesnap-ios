@@ -490,9 +490,13 @@ class ViewController: UIViewController {
             applePayMerchantIdentifier: self.applePayMerchantIdentifier,
             merchantStoreCurrency: self.storeCurrency,
             completion: { error in
-                DispatchQueue.main.async {
-                    self.coverAllView.isHidden = true
-                    self.hideCoverView = true
+                if let error = error {
+                    print("\(error.description())")
+                } else {
+                    DispatchQueue.main.async {
+                        self.coverAllView.isHidden = true
+                        self.hideCoverView = true
+                    }
                 }
         })
     }
