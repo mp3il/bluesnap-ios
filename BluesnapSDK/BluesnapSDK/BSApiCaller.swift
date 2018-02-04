@@ -148,9 +148,9 @@ import Foundation
         
         var result: BSToken?
         var resultError: BSErrors?
-        NSLog("BlueSnap; createBSToken")
+        NSLog("BlueSnap; createSandboxBSToken")
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            NSLog("BlueSnap; createBSToken completion")
+            NSLog("BlueSnap; createSandboxBSToken completion")
             if let error = error {
                 let errorType = type(of: error)
                 NSLog("error getting BSToken - \(errorType) for URL \(urlStr). Error: \(error.localizedDescription)")
@@ -161,7 +161,7 @@ import Foundation
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         result = extractTokenFromResponse(httpResponse: httpResponse)
                         if let result = result {
-                            NSLog("createBSToken result: \(result.tokenStr)")
+                            NSLog("createSandboxBSToken result: \(result.tokenStr)")
                         } else {
                             resultError = .unknown
                         }

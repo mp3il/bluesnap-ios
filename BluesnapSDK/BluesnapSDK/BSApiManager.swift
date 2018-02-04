@@ -76,7 +76,7 @@ import Foundation
      */
     static func createSandboxBSToken(shopperId: Int?, completion: @escaping (BSToken?, BSErrors?) -> Void) {
         
-        createBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: { bsToken, bsError in
+        createSandboxBSToken(shopperId: shopperId, domain: BS_SANDBOX_DOMAIN, user: BS_SANDBOX_TEST_USER, password: BS_SANDBOX_TEST_PASS, completion: { bsToken, bsError in
             
             BSApiManager.setBsToken(bsToken: bsToken)
             completion(bsToken, bsError)
@@ -375,9 +375,9 @@ import Foundation
      - password: password
      - completion: function to be called after result is fetched; will receive optional token and optional error
      */
-    internal static func createBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
+    internal static func createSandboxBSToken(shopperId: Int?, domain: String, user: String, password: String, completion: @escaping (BSToken?, BSErrors?) -> Void) {
 
-        BSApiCaller.createBSToken(shopperId: shopperId, domain: domain, user: user, password: password, completion: completion)
+        BSApiCaller.createSandboxBSToken(shopperId: shopperId, user: user, password: password, completion: completion)
     }
 
 
