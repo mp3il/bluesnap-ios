@@ -158,7 +158,7 @@ public class BSCcInputLine: BSBaseTextInput {
     /**
      When using this control, you need to implement the BSCcInputLineDelegate protocol, and set the control's delegate to be that class
     */
-    var delegate : BSCcInputLineDelegate?
+    public var delegate : BSCcInputLineDelegate?
     
     var cardType : String = "" {
         didSet {
