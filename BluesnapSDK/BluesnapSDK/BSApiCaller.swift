@@ -18,7 +18,7 @@ import Foundation
     internal static let BLUESNAP_VERSION_HEADER = "BLUESNAP_VERSION_HEADER"
     internal static let BLUESNAP_VERSION_HEADER_VAL = "2.0"
     internal static let SDK_VERSION_HEADER = "BLUESNAP_ORIGIN_HEADER"
-    internal static let SDK_VERSION_HEADER_VAL = "IOS SDK 0.1.1"
+    internal static let SDK_VERSION_HEADER_VAL = "IOS SDK 0.2.0"
 
     private static func createRequest(_ urlStr: String, bsToken: BSToken!) -> NSMutableURLRequest {
 
