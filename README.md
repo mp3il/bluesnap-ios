@@ -373,8 +373,7 @@ In the BlueSnap iOS SDK project, the `Model` group contains the data structures 
         internal var tokenStr: String! = ""
         internal var serverUrl: String! = ""
         public init(tokenStr : String!) {
-            self.tokenStr = tokenStr
-            self.serverUrl = isProduction ? BSApiManager.BS_PRODUCTION_DOMAIN : BSApiManager.BS_SANDBOX_DOMAIN
+            ...
         }
         public func getTokenStr() -> String! {
             return self.tokenStr
