@@ -93,18 +93,23 @@ extension BSApplePayInfo: DictionaryConvertible
                 "postalCode": billingContact?.postalAddress?.postalCode ?? "",
         ] as [String: Any]!
 
+        
+        let paymentMethod = [
+        "displayName": token.paymentMethod.displayName ?? "",
+        "network": token.paymentMethod,
+        "type": "debit",
+        ] as [String: Any]!
+        
+        let pktoken = [
+            "transactionIdentifier": token.transactionIdentifier,
+            "paymentData": desrilaziedToken,
+            "paymentMethod": paymentMethod,
+        ] as [String: Any]!
+        
         let ordered = [
                 "billingContact": billingContactDict!,
                 "shippingContact": shippingContactDict!,
-                "token": [
-                        "transactionIdentifier": token.transactionIdentifier,
-                        "paymentData": desrilaziedToken,
-                        "paymentMethod": [
-                                "displayName": token.paymentMethod.displayName ?? "",
-                                "network": token.paymentMethod.network?._rawValue ?? "",
-                                "type": "debit",
-                        ],
-                ]
+                "token": pktoken ,
         ] as [String: Any]
         return ordered
     }
