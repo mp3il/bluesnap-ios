@@ -8,6 +8,7 @@ import PassKit
 
 /**
  Apple Pay details for the purchase
+ This class fetch information from Passkit PKPayment and adapt it to Bluesnap API call
  */
 @objc public class BSApplePaySdkResult: BSBaseSdkResult {
     
@@ -16,7 +17,9 @@ import PassKit
     }
 }
 
-extension BSApplePayPaymentNetworkType: CustomStringConvertible {
+
+// This extention is required only to extract enum string values of the OBJC Passkit type
+extension PKPaymentMethodType: CustomStringConvertible {
     public var description: String {
         switch self {
         case .unknown:
@@ -27,6 +30,9 @@ extension BSApplePayPaymentNetworkType: CustomStringConvertible {
             return "prepaid"
         case .store:
             return "store"
+        default:
+            return "unknown"
+        
         }
     }
 }
@@ -49,46 +55,32 @@ public class BSApplePayInfo
     public init(payment:PKPayment)
     {
         self.payment = payment;
-        //self.paymentdataString = String(data:payment.token.paymentData, encoding: .utf8);
         self.token = payment.token
         self.tokenPaymentNetwork = payment.token.paymentMethod.network?.rawValue;
         self.transactionId = payment.token.transactionIdentifier;
         self.tokenInstrumentName = payment.token.paymentMethod.displayName;
         self.billingContact = payment.billingContact;
         self.shippingContact = payment.shippingContact;
-        
-        
-        try {
-         //   self.tokenPaymentNetworkType = payment.token.paymentMethod.type.rawValue;
-            
-            let networkType : BSApplePayNetworkType =payment.token.paymentMethod.type
-        }
+        self.tokenPaymentNetworkType = payment.token.paymentMethod.type.description
     }
 }
 
 extension BSApplePayInfo: DictionaryConvertible
 {
-//    public func toDictionary() -> [String : Any] {
-//        var map = [String:Any]();
-//        map.setValueIfExists(value: self.token, for: "token");
-//        map.setValueIfExists(value: self.tokenInstrumentName, for: "token_instrument_name");
-//        map.setValueIfExists(value: self.tokenPaymentNetwork, for: "token_payment_network");
-//        map.setValueIfExists(value: self.transactionId, for: "transactionIdentifier");
-//        map.setValueIfExists(value: self.billingContact?.toDictionary(), for: "billingContact");
-//        map.setValueIfExists(value: self.shippingContact?.toDictionary(), for: "shippingContact");
-//        return map;
-//    }
 
     public func toDictionary() throws -> [String: Any] {
 
         let desrilaziedToken = try JSONSerialization.jsonObject(with: payment.token.paymentData, options: JSONSerialization.ReadingOptions())
 
         let shippingContactDict = [
+                "familyName": shippingContact?.name?.familyName ?? "",
+                "givenName": shippingContact?.name?.givenName ?? "",
+                /**
+                These are unused by the API and should not be sent, otherwise API call might fail.
+                */
                 //"addressLines": shippingContact?.postalAddress?.description,
                 //"country": shippingContact?.postalAddress?.country,
                 //"countryCode": shippingContact?.postalAddress?.isoCountryCode,
-                "familyName": shippingContact?.name?.familyName ?? "",
-                "givenName": shippingContact?.name?.givenName ?? "",
                 //"locality": shippingContact?.postalAddress?.street,
                 //"emailAddress": shippingContact?.emailAddress,
                 //"phoneNumber": shippingContact?.phoneNumber?.stringValue,
@@ -106,8 +98,6 @@ extension BSApplePayInfo: DictionaryConvertible
             locality = billingContact?.postalAddress?.subLocality
         }
         let billingContactDict = [
-                //"emailAddress": billingContact?.emailAddress,
-                //"phoneNumber": billingContact?.phoneNumber?.stringValue,
                 "addressLines": billingAddresLines,
                 "country": billingContact?.postalAddress?.country ?? "",
                 "countryCode": billingContact?.postalAddress?.isoCountryCode ?? "",
@@ -121,7 +111,7 @@ extension BSApplePayInfo: DictionaryConvertible
         let paymentMethod = [
         "displayName": token.paymentMethod.displayName ?? "",
         "network": tokenPaymentNetwork ?? "",
-        "type": "debit",
+        "type": tokenPaymentNetworkType,
         ] as [String: String]!
         
         let pktoken = [
