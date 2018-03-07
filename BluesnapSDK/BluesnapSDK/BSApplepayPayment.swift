@@ -16,10 +16,27 @@ import PassKit
     }
 }
 
+extension BSApplePayPaymentNetworkType: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .unknown:
+            return "unknown"
+        case .debit:
+            return "debit"
+        case .prepaid:
+            return "prepaid"
+        case .store:
+            return "store"
+        }
+    }
+}
+
+
 
 public class BSApplePayInfo
 {
     public var tokenPaymentNetwork: String!
+    public var tokenPaymentNetworkType: String!
     public var token: PKPaymentToken!
     public var tokenInstrumentName:String!
     public var transactionId: String!
@@ -39,6 +56,13 @@ public class BSApplePayInfo
         self.tokenInstrumentName = payment.token.paymentMethod.displayName;
         self.billingContact = payment.billingContact;
         self.shippingContact = payment.shippingContact;
+        
+        
+        try {
+         //   self.tokenPaymentNetworkType = payment.token.paymentMethod.type.rawValue;
+            
+            let networkType : BSApplePayNetworkType =payment.token.paymentMethod.type
+        }
     }
 }
 
@@ -96,9 +120,9 @@ extension BSApplePayInfo: DictionaryConvertible
         
         let paymentMethod = [
         "displayName": token.paymentMethod.displayName ?? "",
-        "network": token.paymentMethod,
+        "network": tokenPaymentNetwork ?? "",
         "type": "debit",
-        ] as [String: Any]!
+        ] as [String: String]!
         
         let pktoken = [
             "transactionIdentifier": token.transactionIdentifier,
