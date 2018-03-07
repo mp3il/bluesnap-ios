@@ -25,15 +25,15 @@ open class BSApplepayOperation: Operation {
 
     }
 
-    class func keyPathsForValuesAffectingIsExecuting() -> Set<NSObject> {
+    @objc class func keyPathsForValuesAffectingIsExecuting() -> Set<NSObject> {
         return ["state" as NSObject]
     }
 
-    class func keyPathsForValuesAffectingIsFinished() -> Set<NSObject> {
+    @objc class func keyPathsForValuesAffectingIsFinished() -> Set<NSObject> {
         return ["state" as NSObject]
     }
 
-    class func keyPathsForValuesAffectingIsCancelled() -> Set<NSObject> {
+    @objc class func keyPathsForValuesAffectingIsCancelled() -> Set<NSObject> {
         return ["state" as NSObject]
     }
 

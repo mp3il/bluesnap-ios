@@ -10,7 +10,7 @@ import PassKit
  Apple Pay details for the purchase
  This class fetch information from Passkit PKPayment and adapt it to Bluesnap API call
  */
-@objc public class BSApplePaySdkResult: BSBaseSdkResult {
+public class BSApplePaySdkResult: BSBaseSdkResult {
     
     public override init(sdkRequest: BSSdkRequest) {
         super.init(sdkRequest: sdkRequest)
@@ -85,7 +85,7 @@ extension BSApplePayInfo: DictionaryConvertible
                 //"emailAddress": shippingContact?.emailAddress,
                 //"phoneNumber": shippingContact?.phoneNumber?.stringValue,
                 //"postalCode": shippingContact?.postalAddress?.postalCode,
-        ] as [String: Any]!
+            ] as [String: Any]?
 
         var billingAddresLines = [String]()
         billingAddresLines.append("")
@@ -105,25 +105,25 @@ extension BSApplePayInfo: DictionaryConvertible
                 "givenName": billingContact?.name?.givenName ?? "",
                 "locality": locality ?? "",
                 "postalCode": billingContact?.postalAddress?.postalCode ?? "",
-        ] as [String: Any]!
+                ] as [String: Any]?
 
         
         let paymentMethod = [
         "displayName": token.paymentMethod.displayName ?? "",
         "network": tokenPaymentNetwork ?? "",
         "type": tokenPaymentNetworkType,
-        ] as [String: String]!
+        ] as [String: String]?
         
         let pktoken = [
             "transactionIdentifier": token.transactionIdentifier,
             "paymentData": desrilaziedToken,
-            "paymentMethod": paymentMethod,
-        ] as [String: Any]!
+            "paymentMethod": paymentMethod ?? "",
+            ] as [String: Any]?
         
         let ordered = [
                 "billingContact": billingContactDict!,
                 "shippingContact": shippingContactDict!,
-                "token": pktoken ,
+                "token": pktoken! ,
         ] as [String: Any]
         return ordered
     }
