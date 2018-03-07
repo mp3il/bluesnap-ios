@@ -717,17 +717,17 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         sendActions(for: UIControlEvents.editingDidEnd)
     }
     
-    func textFieldEditingChanged(_ textField: UITextField) {
+    @objc func textFieldEditingChanged(_ textField: UITextField) {
         
         sendActions(for: UIControlEvents.editingChanged)
     }
     
-    func imageTouchUpInside(_ sender: Any) {
+    @objc func imageTouchUpInside(_ sender: Any) {
         
         sendActions(for: UIControlEvents.touchUpInside)
     }
     
-    func fieldCoverButtonTouchUpInside(_ sender: Any) {
+    @objc func fieldCoverButtonTouchUpInside(_ sender: Any) {
         
         sendActions(for: UIControlEvents.touchUpInside)
     }

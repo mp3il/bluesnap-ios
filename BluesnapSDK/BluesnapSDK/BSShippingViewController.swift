@@ -91,7 +91,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.scrollView.setContentOffset(point, animated: false)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         var moveUp = false
         if let fieldBottom = fieldBottom {
@@ -112,7 +112,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         
         if self.movedUp {
             scrollForKeyboard(direction: 0)
@@ -124,7 +124,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         
         self.nameInputLine.dismissKeyboard()
         self.zipInputLine.dismissKeyboard()

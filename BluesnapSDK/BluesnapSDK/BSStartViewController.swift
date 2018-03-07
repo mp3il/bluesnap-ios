@@ -207,7 +207,7 @@ class BSStartViewController: UIViewController {
         }
     }
     
-    func existingCCTouchUpInside(_ sender: Any) {
+    @objc func existingCCTouchUpInside(_ sender: Any) {
         
         if let existingCcUIView = sender as? BSExistingCcUIView, let existingCreditCards = BSApiManager.shopper?.existingCreditCards {
             let ccIdx = existingCcUIView.tag

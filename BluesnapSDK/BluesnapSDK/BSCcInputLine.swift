@@ -745,12 +745,12 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
 
-    func expFieldDidBeginEditing(_ sender: UITextField) {
+    @objc func expFieldDidBeginEditing(_ sender: UITextField) {
         
         //hideError(expTextField)
     }
     
-    func expFieldEditingChanged(_ sender: UITextField) {
+    @objc func expFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.expEditingChanged(sender)
         if checkMaxLength(textField: sender, maxLength: 5) == true {
@@ -762,12 +762,12 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
 
-    func cvvFieldDidBeginEditing(_ sender: UITextField) {
+    @objc func cvvFieldDidBeginEditing(_ sender: UITextField) {
         
         //hideError(cvvTextField)
     }
     
-    func cvvFieldEditingChanged(_ sender: UITextField) {
+    @objc func cvvFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.cvvEditingChanged(sender)
         let cvvLength = BSValidator.getCvvLength(cardType: self.cardType)
@@ -780,7 +780,7 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
     
-    func nextArrowClick() {
+    @objc func nextArrowClick() {
         
         if textField.canResignFirstResponder {
             focusOnExpField()

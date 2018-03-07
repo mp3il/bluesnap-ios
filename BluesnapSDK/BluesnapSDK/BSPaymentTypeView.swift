@@ -89,7 +89,7 @@ class BSPaymentTypeView: BSBaseBoxWithShadowView {
     /**
      Propagate the touch up inside action to the one defined on the view
      */
-    func touchUpInside(_ sender: Any) {
+    @objc func touchUpInside(_ sender: Any) {
         
         sendActions(for: UIControlEvents.touchUpInside)
     }

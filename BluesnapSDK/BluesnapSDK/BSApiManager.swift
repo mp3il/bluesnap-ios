@@ -109,7 +109,7 @@ import Foundation
             if resultError == .unAuthorised {
                 
                 // regenerate Token and try again
-                regenerateToken(executeAfter: { _ in
+                regenerateToken(executeAfter: { 
                     BSApiCaller.getSdkData(bsToken: getBsToken(), baseCurrency: baseCurrency, completion: { sdkData2, resultError2 in
                         
                         if resultError2 == nil {
@@ -274,7 +274,7 @@ import Foundation
                 BSApiCaller.isTokenExpired(bsToken: bsToken, completion: { isExpired in
                     if isExpired {
                         // regenerate Token and try again
-                        regenerateToken(executeAfter: { _ in
+                        regenerateToken(executeAfter: { 
                             NSLog("BlueSnap; getSupportedPaymentMethods retry")
                             BSApiCaller.getSupportedPaymentMethods(bsToken: getBsToken(), completion: { resultSupportedPaymentMethods2, resultError2 in
                                 
@@ -342,7 +342,7 @@ import Foundation
                         NSLog("BlueSnap; createPayPalToken retry completion")
                         if isExpired {
                             // regenerate Token and try again
-                            regenerateToken(executeAfter: { _ in
+                            regenerateToken(executeAfter: { 
                                 BSApiCaller.createPayPalToken(bsToken: getBsToken(), purchaseDetails: purchaseDetails, withShipping: withShipping, completion: { resultToken2, resultError2 in
                                     
                                     payPalToken = resultToken2
@@ -423,7 +423,7 @@ import Foundation
             if error == BSErrors.expiredToken || error == BSErrors.tokenNotFound {
                 // regenerate Token and try again
                 NSLog("BlueSnap; submitCcDetails retry")
-                regenerateToken(executeAfter: { _ in
+                regenerateToken(executeAfter: { 
                     BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: { resultData2, error2 in
                         
                         NSLog("BlueSnap; submitCcDetails retry completion")

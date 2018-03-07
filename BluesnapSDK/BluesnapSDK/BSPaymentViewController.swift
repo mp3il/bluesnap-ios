@@ -109,7 +109,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.scrollView.setContentOffset(point, animated: false)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         var moveUp = false
         if let fieldBottom = fieldBottom {
@@ -130,7 +130,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         
         if self.movedUp {
             scrollForKeyboard(direction: 0)
@@ -142,7 +142,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         
         self.ccInputLine.dismissKeyboard()
         self.nameInputLine.dismissKeyboard()

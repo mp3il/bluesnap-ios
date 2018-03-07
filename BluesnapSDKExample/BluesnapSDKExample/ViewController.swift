@@ -81,7 +81,7 @@ class ViewController: UIViewController {
         self.view.addGestureRecognizer(tap)
     }
 
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         if valueTextField.isFirstResponder {
             valueTextField.resignFirstResponder()
         } else if taxTextField.isFirstResponder {

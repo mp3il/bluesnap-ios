@@ -117,7 +117,7 @@ class BSExistingCCViewController: UIViewController {
     @IBAction func editShipping(_ sender: Any) {
         BSViewsManager.showShippingScreen(
             purchaseDetails: purchaseDetails,
-            submitPaymentFields: {_ in },
+            submitPaymentFields: { },
             validateOnEntry: false,
             inNavigationController: self.navigationController!,
             animated: true)
