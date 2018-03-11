@@ -34,7 +34,7 @@ import Foundation
  - ccType: Credit Card Type
  - expDate: CC expiration date in format MM/YYYY  (in case of new/existing CC)
  */
-@objc public class BSTokenizedBaseCCDetails : BSTokenizePaymentDetails {
+@objc public class BSTokenizeBaseCCDetails : BSTokenizePaymentDetails {
     
     public static let LAST_4_DIGITS_KEY = "last4Digits"
     public static let CARD_TYPE_KEY = "ccType"
@@ -53,7 +53,8 @@ import Foundation
  - ccNumber: Full credit card number
  - cvv: credit card security code
  */
-@objc public class BSTokenizedNewCCDetails : BSTokenizedBaseCCDetails {
+@objc public class BSTokenizeNewCCDetails
+: BSTokenizeBaseCCDetails {
     var ccNumber: String!
     var cvv: String!
     public init(ccNumber: String!, cvv: String!, ccType: String!, expDate: String!) {
@@ -67,7 +68,7 @@ import Foundation
  Existing Credit Card payment details to be submitted to BLS server
  - lastFourDigits: last for digits of existing credit card number
  */
-@objc public class BSTokenizedExistingCCDetails : BSTokenizedBaseCCDetails {
+@objc public class BSTokenizeExistingCCDetails : BSTokenizeBaseCCDetails {
     var lastFourDigits: String!
     public init(lastFourDigits: String!, ccType: String!, expDate: String!) {
         super.init(ccType: ccType, expDate: expDate)
@@ -79,7 +80,7 @@ import Foundation
  ApplePay payment details to be submitted to BLS server
  - applePayToken: ApplePay token
  */
-@objc public class BSTokenizedApplePayDetails : BSTokenizePaymentDetails {
+@objc public class BSTokenizeApplePayDetails : BSTokenizePaymentDetails {
     var applePayToken: String!
     public init(applePayToken: String!) {
         self.applePayToken = applePayToken

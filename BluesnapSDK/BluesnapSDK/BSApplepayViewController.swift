@@ -78,9 +78,9 @@ extension BSStartViewController : PaymentOperationDelegate {
         if let jsonData = try? String(data: paymentInformation.toJSON(), encoding: .utf8)!.data(using: String.Encoding.utf8)!.base64EncodedString() {
 
             //print(String(data: paymentInformation.toJSON(), encoding: .utf8)!)
-            let tokenizedRequest = BSTokenizeRequest()
-            tokenizedRequest.paymentDetails = BSTokenizedApplePayDetails(applePayToken: jsonData)
-            BSApiManager.submitTokenizedDetails(tokenizedRequest: tokenizedRequest, completion: { (result, error) in
+            let tokenizeRequest = BSTokenizeRequest()
+            tokenizeRequest.paymentDetails = BSTokenizeApplePayDetails(applePayToken: jsonData)
+            BSApiManager.submitTokenizedDetails(tokenizeRequest: tokenizeRequest, completion: { (result, error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         completion(error)

@@ -108,8 +108,8 @@ import PassKit
     /**
     Submit data to BLS server under the current token, to be used later for server-to-server actions
     */
-    open class func submitTokenizedDetails(tokenizedRequest: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void) {
-        BSApiManager.submitTokenizedDetails(tokenizedRequest: tokenizedRequest, completion: completion)
+    open class func submitTokenizedDetails(tokenizeRequest: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void) {
+        BSApiManager.submitTokenizedDetails(tokenizeRequest: tokenizeRequest, completion: completion)
     }
     
 //    /**

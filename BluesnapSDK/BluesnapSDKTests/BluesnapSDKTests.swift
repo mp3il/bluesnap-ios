@@ -31,18 +31,18 @@ class BluesnapSDKTests: XCTestCase {
         let ccn = "4111 1111 1111 1111"
         let cvv = "111"
         let exp = "10/2020"
-        let tokenizedRequest = BSTokenizeRequest()
-        tokenizedRequest.paymentDetails = BSTokenizedNewCCDetails(ccNumber: ccn, cvv: cvv, ccType: nil, expDate: exp)
+        let tokenizeRequest = BSTokenizeRequest()
+        tokenizeRequest.paymentDetails = BSTokenizeNewCCDetails(ccNumber: ccn, cvv: cvv, ccType: nil, expDate: exp)
 
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
             
-            BlueSnapSDK.submitTokenizedDetails(tokenizedRequest: tokenizedRequest, completion: { (result, error) in
+            BlueSnapSDK.submitTokenizedDetails(tokenizeRequest: tokenizeRequest, completion: { (result, error) in
                 
                 XCTAssert(error == nil, "error: \(error)")
-                let ccType = result[BSTokenizedBaseCCDetails.CARD_TYPE_KEY]
-                let last4 = result[BSTokenizedBaseCCDetails.LAST_4_DIGITS_KEY]
-                let country = result[BSTokenizedBaseCCDetails.ISSUING_COUNTRY_KEY]
+                let ccType = result[BSTokenizeBaseCCDetails.CARD_TYPE_KEY]
+                let last4 = result[BSTokenizeBaseCCDetails.LAST_4_DIGITS_KEY]
+                let country = result[BSTokenizeBaseCCDetails.ISSUING_COUNTRY_KEY]
                 NSLog("Result: ccType=\(ccType!), last4Digits=\(last4!), ccIssuingCountry=\(country!)")
                 semaphore.signal()
             })
@@ -102,12 +102,12 @@ class BluesnapSDKTests: XCTestCase {
     private func submitCCDetailsExpectError(ccn: String!, cvv: String!, exp: String!, expectedError: BSErrors) {
         
         let semaphore = DispatchSemaphore(value: 0)
-        let tokenizedRequest = BSTokenizeRequest()
-        tokenizedRequest.paymentDetails = BSTokenizedNewCCDetails(ccNumber: ccn, cvv: cvv, ccType: nil, expDate: exp)
+        let tokenizeRequest = BSTokenizeRequest()
+        tokenizeRequest.paymentDetails = BSTokenizeNewCCDetails(ccNumber: ccn, cvv: cvv, ccType: nil, expDate: exp)
         
         createToken(completion: { token, error in
             
-            BlueSnapSDK.submitTokenizedDetails(tokenizedRequest: tokenizedRequest, completion: {
+            BlueSnapSDK.submitTokenizedDetails(tokenizeRequest: tokenizeRequest, completion: {
                 (result, error) in
                 
                 if let error = error {
