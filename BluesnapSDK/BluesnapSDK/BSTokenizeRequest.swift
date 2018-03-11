@@ -12,12 +12,13 @@ import Foundation
  Class holds data to be submitted to BLS server under the current token, to be used later for server-to-server actions
  - Specific payment type details are in sub-classes
  - (optional) Price details
- - (optional) Shopper details
- - (optional) function for updating tax amount based on shipping country/state. Only called when 'withShipping
+ - (optional) Shopper billing details
+ - (optional) Shopper shipping details
+ - (optional) fraud Session Id
  */
 @objc public class BSTokenizeRequest : NSObject {
     public var fraudSessionId: String?
-    public var paymentDetails: BSTokenizeRequestPaymentDetails?
+    public var paymentDetails: BSTokenizePaymentDetails?
     public var priceDetails: BSPriceDetails?
     public var billingDetails: BSBillingAddressDetails?
     public var shippingDetails: BSShippingAddressDetails?
@@ -26,14 +27,19 @@ import Foundation
 /**
  Base class for payment details to be submitted to BLS server
  */
-@objc public class BSTokenizeRequestPaymentDetails : NSObject { }
+@objc public class BSTokenizePaymentDetails : NSObject { }
 
 /**
  Base Credit Card payment details to be submitted to BLS server
  - ccType: Credit Card Type
  - expDate: CC expiration date in format MM/YYYY  (in case of new/existing CC)
  */
-@objc public class BSTokenizeRequestBaseCCDetails : BSTokenizeRequestPaymentDetails {
+@objc public class BSTokenizedBaseCCDetails : BSTokenizePaymentDetails {
+    
+    public static let LAST_4_DIGITS_KEY = "last4Digits"
+    public static let CARD_TYPE_KEY = "ccType"
+    public static let ISSUING_COUNTRY_KEY = "issuingCountry"
+    
     var ccType: String!
     var expDate: String!
     public init(ccType: String!, expDate: String!) {
@@ -47,7 +53,7 @@ import Foundation
  - ccNumber: Full credit card number
  - cvv: credit card security code
  */
-@objc public class BSTokenizeRequestNewCCDetails : BSTokenizeRequestBaseCCDetails {
+@objc public class BSTokenizedNewCCDetails : BSTokenizedBaseCCDetails {
     var ccNumber: String!
     var cvv: String!
     public init(ccNumber: String!, cvv: String!, ccType: String!, expDate: String!) {
@@ -61,7 +67,7 @@ import Foundation
  Existing Credit Card payment details to be submitted to BLS server
  - lastFourDigits: last for digits of existing credit card number
  */
-@objc public class BSTokenizeRequestExistingCCDetails : BSTokenizeRequestBaseCCDetails {
+@objc public class BSTokenizedExistingCCDetails : BSTokenizedBaseCCDetails {
     var lastFourDigits: String!
     public init(lastFourDigits: String!, ccType: String!, expDate: String!) {
         super.init(ccType: ccType, expDate: expDate)
@@ -73,7 +79,7 @@ import Foundation
  ApplePay payment details to be submitted to BLS server
  - applePayToken: ApplePay token
  */
-@objc public class BSTokenizeRequestApplePayDetails : BSTokenizeRequestPaymentDetails {
+@objc public class BSTokenizedApplePayDetails : BSTokenizePaymentDetails {
     var applePayToken: String!
     public init(applePayToken: String!) {
         self.applePayToken = applePayToken

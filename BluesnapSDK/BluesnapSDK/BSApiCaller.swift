@@ -349,9 +349,9 @@ import Foundation
                 do {
                     // Parse the result JSOn object
                     if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                        resultData["ccType"] = json["ccType"] as? String
-                        resultData["last4Digits"] = json["last4Digits"] as? String
-                        resultData["ccIssuingCountry"] = (json["issuingCountry"] as? String ?? "").uppercased()
+                        resultData[BSTokenizedBaseCCDetails.CARD_TYPE_KEY] = json[BSTokenizedBaseCCDetails.CARD_TYPE_KEY] as? String
+                        resultData[BSTokenizedBaseCCDetails.LAST_4_DIGITS_KEY] = json[BSTokenizedBaseCCDetails.LAST_4_DIGITS_KEY] as? String
+                        resultData[BSTokenizedBaseCCDetails.ISSUING_COUNTRY_KEY] = (json[BSTokenizedBaseCCDetails.ISSUING_COUNTRY_KEY] as? String ?? "").uppercased()
                     } else {
                         NSLog("Error parsing BS result on CC details submit")
                         resultError = .unknown
