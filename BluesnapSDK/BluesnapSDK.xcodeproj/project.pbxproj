@@ -42,6 +42,7 @@
 		FD5022961F691D9300C820AC /* BSApiCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5022951F691D9300C820AC /* BSApiCaller.swift */; };
 		FD52D50E1EBF3F6500360863 /* BSStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */; };
 		FD53ABB01EBDFCEB0055C34D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */; };
+		FD54FE022051530D005D952F /* BSTokenizeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD54FE012051530D005D952F /* BSTokenizeRequest.swift */; };
 		FD6479F11FB9C5A900403E7D /* BSSdkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6479F01FB9C5A900403E7D /* BSSdkConfiguration.swift */; };
 		FD6479F31FBC37D900403E7D /* BSCurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6479F21FBC37D900403E7D /* BSCurrencyTests.swift */; };
 		FD6814531F30590600FAE1ED /* BSPaypalHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6814521F30590600FAE1ED /* BSPaypalHandler.swift */; };
@@ -114,6 +115,7 @@
 		FD5022951F691D9300C820AC /* BSApiCaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSApiCaller.swift; sourceTree = "<group>"; };
 		FD52D50D1EBF3F6500360863 /* BSStateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSStateTableViewCell.swift; sourceTree = "<group>"; };
 		FD53ABAF1EBDFCEB0055C34D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		FD54FE012051530D005D952F /* BSTokenizeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSTokenizeRequest.swift; sourceTree = "<group>"; };
 		FD6479F01FB9C5A900403E7D /* BSSdkConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSSdkConfiguration.swift; sourceTree = "<group>"; };
 		FD6479F21FBC37D900403E7D /* BSCurrencyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSCurrencyTests.swift; sourceTree = "<group>"; };
 		FD6814521F30590600FAE1ED /* BSPaypalHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSPaypalHandler.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				DEBD647E04FF2D871818D06F /* BSPKContactExtention.swift */,
 				2D374F3E1E880EF100AE2A81 /* BSCurrencyModel.swift */,
 				FD6479F01FB9C5A900403E7D /* BSSdkConfiguration.swift */,
+				FD54FE012051530D005D952F /* BSTokenizeRequest.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				FD4750BB1EF8EECE00E5DFBC /* BSImageLibrary.swift in Sources */,
 				FD1F7B8D1ECC68A300C22DEB /* BSInputLine.swift in Sources */,
 				FD4D4D421EB1BBED00D40B2A /* BSStatesViewController.swift in Sources */,
+				FD54FE022051530D005D952F /* BSTokenizeRequest.swift in Sources */,
 				FDAB3AC21ECDAE9600AC8A71 /* BSShippingViewController.swift in Sources */,
 				FD5022961F691D9300C820AC /* BSApiCaller.swift in Sources */,
 				FD0888371FAB56A6001EED4C /* BSPaymentTypeView.swift in Sources */,

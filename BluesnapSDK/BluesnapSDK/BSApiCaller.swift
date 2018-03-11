@@ -324,6 +324,22 @@ import Foundation
         return (resultData, resultError)
     }
     
+    static func parseGenericResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
+        
+        var resultData: [String:String] = [:]
+        var resultError: BSErrors?
+        
+        if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+            
+        } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+            resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
+        } else {
+            NSLog("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
+            resultError = .unknown
+        }
+        return (resultData, resultError)
+    }
+
     static func parseResultCCDetailsFromResponse(data: Data?) -> ([String:String], BSErrors?) {
         
         var resultData: [String:String] = [:]

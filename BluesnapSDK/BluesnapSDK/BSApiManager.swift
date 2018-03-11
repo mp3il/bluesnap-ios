@@ -380,27 +380,137 @@ import Foundation
         BSApiCaller.createSandboxBSToken(shopperId: shopperId, user: user, password: password, completion: completion)
     }
 
-
     /**
-     Submit Apple pay data to BlueSnap server
-     - parameters:
-     - data: The apple pay encoded data
-     - completion: callback with either result details if OK, or error details if not OK
-    */
-    static internal func submitApplepayData(data: String!, completion: @escaping ([String:String], BSErrors?) -> Void) {
-
-        let requestBody = [
-                "applePayToken": data!
-        ]
-        BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseApplePayResponse, completion: { resultData, error in
+     Submit data to be submitted to BLS server under the current token, to be used later for server-to-server actions
+     */
+    open class func submitTokenizedDetails(details: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void) {
+        
+        var requestBody : [String:String] = [:]
+        var parseFunction: (Int, Data?) -> ([String:String],BSErrors?) = BSApiCaller.parseGenericResponse
+        
+        if let applePayDetails = details.paymentDetails as? BSTokenizeRequestApplePayDetails {
+            requestBody["applePayToken"] = applePayDetails.applePayToken
+            parseFunction = BSApiCaller.parseApplePayResponse
+            
+        } else if let ccDetails = details.paymentDetails as? BSTokenizeRequestBaseCCDetails {
+            parseFunction = BSApiCaller.parseCCResponse
+            if let cardType = ccDetails.ccType {
+                requestBody["ccType"] = cardType
+            }
+            if let expDate = ccDetails.expDate {
+                requestBody["expDate"] = expDate
+            }
+            if let newCcDetails = ccDetails as? BSTokenizeRequestNewCCDetails {
+                if let ccNumber = newCcDetails.ccNumber {
+                    requestBody["ccNumber"] = BSStringUtils.removeWhitespaces(ccNumber)
+                }
+                if let cvv = newCcDetails.cvv {
+                    requestBody["cvv"] = cvv
+                }
+            } else if let exitingCcDetails = ccDetails as? BSTokenizeRequestExistingCCDetails {
+                if let last4Digits = exitingCcDetails.lastFourDigits {
+                    requestBody["lastFourDigits"] = last4Digits
+                }
+            }
+        }
+        if let fraudSessionId = details.fraudSessionId {
+            requestBody["fraudSessionId"] = fraudSessionId
+        }
+        
+        if let billingDetails = details.billingDetails {
+            if let splitName = billingDetails.getSplitName() {
+                requestBody["billingFirstName"] = splitName.firstName
+                requestBody["billingLastName"] = splitName.lastName
+            }
+            if let country = billingDetails.country {
+                requestBody["billingCountry"] = country
+            }
+            if let state = billingDetails.state {
+                requestBody["billingState"] = state
+            }
+            if let city = billingDetails.city {
+                requestBody["billingCity"] = city
+            }
+            if let address = billingDetails.address {
+                requestBody["billingAddress"] = address
+            }
+            if let zip = billingDetails.zip {
+                requestBody["billingZip"] = zip
+            }
+            if let email = billingDetails.email {
+                requestBody["email"] = email
+            }
+        }
+        
+        if let shippingDetails = details.shippingDetails {
+            if let splitName = shippingDetails.getSplitName() {
+                requestBody["shippingFirstName"] = splitName.firstName
+                requestBody["shippingLastName"] = splitName.lastName
+            }
+            if let country = shippingDetails.country {
+                requestBody["shippingCountry"] = country
+            }
+            if let state = shippingDetails.state {
+                requestBody["shippingState"] = state
+            }
+            if let city = shippingDetails.city {
+                requestBody["shippingCity"] = city
+            }
+            if let address = shippingDetails.address {
+                requestBody["shippingAddress"] = address
+            }
+            if let zip = shippingDetails.zip {
+                requestBody["shippingZip"] = zip
+            }
+            if let phone = shippingDetails.phone {
+                requestBody["phone"] = phone
+            }
+        }
+        
+        let checkErrorAndComplete : ([String:String], BSErrors?) -> Void = { resultData, error in
             if let error = error {
                 completion(resultData, error)
                 debugPrint(error.description())
                 return
             }
             completion(resultData, nil)
+        }
+        
+        BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: parseFunction, completion: { resultData, error in
+            NSLog("BlueSnap; submitCcDetails completion")
+            if error == BSErrors.expiredToken || error == BSErrors.tokenNotFound {
+                // regenerate Token and try again
+                NSLog("BlueSnap; submitCcDetails retry")
+                regenerateToken(executeAfter: { _ in
+                    BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: checkErrorAndComplete)
+                })
+            } else {
+                checkErrorAndComplete(resultData, error)
+            }
         })
     }
+
+    
+    /**
+     Submit Apple pay data to BlueSnap server
+     - parameters:
+     - data: The apple pay encoded data
+     - completion: callback with either result details if OK, or error details if not OK
+    */
+//    static internal func submitApplepayData(data: String!, completion: @escaping ([String:String], BSErrors?) -> Void) {
+//
+//        let requestBody = [
+//                "applePayToken": data!
+//        ]
+//        BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseApplePayResponse, completion: { resultData, error in
+//            if let error = error {
+//                completion(resultData, error)
+//                debugPrint(error.description())
+//                return
+//            }
+//            completion(resultData, nil)
+//        })
+//    }
 
     static internal func regenerateToken(executeAfter: @escaping () -> Void) {
         
@@ -436,7 +546,7 @@ import Foundation
         })
     }
     
-    private static func fillCcDetailsAndComplete(requestBody: [String:String], resultData: [String:String], error: BSErrors?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
+    internal static func fillCcDetailsAndComplete(requestBody: [String:String], resultData: [String:String], error: BSErrors?, completion: @escaping (BSCreditCard, BSErrors?) -> Void) {
         
         let cc = BSCreditCard()
         if let error = error {

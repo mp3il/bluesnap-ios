@@ -106,6 +106,13 @@ import PassKit
     }
     
     /**
+    Submit data to be submitted to BLS server under the current token, to be used later for server-to-server actions
+    */
+    open class func submitTokenizedDetails(details: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void) {
+        BSApiManager.submitTokenizedDetails(details: details, completion: completion)
+    }
+    
+    /**
      Submit Payment token fields
      If you do not want to use our check-out page, you can implement your own.
      You need to generate a token, and then call this function to submit the CC details to BlueSnap instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction.
