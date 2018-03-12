@@ -257,7 +257,7 @@ This section will cover the following topics:
 
 > **Notes**: 
 > * In addition to card details, be sure to collect the user information marked as **Required** on [this page](https://developers.bluesnap.com/v8976-JSON/docs/card-holder-info).
-> * If you would like to build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitCcDetails`](#submitccdetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submitccdetails) section to learn more.
+> * If you would like to build your own UI fields for credit card number, expiration date, and CVV, BlueSnap provides you with a function called [`submitTokenizedDetails`](#submittokenizeddetails) to submit the user's card data directly to BlueSnap. Visit the [Reference](#submittokenizeddetails) section to learn more.
 
 ## Setting up BSCcInputLineDelegate
 If you're using `BSCcInputLine` to collect the user's data, in your `ViewController` you'll need to implement `BSCcInputLineDelegate`, which has 6 methods:
@@ -656,23 +656,20 @@ Parameters:
 | `sdkRequest` | Object that holds price information, required checkout fields, and initial user data. |
 
 
-### submitCcDetails
+### submitTokenizedDetails
 This function is relevant if you're collecting the user's card data using your own input fields. 
-When called, `submitCcDetails` submits the user's card data to BlueSnap, where it will be associated with your token. 
+When called, `submitTokenizedDetails` submits the user's data to BlueSnap, where it will be associated with your token. 
 > **Important:** Do not send raw credit card data to your server. Use this function from the client-side to submit sensitive data directly to BlueSnap.  
 
 Signature:
 
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCreditCard, BSErrors?)->Void)
+    open class func submitTokenizedDetails(tokenizeRequest: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void)
     
 Parameter: 
 
 | Parameter      | Description   |
 | ------------- | ------------- |
-| `ccNumber` | CC number |
-| `expDate` | CC expiration date in the format MM/YYYY |
-| `cvv` | CC security code (CVV) |
-| `purchaseDetails` | Optional. Shopper details that you want to tokenize, such as billing or shipping address. |
+| `tokenizeRequest` | Class BSTokenizeRequest conatins all kinds of user and payment data; fill the fields you want to submit. See classes in file BSTokenizeRequest.swift |
 | `completion` | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
 
 Your `completion` callback should do the following: 

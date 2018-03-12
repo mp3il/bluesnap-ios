@@ -324,6 +324,22 @@ import Foundation
         return (resultData, resultError)
     }
     
+    static func parseGenericResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
+        
+        var resultData: [String:String] = [:]
+        var resultError: BSErrors?
+        
+        if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+            
+        } else if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+            resultError = parseHttpError(data: data, httpStatusCode: httpStatusCode)
+        } else {
+            NSLog("Http error submitting CC details to BS; HTTP status = \(httpStatusCode)")
+            resultError = .unknown
+        }
+        return (resultData, resultError)
+    }
+
     static func parseResultCCDetailsFromResponse(data: Data?) -> ([String:String], BSErrors?) {
         
         var resultData: [String:String] = [:]
@@ -333,9 +349,9 @@ import Foundation
                 do {
                     // Parse the result JSOn object
                     if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
-                        resultData["ccType"] = json["ccType"] as? String
-                        resultData["last4Digits"] = json["last4Digits"] as? String
-                        resultData["ccIssuingCountry"] = (json["issuingCountry"] as? String ?? "").uppercased()
+                        resultData[BSTokenizeBaseCCDetails.CARD_TYPE_KEY] = json[BSTokenizeBaseCCDetails.CARD_TYPE_KEY] as? String
+                        resultData[BSTokenizeBaseCCDetails.LAST_4_DIGITS_KEY] = json[BSTokenizeBaseCCDetails.LAST_4_DIGITS_KEY] as? String
+                        resultData[BSTokenizeBaseCCDetails.ISSUING_COUNTRY_KEY] = (json[BSTokenizeBaseCCDetails.ISSUING_COUNTRY_KEY] as? String ?? "").uppercased()
                     } else {
                         NSLog("Error parsing BS result on CC details submit")
                         resultError = .unknown

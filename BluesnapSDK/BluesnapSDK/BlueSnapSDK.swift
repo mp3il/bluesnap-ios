@@ -106,20 +106,27 @@ import PassKit
     }
     
     /**
-     Submit Payment token fields
-     If you do not want to use our check-out page, you can implement your own.
-     You need to generate a token, and then call this function to submit the CC details to BlueSnap instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction.
-     - parameters:
-     - ccNumber: Credit card number
-     - expDate: CC expiration date in format MM/YYYY
-     - cvv: CC security code (CVV)
-     - purchaseDetails: optional purchase details to be tokenized as well as the CC details
-     - completion: callback with either result details if OK, or error details if not OK
-     */
-    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCreditCard,BSErrors?)->Void) {
-        
-        BSApiManager.submitPurchaseDetails(ccNumber: ccNumber, expDate: expDate, cvv: cvv, last4Digits: nil, cardType: nil, billingDetails: purchaseDetails?.billingDetails, shippingDetails: purchaseDetails?.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
+    Submit data to BLS server under the current token, to be used later for server-to-server actions
+    */
+    open class func submitTokenizedDetails(tokenizeRequest: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void) {
+        BSApiManager.submitTokenizedDetails(tokenizeRequest: tokenizeRequest, completion: completion)
     }
+    
+//    /**
+//     Submit Payment token fields
+//     If you do not want to use our check-out page, you can implement your own.
+//     You need to generate a token, and then call this function to submit the CC details to BlueSnap instead of returning them to your server (which is less secure) and then passing them to BlueSnap when you create the transaction.
+//     - parameters:
+//     - ccNumber: Credit card number
+//     - expDate: CC expiration date in format MM/YYYY
+//     - cvv: CC security code (CVV)
+//     - purchaseDetails: optional purchase details to be tokenized as well as the CC details
+//     - completion: callback with either result details if OK, or error details if not OK
+//     */
+//    open class func submitCcDetails(ccNumber: String, expDate: String, cvv: String, purchaseDetails: BSCcSdkResult?, completion : @escaping (BSCreditCard,BSErrors?)->Void) {
+//        
+//        BSApiManager.submitPurchaseDetails(ccNumber: ccNumber, expDate: expDate, cvv: cvv, last4Digits: nil, cardType: nil, billingDetails: purchaseDetails?.billingDetails, shippingDetails: purchaseDetails?.shippingDetails, fraudSessionId: BlueSnapSDK.fraudSessionId, completion: completion)
+//    }
     
     /**
      Return a list of currencies and their rates from BlueSnap server
