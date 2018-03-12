@@ -167,7 +167,6 @@ import Foundation
         } else {
             tokenizeRequest.paymentDetails = BSTokenizeExistingCCDetails(lastFourDigits: last4Digits, ccType: cardType, expDate: expDate)
         }
-        tokenizeRequest.fraudSessionId = fraudSessionId
         tokenizeRequest.billingDetails = billingDetails
         tokenizeRequest.shippingDetails = shippingDetails
         submitCcDetails(tokenizeRequest: tokenizeRequest, completion: completion)
@@ -351,7 +350,7 @@ import Foundation
                 }
             }
         }
-        if let fraudSessionId = tokenizeRequest.fraudSessionId {
+        if let fraudSessionId = BlueSnapSDK.fraudSessionId {
             requestBody["fraudSessionId"] = fraudSessionId
         }
         

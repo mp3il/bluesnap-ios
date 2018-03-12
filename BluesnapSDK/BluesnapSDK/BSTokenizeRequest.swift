@@ -14,12 +14,9 @@ import Foundation
  - (optional) Price details
  - (optional) Shopper billing details
  - (optional) Shopper shipping details
- - (optional) fraud Session Id
  */
 @objc public class BSTokenizeRequest : NSObject {
-    public var fraudSessionId: String?
     public var paymentDetails: BSTokenizePaymentDetails?
-    public var priceDetails: BSPriceDetails?
     public var billingDetails: BSBillingAddressDetails?
     public var shippingDetails: BSShippingAddressDetails?
 }
