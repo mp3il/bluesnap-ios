@@ -657,7 +657,7 @@ Parameters:
 
 
 ### submitTokenizedDetails
-This function is relevant if you're collecting the user's card data using your own input fields. 
+This function is relevant if you're collecting the user's data using your own input fields. 
 When called, `submitTokenizedDetails` submits the user's data to BlueSnap, where it will be associated with your token. 
 > **Important:** Do not send raw credit card data to your server. Use this function from the client-side to submit sensitive data directly to BlueSnap.  
 
@@ -665,11 +665,11 @@ Signature:
 
     open class func submitTokenizedDetails(tokenizeRequest: BSTokenizeRequest, completion: @escaping ([String:String], BSErrors?) -> Void)
     
-Parameter: 
+Parameters: 
 
 | Parameter      | Description   |
 | ------------- | ------------- |
-| `tokenizeRequest` | Class BSTokenizeRequest conatins all kinds of user and payment data; fill the fields you want to submit. See classes in file BSTokenizeRequest.swift |
+| `tokenizeRequest` | Class `BSTokenizeRequest` contains properties for the user's data. Fill in the properties you wish to submit to BlueSnap to be tokenized. See BSTokenizeRequest.swift for full class details. |
 | `completion` | Callback function that is invoked with non-sensitive credit card details (if submission was a success), or error details (if submission errored). |
 
 Your `completion` callback should do the following: 
