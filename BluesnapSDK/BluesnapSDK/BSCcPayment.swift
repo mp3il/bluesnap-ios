@@ -81,7 +81,9 @@ class BSCreditCardInfo: BSPaymentInfo, NSCopying {
         } else if let billingDetails = sdkRequest.billingDetails {
             self.billingDetails = billingDetails.copy() as! BSBillingAddressDetails
         }
-        if let shippingDetails = BSApiManager.shopper?.shippingDetails {
+        if !sdkRequest.withShipping {
+            self.shippingDetails = nil
+        } else if let shippingDetails = BSApiManager.shopper?.shippingDetails {
             self.shippingDetails = shippingDetails.copy() as? BSShippingAddressDetails
             self.shippingDetails?.phone = BSApiManager.shopper?.phone
         } else if let shippingDetails = sdkRequest.shippingDetails {
