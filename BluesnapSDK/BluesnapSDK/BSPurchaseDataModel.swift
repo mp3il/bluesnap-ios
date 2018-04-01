@@ -115,6 +115,7 @@ public enum BSPaymentType : String {
     public var withEmail: Bool = true
     public var withShipping: Bool = false
     public var fullBilling: Bool = false
+    public var allowCurrencyChange: Bool = true
     public var priceDetails: BSPriceDetails! = BSPriceDetails(amount: 0, taxAmount: 0, currency: nil)
     
     public var billingDetails: BSBillingAddressDetails?

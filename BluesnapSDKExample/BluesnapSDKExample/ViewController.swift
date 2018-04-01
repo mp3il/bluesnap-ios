@@ -25,6 +25,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var returningShopperIdLabel: UILabel!
     @IBOutlet var returningShopperIdTextField: UITextField!
     @IBOutlet weak var storeCurrencyButton: UIButton!
+    @IBOutlet weak var allowCurrencyChangeSwitch: UISwitch!
     
     // MARK: private properties
     
@@ -212,6 +213,7 @@ class ViewController: UIViewController {
         let fullBilling = fullBillingSwitch.isOn
         let withEmail = withEmailSwitch.isOn
         sdkRequest = BSSdkRequest(withEmail: withEmail, withShipping: withShipping, fullBilling: fullBilling, priceDetails: priceDetails, billingDetails: nil, shippingDetails: nil, purchaseFunc: self.completePurchase, updateTaxFunc: self.updateTax)
+        sdkRequest?.allowCurrencyChange = allowCurrencyChangeSwitch.isOn
     }
     
     /**

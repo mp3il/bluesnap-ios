@@ -27,6 +27,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     fileprivate var existingPurchaseDetails : BSCcSdkResult?
     fileprivate var updateTaxFunc: ((_ shippingCountry: String, _ shippingState: String?, _ priceDetails: BSPriceDetails) -> Void)?
     fileprivate var countryManager = BSCountryManager.getInstance()
+    @IBOutlet var menuButton: [UIBarButtonItem]!
     
     // MARK: - Outlets
     
@@ -339,7 +340,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         } else {
             ccInputLine.isHidden = false
             existingCcView.isHidden = true
-            topMenuButton.isEnabled = true
+            topMenuButton.isEnabled = BlueSnapSDK.sdkRequest?.allowCurrencyChange ?? true
         }
         
         if newCardMode && self.ccInputLine.ccnIsOpen {

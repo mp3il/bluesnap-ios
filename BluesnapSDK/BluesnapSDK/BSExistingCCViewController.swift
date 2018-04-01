@@ -93,6 +93,8 @@ class BSExistingCCViewController: UIViewController {
                 }
             }
         }
+        
+        topMenuButton.isEnabled = BlueSnapSDK.sdkRequest?.allowCurrencyChange ?? true
     }
 
     
