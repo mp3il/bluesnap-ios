@@ -310,7 +310,6 @@ curl -v -X POST https://sandbox.bluesnap.com/services/2/transactions \
 	"amount": 25.00, 
 	"currency": "USD", 
 	"pfToken": "ae76939fab7275cbfd657495eb8c4d0654e52e704c112170fa61f4127a34bf64_",
-	"transactionFraudInfo": {"fraudSessionId": "B04C4B2B6BED427284ECE2F1F870466C"}
 }'
 ```
 If successful, the response HTTP status code is 200 OK. Visit our [API Reference](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) for more details. 
