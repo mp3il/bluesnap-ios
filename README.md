@@ -287,7 +287,7 @@ On your submit action (i.e. when the user submits their payment during checkout)
 Another option is to call `checkCreditCard(ccn: String)`, which first validates and then submits the details, calling the delegate `didSubmitCreditCard` after a successful submit.
 
 # Sending the payment for processing
-For credit card and Apple Pay payments, you'll use the Payment API with your token to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture), [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) or [subscription](https://developers.bluesnap.com/v8976-JSON/docs/create-subscription) request, or to attach the payment details to a [user](https://developers.bluesnap.com/v8976-JSON/docs/create-vaulted-shopper). 
+For credit card and Apple Pay payments, you'll use the Payment API with your token to send an [Auth Capture](https://developers.bluesnap.com/v8976-JSON/docs/auth-capture) or [Auth Only](https://developers.bluesnap.com/v8976-JSON/docs/auth-only) request, or to attach the payment details to a [user](https://developers.bluesnap.com/v8976-JSON/docs/create-vaulted-shopper). 
 
 > **Note:** The token must be associated with the user's payment details. In the Standard Checkout Flow, this is when `purchaseFunc` is called. In the Custom Checkout Flow, this is when `didSubmitCreditCard` is called (if you're using the `BSCcInputLine` field) or `completion` is called (if you're using your own input fields). 
 
