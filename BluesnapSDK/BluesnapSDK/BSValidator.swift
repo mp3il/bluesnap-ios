@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public class BSValidator: NSObject {
+public class BSValidator: NSObject {
     
     
     // MARK: Constants
@@ -43,7 +43,7 @@ import Foundation
         if let addressDetails = addressDetails {
             addressDetails.name = newValue
         }
-        if newValue.characters.count == 0 && ignoreIfEmpty {
+        if newValue.count == 0 && ignoreIfEmpty {
             // ignore
         } else if !isValidName(newValue) {
             result = false
@@ -64,7 +64,7 @@ import Foundation
             addressDetails.email = newValue
         }
         var result : Bool = true
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
+        if (ignoreIfEmpty && newValue.count == 0) {
             // ignore
         } else if (!isValidEmail(newValue)) {
             result = false
@@ -98,7 +98,7 @@ import Foundation
             addressDetails.address = newValue
         }
         var result : Bool = true
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
+        if (ignoreIfEmpty && newValue.count == 0) {
             // ignore
         } else if !isValidStreet(newValue) {
             result = false
@@ -121,7 +121,7 @@ import Foundation
             addressDetails.city = newValue
         }
         var result : Bool = true
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
+        if (ignoreIfEmpty && newValue.count == 0) {
             // ignore
         } else if !isValidCity(newValue) {
             result = false
@@ -140,7 +140,7 @@ import Foundation
         
         let newValue = addressDetails?.country ?? ""
         var result : Bool = true
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
+        if (ignoreIfEmpty && newValue.count == 0) {
             // ignore
         } else if !isValidCountry(countryCode: newValue) {
             result = false
@@ -163,7 +163,7 @@ import Foundation
         if let addressDetails = addressDetails {
             addressDetails.zip = newValue
         }
-        if (ignoreIfEmpty && newValue.characters.count == 0) {
+        if (ignoreIfEmpty && newValue.count == 0) {
             // ignore
         } else if !isValidZip(countryCode: addressDetails?.country ?? "", zip: newValue) {
             result = false
@@ -183,7 +183,7 @@ import Foundation
         
         let newValue = addressDetails?.state ?? ""
         var result : Bool = true
-        if ((ignoreIfEmpty || input.isHidden) && newValue.characters.count == 0) {
+        if ((ignoreIfEmpty || input.isHidden) && newValue.count == 0) {
             // ignore
         } else if !isValidCountry(countryCode: addressDetails?.country ?? "") {
             result = false
@@ -204,15 +204,15 @@ import Foundation
         var msg : String = expInvalidMessage
         
         let newValue = input.expTextField.text ?? ""
-        if let p = newValue.characters.index(of: "/") {
-            let mm = newValue.substring(with: newValue.startIndex..<p)
-            let yy = BSStringUtils.removeNoneDigits(newValue.substring(with: p ..< newValue.endIndex))
-            if (mm.characters.count < 2) {
+        if let p = newValue.index(of: "/") {
+            let mm = String(newValue[..<p])
+            let yy = BSStringUtils.removeNoneDigits(String(newValue[p ..< newValue.endIndex]))
+            if (mm.count < 2) {
                 ok = false
             } else if !isValidMonth(mm) {
                 ok = false
                 msg = expMonthInvalidMessage
-            } else if (yy.characters.count < 2) {
+            } else if (yy.count < 2) {
                 ok = false
             } else {
                 (ok, msg) = isCcValidExpiration(mm: mm, yy: yy)
@@ -233,7 +233,7 @@ import Foundation
         
         var result : Bool = true;
         let newValue = input.getCvv() ?? ""
-        if newValue.characters.count != getCvvLength(cardType: cardType) {
+        if newValue.count != getCvvLength(cardType: cardType) {
             result = false
         }
         if result {
@@ -367,7 +367,7 @@ import Foundation
         if let month = Int(mm), let year = Int(yy) {
             var dateComponents = DateComponents()
             let currYear : Int! = getCurrentYear()
-            if yy.characters.count < 4 {
+            if yy.count < 4 {
                 dateComponents.year = year + (currYear / 100)*100
             } else {
                 dateComponents.year = year
@@ -394,14 +394,14 @@ import Foundation
     
     open class func isValidCCN(_ str: String) -> Bool {
         
-        if str.characters.count < 6 {
+        if str.count < 6 {
             return false
         }
         
         var isOdd : Bool! = true
         var sum : Int! = 0;
         
-        for character in str.characters.reversed() {
+        for character in str.reversed() {
             if (character == " ") {
                 // ignore
             } else if (character >= "0" && character <= "9") {
@@ -423,10 +423,10 @@ import Foundation
     
     open class func isValidName(_ str: String) -> Bool {
         
-        if let p = str.characters.index(of: " ") {
-            let firstName = str.substring(with: str.startIndex..<p).trimmingCharacters(in: .whitespaces)
-            let lastName = str.substring(with: p..<str.endIndex).trimmingCharacters(in: .whitespaces)
-            if firstName.characters.count < 2 || lastName.characters.count < 2 {
+        if let p = str.index(of: " ") {
+            let firstName = str[..<p].trimmingCharacters(in: .whitespaces)
+            let lastName = str[p..<str.endIndex].trimmingCharacters(in: .whitespaces)
+            if firstName.count < 2 || lastName.count < 2 {
                 return false
             }
         } else {
@@ -438,7 +438,7 @@ import Foundation
     open class func isValidCity(_ str: String) -> Bool {
         
         var result : Bool = false
-        if (str.characters.count < 3) {
+        if (str.count < 3) {
             result = false
         } else {
             result = true
@@ -449,7 +449,7 @@ import Foundation
     open class func isValidStreet(_ str: String) -> Bool {
         
         var result : Bool = false
-        if (str.characters.count < 3) {
+        if (str.count < 3) {
             result = false
         } else {
             result = true
@@ -462,7 +462,7 @@ import Foundation
         var result : Bool = false
         if BSCountryManager.getInstance().countryHasNoZip(countryCode: countryCode) {
             result = true
-        } else if (zip.characters.count < 3) {
+        } else if (zip.count < 3) {
             result = false
         } else {
             result = true
@@ -476,13 +476,13 @@ import Foundation
         if !isValidCountry(countryCode: countryCode) {
             result = false
         } else if BSCountryManager.getInstance().countryHasStates(countryCode: countryCode) {
-            if stateCode == nil || (stateCode?.characters.count != 2) {
+            if stateCode == nil || (stateCode?.count != 2) {
                 result = false
             } else {
                 let stateName = BSCountryManager.getInstance().getStateName(countryCode: countryCode, stateCode: stateCode ?? "")
                 result = stateName != nil
             }
-        } else if stateCode?.characters.count ?? 0 > 0 {
+        } else if stateCode?.count ?? 0 > 0 {
             result = false
         }
         return result
@@ -529,21 +529,21 @@ import Foundation
     open class func formatCCN(_ str: String) -> String {
         
         var result: String
-        let myLength = str.characters.count
+        let myLength = str.count
         if (myLength > 4) {
             let idx1 = str.index(str.startIndex, offsetBy: 4)
-            result = str.substring(to: idx1) + " "
+            result = str[..<idx1] + " "
             if (myLength > 8) {
                 let idx2 = str.index(idx1, offsetBy: 4)
-                result += str.substring(with: idx1..<idx2) + " "
+                result += str[idx1..<idx2] + " "
                 if (myLength > 12) {
                     let idx3 = str.index(idx2, offsetBy: 4)
-                    result += str.substring(with: idx2..<idx3) + " " + str.substring(from: idx3)
+                    result += str[idx2..<idx3] + " " + str[idx3...]
                 } else {
-                    result += str.substring(from:idx2)
+                    result += str[idx2...]
                 }
             } else {
-                result += str.substring(from: idx1)
+                result += str[idx1...]
             }
         } else {
             result = str
@@ -554,10 +554,10 @@ import Foundation
     open class func formatExp(_ str: String) -> String {
         
         var result: String
-        let myLength = str.characters.count
+        let myLength = str.count
         if (myLength > 2) {
             let idx1 = str.index(str.startIndex, offsetBy: 2)
-            result = str.substring(to: idx1) + "/" + str.substring(from: idx1)
+            result = str[..<idx1] + "/" + str[idx1...]
         } else {
             result = str
         }

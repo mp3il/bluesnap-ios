@@ -15,7 +15,7 @@ import Foundation
  - (optional) Shopper billing details
  - (optional) Shopper shipping details
  */
-@objc public class BSTokenizeRequest : NSObject {
+  public class BSTokenizeRequest : NSObject {
     public var paymentDetails: BSTokenizePaymentDetails?
     public var billingDetails: BSBillingAddressDetails?
     public var shippingDetails: BSShippingAddressDetails?
@@ -24,14 +24,14 @@ import Foundation
 /**
  Base class for payment details to be submitted to BLS server
  */
-@objc public class BSTokenizePaymentDetails : NSObject { }
+  public class BSTokenizePaymentDetails : NSObject { }
 
 /**
  Base Credit Card payment details to be submitted to BLS server
  - ccType: Credit Card Type
  - expDate: CC expiration date in format MM/YYYY  (in case of new/existing CC)
  */
-@objc public class BSTokenizeBaseCCDetails : BSTokenizePaymentDetails {
+  public class BSTokenizeBaseCCDetails : BSTokenizePaymentDetails {
     
     public static let LAST_4_DIGITS_KEY = "last4Digits"
     public static let CARD_TYPE_KEY = "ccType"
@@ -50,7 +50,7 @@ import Foundation
  - ccNumber: Full credit card number
  - cvv: credit card security code
  */
-@objc public class BSTokenizeNewCCDetails
+  public class BSTokenizeNewCCDetails
 : BSTokenizeBaseCCDetails {
     var ccNumber: String!
     var cvv: String!
@@ -65,7 +65,7 @@ import Foundation
  Existing Credit Card payment details to be submitted to BLS server
  - lastFourDigits: last for digits of existing credit card number
  */
-@objc public class BSTokenizeExistingCCDetails : BSTokenizeBaseCCDetails {
+  public class BSTokenizeExistingCCDetails : BSTokenizeBaseCCDetails {
     var lastFourDigits: String!
     public init(lastFourDigits: String!, ccType: String!, expDate: String!) {
         super.init(ccType: ccType, expDate: expDate)
@@ -77,7 +77,7 @@ import Foundation
  ApplePay payment details to be submitted to BLS server
  - applePayToken: ApplePay token
  */
-@objc public class BSTokenizeApplePayDetails : BSTokenizePaymentDetails {
+  public class BSTokenizeApplePayDetails : BSTokenizePaymentDetails {
     var applePayToken: String!
     public init(applePayToken: String!) {
         self.applePayToken = applePayToken

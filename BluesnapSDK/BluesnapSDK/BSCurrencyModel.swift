@@ -4,7 +4,7 @@ import Foundation
  This class represents a currency: name, ISO code, and exchange rate
  */
 // todo: add function for currency symbol
-@objc public class BSCurrency: NSObject {
+  public class BSCurrency: NSObject {
     
     internal var name : String!
     internal var code : String!
@@ -38,7 +38,7 @@ import Foundation
  This class represents a currency dictionary: it contains a list of currencies and 
  the base currency (according to which we get the exchange rates)
  */
-@objc public class BSCurrencies: NSObject {
+  public class BSCurrencies: NSObject {
     
     internal var baseCurrency : String = "USD"
     internal var creationDate : Date = Date()
@@ -54,7 +54,7 @@ import Foundation
         return creationDate
     }
     
-    @objc public func getCurrencyByCode(code: String!) -> BSCurrency? {
+      public func getCurrencyByCode(code: String!) -> BSCurrency? {
         
         for currency in currencies {
             if currency.code == code {
@@ -74,7 +74,7 @@ import Foundation
         return nil
     }
 
-    @objc public func getCurrencyRateByCurrencyCode(code: String!) -> NSNumber? {
+      public func getCurrencyRateByCurrencyCode(code: String!) -> NSNumber? {
 
         return NSNumber.init(value: (getCurrencyByCode(code: code)?.rate)!)
     }

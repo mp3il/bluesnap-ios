@@ -10,7 +10,7 @@
 
 import Foundation
 
-@objc class BSApiManager: NSObject {
+  class BSApiManager: NSObject {
 
     // MARK: Constants
 
@@ -109,7 +109,7 @@ import Foundation
             if resultError == .unAuthorised {
                 
                 // regenerate Token and try again
-                regenerateToken(executeAfter: { _ in
+                regenerateToken(executeAfter: { 
                     BSApiCaller.getSdkData(bsToken: getBsToken(), baseCurrency: baseCurrency, completion: { sdkData2, resultError2 in
                         
                         if resultError2 == nil {
@@ -211,7 +211,7 @@ import Foundation
                 BSApiCaller.isTokenExpired(bsToken: bsToken, completion: { isExpired in
                     if isExpired {
                         // regenerate Token and try again
-                        regenerateToken(executeAfter: { _ in
+                        regenerateToken(executeAfter: { 
                             NSLog("BlueSnap; getSupportedPaymentMethods retry")
                             BSApiCaller.getSupportedPaymentMethods(bsToken: getBsToken(), completion: { resultSupportedPaymentMethods2, resultError2 in
                                 
@@ -279,7 +279,7 @@ import Foundation
                         NSLog("BlueSnap; createPayPalToken retry completion")
                         if isExpired {
                             // regenerate Token and try again
-                            regenerateToken(executeAfter: { _ in
+                            regenerateToken(executeAfter: { 
                                 BSApiCaller.createPayPalToken(bsToken: getBsToken(), purchaseDetails: purchaseDetails, withShipping: withShipping, completion: { resultToken2, resultError2 in
                                     
                                     payPalToken = resultToken2
@@ -418,7 +418,7 @@ import Foundation
             if error == BSErrors.expiredToken || error == BSErrors.tokenNotFound {
                 // regenerate Token and try again
                 NSLog("BlueSnap; submitCcDetails retry")
-                regenerateToken(executeAfter: { _ in
+                regenerateToken(executeAfter: { 
                     BSApiCaller.submitPaymentDetails(bsToken: getBsToken(), requestBody: requestBody, parseFunction: BSApiCaller.parseCCResponse, completion: checkErrorAndComplete)
                 })
             } else {
@@ -462,10 +462,10 @@ import Foundation
         cc.last4Digits = resultData[BSTokenizeBaseCCDetails.LAST_4_DIGITS_KEY]
         if let ccDetails = tokenizeRequest.paymentDetails as? BSTokenizeBaseCCDetails {
             if let expDate = ccDetails.expDate {
-                if let p = expDate.characters.index(of: "/") {
-                    cc.expirationMonth = expDate.substring(with: expDate.startIndex..<p)
+                if let p = expDate.index(of: "/") {
+                    cc.expirationMonth = String(expDate[..<p])
                     let p = expDate.index(after: p)
-                    cc.expirationYear = expDate.substring(with: p..<expDate.endIndex)
+                    cc.expirationYear = String(expDate[p..<expDate.endIndex])
                 }
             }
         }

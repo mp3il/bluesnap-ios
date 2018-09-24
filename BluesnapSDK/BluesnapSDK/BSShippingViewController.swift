@@ -91,12 +91,12 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.scrollView.setContentOffset(point, animated: false)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         var moveUp = false
         if let fieldBottom = fieldBottom {
             let userInfo = notification.userInfo as! [String: NSObject] as NSDictionary
-            let keyboardFrame = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! CGRect
+            let keyboardFrame = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
             let keyboardHeight = Int(keyboardFrame.height)
             let viewHeight : Int = Int(self.view.frame.height)
             let offset = fieldBottom + keyboardHeight - scrollOffset
@@ -112,7 +112,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         
         if self.movedUp {
             scrollForKeyboard(direction: 0)
@@ -124,7 +124,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         
         self.nameInputLine.dismissKeyboard()
         self.zipInputLine.dismissKeyboard()
@@ -146,8 +146,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         if let shippingDetails = self.purchaseDetails.getShippingDetails() {
             nameInputLine.setValue(shippingDetails.name)
@@ -189,8 +189,8 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: self.view.window)
     }
     
     // MARK: Payment click
@@ -372,7 +372,7 @@ class BSShippingViewController: UIViewController, UITextFieldDelegate {
         } else {
             payButtonText = BSLocalizedStrings.getString(BSLocalizedString.Keyboard_Done_Button_Text)
         }
-        payUIButton.setTitle(payButtonText, for: UIControlState())
+        payUIButton.setTitle(payButtonText, for: UIControl.State())
     }
 
     private func updateTexts() {

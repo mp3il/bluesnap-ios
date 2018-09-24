@@ -33,9 +33,9 @@ class BSApiManagerTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         createToken(completion: { token, error in
         
-            NSLog("testIsTokenExpiredExpectsFalse; token str=\(token!.getTokenStr())")
+            NSLog("testIsTokenExpiredExpectsFalse; token str=\(String(describing: token!.getTokenStr()))")
 
-            let result = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
+            _ = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
                 assert(isExpired == false)
                 semaphore.signal()
             })
@@ -50,7 +50,7 @@ class BSApiManagerTests: XCTestCase {
         BSApiManager.setBsToken(bsToken: token)
         
         let semaphore = DispatchSemaphore(value: 0)
-        let result = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
+        _ = BSApiCaller.isTokenExpired(bsToken: token, completion: { isExpired in
             assert(isExpired == true)
             semaphore.signal()
         })
@@ -83,7 +83,7 @@ class BSApiManagerTests: XCTestCase {
                 let bsCurrencies = sdkData?.currencies
                 let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
                 XCTAssertNotNil(gbpCurrency)
-                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(String(describing: gbpCurrency.name)), its rate is \(String(describing: gbpCurrency.rate))")
                 
                 let shopper = sdkData?.shopper
                 XCTAssertNotNil(shopper, "Failed to get shopper")
@@ -153,7 +153,7 @@ class BSApiManagerTests: XCTestCase {
             BSApiManager.createPayPalToken(purchaseDetails: purchaseDetails, withShipping: false, completion: { resultToken, resultError in
                 
                 XCTAssertNil(resultError)
-                NSLog("*** testGetPayPalToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+                NSLog("*** testGetPayPalToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(String(describing: resultError))")
                 semaphore.signal()
             })
         })
@@ -174,7 +174,7 @@ class BSApiManagerTests: XCTestCase {
             
             XCTAssertNotNil(resultError)
             assert(resultError == BSErrors.unAuthorised)
-            NSLog("*** testGetPayPalTokenWithInvalidTokenNoRegeneration; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            NSLog("*** testGetPayPalTokenWithInvalidTokenNoRegeneration; Test result: resultToken=\(resultToken ?? ""), resultError= \(String(describing: resultError))")
             
             assert(self.tokenWasRecreated == false)
             semaphore.signal()
@@ -196,7 +196,7 @@ class BSApiManagerTests: XCTestCase {
         BSApiManager.createPayPalToken(purchaseDetails: purchaseDetails, withShipping: false,completion: { resultToken, resultError in
             
             XCTAssertNil(resultError)
-            NSLog("*** testGetPayPalTokenWithExpiredToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(resultError)")
+            NSLog("*** testGetPayPalTokenWithExpiredToken; Test result: resultToken=\(resultToken ?? ""), resultError= \(String(describing: resultError))")
             
             assert(self.tokenWasRecreated == true)
             semaphore.signal()
@@ -218,7 +218,7 @@ class BSApiManagerTests: XCTestCase {
             BSApiManager.getSupportedPaymentMethods(completion: { resultPaymentMethods, resultError in
                 
                 XCTAssertNil(resultError)
-                NSLog("*** testGetSupportedPaymentMethods; Test result: resultPaymentMethods=\(resultPaymentMethods ?? []), resultError= \(resultError)")
+                NSLog("*** testGetSupportedPaymentMethods; Test result: resultPaymentMethods=\(resultPaymentMethods ?? []), resultError= \(String(describing: resultError))")
                 
                 // check that CC and ApplePay are supported
                 let ccIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.CreditCard, supportedPaymentMethods: resultPaymentMethods)
@@ -244,7 +244,7 @@ class BSApiManagerTests: XCTestCase {
         BSApiManager.getSupportedPaymentMethods(completion: { resultPaymentMethods, resultError in
             
             XCTAssertNil(resultError)
-            NSLog("*** testGetSupportedPaymentMethodsWithExpiredToken; Test result: resultPaymentMethods=\(resultPaymentMethods ?? []), resultError= \(resultError)")
+            NSLog("*** testGetSupportedPaymentMethodsWithExpiredToken; Test result: resultPaymentMethods=\(resultPaymentMethods ?? []), resultError= \(String(describing: resultError))")
             
             // check that CC and ApplePay are supported
             let ccIsSupported = BSApiManager.isSupportedPaymentMethod(paymentType: BSPaymentType.CreditCard, supportedPaymentMethods: resultPaymentMethods)
@@ -277,7 +277,7 @@ class BSApiManagerTests: XCTestCase {
             self.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
                 (result, error) in
                 
-                XCTAssert(error == nil, "error: \(error)")
+                XCTAssert(error == nil, "error: \(String(describing: error))")
                 let ccType = result.ccType
                 let last4 = result.last4Digits
                 let country = result.ccIssuingCountry
@@ -303,7 +303,7 @@ class BSApiManagerTests: XCTestCase {
         self.submitCcDetails(ccNumber: ccn, expDate: exp, cvv: cvv, completion: {
             (result, error) in
             
-            XCTAssert(error == nil, "error: \(error)")
+            XCTAssert(error == nil, "error: \(String(describing: error))")
             let ccType = result.ccType
             let last4 = result.last4Digits
             let country = result.ccIssuingCountry
@@ -352,7 +352,7 @@ class BSApiManagerTests: XCTestCase {
             BSApiManager.submitCcn(ccNumber: ccn, completion: {
                 (result, error) in
                 
-                XCTAssert(error == nil, "error: \(error)")
+                XCTAssert(error == nil, "error: \(String(describing: error))")
                 let ccType = result.ccType
                 let last4 = result.last4Digits
                 let country = result.ccIssuingCountry
@@ -373,7 +373,7 @@ class BSApiManagerTests: XCTestCase {
         createToken(completion: { token, error in
             BSApiManager.submitCcn(ccNumber: ccn, completion: {
                 (result, error) in
-                XCTAssert(error == BSErrors.invalidCcNumber, "error: \(error) should have been BSErrors.invalidCcNumber")
+                XCTAssert(error == BSErrors.invalidCcNumber, "error: \(String(describing: error)) should have been BSErrors.invalidCcNumber")
                 semaphore.signal()
             })
         })
@@ -387,7 +387,7 @@ class BSApiManagerTests: XCTestCase {
         createToken(completion: { token, error in
             BSApiManager.submitCcn(ccNumber: ccn, completion: {
                 (result, error) in
-                XCTAssert(error == BSErrors.invalidCcNumber, "error: \(error) should have been BSErrors.invalidCcNumber")
+                XCTAssert(error == BSErrors.invalidCcNumber, "error: \(String(describing: error)) should have been BSErrors.invalidCcNumber")
                 semaphore.signal()
             })
         })

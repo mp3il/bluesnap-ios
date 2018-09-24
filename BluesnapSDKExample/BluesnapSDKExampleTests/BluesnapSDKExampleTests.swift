@@ -39,11 +39,11 @@ class BluesnapSDKExampleTests: XCTestCase {
                     
                 let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
                 XCTAssertNotNil(gbpCurrency)
-                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.getName()), its rate is \(gbpCurrency.getRate())")
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(String(describing: gbpCurrency.getName())), its rate is \(String(describing: gbpCurrency.getRate()))")
                 
                 let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
                 XCTAssertNotNil(eurCurrencyRate)
-                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                NSLog("testGetTokeString(describing: nAndCurrencies;) EUR currency rate is: \(String(describing: eurCurrencyRate))")
                 
                 semaphore.signal()
             })

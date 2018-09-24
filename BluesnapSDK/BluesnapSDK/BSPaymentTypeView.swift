@@ -40,7 +40,7 @@ class BSPaymentTypeView: BSBaseBoxWithShadowView {
     
     // MARK: internal UI elements
     
-    internal var imageButton : UIButton = UIButton(type: UIButtonType.custom)
+    internal var imageButton : UIButton = UIButton(type: UIButton.ButtonType.custom)
     
     
     // MARK: UIView override functions
@@ -89,9 +89,9 @@ class BSPaymentTypeView: BSBaseBoxWithShadowView {
     /**
      Propagate the touch up inside action to the one defined on the view
      */
-    func touchUpInside(_ sender: Any) {
+    @objc func touchUpInside(_ sender: Any) {
         
-        sendActions(for: UIControlEvents.touchUpInside)
+        sendActions(for: UIControl.Event.touchUpInside)
     }
 
 }

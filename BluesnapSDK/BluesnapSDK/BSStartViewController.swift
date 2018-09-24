@@ -201,13 +201,13 @@ class BSStartViewController: UIViewController {
                 let accessibilityIdentifier = "existingCc\(tag)"
                 cardView.accessibilityIdentifier = accessibilityIdentifier
                 cardView.isUserInteractionEnabled = true
-                cardView.accessibilityTraits = UIAccessibilityTraitButton
+                cardView.accessibilityTraits = UIAccessibilityTraits.button
                 tag = tag + 1
             }
         }
     }
     
-    func existingCCTouchUpInside(_ sender: Any) {
+    @objc func existingCCTouchUpInside(_ sender: Any) {
         
         if let existingCcUIView = sender as? BSExistingCcUIView, let existingCreditCards = BSApiManager.shopper?.existingCreditCards {
             let ccIdx = existingCcUIView.tag

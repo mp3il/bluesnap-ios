@@ -109,12 +109,12 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.scrollView.setContentOffset(point, animated: false)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         var moveUp = false
         if let fieldBottom = fieldBottom {
             let userInfo = notification.userInfo as! [String: NSObject] as NSDictionary
-            let keyboardFrame = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! CGRect
+            let keyboardFrame = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
             let keyboardHeight = Int(keyboardFrame.height)
             let viewHeight : Int = Int(self.view.frame.height)
             let offset = fieldBottom + keyboardHeight - scrollOffset
@@ -130,7 +130,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         
         if self.movedUp {
             scrollForKeyboard(direction: 0)
@@ -142,7 +142,7 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         self.view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         
         self.ccInputLine.dismissKeyboard()
         self.nameInputLine.dismissKeyboard()
@@ -232,8 +232,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.navigationController!.isNavigationBarHidden = false
         
@@ -301,8 +301,8 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
             ccInputLine.closeOnLeave()
         }
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: self.view.window)
     }
 
 
@@ -425,9 +425,9 @@ class BSPaymentViewController: UIViewController, UITextFieldDelegate, BSCcInputL
         
         if (newCardMode && self.withShipping && !isShippingSameAsBilling()) {
             let shippingButtonText = BSLocalizedStrings.getString(BSLocalizedString.Payment_Shipping_Button)
-            payButton.setTitle(shippingButtonText, for: UIControlState())
+            payButton.setTitle(shippingButtonText, for: UIControl.State())
         } else {
-            payButton.setTitle(payButtonText, for: UIControlState())
+            payButton.setTitle(payButtonText, for: UIControl.State())
         }
     }
     

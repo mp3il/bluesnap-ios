@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public class BSCountryManager: NSObject {
+public class BSCountryManager: NSObject {
     
     public static let US_COUNTRY_CODE: String = "US"
 

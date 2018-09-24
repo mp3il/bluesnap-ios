@@ -10,7 +10,7 @@
 
 import Foundation
 
-@objc class BSApiCaller: NSObject {
+  class BSApiCaller: NSObject {
     
     internal static let PAYPAL_SERVICE = "services/2/tokenized-services/paypal-token?amount="
     internal static let PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2"
@@ -161,7 +161,7 @@ import Foundation
                     if (httpStatusCode >= 200 && httpStatusCode <= 299) {
                         result = extractTokenFromResponse(httpResponse: httpResponse)
                         if let result = result {
-                            NSLog("createSandboxBSToken result: \(result.tokenStr)")
+                            NSLog("createSandboxBSToken result: \(String(describing: result.tokenStr))")
                         } else {
                             resultError = .unknown
                         }
@@ -326,7 +326,7 @@ import Foundation
     
     static func parseGenericResponse(httpStatusCode: Int, data: Data?) -> ([String:String], BSErrors?) {
         
-        var resultData: [String:String] = [:]
+        let resultData: [String:String] = [:]
         var resultError: BSErrors?
         
         if (httpStatusCode >= 200 && httpStatusCode <= 299) {
@@ -463,7 +463,7 @@ import Foundation
             }
         } else {
             resultError = .unknown
-            NSLog("Http error; HTTP status = \(httpStatusCode)")
+            NSLog("Http error; HTTP status = \(String(describing: httpStatusCode))")
         }
 
         return resultError
@@ -476,7 +476,7 @@ import Foundation
             do {
                 // sometimes the data is not JSON :(
                 let str : String = String(data: data, encoding: .utf8) ?? ""
-                let p = str.characters.index(of: "{")
+                let p = str.index(of: "{")
                 if p == nil {
                     errStr = str.replacingOccurrences(of: "\"", with: "")
                 } else {
@@ -726,7 +726,7 @@ import Foundation
         var result: BSToken?
         if let location: String = httpResponse?.allHeaderFields["Location"] as? String {
             if let lastIndexOfSlash = location.range(of: "/", options: String.CompareOptions.backwards, range: nil, locale: nil) {
-                let tokenStr = location.substring(with: lastIndexOfSlash.upperBound..<location.endIndex)
+                let tokenStr = String(location[lastIndexOfSlash.upperBound..<location.endIndex])
                 result = BSToken(tokenStr: tokenStr)
             } else {
                 NSLog("Error: BS Token does not contain /")

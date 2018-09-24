@@ -70,7 +70,7 @@ class ViewController: UIViewController {
 		self.navigationController?.isNavigationBarHidden = true
         self.returningShopperIdLabel.isHidden = !returningShopperSwitch.isOn
         self.returningShopperIdTextField.isHidden = !returningShopperSwitch.isOn
-        self.storeCurrencyButton.setTitle(storeCurrency, for: UIControlState())
+        self.storeCurrencyButton.setTitle(storeCurrency, for: UIControl.State())
         amountValueDidChange(valueTextField)
     }
 	
@@ -81,7 +81,7 @@ class ViewController: UIViewController {
         self.view.addGestureRecognizer(tap)
     }
 
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         if valueTextField.isFirstResponder {
             valueTextField.resignFirstResponder()
         } else if taxTextField.isFirstResponder {
@@ -222,8 +222,8 @@ class ViewController: UIViewController {
         
         if let priceDetails = sdkRequest?.priceDetails {
             priceDetails.changeCurrencyAndConvertAmounts(newCurrency: newCurrency)
-            valueTextField.text = String(format: "%.2f", CGFloat(priceDetails.amount ?? 0))
-            taxTextField.text = String(format: "%.2f", CGFloat(priceDetails.taxAmount ?? 0))
+            valueTextField.text = String(format: "%.2f", CGFloat(truncating: priceDetails.amount ?? 0))
+            taxTextField.text = String(format: "%.2f", CGFloat(truncating: priceDetails.taxAmount ?? 0))
             currencyButton.titleLabel?.text = priceDetails.currency
         }
     }
@@ -237,7 +237,7 @@ class ViewController: UIViewController {
         if let newCurrency = newCurrency {
             if newCurrency.getCode() != self.storeCurrency {
                 self.storeCurrency = newCurrency.getCode()
-                self.storeCurrencyButton.setTitle(storeCurrency, for: UIControlState())
+                self.storeCurrencyButton.setTitle(storeCurrency, for: UIControl.State())
                 coverAllLabel.text = LOADING_MESSAGE
                 coverAllView.isHidden = false
                 hideCoverView = true
@@ -376,7 +376,7 @@ class ViewController: UIViewController {
             taxPercent = 1
         }
         let newTax: NSNumber = priceDetails.amount.doubleValue * taxPercent.doubleValue / 100.0 as NSNumber
-        NSLog("Changing tax amount from \(priceDetails.taxAmount) to \(newTax)")
+        NSLog("Changing tax amount from \(String(describing: priceDetails.taxAmount)) to \(newTax)")
         priceDetails.taxAmount = newTax
     }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public enum BSErrors : Int {
+  public enum BSErrors : Int {
     
     // CC
     case invalidCcNumber

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="kEU-ax-AwI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="kEU-ax-AwI">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,7 +14,7 @@
             <objects>
                 <navigationController id="kEU-ax-AwI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QJ0-p5-tRN">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -80,7 +78,7 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With shipping" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyA-5y-lej">
-                                        <rect key="frame" x="14" y="36" width="135" height="21"/>
+                                        <rect key="frame" x="14" y="36" width="135" height="20.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="135" id="k5h-ji-xMG"/>
                                         </constraints>
@@ -96,7 +94,7 @@
                                         </connections>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Full billing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8V-G4-lWL" userLabel="Full billing">
-                                        <rect key="frame" x="14" y="67" width="135" height="22"/>
+                                        <rect key="frame" x="14" y="66.5" width="135" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="135" id="iY3-RT-piH"/>
                                         </constraints>
@@ -109,7 +107,7 @@
                                         <accessibility key="accessibilityConfiguration" identifier="FullBillingSwitch"/>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sqi-jc-dUs" userLabel="With Email">
-                                        <rect key="frame" x="14" y="99" width="135" height="20"/>
+                                        <rect key="frame" x="14" y="98.5" width="135" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="135" id="Ulk-JN-9U8"/>
                                             <constraint firstAttribute="width" constant="135" id="dYX-8x-Iae"/>
@@ -132,7 +130,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOS-3A-GN6">
-                                        <rect key="frame" x="14" y="161" width="109" height="23"/>
+                                        <rect key="frame" x="14" y="161" width="109" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="109" id="fcN-FG-xrv"/>
                                         </constraints>
@@ -205,7 +203,7 @@
                                         <rect key="frame" x="0.0" y="-5" width="375" height="588"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading, please wait..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5gd-cl-sWV">
-                                                <rect key="frame" x="0.0" y="307" width="375" height="24"/>
+                                                <rect key="frame" x="0.0" y="306.5" width="375" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -350,7 +348,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Success!" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3N-It-HEB">
-                                        <rect key="frame" x="95" y="303" width="184" height="53"/>
+                                        <rect key="frame" x="95.5" y="303" width="184" height="53"/>
                                         <accessibility key="accessibilityConfiguration" identifier="SuccessLabel"/>
                                         <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="45"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -369,7 +367,7 @@
                                         </connections>
                                     </button>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Something went wrong" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KfV-UR-b1h">
-                                        <rect key="frame" x="109" y="374" width="158" height="18"/>
+                                        <rect key="frame" x="108.5" y="374" width="158" height="18"/>
                                         <accessibility key="accessibilityConfiguration" identifier="ErrorDescLabel"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -427,10 +425,10 @@
         <!--Navigation Controller-->
         <scene sceneID="WTZ-PP-w37">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6ZD-jU-N6j" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="placeholder ID" automaticallyAdjustsScrollViewInsets="NO" id="6ZD-jU-N6j" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ITB-vE-zCk">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

@@ -16,7 +16,7 @@ import Foundation
  For full billing details, everything is mandatory except email which is optional.
  For shipping details all field are mandatory except phone which is optional.
  */
-@objc public class BSBaseAddressDetails: NSObject {
+  public class BSBaseAddressDetails: NSObject {
     
     public var name : String! = ""
     public var address : String?
@@ -37,7 +37,7 @@ import Foundation
 /**
  Shopper billing details - basically address + email
  */
-@objc public class BSBillingAddressDetails : BSBaseAddressDetails, NSCopying {
+  public class BSBillingAddressDetails : BSBaseAddressDetails, NSCopying {
     
     public var email : String?
 
@@ -63,7 +63,7 @@ import Foundation
 /**
  Shopper shipping details - basically address + phone
  */
-@objc public class BSShippingAddressDetails : BSBaseAddressDetails, NSCopying {
+  public class BSShippingAddressDetails : BSBaseAddressDetails, NSCopying {
     
     public var phone : String?
     

@@ -164,7 +164,7 @@ class BSBaseListController: UIViewController, UITableViewDelegate, UITableViewDa
     func getIndex(ofItem: (name: String, code: String)) -> IndexPath? {
         
         let name = ofItem.name
-        if name.characters.count > 0 {
+        if name.count > 0 {
             let firstLetter = "\(name[name.startIndex])".uppercased()
             if let section = groups[firstLetter] {
                 var index = 0

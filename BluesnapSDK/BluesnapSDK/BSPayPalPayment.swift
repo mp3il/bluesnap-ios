@@ -12,7 +12,7 @@ import Foundation
 /**
  PayPal details for the purchase
  */
-@objc public class BSPayPalSdkResult: BSBaseSdkResult {
+  public class BSPayPalSdkResult: BSBaseSdkResult {
     
     public var payPalInvoiceId : String?
     

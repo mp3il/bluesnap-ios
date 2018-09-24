@@ -39,7 +39,7 @@ class BluesnapSDKTests: XCTestCase {
             
             BlueSnapSDK.submitTokenizedDetails(tokenizeRequest: tokenizeRequest, completion: { (result, error) in
                 
-                XCTAssert(error == nil, "error: \(error)")
+                XCTAssert(error == nil, "error: \(String(describing: error))")
                 let ccType = result[BSTokenizeBaseCCDetails.CARD_TYPE_KEY]
                 let last4 = result[BSTokenizeBaseCCDetails.LAST_4_DIGITS_KEY]
                 let country = result[BSTokenizeBaseCCDetails.ISSUING_COUNTRY_KEY]
@@ -82,11 +82,11 @@ class BluesnapSDKTests: XCTestCase {
                 
                 let gbpCurrency : BSCurrency! = bsCurrencies?.getCurrencyByCode(code: "GBP")
                 XCTAssertNotNil(gbpCurrency)
-                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(gbpCurrency.name), its rate is \(gbpCurrency.rate)")
+                NSLog("testGetTokenAndCurrencies; GBP currency name is: \(String(describing: gbpCurrency.name)), its rate is \(String(describing: gbpCurrency.rate))")
                 
                 let eurCurrencyRate : Double! = bsCurrencies?.getCurrencyRateByCurrencyCode(code: "EUR")
                 XCTAssertNotNil(eurCurrencyRate)
-                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(eurCurrencyRate)")
+                NSLog("testGetTokenAndCurrencies; EUR currency rate is: \(String(describing: eurCurrencyRate))")
                 
                 semaphore.signal()
             })

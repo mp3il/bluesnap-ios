@@ -256,12 +256,12 @@ public class BSCcInputLine: BSBaseTextInput {
     public func getExpDateAsMMYYYY() -> String! {
         
         let newValue = self.expTextField.text ?? ""
-        if let p = newValue.characters.index(of: "/") {
-            let mm = newValue.substring(with: newValue.startIndex..<p)
-            let yy = BSStringUtils.removeNoneDigits(newValue.substring(with: p ..< newValue.endIndex))
+        if let p = newValue.index(of: "/") {
+            let mm = newValue[..<p]
+            let yy = BSStringUtils.removeNoneDigits(String(newValue[p ..< newValue.endIndex]))
             let currentYearStr = String(BSValidator.getCurrentYear())
             let p1 = currentYearStr.index(currentYearStr.startIndex, offsetBy: 2)
-            let first2Digits = currentYearStr.substring(with: currentYearStr.startIndex..<p1)
+            let first2Digits = currentYearStr[..<p1]
             return "\(mm)/\(first2Digits)\(yy)"
         }
         return ""
@@ -728,7 +728,7 @@ public class BSCcInputLine: BSBaseTextInput {
         BSValidator.ccnEditingChanged(textField)
         
         let ccn = BSStringUtils.removeNoneDigits(textField.text ?? "")
-        let ccnLength = ccn.characters.count
+        let ccnLength = ccn.count
         
         if ccnLength >= 6 {
             cardType = BSValidator.getCCTypeByRegex(textField.text ?? "")?.lowercased() ?? ""
@@ -745,16 +745,16 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
 
-    func expFieldDidBeginEditing(_ sender: UITextField) {
+    @objc func expFieldDidBeginEditing(_ sender: UITextField) {
         
         //hideError(expTextField)
     }
     
-    func expFieldEditingChanged(_ sender: UITextField) {
+    @objc func expFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.expEditingChanged(sender)
         if checkMaxLength(textField: sender, maxLength: 5) == true {
-            if sender.text?.characters.count == 5 {
+            if sender.text?.count == 5 {
                 if expTextField.canResignFirstResponder {
                     focusOnCvvField()
                 }
@@ -762,17 +762,17 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
 
-    func cvvFieldDidBeginEditing(_ sender: UITextField) {
+    @objc func cvvFieldDidBeginEditing(_ sender: UITextField) {
         
         //hideError(cvvTextField)
     }
     
-    func cvvFieldEditingChanged(_ sender: UITextField) {
+    @objc func cvvFieldEditingChanged(_ sender: UITextField) {
         
         BSValidator.cvvEditingChanged(sender)
         let cvvLength = BSValidator.getCvvLength(cardType: self.cardType)
         if checkMaxLength(textField: sender, maxLength: cvvLength) == true {
-            if sender.text?.characters.count == cvvLength {
+            if sender.text?.count == cvvLength {
                 if cvvTextField.canResignFirstResponder == true {
                     focusOnNextField()
                 }
@@ -780,7 +780,7 @@ public class BSCcInputLine: BSBaseTextInput {
         }
     }
     
-    func nextArrowClick() {
+    @objc func nextArrowClick() {
         
         if textField.canResignFirstResponder {
             focusOnExpField()
@@ -801,7 +801,7 @@ public class BSCcInputLine: BSBaseTextInput {
             return true
         }
         var result = true
-        if !ignoreIfEmpty || (expTextField.text?.characters.count)! > 0 {
+        if !ignoreIfEmpty || (expTextField.text?.count)! > 0 {
             result = BSValidator.validateExp(input: self)
         }
         return result
@@ -813,7 +813,7 @@ public class BSCcInputLine: BSBaseTextInput {
             return true
         }
         var result = true
-        if !ignoreIfEmpty || (cvvTextField.text?.characters.count)! > 0 {
+        if !ignoreIfEmpty || (cvvTextField.text?.count)! > 0 {
             result = BSValidator.validateCvv(input: self, cardType: cardType)
         }
         return result
@@ -921,7 +921,7 @@ public class BSCcInputLine: BSBaseTextInput {
     }
     
     private func checkMaxLength(textField: UITextField!, maxLength: Int) -> Bool {
-        if (BSStringUtils.removeNoneDigits(textField.text!).characters.count > maxLength) {
+        if (BSStringUtils.removeNoneDigits(textField.text!).count > maxLength) {
             textField.deleteBackward()
             return false
         } else {

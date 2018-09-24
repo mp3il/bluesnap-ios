@@ -294,7 +294,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     /**
      fieldBorderStyle (default = .none) determines the border type for the text field
      */
-    public var fieldBorderStyle : UITextBorderStyle = .none
+    public var fieldBorderStyle : UITextField.BorderStyle = .none
     
     
     // MARK: internal UI elements
@@ -525,7 +525,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
         textField.addTarget(self, action: #selector(BSInputLine.textFieldEditingChanged(_:)), for: .editingChanged)
         textField.delegate = self
         
-        self.imageButton = UIButton(type: UIButtonType.custom)
+        self.imageButton = UIButton(type: UIButton.ButtonType.custom)
         imageButton.accessibilityIdentifier = "ImageButton"
         self.addSubview(imageButton)
         imageButton.addTarget(self, action: #selector(BSBaseTextInput.imageTouchUpInside(_:)), for: .touchUpInside)
@@ -599,7 +599,7 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
             imageButton.isHidden = true
         } else {
             imageButton.isHidden = false
-            imageButton.setImage(image, for: UIControlState.normal)
+            imageButton.setImage(image, for: UIControl.State.normal)
             imageButton.frame = getImageRect()
         }
         
@@ -709,27 +709,27 @@ public class BSBaseTextInput: UIControl, UITextFieldDelegate {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         
         hideError()
-        sendActions(for: UIControlEvents.editingDidBegin)
+        sendActions(for: UIControl.Event.editingDidBegin)
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
         
-        sendActions(for: UIControlEvents.editingDidEnd)
+        sendActions(for: UIControl.Event.editingDidEnd)
     }
     
-    func textFieldEditingChanged(_ textField: UITextField) {
+    @objc func textFieldEditingChanged(_ textField: UITextField) {
         
-        sendActions(for: UIControlEvents.editingChanged)
+        sendActions(for: UIControl.Event.editingChanged)
     }
     
-    func imageTouchUpInside(_ sender: Any) {
+    @objc func imageTouchUpInside(_ sender: Any) {
         
-        sendActions(for: UIControlEvents.touchUpInside)
+        sendActions(for: UIControl.Event.touchUpInside)
     }
     
-    func fieldCoverButtonTouchUpInside(_ sender: Any) {
+    @objc func fieldCoverButtonTouchUpInside(_ sender: Any) {
         
-        sendActions(for: UIControlEvents.touchUpInside)
+        sendActions(for: UIControl.Event.touchUpInside)
     }
 
     // MARK: Numeric Keyboard "done" button enhancement

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -38,10 +36,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryTableViewCell" rowHeight="40" id="jmW-2z-Xb6" customClass="BSCountryTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="280" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jmW-2z-Xb6" id="geS-dI-qMo">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-ax-3BT">
@@ -49,14 +47,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBQ-PP-rh2">
-                                                    <rect key="frame" x="25" y="6" width="232" height="29"/>
+                                                    <rect key="frame" x="24" y="6" width="233" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="Eic-Oi-nQ3" userLabel="checkMark">
-                                                    <rect key="frame" x="252" y="15" width="15" height="13"/>
+                                                    <rect key="frame" x="251" y="15" width="15" height="13"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -400,9 +398,9 @@
                         <outlet property="ccnButton" destination="tF0-LC-ldx" id="gA0-9d-nh8"/>
                         <outlet property="centeredView" destination="FkL-LM-R7b" id="Wre-WY-Jla"/>
                         <outlet property="payPalButton" destination="zdE-7E-j3h" id="pAw-hl-jad"/>
-                        <segue destination="GdF-z9-L8H" kind="show" id="1KG-Ig-ECE"/>
-                        <segue destination="W0G-M6-3dM" kind="show" id="rfc-7Z-z7N"/>
-                        <segue destination="lhw-wu-tEn" kind="show" id="7e7-yj-5Ow"/>
+                        <segue destination="GdF-z9-L8H" kind="show" identifier="placeholder identifier" id="1KG-Ig-ECE"/>
+                        <segue destination="W0G-M6-3dM" kind="show" identifier="placeholder identifier" id="rfc-7Z-z7N"/>
+                        <segue destination="lhw-wu-tEn" kind="show" identifier="placeholder identifier" id="7e7-yj-5Ow"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7q-E5-0yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -473,7 +471,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VhF-2J-DbG" userLabel="Billing Box" customClass="BSBaseBoxWithShadowView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="20" y="120.5" width="280" height="64"/>
+                                        <rect key="frame" x="20" y="120" width="280" height="64"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Billing Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S5N-Ju-9SR">
                                                 <rect key="frame" x="8" y="8" width="231" height="21.5"/>
@@ -518,13 +516,13 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqz-QH-oYM">
-                                        <rect key="frame" x="20" y="212" width="280" height="24"/>
+                                        <rect key="frame" x="20" y="211.5" width="280" height="24"/>
                                         <accessibility key="accessibilityConfiguration" label="ShippingTitle"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UDS-ih-c9e" userLabel="shipping Box" customClass="BSBaseBoxWithShadowView" customModule="BluesnapSDK">
-                                        <rect key="frame" x="20" y="239" width="280" height="56"/>
+                                        <rect key="frame" x="20" y="238.5" width="280" height="56"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8XH-dZ-MHd">
                                                 <rect key="frame" x="8" y="8" width="231" height="17"/>
@@ -706,7 +704,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </view>
                                             <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcs-xh-zfv" userLabel="Name Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="68.5" width="280" height="37.5"/>
+                                                <rect key="frame" x="20" y="68.5" width="280" height="36.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="Name"/>
                                                 <userDefinedRuntimeAttributes>
@@ -725,7 +723,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAV-CU-OEK" userLabel="Email Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="107" width="280" height="36"/>
+                                                <rect key="frame" x="20" y="106" width="280" height="37"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="Email"/>
                                                 <userDefinedRuntimeAttributes>
@@ -738,7 +736,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yRx-IZ-fub" userLabel="Zip Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="144" width="280" height="37"/>
+                                                <rect key="frame" x="20" y="144" width="280" height="36.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="Zip"/>
                                                 <userDefinedRuntimeAttributes>
@@ -751,7 +749,7 @@
                                                 </connections>
                                             </view>
                                             <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Vk-vx-UOS" userLabel="Street Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="182" width="280" height="36"/>
+                                                <rect key="frame" x="20" y="181.5" width="280" height="36.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="Street"/>
                                                 <userDefinedRuntimeAttributes>
@@ -777,7 +775,7 @@
                                                 </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EKc-lR-XxG" userLabel="State Input Line" customClass="BSInputLine" customModule="BluesnapSDK">
-                                                <rect key="frame" x="20" y="256.5" width="280" height="37.5"/>
+                                                <rect key="frame" x="20" y="256.5" width="280" height="37"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="State"/>
                                                 <userDefinedRuntimeAttributes>
@@ -839,14 +837,14 @@
                                 <rect key="frame" x="11" y="412" width="262" height="31"/>
                                 <subviews>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWl-8L-gmv">
-                                        <rect key="frame" x="201.5" y="0.5" width="44" height="31"/>
+                                        <rect key="frame" x="200.5" y="0.0" width="43.5" height="31"/>
                                         <accessibility key="accessibilityConfiguration" identifier="ShippingAsBillingSwitch"/>
                                         <connections>
                                             <action selector="shippingSameAsBillingValueChanged:" destination="W0G-M6-3dM" eventType="valueChanged" id="TrO-Bd-u8l"/>
                                         </connections>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shipping same as billing" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0EE-XI-ScQ">
-                                        <rect key="frame" x="11.5" y="7.5" width="177" height="17"/>
+                                        <rect key="frame" x="12.5" y="7" width="175" height="17"/>
                                         <accessibility key="accessibilityConfiguration" identifier="ShippingAsBillingLabel"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="highlightedColor"/>
@@ -930,10 +928,10 @@
                         <outlet property="topMenuButton" destination="ODe-4v-aVb" id="iIr-n7-oqo"/>
                         <outlet property="zipInputLine" destination="yRx-IZ-fub" id="n5X-b7-TOL"/>
                         <outlet property="zipTopConstraint" destination="Zch-dH-6RJ" id="A8W-lo-FnM"/>
-                        <segue destination="PPS-Pq-6Wu" kind="show" id="sh5-3f-7TO"/>
-                        <segue destination="CMN-vn-Foo" kind="show" id="icf-mO-ubI"/>
-                        <segue destination="Cnt-Wb-Tw2" kind="show" id="cUQ-Cn-kJl"/>
-                        <segue destination="2Ni-9L-E0D" kind="show" id="6FB-PZ-3S1"/>
+                        <segue destination="PPS-Pq-6Wu" kind="show" identifier="placeholder identifier" id="sh5-3f-7TO"/>
+                        <segue destination="CMN-vn-Foo" kind="show" identifier="placeholder identifier" id="icf-mO-ubI"/>
+                        <segue destination="Cnt-Wb-Tw2" kind="show" identifier="placeholder identifier" id="cUQ-Cn-kJl"/>
+                        <segue destination="2Ni-9L-E0D" kind="show" identifier="placeholder identifier" id="6FB-PZ-3S1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A8J-iy-m7u" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -967,20 +965,20 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrencyTableViewCell" rowHeight="40" id="NWv-PN-eoP" userLabel="I" customClass="BSCurrencyTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="288" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="288" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NWv-PN-eoP" id="vce-NJ-ojv">
-                                            <rect key="frame" x="0.0" y="0.0" width="288" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="288" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="CurrencyUILabel" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvq-lv-yB8">
-                                                    <rect key="frame" x="0.0" y="7" width="270" height="24"/>
+                                                    <rect key="frame" x="0.0" y="10.5" width="270" height="18.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="SPl-dB-Ocj" userLabel="checkMark">
-                                                    <rect key="frame" x="272" y="13" width="16" height="13"/>
+                                                    <rect key="frame" x="272" y="13.5" width="16" height="13"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                                     </accessibility>
@@ -1069,20 +1067,20 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateTableViewCell" rowHeight="40" id="k9o-eM-cDg" customClass="BSStateTableViewCell" customModule="BluesnapSDK">
-                                        <rect key="frame" x="0.0" y="56" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="280" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k9o-eM-cDg" id="CMm-xm-mVN">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="39.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="ItemUILabel" text="Item Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U25-dp-1Tb">
-                                                    <rect key="frame" x="8" y="8" width="98" height="24"/>
+                                                    <rect key="frame" x="15" y="11" width="94" height="24"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_check_mark" translatesAutoresizingMaskIntoConstraints="NO" id="MdR-u1-48S" userLabel="checkMark">
-                                                    <rect key="frame" x="256" y="13" width="16" height="13"/>
+                                                    <rect key="frame" x="249" y="16" width="16" height="14"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                                     </accessibility>
@@ -1140,7 +1138,7 @@
                 <navigationController storyboardIdentifier="BSNavToStart" automaticallyAdjustsScrollViewInsets="NO" id="laJ-Gr-piP" userLabel="Navigation Controller to Start Scene" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2fe-kR-029">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1158,7 +1156,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lhw-wu-tEn" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QeD-2B-60y">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

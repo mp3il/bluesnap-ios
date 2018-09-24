@@ -63,8 +63,8 @@ class BSExistingCCViewController: UIViewController {
         billingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Billing)
         shippingLabel.text = BSLocalizedStrings.getString(BSLocalizedString.Label_Shipping)
         let editButtonTitle = BSLocalizedStrings.getString(BSLocalizedString.Edit_Button_Title)
-        editBillingButton.setTitle(editButtonTitle, for: UIControlState())
-        editShippingButton.setTitle(editButtonTitle, for: UIControlState())
+        editBillingButton.setTitle(editButtonTitle, for: UIControl.State())
+        editShippingButton.setTitle(editButtonTitle, for: UIControl.State())
         updateAmounts()
 
         // for removing inner padding from text view
@@ -117,7 +117,7 @@ class BSExistingCCViewController: UIViewController {
     @IBAction func editShipping(_ sender: Any) {
         BSViewsManager.showShippingScreen(
             purchaseDetails: purchaseDetails,
-            submitPaymentFields: {_ in },
+            submitPaymentFields: { },
             validateOnEntry: false,
             inNavigationController: self.navigationController!,
             animated: true)
@@ -160,7 +160,7 @@ class BSExistingCCViewController: UIViewController {
         subtotalAndTaxDetailsView.setAmounts(subtotalAmount: subtotalAmount, taxAmount: taxAmount, currency: toCurrency)
         
         let payButtonText = BSViewsManager.getPayButtonText(subtotalAmount: subtotalAmount, taxAmount: taxAmount, toCurrency: toCurrency)
-        payButton.setTitle(payButtonText, for: UIControlState())
+        payButton.setTitle(payButtonText, for: UIControl.State())
     }
 
     private func callUpdateTax() {

@@ -24,7 +24,7 @@ public enum BSImageNames : String {
     case ccUnknown = "cc_default"
 }
 
-@objc public class BSImageLibrary: NSObject {
+public class BSImageLibrary: NSObject {
     
     fileprivate static let ccTypeToImageMapping = [
         "amex": "amex",

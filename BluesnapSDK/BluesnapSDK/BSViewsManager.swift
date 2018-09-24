@@ -41,7 +41,7 @@ class BSViewsManager {
     /**
      Get the bundle containing BlueSnap assets
      */
-    open static func getBundle() -> Bundle {
+    public static func getBundle() -> Bundle {
 
         return bsBundle
     }
@@ -53,7 +53,7 @@ class BSViewsManager {
      - inNavigationController: your viewController's navigationController (to be able to navigate back)
      - animated: how to navigate to the new screen
      */
-    open static func showStartScreen(
+    public static func showStartScreen(
         inNavigationController: UINavigationController!,
         animated: Bool) {
         
@@ -153,7 +153,7 @@ class BSViewsManager {
 
         let bundle = BSViewsManager.getBundle()
         let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
-        let screen : BSCountryViewController! = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as! BluesnapSDK.BSCountryViewController
+        let screen : BSCountryViewController! = storyboard.instantiateViewController(withIdentifier: BSViewsManager.countryScreenStoryboardId) as? BluesnapSDK.BSCountryViewController
 
         screen.initCountries(selectedCode: selectedCountryCode, updateFunc: updateFunc)
         
@@ -180,7 +180,7 @@ class BSViewsManager {
         if currencyScreen == nil {
             let bundle = BSViewsManager.getBundle()
             let storyboard = UIStoryboard(name: BSViewsManager.storyboardName, bundle: bundle)
-            currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as! BSCurrenciesViewController
+            currencyScreen = storyboard.instantiateViewController(withIdentifier: BSViewsManager.currencyScreenStoryboardId) as? BSCurrenciesViewController
         }
         currencyScreen.initCurrencies(
             currencyCode: selectedCurrencyCode,
@@ -256,7 +256,7 @@ class BSViewsManager {
         view.addSubview(indicator)
         indicator.center = view.center
         indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .gray
+        indicator.style = .gray
         return indicator
     }
     
@@ -292,11 +292,11 @@ class BSViewsManager {
             updateCurrencyFunc: @escaping (BSCurrency?, BSCurrency)->Void,
             errorFunc: @escaping ()->Void) -> UIAlertController {
         
-        let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let menu = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // Add change currency menu item
         let currencyMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Currency)
-        let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertActionStyle.default) { _ in
+        let currencyMenuOption = UIAlertAction(title: currencyMenuTitle, style: UIAlertAction.Style.default) { _ in
             if let purchaseDetails = purchaseDetails {
                 BSViewsManager.showCurrencyList(
                     inNavigationController: inNavigationController,
@@ -310,7 +310,7 @@ class BSViewsManager {
         
         // Add Cancel menu item
         let cancelMenuTitle = BSLocalizedStrings.getString(BSLocalizedString.Menu_Item_Cancel)
-        let cancelMenuOption = UIAlertAction(title: cancelMenuTitle, style: UIAlertActionStyle.cancel, handler: nil)
+        let cancelMenuOption = UIAlertAction(title: cancelMenuTitle, style: UIAlertAction.Style.cancel, handler: nil)
         menu.addAction(cancelMenuOption)
         
         //presentViewController(otherAlert, animated: true, completion: nil)

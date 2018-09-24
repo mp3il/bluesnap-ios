@@ -138,8 +138,8 @@ class BSExistingCcUIView: BSBaseBoxWithShadowView {
         expirationLabel.text = expiration
     }
     
-    func coverButtonTouchUpInside(_ sender: Any) {
+    @objc func coverButtonTouchUpInside(_ sender: Any) {
         
-        sendActions(for: UIControlEvents.touchUpInside)
+        sendActions(for: UIControl.Event.touchUpInside)
     }
 }
