@@ -343,6 +343,15 @@ open class BSViewsManager {
         let currencyCode = (toCurrency == "USD" ? "$" : toCurrency) ?? ""
         let payFormat = BSLocalizedStrings.getString(BSLocalizedString.Payment_Pay_Button_Format)
         let result = String(format: payFormat, currencyCode, CGFloat(amount))
+        
+        /*
+            TODO
+            Guy patch
+        */
+        if (amount == 0) {
+            return "SAVE"
+        }
+        
         return result
     }
 }
