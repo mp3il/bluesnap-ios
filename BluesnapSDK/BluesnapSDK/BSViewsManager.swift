@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class BSViewsManager {
+public open class BSViewsManager {
     
     // MARK: - Constants
     
