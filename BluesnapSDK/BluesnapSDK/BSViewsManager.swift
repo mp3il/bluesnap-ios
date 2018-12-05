@@ -348,6 +348,7 @@ open class BSViewsManager {
             TODO
             Guy patch
         */
+        print("getPayButtonText:", amount)
         if (amount == 0) {
             return "SAVE"
         }
